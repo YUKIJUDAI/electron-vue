@@ -44,9 +44,15 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
     // 存储进程id
     global.mainWindowId = mainWindow.webContents.id;
+    // 存储用户信息
+    global.userInfo = {
+        token: "",      //token
+        phone: ""      // 手机号
+    }
     mainWindow.on('closed', function () {
         mainWindow = null;
         global.mainWindowId = null;
+        global.userInfo = null;
     });
     // 启动更新
     updateHandle();

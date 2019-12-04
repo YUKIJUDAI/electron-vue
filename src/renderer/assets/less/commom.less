@@ -1,0 +1,138 @@
+//浮动
+.fl(@f:left;) {
+    float: @f;
+}
+.fr(@f:right) {
+    float: @f;
+}
+//定位
+.rel(@rel:relative) {
+    position: @rel;
+}
+.abs(@abs:absolute) {
+    position: @abs;
+}
+.fix(@fix:fixed) {
+    position: @fix;
+}
+
+.pos-box(@w:500px,@h:400px,@pos:absolute) {
+    width: @w;
+    height: @h;
+    position: @pos;
+    left: 0;
+    top: 0;
+}
+//定位居中
+.pos-box-cc(@w:600px,@h:360px,@pos:absolute) {
+    width: @w;
+    height: @h;
+    position: @pos;
+    left: 50%;
+    top: 50%;
+    margin-left: -@w / 2;
+    margin-top: -@h / 2;
+}
+//布局
+.bc() {
+    margin-left: auto;
+    margin-right: auto;
+}
+.bc-d(@w:500px) {
+    width: @w;
+    .bc();
+}
+.wh(@w) {
+    width: @w;
+    height: @w;
+}
+// 宽度100%
+.w100() {
+    width: 100%;
+}
+//高度100%
+.h100() {
+    height: 100%;
+}
+// 文字垂直居中
+.l-h(@h) {
+    height: @h;
+    line-height: @h;
+}
+//display
+.db() {
+    display: block;
+}
+.di() {
+    display: inline;
+}
+.dib() {
+    display: inline-block;
+}
+.dib7() {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+.dt() {
+    display: table;
+}
+.dn() {
+    display: none;
+}
+
+//background
+.bg(@url) {
+    background: url(@url) no-repeat center center;
+    background-size: cover;
+}
+.bg-c(@color) {
+    background-color: @color;
+}
+.bg-m(@url,@x:0,@y:0,@repeat:no-repeat) {
+    background: url(@url) @x @y @repeat;
+}
+.bgi(@url) {
+    background-image: url(@url);
+}
+.bgp(@x:0,@y:0) {
+    background-position: @x @y;
+}
+
+//list
+.list-sn() {
+    list-style: none;
+}
+//text
+.text-n(@p: none) {
+    text-decoration: @p;
+}
+//添加下划线
+.tu() {
+    text-decoration: underline;
+}
+.tn() {
+    text-decoration: none;
+}
+.tl() {
+    text-align: left;
+}
+.tc() {
+    text-align: center;
+}
+.tr() {
+    text-align: right;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+    font-size: 0;
+}
+
+.clearfix {
+    *zoom: 1;
+}

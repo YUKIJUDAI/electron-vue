@@ -91,5 +91,5 @@ let addHandler = function (handler) {
 let removeHandler = function (handler) {
     gHandlerList = gHandlerList.filter(h => h !== handler);
 }
-module.exports.addHandler = addHandler;
-module.exports.removeHandler = removeHandler;
+exports.addHandler = addHandler;
+exports.removeHandler = removeHandler;

@@ -2,7 +2,8 @@ const axios = require("axios");
 const qs = require("qs");
 const { remote } = require('electron');
 
-const { baseUrl } = require("../config/config");
+const { baseUrl } = require("@/config/config");
+import store from "@/store";
 
 // 创建新http
 
@@ -17,7 +18,7 @@ const http = axios.create({
 http.interceptors.request.use(
     config => {
         // 添加token
-        const token = remote.getGlobal('mainWindowId');
+        const token = store.state.userInfo.token;
         token && (config.headers.token = token);
 
         if (config.headers["Content-Type"] === "application/x-www-form-urlencoded") {
@@ -33,6 +34,7 @@ http.interceptors.request.use(
 // 请求发送后数据处理
 http.interceptors.response.use(
     res => {
+        console.log(res.config.url, res.data);
         return res.data;
     },
     error => {

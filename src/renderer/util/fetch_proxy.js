@@ -14,7 +14,8 @@ let initProxy = function () {
             winFetch(input, opts).then(
                 (res) => {
                     try {
-                        gHandlerList.map(proxyHandler => proxyHandler.call(this, res));
+                        let params = (opts && opts.hasOwnProperty("params")) ? opts.params : {};
+                        gHandlerList.map(proxyHandler => proxyHandler.call(this, params, res));
                     }
                     catch (e) {
                         console.error(e);
@@ -43,5 +44,5 @@ let addHandler = function (handler) {
 let removeHandler = function (handler) {
     gHandlerList = gHandlerList.filter(h => h !== handler);
 }
-module.exports.addHandler = addHandler;
-module.exports.removeHandler = removeHandler;
+exports.addHandler = addHandler;
+exports.removeHandler = removeHandler;

@@ -1,4 +1,4 @@
-var { readFile, writeFile, access, mkdir } = require("../../middle/fs");
+var { readFile, writeFile, access, mkdir } = require("@/middle/fs");
 var path = require("path");
 
 function _path(filename) {
