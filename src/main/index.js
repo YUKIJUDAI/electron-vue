@@ -4,7 +4,7 @@ const { autoUpdater } = require("electron-updater");
 const { uploadUrl } = require("../renderer/config/config");
 
 if (process.env.NODE_ENV !== 'development') {
-    global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+    global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
 let mainWindow;
@@ -65,12 +65,12 @@ function createView() {
         return;
     }
     sycmWindow = new BrowserWindow({
-        width: 500, height: 500, parent: mainWindow, autoHideMenuBar: true,
+        width: 1000, height: 800, parent: mainWindow, autoHideMenuBar: true,
         webPreferences: {
             webviewTag: true,
             webSecurity: true,
             nodeIntegration: true,
-            preload: path.join(__dirname, "./renderer/assets/js/sycm.js")
+            preload: path.join("http://localhost:9080/static/sycm.js")
         }
     });
     // 加载网页
@@ -97,7 +97,7 @@ function createView() {
 
 // 版本更新
 function updateHandle() {
-    
+
     autoUpdater.setFeedURL(uploadUrl);
     autoUpdater.on('error', function (error) {
         sendUpdateMessage("检查更新出错");

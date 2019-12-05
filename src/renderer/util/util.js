@@ -1,5 +1,12 @@
 import { interval } from "rxjs";
-import { take } from "rxjs/operators";
+import { take, filter } from "rxjs/operators";
+
+// 监测网络
+export const isOnline = function () {
+    interval(10000).pipe(filter(() => !navigator.onLine)).subscribe(() => {
+        new window.Notification("无法连接到服务器，请检查网络");
+    });
+}
 
 // 验证是否为空
 export const isEmpty = function (str) {

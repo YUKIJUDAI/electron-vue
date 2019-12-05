@@ -1,4 +1,4 @@
-alert(1);
+alert(1)
 
 const xhrProxy = require('../../assets/util/xhr_proxy');
 const fetchProxy = require('../../assets/util/fetch_proxy');
@@ -6,7 +6,6 @@ const { remote, ipcRenderer } = require('electron');
 const { xhrList, fetchList } = require("../../assets/util/factory");
 const { from, interval, timer } = require("rxjs");
 const { filter, take, tap, delay } = require("rxjs/operators");
-
 
 let delayTime = 1000;
 // 渲染进程id

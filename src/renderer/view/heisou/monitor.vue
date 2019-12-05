@@ -3,12 +3,12 @@
 
         <el-dialog title="新增竞品配置监控" :visible.sync="addFlag" width="700px">
             <div class="add">
-                <el-form ref="form" :model="form" label-width="80px" :inline="true">
+                <el-form ref="form" :model="add" label-width="80px" :inline="true">
                     <el-form-item label="竞品ID">
                         <el-input type="textarea" :rows="5" placeholder="请输入竞品ID" v-model="add.id" style="width:200px"></el-input>
                     </el-form-item>
                     <el-form-item label="监控天数">
-                        <el-select v-model="value" placeholder="请选择" style="width:200px">
+                        <el-select v-model="add.time" placeholder="请选择" style="width:200px">
                             <el-option label="最近30天" value="30"></el-option>
                             <el-option label="最近60天" value="60"></el-option>
                             <el-option label="最近90天" value="90"></el-option>
@@ -35,6 +35,7 @@
                 <el-form-item label="新增竞品">
                     <el-button type="primary" size="small" @click="addFlag = true">新增商品监控</el-button>
                     <el-button type="info" plain size="small">监控昨日数据</el-button>
+                    <el-button type="info" plain size="small" @click="opensycm">打开生意参谋</el-button>
                 </el-form-item>
                 </br>
                 <!-- 日期下拉 -->
@@ -118,6 +119,9 @@
 </template>
 
 <script>
+const { ipcRenderer } = require("electron");
+import { factory } from "@/util/factory";
+
 export default {
     data() {
         return {
@@ -133,12 +137,23 @@ export default {
                 search: "",
             },
             add: {},
-            table: [{ date: "1234" }, { date: "1234" }, { date: "1234" }, { date: "1234" }, { date: "1234" }, { date: "1234" }, { date: "1234" }, { date: "1234" }, { date: "1234" }],
+            table: [{ date: "1234" }],
             total_pages: 1,
             page: 1
         }
     },
+    mounted() {
+        // 获取xhr信息后处理
+        ipcRenderer.on('send-xhr-data', (event, type, data) => {
+            if (factory.obj[type]) {
+                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(data);
+            }
+        });
+    },
     methods: {
+        opensycm() {
+            ipcRenderer.send("open-sycm");
+        },
         getList() { }
     }
 }

@@ -109,10 +109,7 @@
 <script>
 const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
-
-import isOnline from "@/util/online";
-import { factory } from "@/util/factory";
-import { isEmpty, getPhoneCode } from "@/util/util";
+import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 
 import heiSou from "@/view/heisou/index";
 
@@ -149,11 +146,6 @@ export default {
         // 判断在线离线状态
         isOnline();
 
-        //点击生意参谋打开新页面
-        fromEvent(document.getElementById("button"), 'click').subscribe(() => {
-            ipcRenderer.send("open-sycm");
-        });
-
         // 获取更新
         ipcRenderer.send("checkForUpdate");
         // 输出更新信息
@@ -163,12 +155,6 @@ export default {
         // 更新
         ipcRenderer.on("isUpdateNow", () => {
             ipcRenderer.send("isUpdateNow");
-        });
-        // 获取xhr信息后处理
-        ipcRenderer.on('send-xhr-data', (event, type, data) => {
-            if (factory.obj[type]) {
-                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(data);
-            }
         });
     },
     methods: {
