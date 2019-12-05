@@ -17,11 +17,12 @@
                 <div class="main-left-1">
                     <img src="~@/assets/img/level-1.png" class="identity-tag">
                     <img src="~@/assets/img/admin.png" class="avatar">
-                    <div class="main-login" @click="loginFlag = true">请登录</div>
+                    <div class="main-login" v-if="isLogin">{{userPhone}}</div>
+                    <div class="main-login" @click="loginFlag = true" v-else>请登录</div>
                 </div>
                 <div class="main-left-2 clearfix">
-                    <div class="left-2-left" @click="registeredFlag = true">立即注册</div>
-                    <!-- <div class="left-2-left">充值</div> -->
+                    <div class="left-2-left" v-if="isLogin">充值</div>
+                    <div class="left-2-left" @click="registeredFlag = true" v-else>立即注册</div>
                     <div class="left-2-right">联系客服</div>
                 </div>
                 <div class="main-left-3">
@@ -96,7 +97,7 @@
             <div class="other clearfix">
                 <span class="registered" @click="goLogin">去登录</span>
             </div>
-            <div class="submit" @click="">立即注册</div>
+            <div class="submit" @click="registered">立即注册</div>
             <div class="protocol clearfix">
                 <input type="checkbox" class="protocol-checkbox" v-model="protocolFlag" />
                 <p>我已仔细阅读并同意接受<span>《黑搜开发器服务协议》</span></p>
@@ -129,14 +130,19 @@ export default {
             registeredFlag: false,
             phoneCodeFlag: false,
             // 协议
-            protocolFlag: false,
+            protocolFlag: true,
             // 提交flag
             submitFlag: false,
+            // 倒计时
+            countdown: 60
         }
     },
     computed: {
         isLogin() {
             return !isEmpty(this.$store.state.userInfo.token);
+        },
+        userPhone() {
+            return this.$store.state.userInfo.phone;
         }
     },
     mounted() {
@@ -166,26 +172,31 @@ export default {
         });
     },
     methods: {
+        // 获取短信
         getPhoneCode() {
             if (this.phoneCodeFlag) return;
             getPhoneCode(1, this.registeredForm.phone, this);
         },
+        // 去注册
         goRegistered() {
             this.loginFlag = false;
             this.$nextTick(() => {
                 this.registeredFlag = true;
             });
         },
+        // 去登录
         goLogin() {
             this.registeredFlag = false;
             this.$nextTick(() => {
                 this.loginFlag = true;
             });
         },
+        // 登录
         login() {
             if (this.submitFlag) return;
+            this.submitFlag = true;
             this.$http.post("/index/login", this.loginForm).then(res => {
-                this.submitFlag = true;
+                this.submitFlag = false;
                 if (0 === res.code) {
                     this.$store.dispatch("set_user_info", { token: res.data.token, phone: this.loginForm.phone });
                     this.$message.success(res.msg);
@@ -194,6 +205,29 @@ export default {
                     this.$message.error(res.msg);
                 }
             });
+        },
+        // 注册
+        registered() {
+            if (this.submitFlag) return;
+            // 勾选协议
+            if (!this.protocolFlag) {
+                this.$message("请先同意协议");
+                return;
+            }
+            this.submitFlag = true;
+            this.$http.post("/index/register", this.registeredForm).then(res => {
+                this.submitFlag = false;
+                if (0 === res.code) {
+                    this.$message.success(res.msg);
+                    this.registeredFlag = false;
+                } else {
+                    this.$message.error(res.msg);
+                }
+            });
+        },
+        // 退出
+        exit() {
+            this.$store.dispatch("set_user_info", { token: "", phone: "" });
         }
     }
 }
@@ -230,6 +264,7 @@ export default {
             .fr;
             font-size: 14px;
             color: #fefefe;
+            padding-right: 30px;
             li {
                 margin-top: 15px;
                 cursor: pointer;
@@ -250,7 +285,8 @@ export default {
                 );
                 border-radius: 15px;
             }
-            .login {
+            .login,
+            .user {
                 margin-right: 15px;
             }
             .icon-login {
@@ -271,6 +307,7 @@ export default {
     }
     .body {
         height: calc(~"100vh - 60px - 18px");
+        overflow-y: scroll;
         .bg-c(#f5f5f5);
         padding-top: 18px;
         .main-left {
@@ -371,7 +408,7 @@ export default {
         .main-right {
             margin-left: 208px;
             margin-right: 20px;
-            height: 95%;
+            min-height: 95%;
             background: rgba(255, 255, 255, 1);
             box-shadow: -4px 0px 11px 1px rgba(0, 32, 95, 0.1);
         }

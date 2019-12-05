@@ -31,12 +31,13 @@
 
 <script>
 import heiSouVideo from "@/view/heisou/video";
+import heiSouMonitor from "@/view/heisou/monitor";
 
 export default {
     data() {
         return {
-            temp: [heiSouVideo],
-            tempIndex: 0
+            temp: [heiSouVideo, heiSouMonitor],
+            tempIndex: 1
         }
     },
 }
@@ -46,7 +47,7 @@ export default {
 @import url("~@/assets/less/commom.less");
 .heishou-index {
     padding-top: 20px;
-    height: calc(~"100% - 20px");
+    min-height: calc(~"100% - 20px");
     .heishou-index-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
