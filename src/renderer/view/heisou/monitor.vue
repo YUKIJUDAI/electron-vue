@@ -120,7 +120,7 @@
 
 <script>
 const { ipcRenderer } = require("electron");
-import { factory } from "@/util/factory";
+import factory from "@/util/factory";
 
 export default {
     data() {
@@ -144,9 +144,10 @@ export default {
     },
     mounted() {
         // 获取xhr信息后处理
-        ipcRenderer.on('send-xhr-data', (event, type, data) => {
+        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
+            console.log("get")
             if (factory.obj[type]) {
-                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(data);
+                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
             }
         });
     },

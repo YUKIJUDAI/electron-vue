@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const { autoUpdater } = require("electron-updater");
 const { uploadUrl } = require("../renderer/config/config");
 
@@ -16,7 +17,7 @@ const winURL = process.env.NODE_ENV === 'development'
 // 打开生意参谋
 ipcMain.on("open-sycm", function () {
     createView();
-})
+});
 
 app.on('ready', createWindow);
 
@@ -42,8 +43,6 @@ function createWindow() {
     mainWindow.loadURL(winURL);
     // 打开调试
     mainWindow.webContents.openDevTools();
-    // 存储进程id
-    global.mainWindowId = mainWindow.webContents.id;
     // 存储用户信息
     global.userInfo = {
         token: "",      //token
@@ -51,7 +50,6 @@ function createWindow() {
     }
     mainWindow.on('closed', function () {
         mainWindow = null;
-        global.mainWindowId = null;
         global.userInfo = null;
     });
     // 启动更新
@@ -70,15 +68,13 @@ function createView() {
             webviewTag: true,
             webSecurity: true,
             nodeIntegration: true,
-            preload: path.join("http://localhost:9080/static/sycm.js")
+            preload: __static + "/sycm.js"
         }
     });
     // 加载网页
     sycmWindow.webContents.loadURL('https://sycm.taobao.com/custom/login.htm');
     // 打开调试
     sycmWindow.webContents.openDevTools();
-    // 存储进程id
-    global.sycmWindowId = { id: null };
     // 存储淘宝信息
     global.tbInfo = {
         user_account: "",    //  淘宝登录账户
@@ -90,7 +86,6 @@ function createView() {
 
     sycmWindow.on('closed', function () {
         sycmWindow = null;
-        global.sycmWindowId = null;
         global.tbInfo = null;
     });
 }

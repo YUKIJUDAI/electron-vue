@@ -1,18 +1,8 @@
-const { http } = require("./http");
+const { from } = require("rxjs");
 const { remote } = require('electron');
+
 const { aes } = require("./aes");
-
-const xhrList = [
-    "getPersonalView", // 个人信息
-];
-
-const fetchList = [
-    "list", // 竞品列表
-    "getCoreIndexes", // 关键指标对比
-    "getCoreTrend", // 曲线图数据
-    "getKeywords", // 入店关键词
-    "getFlowSource" // 入店来源
-]
+import http from "./http";
 
 function Factory() {
     this.obj = {};
@@ -28,15 +18,15 @@ var factory = new Factory();
 factory.add("getPersonalView", {
     callback: function (params, res) {
         const data = JSON.parse(res);
-        // 生意参谋进程id
-        const id = remote.getGlobal('sycmWindowId').id;
         remote.getGlobal('tbInfo').user_account = data.loginUserName;   //  淘宝登录账户
         remote.getGlobal('tbInfo').shop_id = data.runAsShopId;          //  店铺id
         remote.getGlobal('tbInfo').shop_name = data.runAsShopTitle;     //  当前店铺名称
         remote.getGlobal('tbInfo').tb_login_user_id = data.loginUserId; //  淘宝登录用户id
         remote.getGlobal('tbInfo').run_as_user_id = data.runAsUserId;   //  当前使用的淘宝用户id
         http.post("/user/relateTbAccount", { tb_account: data.loginUserName, tb_user_id: data.loginUserId }).then(res => {
-            0 === res.code && remote.BrowserWindow.fromId(id).webContents.send("login-success");
+            0 === res.code && from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
+                remote.BrowserWindow.fromId(id).webContents.send("login-success");
+            });
         });
     }
 });
@@ -125,4 +115,4 @@ factory.add("getFlowSource", {
     }
 });
 
-export { factory, xhrList, fetchList };
+export default factory;
