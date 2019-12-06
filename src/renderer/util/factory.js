@@ -25,11 +25,12 @@ factory.add("getPersonalView", {
         remote.getGlobal('tbInfo').run_as_user_id = data.runAsUserId;   //  当前使用的淘宝用户id
         http.post("/user/relateTbAccount", { tb_account: data.loginUserName, tb_user_id: data.loginUserId }).then(res => {
             0 === res.code && from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                remote.BrowserWindow.fromId(id).webContents.send("login-success");
+                //remote.BrowserWindow.fromId(i.id).webContents.send("login-success");
             });
         });
     }
 });
+
 // 竞品列表
 factory.add("list", {
     callback: function (params, res) {
@@ -50,6 +51,20 @@ factory.add("list", {
         }
     }
 });
+
+// 竞争商品信息
+factory.add("getSingleMonitoredInfo", {
+    callback: function (params, res) {
+        console.log("res", res);
+    }
+});
+// 竞争商品
+factory.add("trend", {
+    callback: function (params, res) {
+        console.log("res", res);
+    }
+})
+
 // 关键指标对比
 factory.add("getCoreIndexes", {
     callback: function (params, res) {
@@ -66,6 +81,7 @@ factory.add("getCoreIndexes", {
         http.post("/crawler/saveLog", data).then();
     }
 });
+
 // 曲线图数据
 factory.add("getCoreTrend", {
     callback: function (params, res) {
@@ -82,6 +98,7 @@ factory.add("getCoreTrend", {
         http.post("/crawler/saveLog", data).then();
     }
 });
+
 // 入店关键词
 factory.add("getKeywords", {
     callback: function (params, res) {
@@ -98,6 +115,7 @@ factory.add("getKeywords", {
         http.post("/crawler/saveLog", data).then();
     }
 });
+
 // 入店来源
 factory.add("getFlowSource", {
     callback: function (params, res) {

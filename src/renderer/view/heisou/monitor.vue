@@ -15,15 +15,16 @@
                         </el-select>
                         </br>
                         </br>
-                        <el-button type="primary" size="small">开始监控</el-button>
+                        <el-button type="primary" size="small" v-if="addingFlag">监控中。。。</el-button>
+                        <el-button type="primary" size="small" @click="addMonitor" v-else>开始监控</el-button>
                     </el-form-item>
                 </el-form>
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>日志记录</span>
                     </div>
-                    <div v-for="o in 4" :key="o" class="text item">
-                        {{'列表内容 ' + o }}
+                    <div v-for="(item,i) in logList" :key="i" class="text item">
+                        {{item}}
                     </div>
                 </el-card>
             </div>
@@ -119,13 +120,16 @@
 </template>
 
 <script>
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, remote } = require("electron");
+const { from } = require("rxjs");
+
 import factory from "@/util/factory";
 
 export default {
     data() {
         return {
             addFlag: false,
+            addingFlag: false,
             form: {
                 // 日期
                 date: "",
@@ -136,7 +140,12 @@ export default {
                 //   搜索框
                 search: "",
             },
-            add: {},
+            // 日志
+            logList: [],
+            logFlag: true,
+            // 添加监控表单
+            add: { time: "30" },
+            // 表格数据
             table: [{ date: "1234" }],
             total_pages: 1,
             page: 1
@@ -145,15 +154,42 @@ export default {
     mounted() {
         // 获取xhr信息后处理
         ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
-            console.log("get")
             if (factory.obj[type]) {
                 typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
+            }
+        });
+        // 获取日志
+        ipcRenderer.on("get-log", (event, data) => {
+            // flag 0 成功  1进行中  2 失败
+            if (data.flag === 1 && this.logFlag) {
+                this.logList.push(data.msg);
+            }
+            if (data.flag === 0 && this.logFlag) {
+                this.logFlag = false;
+                this.logList.push(data.msg);
+                this.$message.success(data.msg);
+            }
+            if (data.flag === 2 && this.logFlag) {
+                this.logFlag = false;
+                this.logList.push(data.msg);
+                this.$message.error(data.msg);
             }
         });
     },
     methods: {
         opensycm() {
             ipcRenderer.send("open-sycm");
+        },
+        addMonitor() {
+            if (!this.add.id) {
+                this.$message.error("请输入竞品ID");
+                return;
+            }
+            this.logFlag = true;
+            this.logList = ["开始获取竞品" + this.add.id];
+            from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
+                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor", this.add);
+            });
         },
         getList() { }
     }
