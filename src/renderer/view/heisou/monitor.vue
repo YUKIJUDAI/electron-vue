@@ -253,12 +253,12 @@ export default {
                         res.data.date = arr.reverse();
                         this.treadData = res.data;
                         this.myChart = echarts.init(document.getElementById('echarts'));
-                        this.createChars(false);
+                        this.createCharts(false);
                     }
                 });
             });
         },
-        createChars(flag) {
+        createCharts(flag) {
             var arr = JSON.parse(JSON.stringify(this.treadData));
             let option = {
                 tooltip: {
@@ -322,6 +322,9 @@ export default {
                 ]
             };
             this.myChart.setOption(option, flag);
+        },
+        resetCharts() {
+            this.createCharts(true)
         },
         getList() {
             this.$http.post("/crawler/getCompeteGoods", Object.assign(this.form, { page: this.page })).then(res => {
