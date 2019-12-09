@@ -1,7 +1,8 @@
 const { remote, ipcRenderer } = require('electron');
 const qs = require("qs");
 const { from, interval, timer } = require("rxjs");
-const { filter, take, tap, delay, map } = require("rxjs/operators");
+const { filter, take, tap, delay, map, flatMap } = require("rxjs/operators");
+const moment = require('moment');
 
 let delayTime = 1000;
 
@@ -36,10 +37,10 @@ fetchProxy.addHandler(function (params, res) {
 
 // 登录成功后
 ipcRenderer.on('login-success', (event, type, data) => {
+
     //点击竞争
     interval(1000)
         .pipe(filter(() => document.querySelectorAll(".menu-list").length > 0))
-        .pipe(filter(() => !hasClass(document.querySelector(".menu-list").querySelectorAll('li')[14], "selected")))
         .pipe(take(1))
         .pipe(tap(() => { document.querySelector(".menu-list").querySelectorAll('li')[14].querySelector('a').click() }))
         .subscribe();
@@ -142,28 +143,26 @@ ipcRenderer.on('list-success', (event, type, data) => {
                 o.unsubscribe();
             }
         });
-})
+});
+
 // 添加竞品
 ipcRenderer.on("add-monitor", (event, data) => {
+    data.id = data.id.split(",");
     // todo
     let data1 = {
-        firstCateId: 50010728,
+        firstCateId: remote.getGlobal("tbInfo").cateLevel1Id || "50010728",
         sellerType: -1,
         rivalType: "item",
-        keyword: data.id,
         token: "b758749f8",
     }
     let data2 = {
-        firstCateId: 50010728,
+        firstCateId: remote.getGlobal("tbInfo").cateLevel1Id || "50010728",
         rivalType: "item",
-        itemId: data.id,
         token: "b758749f8"
     };
     let data3 = {
         dateType: "day",
-        dateRange: "2019-12-05|2019-12-05",
-        cateId: 50010728,
-        itemId: data.id,
+        cateId: remote.getGlobal("tbInfo").cateLevel1Id || "50010728",
         device: 0,
         sellerType: -1,
         indexCode: "uvIndex, payRateIndex, tradeIndex, payByrCntIndex",
@@ -176,55 +175,50 @@ ipcRenderer.on("add-monitor", (event, data) => {
         "transit-id": "bU47zaWeb8VVcm2sNmxQe19Wp4v5gg5aGLqrIX18nal2J7c8SkqT8euUXveAJIHSf50MVfUaFBdgNBERkxjfH4aBzGPMJNpUXbLW38OtZkgZvtJs8bUY/4HYOQN05p9P36sItFVASW1vtbJA2RFyaI6GIimPuncwkJo2M7hkcgs="
     }
     let headers3 = {
-        "transit-id": "CFOeUXt/nqP1xWr41wurWvBAh5fXki2NDfkhh46M/6cMogqs7Qm1N/UlnvEN2igkBprtzoLTkIEDopZ3Y4C/b4161yPk7EEhwWjtKWSHHb7XFGxl1VCUpSFtWbItSCGSqfaml4sWTm+NIDNUvHqk3asu2dQn9d6B9f2Yqb9MgNk="
+        "transit-id": "CBrDxQWXHyuiEyOJra7d7aOYeM9z6FFTJzyvixsK6cMouy5aKXOJMIjo9WE/dv7yJOjhjEqcJQHySlZbIWlvPF+31QTRpmoiXIYe09k22ioObyZBwNRCGJuYGPFm+9dHcgSU03IUBpQHyqrSQ0zwdnSrhxjZKtNQcuSCexyyJ2k="
     }
-    // 点击监控商品
-    from(fetch("https://sycm.taobao.com/mc/ci/config/rival/item/queryItem.json?" + qs.stringify(Object.assign(data1, { "_": new Date().getTime() })), { headers: headers1 }))
-        .pipe(map(res => res.json()))
-        .subscribe((result) => {
-            result.then(res => {
-                if (0 === res.data.result) {
-                    from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                        remote.BrowserWindow.fromId(i.id).webContents.send('get-log', { flag: 1, msg: `已获取竞品${data.id}的数据，正在解析` });
-                    });
-                } else {
-                    from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                        remote.BrowserWindow.fromId(i.id).webContents.send('get-log', { flag: 2, msg: res.data.message });
-                    });
-                }
-            }).catch(err => {
-                from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                    rremote.BrowserWindow.fromId(i.id).webContents.send('get-log', { flag: 2, msg: "获取竞品信息失败，请重试" });
-                });
-            })
-        });
 
-    interval(5000)
-        .pipe(take(1))
-        .subscribe((i) => {
-            from(fetch("https://sycm.taobao.com/mc/ci/config/rival/item/getSingleMonitoredInfo.json?" + qs.stringify(Object.assign(data2, { "_": new Date().getTime() })), { headers: headers2 }))
-                .pipe(delay(5000))
-                .pipe(map(res => res.json()))
-                .subscribe();
-        });
-
-    interval(5000)
-        .pipe(take(+data.time / 30))
-        .subscribe((i) => {
-            from(fetch("https://sycm.taobao.com/mc/ci/item/trend.json?" + qs.stringify(Object.assign(data3, { "_": new Date().getTime() })), { headers: headers3 }))
+    interval(10000)
+        .pipe(take(data.id.length))
+        .pipe(tap((j) => { setLog({ flag: 1, msg: `开始获取获取竞品${data.id[j]}的信息，请稍等` }) }))
+        .subscribe((j) => {
+            // 点击监控商品
+            from(fetch("https://sycm.taobao.com/mc/ci/config/rival/item/queryItem.json?" + qs.stringify(Object.assign(data1, { "_": new Date().getTime(), keyword: data.id[j] })), { headers: headers1 }))
                 .pipe(map(res => res.json()))
                 .subscribe((result) => {
                     result.then(res => {
-                        if (0 === res.code && i === (+data.time / 30 - 1)) {
-                            from(remote.BrowserWindow.getAllWindows()).subscribe(j => {
-                                remote.BrowserWindow.fromId(j.id).webContents.send('get-log', { flag: 0, msg: `获取竞品${data.id}信息成功` });
-                            });
-                        }
-                    })
+                        setLog(0 === res.data.result ? { flag: 1, msg: `已获取竞品${data.id[j]}的数据，正在解析` } : { flag: 2, msg: res.data.message });
+                    }).catch(err => {
+                        setLog({ flag: 2, msg: `获取竞品${data.id[j]}信息失败，请重试` });
+                    });
                 });
-        })
 
-})
+            // 竞争商品信息
+            interval(5000)
+                .pipe(take(1))
+                .pipe(flatMap(() => fetch("https://sycm.taobao.com/mc/ci/config/rival/item/getSingleMonitoredInfo.json?" + qs.stringify(Object.assign(data2, { "_": new Date().getTime(), itemId: data.id[j] })), { headers: headers2 })))
+                .pipe(map(res => res.json()))
+                .subscribe((result) => {
+                    result.then(res => {
+                        if (0 === res.code) {
+                            setLog(j === (data.id.length - 1) ? { flag: 0, msg: `获取竞品${data.id[j]}信息成功` } : { flag: 1, msg: `获取竞品${data.id[j]}信息成功` })
+                        } else {
+                            setLog({ flag: 2, msg: res.data.message });
+                        }
+                    }).catch(err => {
+                        setLog({ flag: 2, msg: `获取竞品${data.id[j]}信息失败，请重试` });
+                    });
+                });
+
+            //竞品趋势信息
+            interval(5000)
+                .pipe(take(+data.time / 30))
+                .pipe(flatMap((i) => fetch("https://sycm.taobao.com/mc/ci/item/trend.json?" + qs.stringify(Object.assign(data3, { "_": new Date().getTime(), dateRange: dateRange(i), itemId: data.id[j] })), { headers: headers3 })))
+                .pipe(map(res => res.json()))
+                .subscribe()
+        })
+});
+
 
 // 是否有classname
 function hasClass(ele, cls) {
@@ -233,6 +227,17 @@ function hasClass(ele, cls) {
         if (cls.replace(/\s/g, '').length == 0) return false;
         return new RegExp(' ' + cls + ' ').test(' ' + ele.className + ' ')
     }
+}
+// 日期计算
+function dateRange(i) {
+    const t = moment().subtract((30 * i + 1), 'days');
+    return (t.format('YYYY-MM-DD') + "|" + t.format('YYYY-MM-DD'));
+}
+// 设置日期
+function setLog(obj) {
+    from(remote.BrowserWindow.getAllWindows()).subscribe(j => {
+        remote.BrowserWindow.fromId(j.id).webContents.send('get-log', obj);
+    });
 }
 
 /**
@@ -350,7 +355,9 @@ function FetchProxy() {
         "getCoreTrend", // 曲线图数据
         "getKeywords", // 入店关键词
         "getFlowSource", // 入店来源
-        "getSingleMonitoredInfo" // 竞争商品信息
+        "getSingleMonitoredInfo", // 竞争商品信息
+        "trend", //竞品趋势信息
+        "getShopCate" // 店铺分类信息
     ]
 
     let gHandlerList = [],  //截获请求的处理函数列表
@@ -359,12 +366,12 @@ function FetchProxy() {
         if (gIsInited) return;
         gIsInited = true;
         var winFetch = window.fetch;
-        window.fetch = function (input, opts) {
+        window.fetch = function (url, opts) {
             return new Promise((resolve, reject) => {
-                winFetch(input, opts).then(
+                winFetch(url, opts).then(
                     (res) => {
                         try {
-                            let params = (opts && opts.hasOwnProperty("params")) ? opts.params : {};
+                            let params = (opts && opts.hasOwnProperty("params")) ? opts.params : qs.parse(url.split("?")[1]);
                             gHandlerList.map(proxyHandler => proxyHandler.call(this, params, res));
                         }
                         catch (e) {

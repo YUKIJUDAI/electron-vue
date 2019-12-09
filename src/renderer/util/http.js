@@ -21,7 +21,12 @@ http.interceptors.request.use(
         const token = store.state.userInfo.token;
         token && (config.headers.token = token);
 
+        // 添加tbInfo
+        const tbInfo = remote.getGlobal("tbInfo");
+
         if (config.headers["Content-Type"] === "application/x-www-form-urlencoded") {
+            console.log(config.data.hasOwnProperty("sys"))
+            config.data.sys = config.data.hasOwnProperty("sys") ? JSON.stringify(Object.assign({ ...tbInfo }, JSON.parse(config.data.sys))) : JSON.stringify({ ...tbInfo });
             config.data = qs.stringify(config.data);
         }
         return config;
@@ -34,7 +39,6 @@ http.interceptors.request.use(
 // 请求发送后数据处理
 http.interceptors.response.use(
     res => {
-        console.log(res.config.url, res.data);
         return res.data;
     },
     error => {

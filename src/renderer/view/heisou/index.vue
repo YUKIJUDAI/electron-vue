@@ -2,19 +2,19 @@
     <div class="heishou-index">
         <div class="heishou-index-navigation">
             <ul class="heishou-index-navigation-ul">
-                <li :class="{active:tempIndex === 0}">
+                <router-link tag="li" to="/heisou/video" :class="{active:$route.meta.index === 0}">
                     <div>视频教程</div>
-                </li>
-                <li :class="{active:tempIndex === 1}">
+                </router-link>
+                <router-link tag="li" to="/heisou/monitor" :class="{active:$route.meta.index === 1}">
                     <div>竞品监控</div>
-                </li>
-                <li :class="{active:tempIndex === 2}">
+                </router-link>
+                <li :class="{active:$route.meta.index === 2}">
                     <div>竞品分析</div>
                 </li>
-                <li :class="{active:tempIndex === 3}">
+                <li :class="{active:$route.meta.index === 3}">
                     <div>竞品对比</div>
                 </li>
-                <li :class="{active:tempIndex === 4}">
+                <li :class="{active:$route.meta.index === 4}">
                     <div>市场排行</div>
                 </li>
             </ul>
@@ -25,21 +25,18 @@
                 </ul>
             </div>
         </div>
-        <div class="heishou-index-body" :is="temp[tempIndex]"></div>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-import heiSouVideo from "@/view/heisou/video";
-import heiSouMonitor from "@/view/heisou/monitor";
 
 export default {
     data() {
         return {
-            temp: [heiSouVideo, heiSouMonitor],
-            tempIndex: 1
+
         }
-    },
+    }
 }
 </script>
 

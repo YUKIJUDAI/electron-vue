@@ -77,11 +77,13 @@ function createView() {
     sycmWindow.webContents.openDevTools();
     // 存储淘宝信息
     global.tbInfo = {
-        user_account: "",    //  淘宝登录账户
-        shop_id: "",           //  店铺id
-        shop_name: "",      //  当前店铺名称
-        tb_login_user_id: "",  //  淘宝登录用户id
-        run_as_user_id: ""     //  当前使用的淘宝用户id
+        loginUserName: "",    //  淘宝登录账户
+        runAsShopId: "",           //  店铺id
+        runAsShopTitle: "",      //  当前店铺名称
+        loginUserId: "",  //  淘宝登录用户id
+        runAsUserId: "",     //  当前使用的淘宝用户id
+        cateId: "",   // 店铺分类id
+        cateName: ""  // 店铺分类名字
     };
 
     sycmWindow.on('closed', function () {

@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="main-right">
-                <div class="main-right-body" :is="temp[tempIndex]"></div>
+                <router-view />
             </div>
         </div>
         <el-dialog title="欢迎登录黑搜开发器" :visible.sync="loginFlag" width="558px">
@@ -111,13 +111,9 @@ const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 
-import heiSou from "@/view/heisou/index";
-
 export default {
     data() {
         return {
-            temp: [heiSou],
-            tempIndex: 0,
             // 登录表格
             loginForm: {},
             // 注册表格
