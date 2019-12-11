@@ -13,7 +13,8 @@
         "pack": "npm run pack:main && npm run pack:renderer",
         "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
         "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-        "rebuild": "electron-rebuild -f -w .\\node_modules\\better-sqlite3"
+        "rebuildsqlite3": "electron-rebuild -f -w .\\node_modules\\better-sqlite3",
+        "rebuildrobotjs": "electron-rebuild -f -w .\\node_modules\\robotjs"
     },
     "build": {
         "productName": "my-project",
@@ -53,6 +54,7 @@
         "less-loader": "^5.0.0",
         "moment": "^2.24.0",
         "qs": "^6.9.1",
+        "robotjs": "^0.6.0",
         "run-electron": "^1.0.0",
         "rxjs": "^6.5.3",
         "vue": "^2.5.16",

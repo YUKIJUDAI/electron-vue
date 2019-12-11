@@ -3,6 +3,7 @@ const qs = require("qs");
 const { from, interval, timer } = require("rxjs");
 const { filter, take, tap, delay, map, flatMap } = require("rxjs/operators");
 const moment = require('moment');
+const robot = require("robotjs");
 
 let delayTime = 1000;
 
@@ -148,77 +149,32 @@ ipcRenderer.on('list-success', (event, type, data) => {
 // 添加竞品
 ipcRenderer.on("add-monitor", (event, data) => {
     data.id = data.id.split(",");
-    // todo
-    let data1 = {
-        firstCateId: remote.getGlobal("tbInfo").cateLevel1Id || "50010728",
-        sellerType: -1,
-        rivalType: "item",
-        token: "b758749f8",
-    }
-    let data2 = {
-        firstCateId: remote.getGlobal("tbInfo").cateLevel1Id || "50010728",
-        rivalType: "item",
-        token: "b758749f8"
-    };
-    let data3 = {
-        dateType: "day",
-        cateId: remote.getGlobal("tbInfo").cateLevel1Id || "50010728",
-        device: 0,
-        sellerType: -1,
-        indexCode: "uvIndex, payRateIndex, tradeIndex, payByrCntIndex",
-        token: "b758749f8"
-    }
-    let headers1 = {
-        "transit-id": "Vbib0iPwoCDKW0ZsO3iwAiJ8putPDG3c6ewf3xmRMoBz3I2NV6hZHYL28SeRgjm8xPBa7K6Y3M8mnSST9VQmdb083ubQLpbJ1OZ4YC2g79mAO0sZLxSNu5NisnG+NwVYyZ4GLjqhHB9qCQeYRrVg09N/WHjlDvRYHAqrJsgAqPA="
-    }
-    let headers2 = {
-        "transit-id": "bU47zaWeb8VVcm2sNmxQe19Wp4v5gg5aGLqrIX18nal2J7c8SkqT8euUXveAJIHSf50MVfUaFBdgNBERkxjfH4aBzGPMJNpUXbLW38OtZkgZvtJs8bUY/4HYOQN05p9P36sItFVASW1vtbJA2RFyaI6GIimPuncwkJo2M7hkcgs="
-    }
-    let headers3 = {
-        "transit-id": "CBrDxQWXHyuiEyOJra7d7aOYeM9z6FFTJzyvixsK6cMouy5aKXOJMIjo9WE/dv7yJOjhjEqcJQHySlZbIWlvPF+31QTRpmoiXIYe09k22ioObyZBwNRCGJuYGPFm+9dHcgSU03IUBpQHyqrSQ0zwdnSrhxjZKtNQcuSCexyyJ2k="
-    }
 
-    interval(10000)
-        .pipe(take(data.id.length))
-        .pipe(tap((j) => { setLog({ flag: 1, msg: `开始获取获取竞品${data.id[j]}的信息，请稍等` }) }))
-        .subscribe((j) => {
-            // 点击监控商品
-            from(fetch("https://sycm.taobao.com/mc/ci/config/rival/item/queryItem.json?" + qs.stringify(Object.assign(data1, { "_": new Date().getTime(), keyword: data.id[j] })), { headers: headers1 }))
-                .pipe(map(res => res.json()))
-                .subscribe((result) => {
-                    result.then(res => {
-                        setLog(0 === res.data.result ? { flag: 1, msg: `已获取竞品${data.id[j]}的数据，正在解析` } : { flag: 2, msg: res.data.message });
-                    }).catch(err => {
-                        setLog({ flag: 2, msg: `获取竞品${data.id[j]}信息失败，请重试` });
-                    });
-                });
-
-            // 竞争商品信息
-            interval(5000)
-                .pipe(take(1))
-                .pipe(flatMap(() => fetch("https://sycm.taobao.com/mc/ci/config/rival/item/getSingleMonitoredInfo.json?" + qs.stringify(Object.assign(data2, { "_": new Date().getTime(), itemId: data.id[j] })), { headers: headers2 })))
-                .pipe(map(res => res.json()))
-                .subscribe((result) => {
-                    result.then(res => {
-                        if (0 === res.code) {
-                            setLog(j === (data.id.length - 1) ? { flag: 0, msg: `获取竞品${data.id[j]}信息成功` } : { flag: 1, msg: `获取竞品${data.id[j]}信息成功` })
-                        } else {
-                            setLog({ flag: 2, msg: res.data.message });
-                        }
-                    }).catch(err => {
-                        setLog({ flag: 2, msg: `获取竞品${data.id[j]}信息失败，请重试` });
-                    });
-                });
-
-            //竞品趋势信息
-            interval(5000)
-                .pipe(take(+data.time / 30))
-                .pipe(flatMap((i) => fetch("https://sycm.taobao.com/mc/ci/item/trend.json?" + qs.stringify(Object.assign(data3, { "_": new Date().getTime(), dateRange: dateRange(i), itemId: data.id[j] })), { headers: headers3 })))
-                .pipe(map(res => res.json()))
-                .subscribe()
-        })
+    // 点击监控商品
+    interval(1000)
+        .pipe(filter(() => document.querySelectorAll(".ebase-ModernFrame__leftMenu").length > 0))
+        .pipe(take(1))
+        // .pipe(tap(() => { document.querySelector(".ebase-ModernFrame__leftMenu").querySelectorAll('.level-leaf')[11].querySelector('a').click() }))
+        // .pipe(delay(delayTime))
+        .pipe(tap(() => { document.querySelectorAll(".oui-tab-switch-item")[1].click() }))
+        .pipe(delay(delayTime))
+        .pipe(tap(() => { document.querySelector(".alife-dt-card-sycm-common-select").querySelector("span").click() }))
+        .pipe(delay(delayTime))
+        .pipe(tap(() => { document.querySelectorAll(".ant-input-suffix")[1].querySelector("i").click() }))
+        .pipe(delay(delayTime))
+        .pipe(tap(() => { document.querySelectorAll(".ant-input")[1].focus() }))
+        .pipe(delay(delayTime))
+        .pipe(tap(() => {
+            from(data.id[0].split("")).pipe(delay(20)).subscribe((i) => { robot.keyTap(i) });
+        }))
+        .subscribe();
 });
 
+
+// 是否在竞争页面
+function isHome() {
+    return document.querySelectorAll(".ebase-ModernFrame__leftMenu").length > 0
+}
 
 // 是否有classname
 function hasClass(ele, cls) {
@@ -233,12 +189,13 @@ function dateRange(i) {
     const t = moment().subtract((30 * i + 1), 'days');
     return (t.format('YYYY-MM-DD') + "|" + t.format('YYYY-MM-DD'));
 }
-// 设置日期
+// 设置日志
 function setLog(obj) {
     from(remote.BrowserWindow.getAllWindows()).subscribe(j => {
         remote.BrowserWindow.fromId(j.id).webContents.send('get-log', obj);
     });
 }
+
 
 /**
  * 通过劫持原生XMLHttpRequest实现对页面ajax请求的监听
