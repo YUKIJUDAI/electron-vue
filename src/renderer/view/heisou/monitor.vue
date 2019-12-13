@@ -61,10 +61,10 @@
                                 <el-table-column prop="analysis_time_str" label="日期" width="120"> </el-table-column>
                                 <el-table-column prop="uvIndexNum" label="访客数"> </el-table-column>
                                 <el-table-column prop="tradeNum" label="买家数"> </el-table-column>
-                                <el-table-column prop="" label="支付金额"> </el-table-column>
-                                <el-table-column prop="" label="客单价"> </el-table-column>
+                                <el-table-column prop="payAmount" label="支付金额"> </el-table-column>
+                                <el-table-column prop="price" label="客单价"> </el-table-column>
                                 <el-table-column prop="payRateRatio" label="转化率"> </el-table-column>
-                                <el-table-column prop="" label="UV价值"> </el-table-column>
+                                <el-table-column prop="uvPrice" label="UV价值"> </el-table-column>
                             </el-table>
                         </el-tab-pane>
                     </el-tabs>
@@ -150,10 +150,10 @@
                 <el-table-column prop="itemId" label="宝贝ID" width="120" fixed> </el-table-column>
                 <el-table-column prop="uvIndexNum" label="访客数" width="70" fixed> </el-table-column>
                 <el-table-column prop="tradeNum" label="买家数" width="70" fixed> </el-table-column>
-                <el-table-column prop="" label="支付金额" width="70" fixed> </el-table-column>
-                <el-table-column prop="" label="客单价" width="70"> </el-table-column>
+                <el-table-column prop="payAmount" label="支付金额" width="70" fixed> </el-table-column>
+                <el-table-column prop="price" label="客单价" width="70"> </el-table-column>
                 <el-table-column prop="payRateRatio" label="转化率" width="70"> </el-table-column>
-                <el-table-column prop="" label="UV价值" width="70"> </el-table-column>
+                <el-table-column prop="uvPrice" label="UV价值" width="70"> </el-table-column>
                 <el-table-column prop="goods_name" label="宝贝标题" width="220"> </el-table-column>
                 <el-table-column prop="shop_name" label="店铺名称" width="120"> </el-table-column>
                 <el-table-column prop="" label="类目名称" width="200"> </el-table-column>
@@ -237,14 +237,12 @@ export default {
                 this.updateFlag = false;
                 this.logFlag = false;
                 this.logList.push(data.msg);
-                this.$message.success(data.msg);
             }
             if (data.flag === 2 && this.logFlag) {
                 this.addingFlag = false;
                 this.updateFlag = false;
                 this.logFlag = false;
                 this.logList.push(data.msg);
-                this.$message.error(data.msg);
             }
         });
     },

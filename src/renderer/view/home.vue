@@ -5,6 +5,11 @@
                 <img src="" class="logo">
                 <span class="title">黑搜开发器</span>
             </div>
+            <ul class="clearfix right-button">
+                <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
+                <li class="max" @click="toMainFn('max')"><i class="icon-max"></i></li>
+                <li class="close" @click="toMainFn('close')"><i class="icon-close"></i></li>
+            </ul>
             <ul class="clearfix right-ul">
                 <li class="login" @click="loginFlag = true" v-if="!isLogin"><i class="icon-login"></i>登录</li>
                 <li class="registered" @click="registeredFlag = true" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
@@ -27,10 +32,14 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <li class="clearfix active">
+                        <router-link to="/heisou/video" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 0}">
                             <i class="icon-left-li-1"></i>
                             <span>极速黑搜</span>
-                        </li>
+                        </router-link>
+                        <router-link to="/heihao/search" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 1}">
+                            <i class="icon-left-li-1"></i>
+                            <span>黑号查询</span>
+                        </router-link>
                     </ul>
                 </div>
             </div>
@@ -210,6 +219,10 @@ export default {
         // 退出
         exit() {
             this.$store.dispatch("set_user_info", { token: "", phone: "" });
+        },
+        // 最大化 最小化 关闭
+        toMainFn(type) {
+            ipcRenderer.send(type);
         }
     }
 }
@@ -284,6 +297,39 @@ export default {
                 margin-right: 3px;
                 vertical-align: -4px;
                 background: url("~@/assets/icon/registered.png") no-repeat;
+            }
+        }
+        .right-button {
+            .fr;
+            margin-right: 15px;
+            li {
+                margin-top: 7px;
+                margin-right: 15px;
+                cursor: pointer;
+                .l-h(30px);
+                .fl;
+                .db;
+            }
+            .icon-min {
+                .wh(17px);
+                .dib;
+                margin-right: 3px;
+                vertical-align: -10px;
+                background: url("~@/assets/icon/min.png") no-repeat;
+            }
+            .icon-max {
+                .wh(17px);
+                .dib;
+                margin-right: 3px;
+                vertical-align: -6px;
+                background: url("~@/assets/icon/max.png") no-repeat;
+            }
+            .icon-close {
+                .wh(17px);
+                .dib;
+                margin-right: 3px;
+                vertical-align: -4px;
+                background: url("~@/assets/icon/close.png") no-repeat;
             }
         }
     }
@@ -372,7 +418,7 @@ export default {
                         .fl;
                         font-size: 15px;
                         margin-left: 16px;
-                        color: #6660;
+                        color: #666666;
                     }
                 }
                 .active {
@@ -390,7 +436,7 @@ export default {
         .main-right {
             margin-left: 208px;
             margin-right: 20px;
-            min-height: 95%;
+            height: 95%;
             background: rgba(255, 255, 255, 1);
             box-shadow: -4px 0px 11px 1px rgba(0, 32, 95, 0.1);
         }

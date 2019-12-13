@@ -44,7 +44,7 @@ export default {
 @import url("~@/assets/less/commom.less");
 .heishou-index {
     padding-top: 20px;
-    min-height: calc(~"100% - 20px");
+    height: calc(~"100% - 20px");
     .heishou-index-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;

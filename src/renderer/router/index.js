@@ -18,12 +18,23 @@ export default new Router({
                         {
                             path: "video",
                             component: require("@/view/heisou/video").default,
-                            meta: { index: 0 }
+                            meta: { menuIndex: 0, index: 0 }
                         },
                         {
                             path: "monitor",
                             component: require("@/view/heisou/monitor").default,
-                            meta: { index: 1 }
+                            meta: { menuIndex: 0, index: 1 }
+                        }
+                    ]
+                },
+                {
+                    path: "heihao",
+                    component: require("@/view/heihao/index").default,
+                    children: [
+                        {
+                            path: "search",
+                            component: require("@/view/heihao/search").default,
+                            meta: { menuIndex: 1, index: 0 }
                         }
                     ]
                 }

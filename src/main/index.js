@@ -19,6 +19,21 @@ ipcMain.on("open-sycm", function () {
     createView();
 });
 
+// 最小化
+ipcMain.on("min", function () {
+    mainWindow.minimize();
+});
+
+// 最大化
+ipcMain.on("max", function () {
+    mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
+});
+
+// 关闭
+ipcMain.on("close", function () {
+    mainWindow.close();
+});
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {
@@ -33,6 +48,7 @@ app.on('activate', function () {
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1500, height: 900, autoHideMenuBar: true,
+        minWidth: 1024, minHeight: 768,
         webPreferences: {
             webviewTag: true,
             webSecurity: true,

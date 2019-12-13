@@ -25,7 +25,7 @@ factory.add("getPersonalView", {
         remote.getGlobal('tbInfo').runAsUserId = data.runAsUserId;   //  当前使用的淘宝用户id
         http.post("/user/relateTbAccount", { tb_account: data.loginUserName, tb_user_id: data.loginUserId }).then(res => {
             0 === res.code && from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                //remote.BrowserWindow.fromId(i.id).webContents.send("login-success");
+                remote.BrowserWindow.fromId(i.id).webContents.send("login-success");
             });
         });
     }

@@ -1,6 +1,5 @@
 <template>
     <div class="heisou-video">
-        <img src="~@/assets/img/heisou-index-bg.png" class="bg">
         <div class="part-1">任意竞品 透视分析</div>
         <div class="part-2">
             <div class="list">
@@ -94,14 +93,6 @@ export default {
     .rel;
     background: url("~@/assets/img/heisou-index-bg.png") no-repeat left bottom;
     height: calc(~"100% - 44px");
-    .bg {
-        .abs;
-        overflow: hidden;
-        top: 0;
-        left: 50%;
-        margin-left: -960px;
-        z-index: -1;
-    }
     .part-1 {
         font-size: 0.96rem;
         color: #ff6801;
