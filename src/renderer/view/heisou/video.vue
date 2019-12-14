@@ -92,57 +92,57 @@ export default {
 .heisou-video {
     .rel;
     background: url("~@/assets/img/heisou-index-bg.png") no-repeat left bottom;
-    height: calc(~"100% - 44px");
+    min-height: calc(~"87vh - 15px - 40px - 20px - 2px");
     .part-1 {
-        font-size: 0.96rem;
+        font-size: 40px;
         color: #ff6801;
-        padding-top: 0.7rem;
+        padding-top: 35px;
         .tc;
     }
     .part-2 {
         display: flex;
         justify-content: space-around;
-        margin-top: 0.8rem;
+        margin-top: 40px;
         .list {
-            width: 9.32rem;
-            height: 12.6rem;
+            width: 30%;
+            height: 550px;
             background: rgba(255, 255, 255, 1);
             box-shadow: -4px 0px 11px 1px rgba(0, 32, 95, 0.15);
         }
         .list-title {
             .tc;
-            padding: 0.6rem 0;
+            padding: 20px 0;
             border-bottom: 1px solid #eee;
-            font-size: 0.4rem;
+            font-size: 20px;
             font-weight: bold;
             color: rgba(51, 51, 51, 1);
         }
         .list-video {
-            padding: 0.6rem;
+            padding: 20px;
             video {
                 width: 100%;
                 height: 100%;
             }
         }
         .list-ul {
-            padding: 0 0.6rem;
+            padding: 0 30px;
             li {
                 list-style: none;
-                margin-bottom: 0.2rem;
+                margin-bottom: 5px;
             }
             i {
                 .fl;
                 .db;
-                .wh(0.36rem);
+                .wh(18px);
                 .bg("~@/assets/icon/star.png");
-                margin-right: 0.24rem;
-                margin-top: 0.1rem;
+                margin-right: 12px;
+                margin-top: 5px;
             }
             p {
                 .fl;
-                font-size: 0.32rem;
+                font-size: 14px;
                 color: #666;
-                line-height: 0.6rem;
+                line-height: 26px;
             }
             span {
                 color: #2062e6;
@@ -151,14 +151,14 @@ export default {
     }
     .part-3 {
         .tc;
-        color:#fff;
+        color: #fff;
         .part-3-1 {
-            padding: 0.56rem 0;
-            font-size: 0.48rem;
+            padding: 28px 0;
+            font-size: 24px;
         }
         .part-3-2 {
-            font-size: 0.32rem;
-            .l-h(0.6rem);
+            font-size: 16px;
+            .l-h(30px);
         }
     }
 }

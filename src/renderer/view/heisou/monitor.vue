@@ -520,6 +520,7 @@ export default {
     }
 }
 .pagination {
+    overflow: hidden;
     padding-top: 20px;
     text-align: center;
 }

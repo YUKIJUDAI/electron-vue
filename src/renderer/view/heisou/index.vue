@@ -25,7 +25,7 @@
                 </ul>
             </div>
         </div>
-        <router-view></router-view>
+        <router-view class="heisou-main"></router-view>
     </div>
 </template>
 
@@ -43,8 +43,8 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 .heishou-index {
-    padding-top: 20px;
-    height: calc(~"100% - 20px");
+    padding-top: 15px;
+    min-height: calc(~"87vh - 15px");
     .heishou-index-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
@@ -97,6 +97,9 @@ export default {
                     no-repeat;
             }
         }
+    }
+    .heisou-main {
+        padding-bottom: 20px;
     }
 }
 </style>

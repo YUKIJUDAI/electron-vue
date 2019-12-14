@@ -1,16 +1,16 @@
 <template>
     <div class="main">
-        <div class="header clearfix">
+        <div class="header clearfix" style="-webkit-app-region: drag">
             <div class="msg">
                 <img src="" class="logo">
                 <span class="title">黑搜开发器</span>
             </div>
-            <ul class="clearfix right-button">
+            <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
                 <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
                 <li class="max" @click="toMainFn('max')"><i class="icon-max"></i></li>
                 <li class="close" @click="toMainFn('close')"><i class="icon-close"></i></li>
             </ul>
-            <ul class="clearfix right-ul">
+            <ul class="clearfix right-ul" style="-webkit-app-region: no-drag">
                 <li class="login" @click="loginFlag = true" v-if="!isLogin"><i class="icon-login"></i>登录</li>
                 <li class="registered" @click="registeredFlag = true" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
                 <li class="user" v-if="isLogin">{{userPhone}}</li>
@@ -231,7 +231,6 @@ export default {
 <style scoped lang="less">
 @import url("~@/assets/less/commom.less");
 .main {
-    min-width: 1024px;
     width: 100vw;
     overflow: hidden;
     .header {
@@ -303,8 +302,8 @@ export default {
             .fr;
             margin-right: 15px;
             li {
-                margin-top: 7px;
-                margin-right: 15px;
+                margin-top: 15px;
+                margin-right: 7px;
                 cursor: pointer;
                 .l-h(30px);
                 .fl;
@@ -335,12 +334,12 @@ export default {
     }
     .body {
         height: calc(~"100vh - 60px - 18px");
-        overflow-y: scroll;
+        overflow-y: auto;
         .bg-c(#f5f5f5);
         padding-top: 18px;
         .main-left {
             width: 175px;
-            height: 95%;
+            height: 87vh;
             margin-left: 20px;
             background: rgba(255, 255, 255, 1);
             border: 1px solid rgba(238, 238, 238, 1);
@@ -436,7 +435,7 @@ export default {
         .main-right {
             margin-left: 208px;
             margin-right: 20px;
-            height: 95%;
+            margin-bottom: 20px;
             background: rgba(255, 255, 255, 1);
             box-shadow: -4px 0px 11px 1px rgba(0, 32, 95, 0.1);
         }

@@ -35,6 +35,16 @@ export default new Router({
                             path: "search",
                             component: require("@/view/heihao/search").default,
                             meta: { menuIndex: 1, index: 0 }
+                        },
+                        {
+                            path: "report",
+                            component: require("@/view/heihao/report").default,
+                            meta: { menuIndex: 1, index: 1 }
+                        },
+                        {
+                            path: "reportHistory",
+                            component: require("@/view/heihao/reportHistory").default,
+                            meta: { menuIndex: 1, index: 2 }
                         }
                     ]
                 }

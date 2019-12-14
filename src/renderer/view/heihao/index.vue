@@ -5,12 +5,15 @@
                 <router-link tag="li" to="/heihao/search" :class="{active:$route.meta.index === 0}">
                     <div>深度黑号查询</div>
                 </router-link>
-                <router-link tag="li" to="" :class="{active:$route.meta.index === 1}">
+                <router-link tag="li" to="/heihao/report" :class="{active:$route.meta.index === 1}">
                     <div>举报黑号</div>
+                </router-link>
+                <router-link tag="li" to="/heihao/reportHistory" :class="{active:$route.meta.index === 2}">
+                    <div>举报记录</div>
                 </router-link>
             </ul>
         </div>
-        <router-view></router-view>
+        <router-view class="heihao-main"></router-view>
     </div>
 </template>
 
@@ -28,8 +31,8 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 .heihao-index {
-    padding-top: 20px;
-    height: calc(~"100% - 20px");
+    padding-top: 15px;
+    min-height: calc(~"87vh - 15px");
     .heihao-index-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
@@ -55,6 +58,9 @@ export default {
                 }
             }
         }
+    }
+    .heihao-main {
+        padding-bottom: 20px;
     }
 }
 </style>

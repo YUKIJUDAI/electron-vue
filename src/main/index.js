@@ -47,8 +47,8 @@ app.on('activate', function () {
 // 创建窗口
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1500, height: 900, autoHideMenuBar: true,
-        minWidth: 1024, minHeight: 768,
+        width: 1280, height: 800, autoHideMenuBar: true,
+        minWidth: 1280, minHeight: 800, frame: false,
         webPreferences: {
             webviewTag: true,
             webSecurity: true,
