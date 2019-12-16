@@ -14,16 +14,7 @@
                 <li :class="{active:$route.meta.index === 3}">
                     <div>竞品对比</div>
                 </li>
-                <li :class="{active:$route.meta.index === 4}">
-                    <div>市场排行</div>
-                </li>
             </ul>
-            <div class="heishou-index-navigation-right">
-                <ul>
-                    <li><i class="icon-heishou-index-1"></i>示例</li>
-                    <li><i class="icon-heishou-index-2"></i>充值</li>
-                </ul>
-            </div>
         </div>
         <router-view class="heisou-main"></router-view>
     </div>
@@ -48,7 +39,7 @@ export default {
     .heishou-index-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
-        height: 43px;
+        height: 45px;
         .heishou-index-navigation-ul {
             .fl;
             li {
@@ -68,33 +59,6 @@ export default {
                 div {
                     color: #ff6801;
                 }
-            }
-        }
-        .heishou-index-navigation-right {
-            .fr;
-            li {
-                .fl;
-                font-size: 16px;
-                color: rgba(255, 104, 1, 1);
-                margin-right: 20px;
-                margin-top: 12px;
-                cursor: pointer;
-            }
-            .icon-heishou-index-1 {
-                .wh(18px);
-                .dib;
-                vertical-align: -2px;
-                margin-right: 5px;
-                background: url("~@/assets/icon/icon-heishou-index-1.png")
-                    no-repeat;
-            }
-            .icon-heishou-index-2 {
-                .wh(18px);
-                .dib;
-                vertical-align: -2px;
-                margin-right: 5px;
-                background: url("~@/assets/icon/icon-heishou-index-2.png")
-                    no-repeat;
             }
         }
     }

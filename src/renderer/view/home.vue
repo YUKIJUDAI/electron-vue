@@ -40,6 +40,10 @@
                             <i class="icon-left-li-1"></i>
                             <span>黑号查询</span>
                         </router-link>
+                        <router-link to="/liuliang/flow" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 2}">
+                            <i class="icon-left-li-1"></i>
+                            <span>淘宝流量</span>
+                        </router-link>
                     </ul>
                 </div>
             </div>

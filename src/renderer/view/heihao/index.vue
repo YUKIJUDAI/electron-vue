@@ -36,7 +36,7 @@ export default {
     .heihao-index-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
-        height: 43px;
+        height: 45px;
         .heihao-index-navigation-ul {
             .fl;
             li {
