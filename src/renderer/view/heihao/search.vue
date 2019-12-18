@@ -1,9 +1,9 @@
 <template>
     <div class="heihao-search">
         <div class="search">
-            <el-form :inline="true" :model="searchData" label-width="80px" label-position="left">
+            <el-form :inline="true" label-width="80px" label-position="left">
                 <el-form-item label="用户旺旺">
-                    <el-input v-model="searchData.title" size="small" style="width:495px"></el-input>
+                    <el-input v-model="wangwang" size="small" style="width:495px"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search">立即查询</el-button>
@@ -19,52 +19,49 @@
                     </div>
                     <ul class="info-ul">
                         <li>
-                            <p>旺旺：<span></span></p>
+                            <p>旺旺：<span>{{baseInfo.wang}}</span></p>
                         </li>
                         <li>
-                            <p>是否实名：<span></span></p>
+                            <p>是否实名：<span>{{["未实名","已实名"][+baseInfo.isAuth]}}</span></p>
                         </li>
                         <li>
-                            <p>周单均数：<span></span></p>
+                            <p>周单均数：<span>{{baseInfo.weekNum}}</span></p>
                         </li>
                         <li>
-                            <p>单数：<span></span></p>
+                            <p>单数：<span>{{baseInfo.goodNum}}</span></p>
                         </li>
                         <li>
-                            <p>性别：<span></span></p>
+                            <p>性别：<span>{{baseInfo.sex}}</span></p>
                         </li>
                         <li>
-                            <p>买家信誉：<span></span></p>
+                            <p>买家信誉：<span>{{baseInfo.creditLevel}}</span></p>
                         </li>
                         <li>
-                            <p>月单均值：<span></span></p>
+                            <p>月单均值：<span>{{baseInfo.monthNum}}</span></p>
                         </li>
                         <li>
-                            <p>中差评价：<span></span></p>
+                            <p>中差评价：<span>{{baseInfo.receiveBadNum}}</span></p>
                         </li>
                         <li>
-                            <p>地区：<span></span></p>
+                            <p>地区：<span>{{baseInfo.area}}</span></p>
                         </li>
                         <li>
-                            <p>会员等级：<span></span></p>
+                            <p>会员等级：<span>{{baseInfo.vLevel}}</span></p>
                         </li>
                         <li>
-                            <p>注册时间：<span></span></p>
+                            <p>注册时间：<span>{{baseInfo.registerDate}}</span></p>
                         </li>
                         <li>
-                            <p>好评数：<span></span></p>
+                            <p>好评数：<span>{{baseInfo.goodRate}}</span></p>
                         </li>
                         <li>
-                            <p>淘龄：<span></span></p>
+                            <p>淘龄：<span>{{baseInfo.tbAge}}</span></p>
                         </li>
                         <li>
-                            <p>超级会员：<span></span></p>
+                            <p>超级会员：<span>{{baseInfo.superVip}}</span></p>
                         </li>
                         <li>
-                            <p>最后登录：<span></span></p>
-                        </li>
-                        <li>
-                            <p>好评率：<span></span></p>
+                            <p>最后登录：<span>{{baseInfo.lastLoginTime}}</span></p>
                         </li>
                     </ul>
                 </div>
@@ -72,22 +69,22 @@
             <div class="msg">
                 <div class="msg-title">
                     <p class="msg-title-p1">用户打标情况<span>（深度付费查询）</span></p>
-                    <p class="msg-title-p2">【这个是黑号，我有证据，我要举报】</p>
+                    <p class="msg-title-p2" @click="report">【这个是黑号，我有证据，我要举报】</p>
                 </div>
                 <el-table :data="tableData" border style="width: 100%" :header-cell-style="{'text-align':'center','background':'#FF6801','border-color':'#FF6801','color':'#fff'}">
-                    <el-table-column prop="" label="跑单">
+                    <el-table-column prop="pd" label="跑单">
                     </el-table-column>
-                    <el-table-column prop="" label="敲诈">
+                    <el-table-column prop="qz" label="敲诈">
                     </el-table-column>
-                    <el-table-column prop="" label="骗子">
+                    <el-table-column prop="pz" label="骗子">
                     </el-table-column>
-                    <el-table-column prop="" label="打假">
+                    <el-table-column prop="dj" label="打假">
                     </el-table-column>
-                    <el-table-column prop="" label="差评">
+                    <el-table-column prop="cp" label="差评">
                     </el-table-column>
-                    <el-table-column prop="" label="P图">
+                    <el-table-column prop="pt" label="P图">
                     </el-table-column>
-                    <el-table-column prop="" label="降权">
+                    <el-table-column prop="jq" label="降权">
                     </el-table-column>
                 </el-table>
                 <p class="msg-result">此账号不是黑号，此次查询不消耗次数和VIP日查询次数</p>
@@ -128,14 +125,52 @@
 export default {
     data() {
         return {
-            searchData: {},
+            wangwang: "",
             tableData: [],
-            searchFlag: true
+            baseInfo: {},
+            searchFlag: false
         }
     },
     methods: {
+        // 获取淘宝会员信息
+        getBaseInfo() {
+            this.$http.post("/heisou/baseInfo", { wangwang: this.wangwang }).then((res) => {
+                if (0 === res.code) {
+                    this.baseInfo = res.data;
+                } else {
+                    this.$message.error(res.msg);
+                }
+            });
+        },
+        // 获取打标信息
+        getMarking() {
+            this.$http.post("/heisou/find", { wangwang: this.wangwang }).then((res) => {
+                if (0 === res.code) {
+                    this.tableData = [res.data]
+                } else {
+                    this.$message.error(res.msg);
+                }
+            });
+        },
+        // 搜索
         search() {
+            if (this.wangwang === "") {
+                this.$message.error("请输入旺旺号");
+                return;
+            }
             this.searchFlag = true;
+            this.tableData = [];
+            this.baseInfo = {};
+            this.getMarking();
+            this.getBaseInfo();
+        },
+        // 举报
+        report() {
+            if (this.wangwang === "") {
+                this.$message.error("请输入旺旺号");
+                return;
+            }
+            this.$router.push("/heihao/report?id=" + this.wangwang);
         }
     }
 }
@@ -225,6 +260,7 @@ export default {
             font-weight: bold;
             color: #ff6801;
             text-decoration: underline;
+            cursor: pointer;
         }
         .msg-result {
             margin-top: 18px;
