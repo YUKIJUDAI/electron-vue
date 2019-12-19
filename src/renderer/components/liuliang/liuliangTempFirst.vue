@@ -3,56 +3,53 @@
         <el-form label-width="80px" label-position="left">
             <!-- 日期下拉 -->
             <el-form-item :model="form" label="监控日期">
-                <el-select v-model="form.date" size="small" style="width:100px">
-                    <el-option label="1天" value="1"></el-option>
-                    <el-option label="3天" value="3"></el-option>
-                    <el-option label="7天" value="7"></el-option>
-                    <el-option label="30天" value="30"></el-option>
-                    <el-option label="自定义" value="0"></el-option>
-                </el-select>
                 <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 <br />
-                <p class="statistics">任务时长<span>1</span>天，每天发布<span>100</span>个任务，此次合计发布<span>100</span>个任务</p>
+                <p class="statistics">任务时长<span>{{days}}</span>天，每天发布<span>{{countbydays}}</span>个任务，此次合计发布<span>{{count}}</span>个任务</p>
             </el-form-item>
             <el-form-item label="商品链接">
-                <el-input placeholder="请输入商品链接" style="width:700px"></el-input>
+                <el-input placeholder="请输入商品链接" style="width:700px" v-model="form.target"></el-input>
             </el-form-item>
-            <el-form-item label="关键词一">
+            <el-form-item :label="'关键词' + (i + 1)" v-for="(item,i) in form.plan">
                 <div class="keywords">
-                    <el-input placeholder="请输入关键词" class="input-with-select" style="width:300px">
+                    <el-input placeholder="请输入关键词" class="input-with-select" style="width:250px">
                         <el-button slot="append" icon="el-icon-search">查排名</el-button>
                     </el-input>
                     <div class="keywords-right">
                         <span class="keywords-span-1">数量</span>
-                        <el-input-number :min="1" :max="9999"></el-input-number>
-                        <span class="keywords-span-2">时段</span>
-                        <i class="iconfont icon-jianhao"></i>
-                        <i class="iconfont icon-jiahao"></i>
+                        <el-input-number :min="1" :max="9999" v-model="item.count"></el-input-number>
+                        <span class="keywords-span-2">智能分配</span>
+                        <span class="keywords-span-3" @click="empty(i)">清空</span>
+                        <i class="iconfont icon-jianhao" @click="removePlan(i)" v-if="form.plan.length > 1"></i>
+                        <i class="iconfont icon-jiahao" @click="addPlan(i)"></i>
                     </div>
                     <br />
-                    <ul class="clearfix">
-                        <li v-for="(i,item) in 24" :key="i">
-                            <p :class="{'color':i > 19 }">00:00</p><input type="text">
-                        </li>
-                    </ul>
+                    <el-collapse v-model="item.collapse">
+                        <el-collapse-item :title="'共 '+ item.count +'个任务，已分配 '+ item.assigned + '个任务，未分配 ' + item.unassigned + ' 个'" name="1">
+                            <ul class="clearfix">
+                                <li v-for="(value,j) in item.hour" :key="j">
+                                    <p :class="{'color':j > 19 }">{{j > 9 ? j + ":00" : "0" + j + ":00"}}</p>
+                                    <input type="number" v-model="item.hour[j]" @change="changeInput(i)" min="0">
+                                </li>
+                            </ul>
+                        </el-collapse-item>
+                    </el-collapse>
                 </div>
             </el-form-item>
             <el-form-item label="浏览时间">
-                <el-select size="small" style="width:200px">
-                    <el-option label="100 - 180秒(免费)" value="1"></el-option>
-                    <el-option label="180 - 280秒" value="2"></el-option>
-                    <el-option label="280 - 380秒" value="3"></el-option>
+                <el-select size="small" style="width:200px" v-model="form.browse_time">
+                    <el-option label="100 - 180秒(免费)" value="100-180"></el-option>
+                    <el-option label="180 - 280秒" value="180-280"></el-option>
+                    <el-option label="280 - 380秒" value="280-380"></el-option>
+                    <el-option label="380 - 480秒" value="380-480"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="浏览深度">
-                <el-select size="small" style="width:200px">
-                    <el-option label="不浏览其他商品" value="1"></el-option>
-                    <el-option label="随机浏览商品" value="2"></el-option>
-                    <el-option label="深度浏览商品" value="3"></el-option>
+                <el-select size="small" style="width:200px" v-model="form.depth">
+                    <el-option label="不浏览其他商品" value="0"></el-option>
+                    <el-option label="随机浏览商品" value="1"></el-option>
+                    <el-option label="深度浏览商品" value="2"></el-option>
                 </el-select>
-            </el-form-item>
-            <el-form-item label="任务备注">
-                <el-input placeholder="任务备注（可不填）" style="width:700px"></el-input>
             </el-form-item>
         </el-form>
         <div class="settlement">
@@ -68,10 +65,70 @@
 </template>
 
 <script>
+const moment = require('moment');
+
+var defaultData = [2, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 2, 1],
+    emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
 export default {
     data() {
         return {
-            form: {}
+            days: 0,
+            countbydays: 100,
+            count: 100,
+            form: {
+                dateValue: "",
+                begin_time: "",
+                browse_time: "100-180",
+                depth: "0",
+                plan: [{
+                    hour: JSON.parse(JSON.stringify(defaultData)),
+                    keyword: "",
+                    assigned: 100,
+                    unassigned: 0,
+                    count: 100,
+                    collapse: ["1"]
+                }]
+            }
+        }
+    },
+    mounted() {
+        this.form.dateValue = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
+    },
+    methods: {
+        // 改变数值
+        changeInput(i) {
+            this.form.plan[i].assigned = this.form.plan[i].hour.reduce((prev, curr, idx, arr) => +prev + +curr);
+            this.form.plan[i].unassigned = this.form.plan[i].count - this.form.plan[i].assigned;
+        },
+        // 清空
+        empty(i) {
+            this.form.plan[i].hour = emptyData;
+            this.form.plan[i].assigned = 0;
+            this.form.plan[i].unassigned = this.form.plan[i].count - this.form.plan[i].assigned;
+        },
+        // 添加计划
+        addPlan(i) {
+            this.form.plan.push({
+                hour: JSON.parse(JSON.stringify(defaultData)),
+                keyword: "",
+                assigned: 100,
+                unassigned: 0,
+                count: 100,
+                collapse: ["1"]
+            });
+        },
+        removePlan(i) {
+            this.form.plan.splice(i, 1);
+        }
+
+    },
+    watch: {
+        "form.dateValue"(val) {
+            if (Array.isArray(val)) {
+                this.form.begin_time = val[0];
+                this.days = moment(val[1]).diff(moment(val[0]), 'days') + 1;
+            }
         }
     }
 }
@@ -91,6 +148,10 @@ export default {
             color: #ff6801;
         }
     }
+    .el-collapse {
+        margin-top: 10px;
+        border: 0;
+    }
     .keywords {
         width: 700px;
         .keywords-right {
@@ -100,6 +161,17 @@ export default {
             padding-right: 10px;
         }
         .keywords-span-2 {
+            padding: 5px 10px;
+            .tc;
+            color: #fff;
+            cursor: pointer;
+            background: #ff6801;
+            border: 1px solid #ff6801;
+            margin-left: 14px;
+            border-radius: 4px;
+            vertical-align: -1px;
+        }
+        .keywords-span-3 {
             padding: 5px 10px;
             .tc;
             color: #666;
@@ -205,6 +277,23 @@ export default {
                 margin-left: 10px;
             }
         }
+    }
+}
+</style>
+<style lang="less">
+.liuliangTempFirst {
+    .el-collapse-item__header {
+        height: 30px;
+        line-height: 30px;
+        font-size: 15px;
+        color: #ff6801;
+        border: 0;
+    }
+    .el-collapse-item__wrap {
+        border: 0;
+    }
+    .el-collapse-item__content {
+        padding-bottom: 0;
     }
 }
 </style>
