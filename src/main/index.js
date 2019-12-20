@@ -58,7 +58,8 @@ function createWindow() {
     // 加载网页
     mainWindow.loadURL(winURL);
     // 打开调试
-    mainWindow.webContents.openDevTools();
+    mainWindow.webContents.closeDevTools();
+    // mainWindow.webContents.openDevTools();
     // 存储用户信息
     global.userInfo = {
         token: "",      //token
@@ -90,7 +91,8 @@ function createView() {
     // 加载网页
     sycmWindow.webContents.loadURL('https://sycm.taobao.com/custom/login.htm');
     // 打开调试
-    sycmWindow.webContents.openDevTools();
+    sycmWindow.webContents.closeDevTools();
+    // sycmWindow.webContents.openDevTools();
     // 存储淘宝信息
     global.tbInfo = {
         loginUserName: "",    //  淘宝登录账户

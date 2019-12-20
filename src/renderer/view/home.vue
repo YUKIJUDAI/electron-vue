@@ -2,7 +2,7 @@
     <div class="main">
         <div class="header clearfix" style="-webkit-app-region: drag">
             <div class="msg">
-                <img src="" class="logo">
+                <img src="~@/assets/icon/logo.png" class="logo">
                 <span class="title">黑搜开发器</span>
             </div>
             <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
@@ -595,7 +595,6 @@ export default {
 <style lang="less">
 .el-dialog__header {
     background-color: #ff6801;
-    padding: 0 0 10px 0;
     text-align: center;
     color: #fff;
 }
