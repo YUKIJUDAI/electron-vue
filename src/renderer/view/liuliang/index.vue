@@ -12,12 +12,12 @@
                     <div>加购任务</div>
                 </router-link>
             </ul>
-            <div class="liuliang-index-navigation-right">
+            <!-- <div class="liuliang-index-navigation-right">
                 <ul>
                     <li><i class="icon-liuliang-index-1"></i>示例</li>
                     <li><i class="icon-liuliang-index-2"></i>重置</li>
                 </ul>
-            </div>
+            </div> -->
         </div>
         <router-view class="liuliang-main"></router-view>
     </div>

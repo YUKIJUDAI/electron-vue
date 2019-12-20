@@ -28,3 +28,22 @@ export const getPhoneCode = function (type, phone, _this) {
         }
     });
 }
+
+// 权重算法
+export const weightFn = function (arr, sum) {
+    // arr总和
+    var nums = arr.reduce((prev, curr, idx, arr) => +prev + +curr);
+    // 根据权重得出的新数组
+    var newArr = arr.map((item, i) => Math.floor(sum * item / nums));
+    // 所的权重
+    var remainder = arr.map((item, i) => { return { remainder: item / nums, index: i } });
+    // 舍去小数后和总数的差值
+    var difference = sum - newArr.reduce((prev, curr, idx, arr) => +prev + +curr);
+    // 权重大小排列
+    remainder.sort((a, b) => a.remainder < b.remainder ? 1 : -1);
+    // 给新数组剩下的加值
+    for (let index = 0; index < difference; index++) {
+        newArr[remainder[index].index]++;
+    }
+    return newArr;
+}

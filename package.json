@@ -36,6 +36,10 @@
             "target": "nsis",
             "icon": "build/icons/icon.ico"
         },
+        "mac": {
+            "icon": "build/icons/icon.icns",
+            "artifactName": "${productName}_setup_${version}.${ext}"
+        },
         "nsis": {
             "oneClick": false,
             "allowToChangeInstallationDirectory": true,

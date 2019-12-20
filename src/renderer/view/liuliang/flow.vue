@@ -4,22 +4,22 @@
             <el-form label-width="80px" label-position="left">
                 <el-form-item label="活动区域">
                     <ul class="flow-select">
-                        <li class="flow-select-btn" :class="{'flow-select-btn-active':index === 0}" @click="changeBtn(0)">
+                        <li class="flow-select-btn" :class="{'flow-select-btn-active':type === 0}" @click="changeBtn(0)">
                             <i class="iconfont icon-shouji"></i>
                             <span>APP流量</span>
                         </li>
-                        <li class="flow-select-btn" :class="{'flow-select-btn-active':index === 1}" @click="changeBtn(1)">
+                        <li class="flow-select-btn" :class="{'flow-select-btn-active':type === 1}" @click="changeBtn(1)">
                             <i class="iconfont icon-qiantai"></i>
                             <span>PC流量</span>
                         </li>
-                        <li class="flow-select-btn" :class="{'flow-select-btn-active':index === 2}" @click="changeBtn(2)">
+                        <li class="flow-select-btn" :class="{'flow-select-btn-active':type === 2}" @click="changeBtn(2)">
                             <i class="iconfont icon-lianjie"></i>
                             <span>直访流量</span>
                         </li>
                     </ul>
                 </el-form-item>
             </el-form>
-            <liuliang-temp-first :type="typeList[index]" />
+            <liuliang-temp-first :type="type" />
         </div>
     </div>
 </template>
@@ -31,16 +31,15 @@ export default {
     components: { liuliangTempFirst },
     data() {
         return {
-            typeList: ["l_app", "l_pc", "l_link"],
-            index: 0
+            type: 0
         }
     },
     methods: {
         changeBtn(index) {
-            if (this.index === index) {
+            if (this.type === index) {
                 return;
             }
-            this.index = index;
+            this.type = index;
         }
     }
 }

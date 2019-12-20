@@ -130,8 +130,8 @@
         <!-- 下部表格开始 -->
         <div class="table-content">
             <el-table :data="table" style="width: 100%" border @select="select" @select-all="select">
-                <el-table-column type="selection" width="30" fixed> </el-table-column>
-                <el-table-column label="查看趋势" width="90" fixed>
+                <el-table-column type="selection" width="30" fixed align="right"> </el-table-column>
+                <el-table-column label="查看趋势" width="90" fixed align="right"> 
                     <template slot-scope="scope">
                         <el-button @click="toCheckTrend(scope.row)" type="text" size="small">查看</el-button>
                     </template>
@@ -141,24 +141,24 @@
                         {{["未监控","已监控"][+scope.row.isMonitored]}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="monitor_days" label="监控天数" width="70" fixed> </el-table-column>
-                <el-table-column label="主图" width="70" fixed>
+                <el-table-column prop="monitor_days" label="监控天数" width="70" fixed align="right"> </el-table-column>
+                <el-table-column label="主图" width="70" fixed align="right">
                     <template slot-scope="scope">
                         <img class="picture" :src="scope.row.pictUrl" alt="" />
                     </template>
                 </el-table-column>
-                <el-table-column prop="itemId" label="宝贝ID" width="120" fixed> </el-table-column>
-                <el-table-column prop="uvIndexNum" label="访客数" width="70" fixed> </el-table-column>
-                <el-table-column prop="tradeNum" label="买家数" width="70" fixed> </el-table-column>
-                <el-table-column prop="payAmount" label="支付金额" width="70" fixed> </el-table-column>
-                <el-table-column prop="price" label="客单价" width="70"> </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" width="70"> </el-table-column>
-                <el-table-column prop="uvPrice" label="UV价值" width="70"> </el-table-column>
-                <el-table-column prop="goods_name" label="宝贝标题" width="220"> </el-table-column>
-                <el-table-column prop="shop_name" label="店铺名称" width="120"> </el-table-column>
-                <el-table-column prop="" label="类目名称" width="200"> </el-table-column>
-                <el-table-column prop="start_time" label="开始时间" width="120"> </el-table-column>
-                <el-table-column prop="end_time" label="截止时间" width="120"> </el-table-column>
+                <el-table-column prop="itemId" label="宝贝ID" width="120" fixed align="right"> </el-table-column>
+                <el-table-column prop="uvIndexNum" label="访客数" width="70" fixed align="right"> </el-table-column>
+                <el-table-column prop="tradeNum" label="买家数" width="70" fixed align="right"> </el-table-column>
+                <el-table-column prop="payAmount" label="支付金额" width="70" fixed align="right"> </el-table-column>
+                <el-table-column prop="price" label="客单价" width="70" align="right"> </el-table-column>
+                <el-table-column prop="payRateRatio" label="转化率" width="70" align="right"> </el-table-column>
+                <el-table-column prop="uvPrice" label="UV价值" width="70" align="right"> </el-table-column>
+                <el-table-column prop="goods_name" label="宝贝标题" width="220" align="right"> </el-table-column>
+                <el-table-column prop="shop_name" label="店铺名称" width="120" align="right"> </el-table-column>
+                <el-table-column prop="" label="类目名称" width="200" align="right"> </el-table-column>
+                <el-table-column prop="start_time" label="开始时间" width="120" align="right"> </el-table-column>
+                <el-table-column prop="end_time" label="截止时间" width="120" align="right"> </el-table-column>
             </el-table>
         </div>
         <!-- 下部表格结束 -->

@@ -5,23 +5,23 @@
             <el-form-item :model="form" label="监控日期">
                 <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 <br />
-                <p class="statistics">任务时长<span>{{days}}</span>天，每天发布<span>{{countbydays}}</span>个任务，此次合计发布<span>{{count}}</span>个任务</p>
+                <p class="statistics">任务时长<span>{{days}}</span>天，每天发布<span>{{countbydays}}</span>个任务，此次合计发布<span>{{countbydays*days}}</span>个任务</p>
             </el-form-item>
             <el-form-item label="商品链接">
                 <el-input placeholder="请输入商品链接" style="width:700px" v-model="form.target"></el-input>
             </el-form-item>
-            <el-form-item :label="'关键词' + (i + 1)" v-for="(item,i) in form.plan">
+            <el-form-item :label="flag ? '关键词' + (i + 1) : '数量'" v-for="(item,i) in form.plan">
                 <div class="keywords">
-                    <el-input placeholder="请输入关键词" class="input-with-select" style="width:250px">
-                        <el-button slot="append" icon="el-icon-search">查排名</el-button>
+                    <el-input placeholder="请输入关键词" class="input-with-select" v-model="item.keyword" style="width:250px" v-if="flag">
+                        <el-button slot="append" icon="el-icon-search" @click="open">查排名</el-button>
                     </el-input>
-                    <div class="keywords-right">
-                        <span class="keywords-span-1">数量</span>
-                        <el-input-number :min="1" :max="9999" v-model="item.count"></el-input-number>
-                        <span class="keywords-span-2">智能分配</span>
+                    <div :class="[flag ? 'keywords-right':'keywords-left']">
+                        <span class="keywords-span-1" v-if="flag">数量</span>
+                        <el-input-number :min="1" :max="9999" v-model="item.count" @change="smartAllocation(i)"></el-input-number>
+                        <span class="keywords-span-2" @click="smartAllocation(i)">智能分配</span>
                         <span class="keywords-span-3" @click="empty(i)">清空</span>
                         <i class="iconfont icon-jianhao" @click="removePlan(i)" v-if="form.plan.length > 1"></i>
-                        <i class="iconfont icon-jiahao" @click="addPlan(i)"></i>
+                        <i class="iconfont icon-jiahao" @click="addPlan(i)" v-if="flag"></i>
                     </div>
                     <br />
                     <el-collapse v-model="item.collapse">
@@ -53,7 +53,7 @@
             </el-form-item>
         </el-form>
         <div class="settlement">
-            <div class="settlement-btn">
+            <div class="settlement-btn" @click="submit">
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
             </div>
@@ -65,17 +65,21 @@
 </template>
 
 <script>
+const { shell } = require("electron");
 const moment = require('moment');
+import { weightFn } from "@/util/util";
+import { strictEqual } from 'assert';
 
 var defaultData = [2, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 2, 1],
     emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 export default {
+    props: ["type"],
     data() {
         return {
             days: 0,
             countbydays: 100,
-            count: 100,
+            flag: true,
             form: {
                 dateValue: "",
                 begin_time: "",
@@ -96,6 +100,10 @@ export default {
         this.form.dateValue = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
     },
     methods: {
+        // 查排名
+        open(){
+            shell.openExternal("https://www.kehuda.com/");
+        },
         // 改变数值
         changeInput(i) {
             this.form.plan[i].assigned = this.form.plan[i].hour.reduce((prev, curr, idx, arr) => +prev + +curr);
@@ -117,17 +125,54 @@ export default {
                 count: 100,
                 collapse: ["1"]
             });
+            var countbydays = 0;
+            this.form.plan.map((item, i) => countbydays += item.count);
+            this.countbydays = countbydays;
         },
+        // 删除计划
         removePlan(i) {
             this.form.plan.splice(i, 1);
+            var countbydays = 0;
+            this.form.plan.map((item, i) => countbydays += item.count);
+            this.countbydays = countbydays;
+        },
+        // 智能推荐
+        smartAllocation(i) {
+            var countbydays = 0;
+            this.form.plan.map((item, i) => countbydays += item.count);
+            this.countbydays = countbydays;
+            this.form.plan[i].assigned = this.form.plan[i].count;
+            this.form.plan[i].unassigned = 0;
+            this.form.plan[i].hour = weightFn(defaultData, this.form.plan[i].count);
+        },
+        // 提交数据
+        submit() {
+            var data = JSON.parse(JSON.stringify(this.form));
+            delete data.dateValue;
+            data.type = this.type;
+            data.plan.forEach((item, i) => item.hour = item.hour.join(","));
+            data.plan = JSON.stringify(data.plan);
+            this.$http.post("/lieliu/addTask", data).then(res => {
+                0 === res.code ? this.$success(res.msg) : this.$message.error(res.msg);
+            });
         }
-
     },
     watch: {
         "form.dateValue"(val) {
             if (Array.isArray(val)) {
                 this.form.begin_time = val[0];
                 this.days = moment(val[1]).diff(moment(val[0]), 'days') + 1;
+            }
+        },
+        "type"(val) {
+            if ([2, 7, 10].includes(val)) {
+                this.flag = false;
+                this.form.plan = [this.form.plan[0]];
+                var countbydays = 0;
+                this.form.plan.map((item, i) => countbydays += item.count);
+                this.countbydays = countbydays;
+            } else {
+                this.flag = true;
             }
         }
     }
@@ -156,6 +201,9 @@ export default {
         width: 700px;
         .keywords-right {
             .fr;
+        }
+        .keywords-left {
+            .fl;
         }
         .keywords-span-1 {
             padding-right: 10px;
