@@ -183,7 +183,7 @@ export default {
 @import url("~@/assets/less/commom.less");
 .liuliangTempFirst {
     .rel;
-    min-height: calc(~"88vh - 247px");
+    min-height: calc(~"88vh - 217px");
     padding-bottom: 80px;
     .statistics {
         margin-top: 10px;

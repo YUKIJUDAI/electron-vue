@@ -73,7 +73,7 @@
                     </div>
                 </form>
                 <div class="other clearfix">
-                    <span class="forget-pwd" @click="">忘记密码</span>
+                    <span class="forget-pwd" @click="goForget">忘记密码</span>
                     <span class="registered" @click="goRegistered">免费注册</span>
                 </div>
                 <div class="submit" @click="login">登录</div>
@@ -116,6 +116,39 @@
                 <p>我已仔细阅读并同意接受<span>《黑搜开发器服务协议》</span></p>
             </div>
         </el-dialog>
+        <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">
+            <form class="form">
+                <div class="form-input">
+                    <i class="phone"></i>
+                    <input type="text" placeholder="请输入手机号" v-model="forgetForm.phone">
+                </div>
+                <div class="form-input">
+                    <i class="pwd"></i>
+                    <input type="password" placeholder="请输入新密码" v-model="forgetForm.password">
+                </div>
+                <div class="clearfix form-margin">
+                    <div class="form-input form-input-code">
+                        <i class="code"></i>
+                        <input type="text" placeholder="请输入图形验证码">
+                    </div>
+                    <div class="code-img">
+                        <img src="" alt="">
+                    </div>
+                </div>
+                <div class="clearfix form-margin">
+                    <div class="form-input form-input-code">
+                        <i class="safe"></i>
+                        <input type="text" placeholder="请输入手机验证码" v-model="forgetForm.code">
+                    </div>
+                    <div class="code-safe" v-if="phoneCodeFlag">{{countdown}}</div>
+                    <div class="code-safe" @click="getPhoneCode" v-else>发送验证码</div>
+                </div>
+            </form>
+            <div class="other clearfix">
+                <span class="registered" @click="goForget">去登录</span>
+            </div>
+            <div class="submit" @click="forget">立即重置</div>
+        </el-dialog>
     </div>
 </template>
 
@@ -131,9 +164,12 @@ export default {
             loginForm: {},
             // 注册表格
             registeredForm: {},
+            // 忘记密码表格
+            forgetForm: {},
 
             loginFlag: false,
             registeredFlag: false,
+            forgetFlag: false,
             phoneCodeFlag: false,
             // 协议
             protocolFlag: true,
@@ -169,8 +205,18 @@ export default {
     methods: {
         // 获取短信
         getPhoneCode() {
-            if (this.phoneCodeFlag) return;
-            getPhoneCode(1, this.registeredForm.phone, this);
+            if (this.registeredFlag) {
+                var phone = this.registeredForm.phone;
+                var type = 1;
+            } else if (this.forgetFlag) {
+                var phone = this.forgetForm.phone;
+                var type = 2;
+            }
+            if (!phone) {
+                this.$message("请先输入手机号");
+                return
+            };
+            getPhoneCode(type, phone, this);
         },
         // 去注册
         goRegistered() {
@@ -184,6 +230,13 @@ export default {
             this.registeredFlag = false;
             this.$nextTick(() => {
                 this.loginFlag = true;
+            });
+        },
+        // 忘记密码
+        goForget() {
+            this.loginFlag = false;
+            this.$nextTick(() => {
+                this.forgetFlag = true;
             });
         },
         // 登录
@@ -215,6 +268,22 @@ export default {
                 if (0 === res.code) {
                     this.$message.success(res.msg);
                     this.registeredFlag = false;
+                } else {
+                    this.$message.error(res.msg);
+                }
+            });
+        },
+        // 忘记密码
+        forget() {
+            if (this.submitFlag) return;
+            this.submitFlag = true;
+            this.$http.post("/index/forgetPwd", this.forgetForm).then(res => {
+                this.submitFlag = false;
+                if (0 === res.code) {
+                    this.$store.dispatch("set_user_info", { token: "", phone: "" });
+                    this.$message.success(res.msg);
+                    this.forgetFlag = false;
+                    this.$router.replace("/");
                 } else {
                     this.$message.error(res.msg);
                 }
@@ -597,11 +666,16 @@ export default {
     background-color: #ff6801;
     text-align: center;
     color: #fff;
+    padding: 20px;
 }
 .el-dialog__title {
     color: #fff;
 }
 .el-dialog__headerbtn .el-dialog__close {
+    color: #fff;
+}
+.el-dialog__headerbtn:focus .el-dialog__close,
+.el-dialog__headerbtn:hover .el-dialog__close {
     color: #fff;
 }
 </style>

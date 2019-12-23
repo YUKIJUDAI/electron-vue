@@ -1,6 +1,6 @@
 {
     "name": "my-project",
-    "version": "0.0.2",
+    "version": "1.1.11",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -33,7 +33,7 @@
         "win": {
             "artifactName": "${productName}_setup_${version}.${ext}",
             "target": "nsis",
-            "icon": "build/icons/icon.ico"
+            "icon": "static/logo.ico"
         },
         "nsis": {
             "oneClick": false,
