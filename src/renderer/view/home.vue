@@ -11,8 +11,8 @@
                 <li class="close" @click="toMainFn('close')"><i class="icon-close"></i></li>
             </ul>
             <ul class="clearfix right-ul" style="-webkit-app-region: no-drag">
-                <li class="login" @click="loginFlag = true" v-if="!isLogin"><i class="icon-login"></i>登录</li>
-                <li class="registered" @click="registeredFlag = true" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
+                <li class="login" @click="goLogin" v-if="!isLogin"><i class="icon-login"></i>登录</li>
+                <li class="registered" @click="goRegistered" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
                 <li class="user" v-if="isLogin">{{userPhone}}</li>
                 <li class="exit" @click="exit" v-if="isLogin">退出</li>
             </ul>
@@ -23,11 +23,11 @@
                     <img src="~@/assets/img/level-1.png" class="identity-tag">
                     <img src="~@/assets/img/admin.png" class="avatar">
                     <div class="main-login" v-if="isLogin">{{userPhone}}</div>
-                    <div class="main-login" @click="loginFlag = true" v-else>请登录</div>
+                    <div class="main-login" @click="goLogin" v-else>请登录</div>
                 </div>
                 <div class="main-left-2 clearfix">
                     <div class="left-2-left" v-if="isLogin">充值</div>
-                    <div class="left-2-left" @click="registeredFlag = true" v-else>立即注册</div>
+                    <div class="left-2-left" @click="goRegistered" v-else>立即注册</div>
                     <div class="left-2-right">联系客服</div>
                 </div>
                 <div class="main-left-3">
@@ -69,10 +69,10 @@
                     <div class="clearfix form-margin">
                         <div class="form-input form-input-code">
                             <i class="code"></i>
-                            <input type="text" placeholder="请输入图形验证码">
+                            <input type="text" placeholder="请输入图形验证码" v-model="loginForm.verify">
                         </div>
                         <div class="code-img">
-                            <img src="" alt="">
+                            <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
                         </div>
                     </div>
                 </form>
@@ -96,10 +96,10 @@
                 <div class="clearfix form-margin">
                     <div class="form-input form-input-code">
                         <i class="code"></i>
-                        <input type="text" placeholder="请输入图形验证码">
+                        <input type="text" placeholder="请输入图形验证码" v-model="loginForm.verify">
                     </div>
                     <div class="code-img">
-                        <img src="" alt="">
+                        <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
                     </div>
                 </div>
                 <div class="clearfix form-margin">
@@ -133,10 +133,10 @@
                 <div class="clearfix form-margin">
                     <div class="form-input form-input-code">
                         <i class="code"></i>
-                        <input type="text" placeholder="请输入图形验证码">
+                        <input type="text" placeholder="请输入图形验证码" v-model="loginForm.verify">
                     </div>
                     <div class="code-img">
-                        <img src="" alt="">
+                        <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
                     </div>
                 </div>
                 <div class="clearfix form-margin">
@@ -149,7 +149,7 @@
                 </div>
             </form>
             <div class="other clearfix">
-                <span class="registered" @click="goForget">去登录</span>
+                <span class="registered" @click="goLogin">去登录</span>
             </div>
             <div class="submit" @click="forget">立即重置</div>
         </el-dialog>
@@ -160,10 +160,12 @@
 const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
+import { baseUrl } from "@/config/config";
 
 export default {
     data() {
         return {
+            baseUrl,
             // 登录表格
             loginForm: {},
             // 注册表格
@@ -180,7 +182,8 @@ export default {
             // 提交flag
             submitFlag: false,
             // 倒计时
-            countdown: 60
+            countdown: 60,
+            key: ""
         }
     },
     computed: {
@@ -205,34 +208,49 @@ export default {
         ipcRenderer.on("isUpdateNow", () => {
             ipcRenderer.send("isUpdateNow");
         });
+        this.getKey();
     },
     methods: {
+        // 随机key
+        getKey() {
+            this.key = new Date().getTime() + "" + (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000);
+        },
         // 获取短信
         getPhoneCode() {
             if (this.registeredFlag) {
                 var phone = this.registeredForm.phone;
+                var verify = this.registeredForm.verify;
                 var type = 1;
             } else if (this.forgetFlag) {
                 var phone = this.forgetForm.phone;
+                var verify = this.forgetForm.verify;
                 var type = 2;
             }
             if (!phone) {
-                this.$message("请先输入手机号");
-                return
-            };
-            getPhoneCode(type, phone, this);
+                this.$message.error("请先输入手机号");
+                return;
+            } else if (!verify) {
+                this.$message.error("请先填写图形验证码");
+                return;
+            }
+            getPhoneCode(type, phone, verify, this);
         },
         // 去注册
         goRegistered() {
             this.loginFlag = false;
             this.$nextTick(() => {
+                this.registeredForm = {};
+                this.getKey();
                 this.registeredFlag = true;
             });
         },
         // 去登录
         goLogin() {
-            this.registeredFlag = false;
+            this.registeredFlag && (this.registeredFlag = false);
+            this.forgetFlag && (this.forgetFlag = false);
             this.$nextTick(() => {
+                this.loginForm = {};
+                this.getKey();
                 this.loginFlag = true;
             });
         },
@@ -240,6 +258,8 @@ export default {
         goForget() {
             this.loginFlag = false;
             this.$nextTick(() => {
+                this.forgetForm = {};
+                this.getKey();
                 this.forgetFlag = true;
             });
         },
@@ -247,13 +267,14 @@ export default {
         login() {
             if (this.submitFlag) return;
             this.submitFlag = true;
-            this.$http.post("/index/login", this.loginForm).then(res => {
+            this.$http.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$store.dispatch("set_user_info", { token: res.data.token, phone: this.loginForm.phone });
                     this.$message.success(res.msg);
                     this.loginFlag = false;
                 } else {
+                    this.getKey();
                     this.$message.error(res.msg);
                 }
             });
@@ -267,12 +288,13 @@ export default {
                 return;
             }
             this.submitFlag = true;
-            this.$http.post("/index/register", this.registeredForm).then(res => {
+            this.$http.post("/index/register", Object.assign(this.registeredForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$message.success(res.msg);
                     this.registeredFlag = false;
                 } else {
+                    this.getKey();
                     this.$message.error(res.msg);
                 }
             });
@@ -281,7 +303,7 @@ export default {
         forget() {
             if (this.submitFlag) return;
             this.submitFlag = true;
-            this.$http.post("/index/forgetPwd", this.forgetForm).then(res => {
+            this.$http.post("/index/forgetPwd", Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$store.dispatch("set_user_info", { token: "", phone: "" });
@@ -289,6 +311,7 @@ export default {
                     this.forgetFlag = false;
                     this.$router.replace("/");
                 } else {
+                    this.getKey();
                     this.$message.error(res.msg);
                 }
             });
@@ -603,6 +626,7 @@ export default {
             img {
                 width: 100%;
                 height: 100%;
+                margin-top: 10px;
             }
         }
         .code-safe {

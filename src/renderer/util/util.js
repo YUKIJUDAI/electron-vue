@@ -14,8 +14,8 @@ export const isEmpty = function (str) {
 }
 
 // 获取验证码
-export const getPhoneCode = function (type, phone, _this) {
-    _this.$http.post("/index/sendSms", { type, phone }).then(res => {
+export const getPhoneCode = function (type, phone, verify, _this) {
+    _this.$http.post("/index/sendSms", { type, phone, verify_key: _this.key, verify }).then(res => {
         if (0 === res.code) {
             _this.$message.success(res.msg);
             _this.phoneCodeFlag = true;
