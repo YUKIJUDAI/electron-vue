@@ -37,12 +37,16 @@
                             <span>极速黑搜</span>
                         </router-link>
                         <router-link to="/heihao/search" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 1}">
-                            <i class="icon-left-li-1"></i>
+                            <i class="iconfont icon-sousuo1"></i>
                             <span>黑号查询</span>
                         </router-link>
                         <router-link to="/liuliang/flow" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 2}">
-                            <i class="icon-left-li-1"></i>
+                            <i class="iconfont icon-taobao"></i>
                             <span>淘宝流量</span>
+                        </router-link>
+                        <router-link to="/shipin/videoCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
+                            <i class="iconfont icon-shipin"></i>
+                            <span>视频中心</span>
                         </router-link>
                     </ul>
                 </div>
@@ -479,25 +483,25 @@ export default {
                     &:hover {
                         background: rgba(241, 245, 251, 1);
                     }
-                    .icon-left-li-1 {
-                        .fl;
-                        .db;
-                        .wh(19px);
+                    i {
+                        font-size: 18px;
                         margin-top: 13px;
                         margin-left: 27px;
+                        vertical-align: -2px;
+                    }
+                    .icon-taobao {
+                        font-size: 20px;
                     }
                     span {
-                        .fl;
                         font-size: 15px;
-                        margin-left: 16px;
+                        margin-left: 10px;
                         color: #666666;
                     }
                 }
                 .active {
                     background: rgba(241, 245, 251, 1);
-                    .icon-left-li-1 {
-                        background: url("~@/assets/icon/icon-left-li-1-active.png")
-                            no-repeat;
+                    i {
+                        color: #ff6801;
                     }
                     span {
                         color: #ff6801;

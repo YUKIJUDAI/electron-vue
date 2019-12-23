@@ -19,7 +19,7 @@
         "productName": "黑搜",
         "appId": "com.example.yourapp",
         "directories": {
-            "output": "build"
+            "output": "build/${productName}_${version}"
         },
         "files": [
             "dist/electron/**/*"

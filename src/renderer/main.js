@@ -2,7 +2,7 @@ import Vue from 'vue';
 import http from '@/util/http';
 import ElementUI from 'element-ui';
 import '@/assets/theme/index.css';
-import '@/assets/iconfont/iconfont.css';
+// import '@/assets/iconfont/iconfont.css';
 
 import App from './App';
 import router from './router';

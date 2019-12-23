@@ -76,6 +76,18 @@ export default new Router({
                             meta: { menuIndex: 2, index: 2 }
                         }
                     ]
+                },
+                {
+                    path: "shipin",
+                    component: require("@/view/shipin/index").default,
+                    children: [
+                        // 视频 
+                        {
+                            path: "videoCenter",
+                            component: require("@/view/shipin/videoCenter").default,
+                            meta: { menuIndex: 5, index: 0 }
+                        }
+                    ]
                 }
             ]
         },
