@@ -51,14 +51,16 @@
 <script>
 import dataSource from "@/components/heisou/dataSource";
 import keywordAnalysis from "@/components/heisou/keywordAnalysis";
-import rootAnalysis from "@/components/heisou/rootAnalysis"
+import rootAnalysis from "@/components/heisou/rootAnalysis";
+import trafficStructureAnalysis from "@/components/heisou/trafficStructureAnalysis";
+import report from "@/components/heisou/report";
 
 export default {
     data() {
         return {
             form: {},
-            tabIndex: 2,
-            tempList: [dataSource, keywordAnalysis, rootAnalysis]
+            tabIndex: 4,
+            tempList: [dataSource, keywordAnalysis, rootAnalysis, trafficStructureAnalysis, report]
         }
     },
     methods: {
