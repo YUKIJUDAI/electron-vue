@@ -26,6 +26,12 @@ export default new Router({
                             path: "monitor",
                             component: require("@/view/heisou/monitor").default,
                             meta: { menuIndex: 0, index: 1 }
+                        },
+                        // 竞品分析
+                        {
+                            path: "analysis",
+                            component: require("@/view/heisou/analysis").default,
+                            meta: { menuIndex: 0, index: 2 }
                         }
                     ]
                 },

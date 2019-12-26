@@ -72,6 +72,64 @@
             </div>
         </el-dialog>
 
+        <div class="my-data">
+            <div class="data-detail clearfix">
+                <div class="data-detail-1">
+                    <img src="~@/assets/icon/monitor-1.png">
+                    <span class="span-1">支付金额（元）</span>
+                    <span class="span-2">{{~~shopInfo.today[4].payAmt.value | money}}</span>
+                    <ul>
+                        <li>行业排名 {{shopInfo.rank.payAmtRank.value === 0 ? "100+" : shopInfo.rank.payAmtRank.value}}</li>
+                        <li>无线占比 {{shopInfo.wireless.payAmtWL.value}}</li>
+                        <li>昨日全天 {{(~~shopInfo.yesterday.payAmt.value) | money}}</li>
+                    </ul>
+                </div>
+                <div class="data-detail-2">
+
+                </div>
+                <div class="data-detail-3">
+                    <ul>
+                        <li>
+                            <img src="~@/assets/icon/monitor-2.png">
+                            <span class="span-1">访客数</span>
+                            <br />
+                            <span class="span-2">{{shopInfo.today[0].uv.value}}</span>
+                        </li>
+                        <li>
+                            <img src="~@/assets/icon/monitor-3.png">
+                            <span class="span-1">支付订单数</span>
+                            <br />
+                            <span class="span-2">{{shopInfo.today[3].payOrdCnt.value}}</span>
+                        </li>
+                        <li>
+                            <img src="~@/assets/icon/monitor-4.png">
+                            <span class="span-1">浏览量</span>
+                            <br />
+                            <span class="span-2">{{shopInfo.today[2].pv.value}}</span>
+                        </li>
+                        <li>
+                            <img src="~@/assets/icon/monitor-5.png">
+                            <span class="span-1">转化率</span>
+                            <br />
+                            <span class="span-2">{{~~(shopInfo.today[3].payOrdCnt.value/shopInfo.today[0].uv.value * 100)}}%</span>
+                        </li>
+                        <li>
+                            <img src="~@/assets/icon/monitor-6.png">
+                            <span class="span-1">收藏率</span>
+                            <br />
+                            <span class="span-2"></span>
+                        </li>
+                        <li>
+                            <img src="~@/assets/icon/monitor-7.png">
+                            <span class="span-1">加购率</span>
+                            <br />
+                            <span class="span-2"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <!-- 上部表单开始 -->
         <div class="table-form">
             <el-form :inline="true" :model="form" class="demo-form-inline">
@@ -96,20 +154,6 @@
                 <el-form-item>
                     <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 </el-form-item>
-                </br>
-                <!-- 单选框 -->
-                <el-form-item label="店铺分类">
-                    <el-select v-model="form.shop" size="small" style="width:200px">
-                        <el-option label="昨天" value=""></el-option>
-                        <el-option label="前天" value=""></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="类目分类">
-                    <el-select v-model="form.leimu" size="small" style="width:200px">
-                        <el-option label="昨天" value=""></el-option>
-                        <el-option label="前天" value=""></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item label="宝贝ID">
                     <el-input v-model="form.itemId" size="small" style="width:200px"></el-input>
                 </el-form-item>
@@ -131,7 +175,7 @@
         <div class="table-content">
             <el-table :data="table" style="width: 100%" border @select="select" @select-all="select">
                 <el-table-column type="selection" width="30" fixed align="right"> </el-table-column>
-                <el-table-column label="查看趋势" width="90" fixed align="right"> 
+                <el-table-column label="查看趋势" width="90" fixed align="right">
                     <template slot-scope="scope">
                         <el-button @click="toCheckTrend(scope.row)" type="text" size="small">查看</el-button>
                     </template>
@@ -155,10 +199,16 @@
                 <el-table-column prop="payRateRatio" label="转化率" width="70" align="right"> </el-table-column>
                 <el-table-column prop="uvPrice" label="UV价值" width="70" align="right"> </el-table-column>
                 <el-table-column prop="goods_name" label="宝贝标题" width="220" align="right"> </el-table-column>
-                <el-table-column prop="shop_name" label="店铺名称" width="120" align="right"> </el-table-column>
-                <el-table-column prop="" label="类目名称" width="200" align="right"> </el-table-column>
-                <el-table-column prop="start_time" label="开始时间" width="120" align="right"> </el-table-column>
-                <el-table-column prop="end_time" label="截止时间" width="120" align="right"> </el-table-column>
+                <el-table-column label="深度智能分析" width="120" align="right">
+                    <template slot-scope="scope">
+                        <p>点击展开智能分析</p>
+                    </template>
+                </el-table-column>
+                <el-table-column label="深度人工诊断" width="120" align="right">
+                    <template slot-scope="scope">
+                        <p>扫码添加咨询诊断</p>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
         <!-- 下部表格结束 -->
@@ -185,6 +235,12 @@ export default {
     data() {
         return {
             // 列表
+            shopInfo: {
+                rank: { payAmtRank: { value: 0 } },
+                wireless: { payAmtWL: { value: "" } },
+                today: [{ uv: { value: "" } }, {}, { pv: { value: "" } }, { payOrdCnt: { value: "" } }, { payAmt: { value: "" } }],
+                yesterday: { payAmt: { value: "" } }
+            },
             table: [],
             total_pages: 1,
             page: 1,
@@ -217,9 +273,22 @@ export default {
             myChart: "",
         }
     },
+    filters: {
+        money(num) {
+            var result = [], counter = 0;
+            num = (num || 0).toString().split('');
+            for (var i = num.length - 1; i >= 0; i--) {
+                counter++;
+                result.unshift(num[i]);
+                if (!(counter % 3) && i != 0) { result.unshift(','); }
+            }
+            return result.join('');
+        }
+    },
     mounted() {
         this.form.date = "1";
         this.getList();
+        this.getShop();
         // 获取xhr信息后处理
         ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
             if (factory.obj[type]) {
@@ -456,6 +525,12 @@ export default {
                 }
             });
         },
+        // 获取店铺基础数据
+        getShop() {
+            this.$http.post("/crawler/getShopTrend", {}).then(res => {
+                0 === res.code && (this.shopInfo = res.data);
+            })
+        },
         // 选择
         select(selection) {
             var arr = [];
@@ -507,8 +582,70 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 
+.my-data {
+    padding: 30px 0 0 0;
+    margin: 0 20px;
+    border-bottom: 1px solid #f5f5f5;
+    .data-detail {
+        margin-left: 75px;
+        overflow: hidden;
+    }
+    .data-detail-1 {
+        .fl;
+        width: 160px;
+        img {
+            .fl;
+        }
+        .span-1 {
+            font-size: 14px;
+            padding-left: 6px;
+        }
+        .span-2 {
+            font-size: 22px;
+            padding-left: 6px;
+        }
+        ul {
+            margin-top: 20px;
+        }
+        li {
+            font-size: 12px;
+            color: #999;
+            line-height: 22px;
+        }
+    }
+    .data-detail-2 {
+        .fl;
+        margin-left: 50px;
+        width: 360px;
+        height: 150px;
+    }
+    .data-detail-3 {
+        .fl;
+        ul {
+            width: 550px;
+        }
+        li {
+            .dib;
+            width: 170px;
+            margin: 15px 0;
+        }
+        img {
+            .fl;
+        }
+        .span-1 {
+            font-size: 14px;
+            padding-left: 10px;
+        }
+        .span-2 {
+            font-size: 22px;
+            padding-left: 10px;
+        }
+    }
+}
+
 .table-form {
     padding: 28px 50px;
+    padding-bottom: 0;
     font-size: 0;
     background-color: #fff;
 }

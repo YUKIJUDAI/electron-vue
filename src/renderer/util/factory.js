@@ -31,6 +31,32 @@ factory.add("getPersonalView", {
     }
 });
 
+
+// 我的店铺趋势
+factory.add("trend", {
+    callback: function (params, res) {
+        // 返回数据
+        const data = {
+            sys: JSON.stringify({ ...params }),
+            crawler_data: JSON.stringify(res.data)
+        }
+        http.post("/crawler/saveShopTrend", data).then();
+    }
+});
+
+// 我的店铺数据
+factory.add("overview", {
+    callback: function (params, res) {
+        // 返回数据
+        const data = {
+            sys: JSON.stringify({ ...params }),
+            source: 'list',
+            crawler_data: JSON.stringify(res.data)
+        }
+        http.post("/crawler/saveShopOverview", data).then();
+    }
+});
+
 // 店铺类目信息
 factory.add("getShopCate", {
     callback: function (params, res) {
@@ -77,19 +103,6 @@ factory.add("getSingleMonitoredInfo", {
             crawler_data: aes(res)
         }
         http.post("/crawler/addCompeteInfo", data).then();
-    }
-});
-
-// 竞争商品趋势
-factory.add("trend", {
-    callback: function (params, res) {
-        // 返回数据
-        const data = {
-            sys: JSON.stringify({ ...params }),
-            source: 'list',
-            crawler_data: aes(res)
-        }
-        http.post("/crawler/addCompeteIndex", data).then();
     }
 });
 

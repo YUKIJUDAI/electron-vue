@@ -10,7 +10,7 @@
             <el-form-item label="商品链接">
                 <el-input placeholder="请输入商品链接" style="width:700px" v-model="form.target"></el-input>
             </el-form-item>
-            <el-form-item :label="flag ? '关键词' + (i + 1) : '数量'" v-for="(item,i) in form.plan">
+            <el-form-item :label="flag ? '关键词' + (i + 1) : '数量'" v-for="(item,i) in form.plan" :key="i">
                 <div class="keywords">
                     <el-input placeholder="请输入关键词" class="input-with-select" v-model="item.keyword" style="width:250px" v-if="flag">
                         <el-button slot="append" icon="el-icon-search" @click="open">查排名</el-button>

@@ -24,6 +24,7 @@ fetchProxy.addHandler(function (params, res) {
     from(fetchProxy.fetchList).pipe(filter(item => res.clone().url.includes(item))).subscribe(item => {
         // 接口成功
         res.clone().json().then(result => {
+            result.content && (result = result.content);
             if (0 === result.code) {
                 from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
                     remote.BrowserWindow.fromId(i.id).webContents.send('send-xhr-data', item, params, result.data);
@@ -43,9 +44,10 @@ ipcRenderer.on('login-success', (event) => {
     }
     frequency++;
     //点击竞争
-    interval(1000)
+    interval(5000)
         .pipe(filter(() => document.querySelectorAll(".menu-list").length > 0))
         .pipe(take(1))
+        .pipe(delay(3000))
         .pipe(tap(() => { document.querySelector(".menu-list").querySelectorAll('li')[14].querySelector('a').click() }))
         .subscribe();
     // 点击监控商品
@@ -349,6 +351,8 @@ function FetchProxy() {
     }
 
     this.fetchList = [
+        "trend", // 我的店铺趋势
+        "overview", // 我的点铺数据
         "list", // 竞品列表
         "getCoreIndexes", // 关键指标对比
         "getCoreTrend", // 曲线图数据

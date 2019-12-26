@@ -8,12 +8,9 @@
                 <router-link tag="li" to="/heisou/monitor" :class="{active:$route.meta.index === 1}">
                     <div>竞品监控</div>
                 </router-link>
-                <li :class="{active:$route.meta.index === 2}">
+                <router-link tag="li" to="/heisou/analysis" :class="{active:$route.meta.index === 2}">
                     <div>竞品分析</div>
-                </li>
-                <li :class="{active:$route.meta.index === 3}">
-                    <div>竞品对比</div>
-                </li>
+                </router-link>
             </ul>
         </div>
         <router-view class="heisou-main"></router-view>
