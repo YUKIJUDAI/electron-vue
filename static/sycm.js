@@ -67,88 +67,80 @@ ipcRenderer.on('login-success', (event) => {
         .subscribe();
 });
 
-// list获取成功之后
-ipcRenderer.on('list-success', (event, type, data) => {
-    // 点击竞争
+// 添加竞品详情
+ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
     interval(1000)
-        .pipe(filter(() => document.querySelectorAll(".menu-list").length > 0))
-        .pipe(filter(() => !hasClass(document.querySelector(".menu-list").querySelectorAll('li')[14], "selected")))
-        .pipe(take(1))
-        .pipe(tap(() => { document.querySelector(".menu-list").querySelectorAll('li')[14].querySelector('a').click() }))
-        .subscribe();
-    // 点击竞品分析
-    interval(1000)
-        .pipe(filter(() => document.querySelectorAll(".ebase-ModernFrame__leftMenu").length > 0))
-        .pipe(filter(() => !hasClass(document.querySelector(".ebase-ModernFrame__leftMenu").querySelectorAll('.level-leaf')[5], "selected")))
-        .pipe(take(1))
-        .pipe(tap(() => { document.querySelector(".ebase-ModernFrame__leftMenu").querySelectorAll('.level-leaf')[5].querySelector('a').click() }))
-        .subscribe();
-    // 点击日
-    interval(1000)
+        .pipe(filter(() => document.querySelectorAll('.level-leaf')[5]))
+        .pipe(tap(() => {
+            // 如果不在竞争分析
+            !isAnalysis() && document.querySelectorAll('.level-leaf')[5].querySelector('a').click()
+        }))
         .pipe(filter(() => document.querySelectorAll(".oui-date-picker-particle-button").length > 0))
-        .pipe(filter(() => !hasClass(document.querySelector(".oui-date-picker-particle-button").querySelectorAll('button')[3], "ant-btn-primary")))
+        .pipe(tap(() => {
+            // 点击日
+            !hasClass(document.querySelector(".oui-date-picker-particle-button").querySelectorAll('button')[3], "ant-btn-primary")
+                && document.querySelector(".oui-date-picker-particle-button").querySelectorAll('button')[3].click()
+        }))
+        .pipe(filter(() => document.querySelectorAll(".alife-dt-card-sycm-common-select").length > 0))
         .pipe(take(1))
-        .pipe(tap(() => { document.querySelector(".oui-date-picker-particle-button").querySelectorAll('button')[3].click() }))
-        .subscribe();
-    // 点击+号
-    interval(1000).pipe(filter(() => document.querySelectorAll(".sycm-common-select-2").length === 1))
-        .pipe(filter(() => document.querySelectorAll(".sycm-common-select-3").length === 1))
-        .pipe(take(1))
-        .pipe(tap(() => { document.querySelectorAll(".sycm-common-select-2")[0].querySelector("span").click() }))
-        .pipe(delay(200))
-        .pipe(tap(() => { document.querySelectorAll(".sycm-common-select-3")[0].querySelector("span").click() }))
-        .subscribe();
-
-    //  点击自家产品列表
-    var o = interval(1000 * 11)
-        .pipe(filter(() => document.querySelectorAll(".sycm-common-select-2").length > 1 && document.querySelectorAll(".sycm-common-select-3").length > 1))
+        .pipe(tap(() => {
+            // 点击加号
+            document.querySelectorAll(".alife-dt-card-sycm-common-select")[1].querySelector("span").click()
+        }))
         .pipe(delay(1000))
-        .subscribe((item) => {
-            window.scrollTo(0, 800);
-            let l = document.querySelectorAll(".sycm-common-select-2")[1].querySelectorAll(".oui-typeahead-dropdown-item").length;
-            let _l = document.querySelectorAll(".sycm-common-select-3")[1].querySelectorAll(".oui-typeahead-dropdown-item").length;
-            let max = Math.max(l, _l);
-            // 两者共有
-            if (item <= max) {
-                timer(1000)
-                    .pipe(take(1))
-                    .pipe(tap(() => {
-                        const dom = document.querySelectorAll(".sycm-common-select-2")[1].querySelectorAll(".oui-typeahead-dropdown-item")[item];
-                        dom && dom.click();
-                    }))
-                    .pipe(delay(1000))
-                    .pipe(tap(() => {
-                        const dom = document.querySelectorAll(".sycm-common-select-3")[1].querySelectorAll(".oui-typeahead-dropdown-item")[item];
-                        dom && dom.click();
-                    }))
-                    .pipe(delay(1000))
-                    // 点击下拉
-                    .pipe(tap(() => { document.querySelectorAll(".oui-select")[1].click() }))
-                    .pipe(delay(1000))
-                    .pipe(tap(() => { document.querySelectorAll(".oui-select")[2].click() }))
-                    .pipe(delay(1000))
-                    // 点击无线端
-                    .pipe(tap(() => { document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[1].click() }))
-                    .pipe(delay(1000))
-                    // 点击天猫
-                    .pipe(tap(() => { document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[1].click() }))
-                    .pipe(delay(1000))
-                    // 点击pc端
-                    .pipe(tap(() => { document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[0].click() }))
-                    .pipe(delay(1000))
-                    // 点击淘宝
-                    .pipe(tap(() => { document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[0].click() }))
-                    .pipe(delay(1000))
-                    //  入店来源无线端
-                    .pipe(tap(() => { document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[0].click() }))
-                    .pipe(delay(1000))
-                    // 入店来源pc端
-                    .pipe(tap(() => { document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[1].click() }))
-                    .subscribe();
-            } else {
-                o.unsubscribe();
-            }
-        });
+        .pipe(tap(() => {
+            document.querySelectorAll(".ant-input")[0].focus()
+        }))
+        .pipe(delay(1000))
+        .pipe(tap(() => {
+            SetValue(document.querySelectorAll(".ant-input")[0], goodsname);
+        }))
+        .pipe(delay(1000))
+        .pipe(tap(() => {
+            document.querySelector(".oui-typeahead-dropdown-item").click();
+        }))
+        .pipe(delay(1000))
+        // 点击下拉
+        .pipe(tap(() => {
+            window.scrollTo(0, 1500);
+            document.querySelectorAll(".oui-select")[1].click()
+        }))
+        .pipe(delay(1000))
+        // 点击无线端
+        .pipe(tap(() => {
+            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[1].click()
+        }))
+        .pipe(delay(1000))
+        // 点击天猫
+        .pipe(tap(() => {
+            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[1].click()
+        }))
+        .pipe(delay(1000))
+        // 点击pc端
+        .pipe(tap(() => {
+            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[0].click()
+        }))
+        .pipe(delay(1000))
+        // 点击淘宝
+        .pipe(tap(() => {
+            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[0].click()
+        }))
+        .pipe(delay(1000))
+        // 点击下拉
+        .pipe(tap(() => {
+            document.querySelectorAll(".oui-select")[2].click()
+        }))
+        .pipe(delay(1000))
+        //  入店来源pc端
+        .pipe(tap(() => {
+            document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[0].click()
+        }))
+        .pipe(delay(1000))
+        // 入店来源无线端
+        .pipe(tap(() => {
+            document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[1].click()
+        }))
+        .subscribe()
 });
 
 // 添加竞品
@@ -210,12 +202,15 @@ function isCompetitionPage() {
     return document.querySelector(".menu-list")
         && hasClass(document.querySelector(".menu-list").querySelectorAll("li")[14], "selected");
 }
+// 是否在竞品分析页面
+function isAnalysis() {
+    return hasClass(document.querySelectorAll(".level-leaf")[5], "selected");
+}
+
 // 是否在竞争配置页面
 function isConfigurationPage() {
     return hasClass(document.querySelectorAll(".level-leaf")[11], "selected")
 }
-
-
 
 // 是否有classname
 function hasClass(ele, cls) {
@@ -336,7 +331,6 @@ function XhrProxy() {
 }
 
 /**
- * xhr_proxy.js
  * 通过劫持原生fetch实现对页面ajax请求的监听
  */
 function FetchProxy() {

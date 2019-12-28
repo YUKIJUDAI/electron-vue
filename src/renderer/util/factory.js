@@ -47,10 +47,10 @@ factory.add("trend", {
 // 我的店铺数据
 factory.add("overview", {
     callback: function (params, res) {
+        if (!res.data) return;
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            source: 'list',
             crawler_data: JSON.stringify(res.data)
         }
         http.post("/crawler/saveShopOverview", data).then();
@@ -83,10 +83,9 @@ factory.add("list", {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                source: 'list',
                 crawler_data: aes(res)
             }
-            http.post("/crawler/saveLog", data).then(r => {
+            http.post("/crawler/saveList", data).then(r => {
                 //0 === r.code && remote.BrowserWindow.fromId(id).webContents.send("list-success");
             });
         }
@@ -99,7 +98,6 @@ factory.add("getSingleMonitoredInfo", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            source: 'list',
             crawler_data: aes(res)
         }
         http.post("/crawler/addCompeteInfo", data).then();
@@ -112,7 +110,6 @@ factory.add("getCoreIndexes", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            source: 'list',
             crawler_data: aes(res)
         }
         http.post("/crawler/saveLog", data).then();
@@ -125,7 +122,6 @@ factory.add("getCoreTrend", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            source: 'list',
             crawler_data: aes(res)
         }
         http.post("/crawler/saveLog", data).then();
@@ -138,7 +134,6 @@ factory.add("getKeywords", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            source: 'list',
             crawler_data: aes(res)
         }
         http.post("/crawler/saveLog", data).then();
@@ -151,7 +146,6 @@ factory.add("getFlowSource", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            source: 'list',
             crawler_data: aes(res)
         }
         http.post("/crawler/saveLog", data).then();

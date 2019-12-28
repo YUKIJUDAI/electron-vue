@@ -1,7 +1,7 @@
 <template>
     <div class="heisou-monitor">
         <!-- 新增竞品监控 -->
-        <el-dialog title="新增竞品配置监控" :visible.sync="addFlag" width="700px">
+        <el-dialog title="新增竞品配置监控" :visible.sync="addFlag" width="700px" :close-on-click-modal="false" :close-on-press-escape="false">
             <div class="add">
                 <el-form ref="form" :model="add" label-width="80px" :inline="true">
                     <el-form-item label="竞品ID">
@@ -22,6 +22,7 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>日志记录</span>
+                        <el-button style="float: right; padding: 3px 0" type="text" @click="logList = []">清空</el-button>
                     </div>
                     <div v-for="(item,i) in logList" :key="i" class="text item">
                         {{item}}
@@ -174,37 +175,37 @@
         <!-- 下部表格开始 -->
         <div class="table-content">
             <el-table :data="table" style="width: 100%" border @select="select" @select-all="select">
-                <el-table-column type="selection" width="30" fixed align="right"> </el-table-column>
-                <el-table-column label="查看趋势" width="90" fixed align="right">
+                <el-table-column type="selection" width="30" fixed align="center"> </el-table-column>
+                <el-table-column label="查看趋势" width="90" fixed align="center">
                     <template slot-scope="scope">
                         <el-button @click="toCheckTrend(scope.row)" type="text" size="small">查看</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="昨日监控" width="70" fixed>
+                <el-table-column label="昨日监控" width="70" fixed align="center">
                     <template slot-scope="scope">
                         {{["未监控","已监控"][+scope.row.isMonitored]}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="monitor_days" label="监控天数" width="70" fixed align="right"> </el-table-column>
-                <el-table-column label="主图" width="70" fixed align="right">
+                <el-table-column prop="monitor_days" label="监控天数" width="70" fixed align="center"> </el-table-column>
+                <el-table-column label="主图" width="70" fixed align="center">
                     <template slot-scope="scope">
                         <img class="picture" :src="scope.row.pictUrl" alt="" />
                     </template>
                 </el-table-column>
-                <el-table-column prop="itemId" label="宝贝ID" width="120" fixed align="right"> </el-table-column>
-                <el-table-column prop="uvIndexNum" label="访客数" width="70" fixed align="right"> </el-table-column>
-                <el-table-column prop="tradeNum" label="买家数" width="70" fixed align="right"> </el-table-column>
-                <el-table-column prop="payAmount" label="支付金额" width="70" fixed align="right"> </el-table-column>
-                <el-table-column prop="price" label="客单价" width="70" align="right"> </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" width="70" align="right"> </el-table-column>
-                <el-table-column prop="uvPrice" label="UV价值" width="70" align="right"> </el-table-column>
-                <el-table-column prop="goods_name" label="宝贝标题" width="220" align="right"> </el-table-column>
-                <el-table-column label="深度智能分析" width="120" align="right">
+                <el-table-column prop="itemId" label="宝贝ID" width="120" fixed align="center"> </el-table-column>
+                <el-table-column prop="uvIndexNum" label="访客数" width="70" fixed align="center"> </el-table-column>
+                <el-table-column prop="tradeNum" label="买家数" width="70" fixed align="center"> </el-table-column>
+                <el-table-column prop="payAmount" label="支付金额" width="70" fixed align="center"> </el-table-column>
+                <el-table-column prop="price" label="客单价" width="70" align="center"> </el-table-column>
+                <el-table-column prop="payRateRatio" label="转化率" width="70" align="center"> </el-table-column>
+                <el-table-column prop="uvPrice" label="UV价值" width="70" align="center"> </el-table-column>
+                <el-table-column prop="goods_name" label="宝贝标题" width="220" align="center"> </el-table-column>
+                <el-table-column label="深度智能分析" width="120" align="center">
                     <template slot-scope="scope">
                         <p>点击展开智能分析</p>
                     </template>
                 </el-table-column>
-                <el-table-column label="深度人工诊断" width="120" align="right">
+                <el-table-column label="深度人工诊断" width="120" align="center">
                     <template slot-scope="scope">
                         <p>扫码添加咨询诊断</p>
                     </template>

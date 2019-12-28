@@ -1,8 +1,48 @@
 <template>
     <div class="analysis">
+        <el-dialog title="选择监控竞品宝贝" :visible.sync="addFlag" width="1024px" :close-on-click-modal="false" :close-on-press-escape="false">
+            <el-table :data="goodsInfo" border style="width: 100%" class="goodsInfo">
+                <el-table-column prop="" label="主图" width="70">
+                    <template slot-scope="scope">
+                        <img class="picture" :src="scope.row.pictUrl" alt="" />
+                    </template>
+                </el-table-column>
+                <el-table-column prop="itemId" label="宝贝ID" width="110">
+                </el-table-column>
+                <el-table-column prop="goods_name" label="宝贝标题" width="220">
+                </el-table-column>
+                <el-table-column prop="shop_name" label="店铺名称" width="140">
+                </el-table-column>
+                <el-table-column prop="create_time" label="开始日期">
+                </el-table-column>
+                <el-table-column prop="last_crawler_time" label="截至日期">
+                </el-table-column>
+                <el-table-column prop="crawler_days" label="采集天数" width="70">
+                </el-table-column>
+                <el-table-column prop="" label="昨日监控" width="70">
+                    <template slot-scope="scope">
+                        {{["未监控","已监控"][+scope.row.isMonitored]}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="" label="操作" width="110">
+                    <template slot-scope="scope">
+                        <el-button type="primary" plain @click="getCompeteGoodsInfo(scope.row.goods_name)">开始获取</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>日志记录</span>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="logList = []">清空</el-button>
+                </div>
+                <div v-for="(item,i) in logList" :key="i" class="text item">
+                    {{item}}
+                </div>
+            </el-card>
+        </el-dialog>
         <div class="info">
             <span class="info-title">宝贝信息</span>
-            <el-button type="primary" class="info-btn">选择宝贝</el-button>
+            <el-button type="primary" class="info-btn" @click="addFlag = true">选择宝贝</el-button>
             <div class="competition-info">
                 <img src="">
                 <span class="title">腕力球100公斤200健身60男减压自启动静音臂力手腕锻炼握力器离心</span>
@@ -41,7 +81,7 @@
                 <li :class="{active:tabIndex === 3}" @click="changeTab(3)">流量结构分析</li>
                 <li :class="{active:tabIndex === 4}" @click="changeTab(4)">黑搜报表</li>
                 <li :class="{active:tabIndex === 5}" @click="changeTab(5)">宝贝信息</li>
-                <li :class="{active:tabIndex === 6}" @click="changeTab(6)">黑搜分析<i class="hot"></i></li>
+                <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">黑搜分析<i class="hot"></i></li>
             </ul>
         </div>
         <div class="data" :is="tempList[tabIndex]"></div>
@@ -49,23 +89,85 @@
 </template>
 
 <script>
+const { ipcRenderer, remote } = require("electron");
+const { from } = require("rxjs");
+
+import factory from "@/util/factory";
 import dataSource from "@/components/heisou/dataSource";
 import keywordAnalysis from "@/components/heisou/keywordAnalysis";
 import rootAnalysis from "@/components/heisou/rootAnalysis";
 import trafficStructureAnalysis from "@/components/heisou/trafficStructureAnalysis";
 import report from "@/components/heisou/report";
+import goodsInfo from "@/components/heisou/goodsInfo";
+import heisouAnalysis from "@/components/heisou/heisouAnalysis";
 
 export default {
     data() {
         return {
             form: {},
-            tabIndex: 4,
-            tempList: [dataSource, keywordAnalysis, rootAnalysis, trafficStructureAnalysis, report]
+            tabIndex: 0,
+            tempList: [
+                dataSource,
+                keywordAnalysis,
+                rootAnalysis,
+                trafficStructureAnalysis,
+                report,
+                goodsInfo,
+                heisouAnalysis
+            ],
+            // 竞品列表
+            goodsInfo: [],
+            // 添加弹窗
+            addFlag: false,
+            // 日志
+            logList: [],
+            logFlag: true
+
         }
+    },
+    mounted(){
+        this.getList();
+        // 获取xhr信息后处理
+        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
+            if (factory.obj[type]) {
+                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
+            }
+        });
+        // 获取日志
+        ipcRenderer.on("get-log", (event, data) => {
+            // flag 0 成功  1进行中  2 失败
+            if (data.flag === 1 && this.logFlag) {
+                this.logList.push(data.msg);
+            }
+            if (data.flag === 0 && this.logFlag) {
+                this.addingFlag = false;
+                this.updateFlag = false;
+                this.logFlag = false;
+                this.logList.push(data.msg);
+            }
+            if (data.flag === 2 && this.logFlag) {
+                this.addingFlag = false;
+                this.updateFlag = false;
+                this.logFlag = false;
+                this.logList.push(data.msg);
+            }
+        });
     },
     methods: {
         changeTab(index) {
             this.tabIndex = index;
+        },
+        // 获取列表数据
+        getList() {
+            this.$http.post("/crawler/getCompeteGoodsList", {}).then(res => {
+                0 === res.code && (this.goodsInfo = res.data);
+            });
+        },
+        // 获取竞品数据
+        getCompeteGoodsInfo(goodsname){
+            from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
+                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor-detail", goodsname);
+            });
         }
     }
 }
@@ -160,6 +262,23 @@ export default {
                 border-bottom: 30px solid rgba(255, 105, 2, 1);
             }
         }
+        .active1 {
+            background: rgba(223, 63, 49, 1);
+            color: #fff;
+            &::after {
+                border-bottom: 30px solid rgba(223, 63, 49, 1);
+            }
+        }
+    }
+    .box-card {
+        margin-top: 20px;
+    }
+    .goodsInfo {
+        height: 300px;
+        overflow-y: auto;
+    }
+    .picture {
+       .wh(40px);
     }
 }
 </style>
