@@ -1,13 +1,13 @@
 <template>
-    <div class="shipin-index">
-        <div class="shipin-index-navigation">
-            <ul class="shipin-index-navigation-ul">
-                <router-link tag="li" to="/shipin/videoCenter" :class="{active:$route.meta.index === 0}">
+    <div class="ganhuo-index">
+        <div class="ganhuo-index-navigation">
+            <ul class="ganhuo-index-navigation-ul">
+                <router-link tag="li" to="/ganhuo/videoCenter" :class="{active:$route.meta.index === 0}">
                     <div>视频中心</div>
                 </router-link>
             </ul>
         </div>
-        <router-view class="shipin-main"></router-view>
+        <router-view class="ganhuo-main"></router-view>
     </div>
 </template>
 
@@ -18,14 +18,14 @@ export default {}
 
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
-.shipin-index {
+.ganhuo-index {
     padding-top: 15px;
     min-height: calc(~"87vh - 15px");
-    .shipin-index-navigation {
+    .ganhuo-index-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
         height: 45px;
-        .shipin-index-navigation-ul {
+        .ganhuo-index-navigation-ul {
             .fl;
             li {
                 .fl;
@@ -47,7 +47,7 @@ export default {}
             }
         }
     }
-    .shipin-main {
+    .ganhuo-main {
         padding-bottom: 20px;
     }
 }

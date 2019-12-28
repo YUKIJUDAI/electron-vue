@@ -44,7 +44,7 @@
                             <i class="iconfont icon-taobao"></i>
                             <span>淘宝流量</span>
                         </router-link>
-                        <router-link to="/shipin/videoCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
+                        <router-link to="/ganhuo/videoCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
                             <i class="iconfont icon-shipin"></i>
                             <span>视频中心</span>
                         </router-link>

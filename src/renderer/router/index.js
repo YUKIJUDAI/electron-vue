@@ -84,13 +84,13 @@ export default new Router({
                     ]
                 },
                 {
-                    path: "shipin",
-                    component: require("@/view/shipin/index").default,
+                    path: "ganhuo",
+                    component: require("@/view/ganhuo/index").default,
                     children: [
                         // 视频 
                         {
                             path: "videoCenter",
-                            component: require("@/view/shipin/videoCenter").default,
+                            component: require("@/view/ganhuo/videoCenter").default,
                             meta: { menuIndex: 5, index: 0 }
                         }
                     ]
