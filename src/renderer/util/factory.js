@@ -123,7 +123,7 @@ factory.add("getCoreTrend", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/saveLog", data).then();
+        http.post("/crawler/addCompeteIndex", data).then();
     }
 });
 
@@ -135,7 +135,7 @@ factory.add("getKeywords", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/saveLog", data).then();
+        http.post("/crawler/addCompeteKeywords", data).then();
     }
 });
 

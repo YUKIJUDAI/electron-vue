@@ -1,6 +1,8 @@
 import Vue from 'vue';
-import http from '@/util/http';
+import echarts from 'echarts';
 import ElementUI from 'element-ui';
+
+import http from '@/util/http';
 import '@/assets/theme/index.css';
 // import '@/assets/iconfont/iconfont.css';
 
@@ -13,6 +15,7 @@ Vue.http = Vue.prototype.$http = http;
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
+Vue.prototype.$echarts = echarts;
 
 /* eslint-disable no-new */
 new Vue({

@@ -82,12 +82,10 @@
                     <ul>
                         <li>行业排名 {{shopInfo.rank.payAmtRank.value === 0 ? "100+" : shopInfo.rank.payAmtRank.value}}</li>
                         <li>无线占比 {{shopInfo.wireless.payAmtWL.value}}</li>
-                        <li>昨日全天 {{(~~shopInfo.yesterday.payAmt.value) | money}}</li>
+                        <li>昨日全天 {{(~~shopInfo.yesterday.index.payAmt.value) | money}}</li>
                     </ul>
                 </div>
-                <div class="data-detail-2">
-
-                </div>
+                <div class="data-detail-2" id="data-detail-2"></div>
                 <div class="data-detail-3">
                     <ul>
                         <li>
@@ -193,13 +191,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="itemId" label="宝贝ID" width="120" fixed align="center"> </el-table-column>
-                <el-table-column prop="uvIndexNum" label="访客数" width="70" fixed align="center"> </el-table-column>
-                <el-table-column prop="tradeNum" label="买家数" width="70" fixed align="center"> </el-table-column>
-                <el-table-column prop="payAmount" label="支付金额" width="70" fixed align="center"> </el-table-column>
-                <el-table-column prop="price" label="客单价" width="70" align="center"> </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" width="70" align="center"> </el-table-column>
-                <el-table-column prop="uvPrice" label="UV价值" width="70" align="center"> </el-table-column>
-                <el-table-column prop="goods_name" label="宝贝标题" width="220" align="center"> </el-table-column>
+                <el-table-column prop="goods_name" label="宝贝标题" width="220" fixed align="center"> </el-table-column>
+                <el-table-column prop="uvIndexNum" label="访客数" align="center"> </el-table-column>
+                <el-table-column prop="tradeNum" label="买家数" align="center"> </el-table-column>
+                <el-table-column prop="payAmount" label="支付金额" align="center"> </el-table-column>
+                <el-table-column prop="price" label="客单价" align="center"> </el-table-column>
+                <el-table-column prop="payRateRatio" label="转化率" align="center"> </el-table-column>
+                <el-table-column prop="uvPrice" label="UV价值" align="center"> </el-table-column>
+
                 <el-table-column label="深度智能分析" width="120" align="center">
                     <template slot-scope="scope">
                         <p>点击展开智能分析</p>
@@ -225,10 +224,6 @@ const { ipcRenderer, remote } = require("electron");
 const { from } = require("rxjs");
 const moment = require('moment');
 import axios from "axios";
-const echarts = require('echarts/lib/echarts');
-require('echarts/lib/chart/line');
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/legend');
 
 import factory from "@/util/factory";
 
@@ -240,7 +235,7 @@ export default {
                 rank: { payAmtRank: { value: 0 } },
                 wireless: { payAmtWL: { value: "" } },
                 today: [{ uv: { value: "" } }, {}, { pv: { value: "" } }, { payOrdCnt: { value: "" } }, { payAmt: { value: "" } }],
-                yesterday: { payAmt: { value: "" } }
+                yesterday: { index: { payAmt: { value: "" } } }
             },
             table: [],
             total_pages: 1,
@@ -345,7 +340,7 @@ export default {
                         res[0].data.date = arr.reverse();
                         this.treadData = res[0].data;
                         this.treadTable = res[1].data;
-                        this.myChart = echarts.init(document.getElementById('echarts'));
+                        this.myChart = this.$echarts.init(document.getElementById('echarts'));
                         this.createCharts(false);
                     } else {
                         this.$message.error("数据获取失败，请重试");
@@ -529,7 +524,100 @@ export default {
         // 获取店铺基础数据
         getShop() {
             this.$http.post("/crawler/getShopTrend", {}).then(res => {
-                0 === res.code && (this.shopInfo = res.data);
+                if (0 === res.code) {
+                    this.shopInfo = res.data;
+                    let echarts = this.$echarts.init(document.getElementById('data-detail-2'));
+                    let option = {
+                        color: ["#FF6801", "#CECECE"],
+                        legend: {
+                            data: ['今日', '昨日']
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%',
+                            top: "10%",
+                            bottom: '5%',
+                            containLabel: true
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            formatter: '{b0}时<br/>今日：{c0}元: <br/>昨日：{c1}元'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'],
+                            axisLine: {
+                                show: false
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLabel: {
+                                interval: 2
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            axisLine: {
+                                show: false
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            splitNumber: 2
+                        },
+                        series: [
+                            {
+                                name: "今日",
+                                data: res.data.trend.payAmt.map(item => ~~item),
+                                type: 'line',
+                                symbol: 'none',
+                                smooth: true,
+                                areaStyle: {
+                                    color: {
+                                        type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0, color: 'rgba(255,104,1,0.5)'
+                                        }, {
+                                            offset: 1, color: '#fff'
+                                        }],
+                                        global: false
+                                    }
+                                }
+                            },
+                            {
+                                name: "昨日",
+                                data: res.data.yesterday.trend.payAmt.map(item => ~~item),
+                                type: 'line',
+                                symbol: 'none',
+                                smooth: true,
+                                areaStyle: {
+                                    color: {
+                                        type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0, color: 'rgba(206,206,206,0.5)'
+                                        }, {
+                                            offset: 1, color: '#fff'
+                                        }],
+                                        global: false
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                    echarts.setOption(option)
+                }
             })
         },
         // 选择
@@ -616,7 +704,7 @@ export default {
     }
     .data-detail-2 {
         .fl;
-        margin-left: 50px;
+        margin: 0 50px;
         width: 360px;
         height: 150px;
     }
