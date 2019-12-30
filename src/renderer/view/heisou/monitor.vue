@@ -541,7 +541,7 @@ export default {
                         },
                         tooltip: {
                             trigger: 'axis',
-                            formatter: '{b0}时<br/>今日：{c0}元: <br/>昨日：{c1}元'
+                            formatter: '{b0}时<br/>{a0}：{c0}元<br/>{a1}：{c1}元'
                         },
                         xAxis: {
                             type: 'category',
