@@ -123,7 +123,7 @@ factory.add("getCoreTrend", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/addCompeteIndex", data).then();
+        http.post("/crawler/addCoreTrend", data).then();
     }
 });
 
@@ -135,7 +135,7 @@ factory.add("getKeywords", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/addCompeteKeywords", data).then();
+        http.post("/crawler/addKeywords", data).then();
     }
 });
 
@@ -147,8 +147,19 @@ factory.add("getFlowSource", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/saveLog", data).then();
+        http.post("/crawler/addFlowSource", data).then();
     }
 });
+
+// 入店来源趋势
+factory.add("getSourceTrend", {
+    callback: function (params, res) {
+        const data = {
+            sys: JSON.stringify({ ...params }),
+            crawler_data: JSON.stringify(res)
+        }
+        http.post("/crawler/addSourceTrend", data).then();
+    }
+})
 
 export default factory;

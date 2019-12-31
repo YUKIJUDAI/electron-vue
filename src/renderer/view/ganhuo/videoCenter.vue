@@ -270,14 +270,14 @@ export default {
 }
 </style>
 <style lang="less">
-    .video-dialog {
-        .el-dialog__header {
-            display: none;
-        }
+.video-dialog {
+    .el-dialog__header {
+        display: none;
     }
     .el-dialog__body {
         width: 800px;
         height: 500px;
         padding: 0;
     }
+}
 </style>

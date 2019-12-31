@@ -1,7 +1,7 @@
 const { remote, ipcRenderer } = require('electron');
 const qs = require("qs");
-const { from, interval, timer } = require("rxjs");
-const { filter, take, tap, delay, map, flatMap } = require("rxjs/operators");
+const { from, interval, timer, concat } = require("rxjs");
+const { filter, take, tap, delay, map, flatMap, last } = require("rxjs/operators");
 const moment = require('moment');
 
 // 发送数据到渲染进程 xhr
@@ -131,16 +131,59 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
             document.querySelectorAll(".oui-select")[2].click()
         }))
         .pipe(delay(1000))
-        //  入店来源pc端
         .pipe(tap(() => {
-            document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[0].click()
+            // 点击无线端
+            document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[0].click();
         }))
         .pipe(delay(1000))
-        // 入店来源无线端
-        .pipe(tap(() => {
-            document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[1].click()
-        }))
-        .subscribe()
+        .subscribe(() => {
+            let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
+            let b = timer(0, 35000)
+                .pipe(take(len.length))
+                .pipe(tap((i) => {
+                    // 点击下一页
+                    len[i].click();
+                }));
+
+            b.subscribe(() => {
+                let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
+                let c = timer(0, 1000)
+                    .pipe(take(len.length))
+                    .pipe(delay(500))
+                    .pipe(filter((i) => (i + 1) % 3 === 0))
+                    .pipe(tap((i) => {
+                        // 点击趋势
+                        len[i].querySelector("a").click();
+                    }))
+                    .pipe(last())
+
+                c.subscribe(() => {
+                    document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[1].click();
+                    let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
+                    let b = timer(1000, 35000)
+                        .pipe(take(len.length))
+                        .pipe(tap((i) => {
+                            // 点击下一页
+                            len[i].click();
+                        }));
+
+                    b.subscribe(() => {
+                        let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
+                        let c = timer(0, 1000)
+                            .pipe(take(len.length))
+                            .pipe(delay(500))
+                            .pipe(filter((i) => (i + 1) % 3 === 0))
+                            .pipe(tap((i) => {
+                                // 点击趋势
+                                len[i].querySelector("a").click();
+                            }))
+                            .pipe(last())
+
+                            c.subscribe();
+                    })
+                });
+            })
+        });
 });
 
 // 添加竞品
@@ -352,9 +395,10 @@ function FetchProxy() {
         "getCoreTrend", // 曲线图数据
         "getKeywords", // 入店关键词
         "getFlowSource", // 入店来源
+        "getSourceTrend", // 入店来源趋势
         "getSingleMonitoredInfo", // 竞争商品信息
         "trend", //竞品趋势信息
-        "getShopCate" // 店铺分类信息
+        "getShopCate", // 店铺分类信息
     ]
 
     let gHandlerList = [],  //截获请求的处理函数列表
