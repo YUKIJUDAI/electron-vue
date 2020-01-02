@@ -1,5 +1,5 @@
 const { from } = require("rxjs");
-const { remote } = require('electron');
+const { remote, ipcRenderer } = require('electron');
 
 const { aes } = require("./aes");
 import http from "./http";
@@ -85,7 +85,7 @@ factory.add("list", {
                 crawler_data: aes(res)
             }
             http.post("/crawler/saveList", data).then(r => {
-                //0 === r.code && remote.BrowserWindow.fromId(id).webContents.send("list-success");
+                ipcRenderer.send("hide-sycm");
             });
         }
     }

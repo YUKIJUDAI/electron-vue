@@ -34,6 +34,11 @@ ipcMain.on("close", function () {
     mainWindow.close();
 });
 
+// 隐藏淘宝
+ipcMain.on("hide-sycm", function () {
+    //sycmWindow && sycmWindow.hide();
+});
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {

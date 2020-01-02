@@ -89,7 +89,7 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
         }))
         .pipe(delay(1000))
         .pipe(tap(() => {
-            document.querySelectorAll(".ant-input")[0].focus()
+            document.querySelectorAll(".ant-input")[0].focus();
         }))
         .pipe(delay(1000))
         .pipe(tap(() => {
@@ -98,88 +98,107 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
         .pipe(delay(1000))
         .pipe(tap(() => {
             document.querySelector(".oui-typeahead-dropdown-item").click();
+            setLog({ flag: 1, msg: "开始获取竞品数据，请稍后。。。" });
         }))
         .pipe(delay(1000))
         // 点击下拉
         .pipe(tap(() => {
-            window.scrollTo(0, 1500);
-            document.querySelectorAll(".oui-select")[1].click()
+            setLog({ flag: 1, msg: "正在获取关键指标对比，请稍后。。。" });
+            document.querySelectorAll(".oui-select")[1].click();
         }))
         .pipe(delay(1000))
         // 点击无线端
         .pipe(tap(() => {
-            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[1].click()
+            setLog({ flag: 1, msg: "关键指标对比获取成功。" });
+            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[1].click();
+            setLog({ flag: 1, msg: "正在获取关键词信息，请稍后。。。" });
         }))
         .pipe(delay(1000))
         // 点击天猫
         .pipe(tap(() => {
-            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[1].click()
+            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[1].click();
         }))
         .pipe(delay(1000))
         // 点击pc端
         .pipe(tap(() => {
-            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[0].click()
+            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[0].click();
         }))
         .pipe(delay(1000))
         // 点击淘宝
         .pipe(tap(() => {
-            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[0].click()
+            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[0].click();
+        }))
+        .pipe(delay(1000))
+        .pipe(tap(() => {
+            window.scroll(0, 2000);
         }))
         .pipe(delay(1000))
         // 点击下拉
         .pipe(tap(() => {
-            document.querySelectorAll(".oui-select")[2].click()
+            try {
+                document.querySelectorAll(".oui-select")[2].click();
+            } catch (error) {
+                setLog({ flag: 2, msg: "获取数据失败，请重试" });
+            }
         }))
         .pipe(delay(1000))
         .pipe(tap(() => {
+            setLog({ flag: 1, msg: "关键词信息获取成功" });
             // 点击无线端
             document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[0].click();
+            setLog({ flag: 1, msg: "正在获取流量数据，数据量较大，请稍后。。。" });
         }))
         .pipe(delay(1000))
         .subscribe(() => {
-            let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
-            let b = timer(0, 35000)
-                .pipe(take(len.length))
+            var _a = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
+            let a = timer(0, 35000)
+                .pipe(take(_a.length))
                 .pipe(tap((i) => {
                     // 点击下一页
-                    len[i].click();
+                    _a[i].click();
                 }));
 
-            b.subscribe(() => {
-                let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
-                let c = timer(0, 1000)
-                    .pipe(take(len.length))
+            a.subscribe(() => {
+                var _b = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
+                let b = timer(0, 1000)
+                    .pipe(take(_b.length))
                     .pipe(delay(500))
                     .pipe(filter((i) => (i + 1) % 3 === 0))
                     .pipe(tap((i) => {
                         // 点击趋势
-                        len[i].querySelector("a").click();
+                        _b[i].querySelector("a").click();
                     }))
                     .pipe(last())
+                    .pipe(tap(() => {
+                        document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[1].click();
+                    }))
+                    .pipe(delay(1000))
 
-                c.subscribe(() => {
-                    document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[1].click();
-                    let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
-                    let b = timer(1000, 35000)
-                        .pipe(take(len.length))
+                b.subscribe(() => {
+                    var _c = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
+                    let c = timer(1000, 35000)
+                        .pipe(take(_c.length))
                         .pipe(tap((i) => {
                             // 点击下一页
-                            len[i].click();
+                            _c[i].click();
                         }));
 
-                    b.subscribe(() => {
-                        let len = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
-                        let c = timer(0, 1000)
-                            .pipe(take(len.length))
+                    c.subscribe((j) => {
+                        var _d = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
+                        let d = timer(0, 1000)
+                            .pipe(take(_d.length))
                             .pipe(delay(500))
                             .pipe(filter((i) => (i + 1) % 3 === 0))
                             .pipe(tap((i) => {
                                 // 点击趋势
-                                len[i].querySelector("a").click();
+                                _d[i].querySelector("a").click();
                             }))
                             .pipe(last())
+                            .pipe(tap(() => {
+                                j === (_c.length - 1) && setLog({ flag: 0, msg: "流量数获取成功" });
+                            }))
 
-                            c.subscribe();
+                        d.subscribe();
                     })
                 });
             })

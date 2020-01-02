@@ -1,7 +1,7 @@
 <template>
     <div class="analysis">
-        <el-dialog title="选择监控竞品宝贝" :visible.sync="addFlag" width="1024px" :close-on-click-modal="false" :close-on-press-escape="false">
-            <el-table :data="goodsInfo" border style="width: 100%" class="goodsInfo">
+        <el-dialog title="选择监控竞品宝贝" :visible.sync="addFlag" width="1024px" :close-on-click-modal="false" :close-on-press-escape="false" :before-close="handleClose">
+            <el-table :data="goodsList" border style="width: 100%" class="goodsInfo">
                 <el-table-column prop="" label="主图" width="70">
                     <template slot-scope="scope">
                         <img class="picture" :src="scope.row.pictUrl" alt="" />
@@ -26,7 +26,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="操作" width="110">
                     <template slot-scope="scope">
-                        <el-button type="primary" plain @click="getCompeteGoodsInfo(scope.row.goods_name)">开始获取</el-button>
+                        <el-button type="primary" plain @click="getCompeteGoodsInfo(scope.row)">开始获取</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -44,12 +44,14 @@
             <span class="info-title">宝贝信息</span>
             <el-button type="primary" class="info-btn" @click="addFlag = true">选择宝贝</el-button>
             <div class="competition-info">
-                <img src="">
-                <span class="title">腕力球100公斤200健身60男减压自启动静音臂力手腕锻炼握力器离心</span>
-                <br />
-                <span class="shop-name">日轮九山旗舰店</span>
-                <br />
-                <span class="shop-id">ID:625415124947</span>
+                <img :src="goodsInfo.pictUrl">
+                <div>
+                    <span class="title">{{goodsInfo.goods_name}}</span>
+                    <br />
+                    <span class="shop-name">{{goodsInfo.shop_name}}</span>
+                    <br />
+                    <span class="shop-id">ID:{{goodsInfo.itemId}}</span>
+                </div>
             </div>
         </div>
         <div class="form">
@@ -116,7 +118,13 @@ export default {
                 heisouAnalysis
             ],
             // 竞品列表
-            goodsInfo: [],
+            goodsList: [],
+            // 竞品获取中flag
+            addingFlag: false,
+            goodsInfo: {
+                goods_name: "", pictUrl: "", shop_name: "", itemId: ""
+            },
+
             // 添加弹窗
             addFlag: false,
             // 日志
@@ -125,7 +133,7 @@ export default {
 
         }
     },
-    mounted(){
+    mounted() {
         this.getList();
         // 获取xhr信息后处理
         ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
@@ -141,15 +149,25 @@ export default {
             }
             if (data.flag === 0 && this.logFlag) {
                 this.addingFlag = false;
-                this.updateFlag = false;
                 this.logFlag = false;
                 this.logList.push(data.msg);
+                this.$alert('数据获取成功,请点击开始查询重新获取数据', '', {
+                    confirmButtonText: '确定',
+                    callback: this.handleClose
+                });
             }
             if (data.flag === 2 && this.logFlag) {
                 this.addingFlag = false;
-                this.updateFlag = false;
                 this.logFlag = false;
                 this.logList.push(data.msg);
+                this.$alert('数据获取失败', '', {
+                    confirmButtonText: '确定',
+                    callback: () => {
+                        this.goodsInfo = {
+                            goods_name: "", pictUrl: "", shop_name: "", itemId: ""
+                        };
+                    }
+                });
             }
         });
     },
@@ -160,14 +178,30 @@ export default {
         // 获取列表数据
         getList() {
             this.$http.post("/crawler/getCompeteGoodsList", {}).then(res => {
-                0 === res.code && (this.goodsInfo = res.data);
+                0 === res.code && (this.goodsList = res.data);
             });
         },
         // 获取竞品数据
-        getCompeteGoodsInfo(goodsname){
+        getCompeteGoodsInfo(data) {
+            if (this.addingFlag) {
+                this.$message.error("请等待当前任务完成后再试");
+                return;
+            }
+            this.addingFlag = true;
+            this.goodsInfo = { goods_name: data.goods_name, pictUrl: data.pictUrl, shop_name: data.shop_name, itemId: data.itemId };
             from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor-detail", goodsname);
+                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor-detail", data.goods_name);
             });
+        },
+        // 竞品关闭
+        handleClose() {
+            if (this.addingFlag) {
+                this.$message.error("请等待当前任务完成后再关闭");
+                return;
+            }
+            this.logList = [];
+            this.logFlag = true;
+            this.addFlag = false;
         }
     }
 }
@@ -199,6 +233,9 @@ export default {
             .wh(100px);
             .fl;
             margin-right: 13px;
+        }
+        div {
+            .fl;
         }
         .title {
             .dib;
@@ -278,7 +315,7 @@ export default {
         overflow-y: auto;
     }
     .picture {
-       .wh(40px);
+        .wh(40px);
     }
 }
 </style>
