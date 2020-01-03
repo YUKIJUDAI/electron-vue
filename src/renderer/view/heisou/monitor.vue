@@ -112,18 +112,6 @@
                             <br />
                             <span class="span-2">{{~~(shopInfo.today[3].payOrdCnt.value/shopInfo.today[0].uv.value * 100)}}%</span>
                         </li>
-                        <li>
-                            <img src="~@/assets/icon/monitor-6.png">
-                            <span class="span-1">收藏率</span>
-                            <br />
-                            <span class="span-2"></span>
-                        </li>
-                        <li>
-                            <img src="~@/assets/icon/monitor-7.png">
-                            <span class="span-1">加购率</span>
-                            <br />
-                            <span class="span-2"></span>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -711,7 +699,7 @@ export default {
     .data-detail-3 {
         .fl;
         ul {
-            width: 550px;
+            width: 350px;
         }
         li {
             .dib;

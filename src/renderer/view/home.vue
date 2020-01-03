@@ -48,6 +48,10 @@
                             <i class="iconfont icon-shipin"></i>
                             <span>视频中心</span>
                         </router-link>
+                        <router-link to="/geren/personCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 6}">
+                            <i class="iconfont"></i>
+                            <span>个人中心</span>
+                        </router-link>
                     </ul>
                 </div>
             </div>

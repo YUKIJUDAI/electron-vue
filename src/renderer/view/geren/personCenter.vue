@@ -1,0 +1,272 @@
+<template>
+    <div class="personCenter">
+        <div class="head clearfix">
+            <div class="head-left clearfix">
+                <div class="head-left-1">
+                    <img src="~@/assets/img/admin.png">
+                </div>
+                <div class="head-left-2">
+                    <p class="p-1">您好，{{userPhone}}<img src="~@/assets/img/vip-1.png" /><span>升级</span></p>
+                    <ul class="clearfix">
+                        <li>
+                            <p>可用担保金额：<span></span></p>
+                        </li>
+                        <li>
+                            <p>金币余额：<span></span></p>
+                        </li>
+                    </ul>
+                    <p class="p-2">冻结中担保金：</p>
+                </div>
+                <div class="head-left-3">
+                    <el-button size="small" type="primary" class="head-left-3-btn">充值</el-button>
+                    <br />
+                    <el-button size="small" plain class="head-left-3-btn">提现</el-button>
+                </div>
+            </div>
+            <div class="head-right">
+                <ul>
+                    <li>
+                        <img src="~@/assets/img/gift.png">
+                        <span>邀请有奖</span>
+                        <br />
+                        <span>获取免费金币</span>
+                    </li>
+                    <li>
+                        <img src="~@/assets/img/gzh.png">
+                        <span>微信公众号</span>
+                        <br />
+                        <span>关注免费得金币</span>
+                    </li>
+                    <li>
+                        <img src="~@/assets/img/wechat.png">
+                        <span>加客服好友</span>
+                        <br />
+                        <span>人工精准对接</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <p class="p-3">邀请商家注册：https://heisou.com/u/2584325354/<span>复制链接</span></p>
+        <p class="p-4">成功注册送7天VIP 商家付费享受10%分佣</p>
+        <div class="body">
+            <div class="body-con">
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <span>使用明细</span>
+                        <el-button style="float: right; padding: 3px 0" type="text">查看更多></el-button>
+                    </div>
+                    <ul>
+                        <li>
+                            <p class="p-5">竞品已监控</p>
+                            <p class="p-6">45<span>天</span></p>
+                        </li>
+                        <li>
+                            <p class="p-5">黑号已查询</p>
+                            <p class="p-6">45<span>次</span></p>
+                        </li>
+                        <li>
+                            <p class="p-5">流量已发布</p>
+                            <p class="p-6">45<span>单</span></p>
+                        </li>
+                    </ul>
+                </el-card>
+                <img src="~@/assets/img/ad-1.png" class="ad">
+            </div>
+            <div class="body-con">
+                <el-card class="box-card box-card2">
+                    <div slot="header" class="clearfix">
+                        <span>邀请明细</span>
+                        <el-button style="float: right; padding: 3px 0" type="text">查看更多></el-button>
+                    </div>
+                    <ul>
+                        <li>
+                            <img src="~@/assets/img/p.png" class="p">
+                            <p class="p-5">累计邀请人数</p>
+                            <p class="p-6">45<span>人</span></p>
+                        </li>
+                        <li>
+                            <img src="~@/assets/img/m.png" class="m">
+                            <p class="p-5">累计获得奖励 (金币)</p>
+                            <p class="p-6">45<span>个</span></p>
+                        </li>
+                        <li>
+                            <el-button size="small" type="primary" class="invite">立即邀请</el-button>
+                        </li>
+                    </ul>
+                </el-card>
+                <img src="~@/assets/img/ad-2.png" class="ad">
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import { isEmpty } from "@/util/util";
+
+export default {
+    computed: {
+        isLogin() {
+            return !isEmpty(this.$store.state.userInfo.token);
+        },
+        userPhone() {
+            return this.$store.state.userInfo.phone;
+        }
+    },
+}
+</script>
+
+<style lang="less" scoped>
+@import url("~@/assets/less/commom.less");
+
+.personCenter {
+    margin-top: 38px;
+    padding: 0 20px;
+    .head {
+        overflow: hidden;
+        .head-left {
+            overflow: hidden;
+            .fl;
+            border-right: 1px solid #ddd;
+        }
+        .head-left-1 {
+            .fl;
+        }
+        .head-left-2 {
+            .fl;
+            margin-left: 10px;
+            .p-1 {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+                img {
+                    margin-left: 8px;
+                    vertical-align: -5px;
+                }
+                span {
+                    padding-left: 7px;
+                    color: #fe0102;
+                    font-size: 12px;
+                    text-decoration: underline;
+                }
+            }
+            ul {
+                margin-top: 15px;
+                li {
+                    width: 160px;
+                    .fl;
+                    font-size: 14px;
+                    color: #333;
+                    &:first-child {
+                        border-right: 1px solid #ddd;
+                    }
+                    &:nth-child(2) {
+                        .tc;
+                    }
+                }
+            }
+            .p-2 {
+                margin-top: 10px;
+                font-size: 12px;
+                color: #999;
+            }
+        }
+        .head-left-3 {
+            .fl;
+            margin: 0 20px;
+            .head-left-3-btn {
+                margin-top: 10px;
+            }
+        }
+        .head-right {
+            .fl;
+            ul {
+                display: flex;
+            }
+            li {
+                width: 140px;
+                padding: 18px 0 18px 4%;
+                img {
+                    .fl;
+                    margin-top: 4px;
+                }
+                span {
+                    &:nth-child(2) {
+                        color: #ff6801;
+                        font-size: 14px;
+                        padding-left: 9px;
+                    }
+                    &:nth-child(4) {
+                        color: #999;
+                        font-size: 12px;
+                        padding-left: 9px;
+                        padding-top: 3px;
+                    }
+                }
+            }
+        }
+    }
+    .p-3 {
+        font-size: 14px;
+        color: #333;
+        margin-top: 20px;
+        span {
+            text-decoration: underline;
+            color: red;
+            cursor: pointer;
+        }
+    }
+    .p-4 {
+        color: #ff6801;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 7px;
+    }
+    .body {
+        margin-top: 20px;
+        .body-con {
+            display: flex;
+            margin-bottom: 27px;
+            .box-card {
+                width: 60%;
+                margin-right: 20px;
+                li {
+                    .fl;
+                    width: 33%;
+                    .tc;
+                    .p-5 {
+                        font-size: 14px;
+                        color: #666;
+                    }
+                    .p-6 {
+                        font-size: 24px;
+                        color: #ff6801;
+                        margin-top: 10px;
+                        span {
+                            font-size: 14px;
+                            color: #666;
+                        }
+                    }
+                }
+                .p,
+                .m {
+                    .fl;
+                    margin-right: 20px;
+                    margin-top: 10px;
+                }
+                .invite {
+                    margin-top: 15px;
+                }
+            }
+            .box-card2 {
+                li {
+                    .tl;
+                    width: 40%;
+                    &:last-child {
+                        width: 20%;
+                    }
+                }
+            }
+        }
+    }
+}
+</style>

@@ -94,6 +94,18 @@ export default new Router({
                             meta: { menuIndex: 5, index: 0 }
                         }
                     ]
+                },
+                {
+                    path: "geren",
+                    component: require("@/view/geren/index").default,
+                    children: [
+                        // 个人中心
+                        {
+                            path: "personCenter",
+                            component: require("@/view/geren/personCenter").default,
+                            meta: { menuIndex: 6, index: 0 }
+                        }
+                    ]
                 }
             ]
         },
