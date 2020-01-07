@@ -100,7 +100,7 @@
                 <div class="clearfix form-margin">
                     <div class="form-input form-input-code">
                         <i class="code"></i>
-                        <input type="text" placeholder="请输入图形验证码" v-model="loginForm.verify">
+                        <input type="text" placeholder="请输入图形验证码" v-model="registeredForm.verify">
                     </div>
                     <div class="code-img">
                         <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
@@ -125,37 +125,7 @@
             </div>
         </el-dialog>
         <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">
-            <form class="form">
-                <div class="form-input">
-                    <i class="phone"></i>
-                    <input type="text" placeholder="请输入手机号" v-model="forgetForm.phone">
-                </div>
-                <div class="form-input">
-                    <i class="pwd"></i>
-                    <input type="password" placeholder="请输入新密码" v-model="forgetForm.password">
-                </div>
-                <div class="clearfix form-margin">
-                    <div class="form-input form-input-code">
-                        <i class="code"></i>
-                        <input type="text" placeholder="请输入图形验证码" v-model="loginForm.verify">
-                    </div>
-                    <div class="code-img">
-                        <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
-                    </div>
-                </div>
-                <div class="clearfix form-margin">
-                    <div class="form-input form-input-code">
-                        <i class="safe"></i>
-                        <input type="text" placeholder="请输入手机验证码" v-model="forgetForm.code">
-                    </div>
-                    <div class="code-safe" v-if="phoneCodeFlag">{{countdown}}</div>
-                    <div class="code-safe" @click="getPhoneCode" v-else>发送验证码</div>
-                </div>
-            </form>
-            <div class="other clearfix">
-                <span class="registered" @click="goLogin">去登录</span>
-            </div>
-            <div class="submit" @click="forget">立即重置</div>
+            <password v-model="forgetFlag" @goLogin="goLogin" :b="true"></password>
         </el-dialog>
     </div>
 </template>
@@ -165,8 +135,10 @@ const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import { baseUrl } from "@/config/config";
+import password from "@/components/password";
 
 export default {
+    components: { password },
     data() {
         return {
             baseUrl,
@@ -174,8 +146,6 @@ export default {
             loginForm: {},
             // 注册表格
             registeredForm: {},
-            // 忘记密码表格
-            forgetForm: {},
 
             loginFlag: false,
             registeredFlag: false,
@@ -221,23 +191,14 @@ export default {
         },
         // 获取短信
         getPhoneCode() {
-            if (this.registeredFlag) {
-                var phone = this.registeredForm.phone;
-                var verify = this.registeredForm.verify;
-                var type = 1;
-            } else if (this.forgetFlag) {
-                var phone = this.forgetForm.phone;
-                var verify = this.forgetForm.verify;
-                var type = 2;
-            }
-            if (!phone) {
+            if (!this.registeredForm.phone) {
                 this.$message.error("请先输入手机号");
                 return;
-            } else if (!verify) {
+            } else if (!this.registeredForm.verify) {
                 this.$message.error("请先填写图形验证码");
                 return;
             }
-            getPhoneCode(type, phone, verify, this);
+            getPhoneCode(type, this.registeredForm.phone, this.registeredForm.verify, this);
         },
         // 去注册
         goRegistered() {
@@ -303,26 +264,10 @@ export default {
                 }
             });
         },
-        // 忘记密码
-        forget() {
-            if (this.submitFlag) return;
-            this.submitFlag = true;
-            this.$http.post("/index/forgetPwd", Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
-                this.submitFlag = false;
-                if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", { token: "", phone: "" });
-                    this.$message.success(res.msg);
-                    this.forgetFlag = false;
-                    this.$router.replace("/");
-                } else {
-                    this.getKey();
-                    this.$message.error(res.msg);
-                }
-            });
-        },
         // 退出
         exit() {
             this.$store.dispatch("set_user_info", { token: "", phone: "" });
+            this.$router.replace("/");
         },
         // 最大化 最小化 关闭
         toMainFn(type) {

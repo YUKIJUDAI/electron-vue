@@ -5,6 +5,9 @@
                 <router-link tag="li" to="/geren/personCenter" :class="{active:$route.meta.index === 0}">
                     <div>个人中心</div>
                 </router-link>
+                <router-link tag="li" to="/geren/accountSettings" :class="{active:$route.meta.index === 3}">
+                    <div>账户设置</div>
+                </router-link>
             </ul>
         </div>
         <router-view class="geren-main"></router-view>

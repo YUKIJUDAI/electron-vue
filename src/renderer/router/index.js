@@ -104,6 +104,11 @@ export default new Router({
                             path: "personCenter",
                             component: require("@/view/geren/personCenter").default,
                             meta: { menuIndex: 6, index: 0 }
+                        },
+                        {
+                            path: "accountSettings",
+                            component: require("@/view/geren/accountSettings").default,
+                            meta: { menuIndex: 6, index: 3 }
                         }
                     ]
                 }

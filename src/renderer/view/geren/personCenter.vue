@@ -208,7 +208,7 @@ export default {
     .p-3 {
         font-size: 14px;
         color: #333;
-        margin-top: 20px;
+        margin-top: 15px;
         span {
             text-decoration: underline;
             color: red;
