@@ -2,18 +2,18 @@
     <div class="liuliang-index">
         <div class="liuliang-index-navigation clearfix">
             <ul class="liuliang-index-navigation-ul">
-                <router-link tag="li" to="/liuliang/flow" :class="{active:$route.meta.index === 0}">
+                <router-link tag="li" to="/liuliangliebiao/flow" :class="{active:$route.meta.index === 0}">
                     <div>流量任务</div>
                 </router-link>
-                <router-link tag="li" to="/liuliang/favorite" :class="{active:$route.meta.index === 1}">
+                <router-link tag="li" to="/liuliangliebiao/favorite" :class="{active:$route.meta.index === 1}">
                     <div>收藏任务</div>
                 </router-link>
-                <router-link tag="li" to="/liuliang/plusPurchase" :class="{active:$route.meta.index === 2}">
+                <router-link tag="li" to="/liuliangliebiao/plusPurchase" :class="{active:$route.meta.index === 2}">
                     <div>加购任务</div>
                 </router-link>
             </ul>
             <div class="liuliang-index-navigation-right">
-                <router-link tag="p" :to="['/liuliangliebiao/flow','/liuliangliebiao/favorite','/liuliangliebiao/plusPurchase'][$route.meta.index]">任务管理</router-link>
+                <router-link tag="p" :to="['/liuliang/flow','/liuliang/favorite','/liuliang/plusPurchase'][$route.meta.index]">发布任务</router-link>
             </div>
         </div>
         <router-view class="liuliang-main">

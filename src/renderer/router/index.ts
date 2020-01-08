@@ -84,6 +84,30 @@ export default new Router({
                     ]
                 },
                 {
+                    path: "liuliangliebiao",
+                    component: require("@/view/liuliangliebiao/index").default,
+                    children: [
+                        // 流量
+                        {
+                            path: "flow",
+                            component: require("@/view/liuliangliebiao/flow").default,
+                            meta: { menuIndex: 2, index: 0 }
+                        },
+                        // 收藏
+                        {
+                            path: "favorite",
+                            component: require("@/view/liuliangliebiao/favorite").default,
+                            meta: { menuIndex: 2, index: 1 }
+                        },
+                        // 加购
+                        {
+                            path: "plusPurchase",
+                            component: require("@/view/liuliangliebiao/plusPurchase").default,
+                            meta: { menuIndex: 2, index: 2 }
+                        }
+                    ]
+                },
+                {
                     path: "ganhuo",
                     component: require("@/view/ganhuo/index").default,
                     children: [
