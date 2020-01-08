@@ -5,9 +5,7 @@
 </template>
 
 <script>
-export default {
-    name: 'vue-electron' 
-}
+export default { }
 </script>
 
 <style>

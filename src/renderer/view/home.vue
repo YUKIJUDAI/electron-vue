@@ -131,6 +131,7 @@
 </template>
 
 <script>
+import { Component, Vue } from "vue-property-decorator";
 const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";

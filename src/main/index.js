@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { autoUpdater } = require("electron-updater");
-const { uploadUrl } = require("../renderer/config/config");
+// const { uploadUrl } = require("../renderer/config/config");
 
 if (process.env.NODE_ENV !== 'development') {
     global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -118,7 +118,7 @@ function createView() {
 // 版本更新
 function updateHandle() {
 
-    autoUpdater.setFeedURL(uploadUrl);
+    autoUpdater.setFeedURL("http://127.0.0.1:3000/public");
     autoUpdater.on('error', function (error) {
         sendUpdateMessage("检查更新出错");
     });

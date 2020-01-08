@@ -1,4 +1,4 @@
-var { readFile, writeFile, access, mkdir } = require("@/middle/fs");
+const { readFile, writeFile, access, mkdir } = require("@/middle/fs");
 var path = require("path");
 
 function _path(filename) {
@@ -6,17 +6,17 @@ function _path(filename) {
 }
 
 // 读取文件
-exports.readSaveData = function (filename) {
+const readSaveData = function (filename) {
     return readFile(_path(filename));
 }
 
 // 写入文件
-exports.writeSaveData = function (filename, data) {
+const writeSaveData = function (filename, data) {
     return writeFile(_path(filename), JSON.stringify(data));
 }
 
 // 创建文件
-exports.mkdirSaveData = function (filename) {
+const mkdirSaveData = function (filename) {
     access(_path(filename)).subscribe(
         () => {
             // todo存在 日志
@@ -26,3 +26,5 @@ exports.mkdirSaveData = function (filename) {
         }
     )
 }
+
+export {readSaveData, writeSaveData,mkdirSaveData}

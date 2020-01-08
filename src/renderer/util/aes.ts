@@ -1,7 +1,6 @@
 var CryptoJS = require("crypto-js");
 var AES = require("crypto-js/aes");
-
-module.exports.aes = function (txt) {
+const aes = function (txt) {
     var key = "w28Cz694s63kBYk4";
     var io = "4kYBk36s496zC82w";
 
@@ -15,3 +14,5 @@ module.exports.aes = function (txt) {
 
     return res.toString(CryptoJS.enc.Utf8);
 }
+
+export { aes }
