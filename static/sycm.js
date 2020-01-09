@@ -315,46 +315,48 @@ ipcRenderer.on("add-monitor", (event, data) => {
         .subscribe((item => {
             // 点击监控商品
             interval(1000)
-                .pipe(filter(() => document.querySelectorAll('.level-leaf')[11]))
-                .pipe(tap(() => {
-                    // 如果不在竞争配置
-                    !isConfigurationPage() && document.querySelectorAll('.level-leaf')[11].querySelector('a').click()
-                }))
-                .pipe(filter(() => document.querySelectorAll(".oui-tab-switch-item")[1]))
-                .pipe(tap(() => {
-                    // 如果不在竞争商品页
-                    !hasClass(document.querySelectorAll(".oui-tab-switch-item")[1], "oui-tab-switch-item-active") && document.querySelectorAll(".oui-tab-switch-item")[1].click()
-                }))
-                .pipe(filter(() => document.querySelector(".alife-dt-card-sycm-common-select") && document.querySelector(".alife-dt-card-sycm-common-select").querySelector("span")))
-                .pipe(tap(() => {
-                    // 如果没有弹框被隐藏
-                    if (!document.querySelector(".ant-dropdown") || hasClass(document.querySelector(".ant-dropdown"), ".ant-dropdown-hidden")) {
-                        document.querySelector(".alife-dt-card-sycm-common-select").querySelector("span").click();
-                    }
-                }))
-                .pipe(filter(() => document.querySelectorAll(".ant-input-suffix")[1]))
-                .pipe(take(1))
-                .pipe(tap(() => {
-                    setLog({ flag: 1, msg: `正在获取竞品${data.id[item]}的数据` });
-                    document.querySelectorAll(".ant-input-suffix")[1].querySelector("i").click()
-                }))
-                .pipe(delay(1000))
-                .pipe(tap(() => {
-                    document.querySelectorAll(".ant-input")[1].focus()
-                }))
-                .pipe(delay(500))
-                .pipe(tap(() => {
-                    SetValue(document.querySelectorAll(".ant-input")[1], data.id[item]);
-                }))
-                .pipe(delay(1000))
-                .pipe(tap(() => {
-                    !document.querySelector(".oui-typeahead-dropdown-item") && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
-                }))
-                .pipe(filter(() => document.querySelector(".oui-typeahead-dropdown-item")))
-                .pipe(tap(() => {
-                    document.querySelector(".oui-typeahead-dropdown-item").click();
-                    setLog({ "flag": (data.id.length === (item + 1) ? 0 : 1), "msg": `获取竞品${data.id[item]}成功` })
-                }))
+                .pipe(
+                    filter(()=>document.querySelectorAll('.level-leaf')[11]),
+                    tap(() => {
+                        // 如果不在竞争配置
+                        !isConfigurationPage() && document.querySelectorAll('.level-leaf')[11].querySelector('a').click()
+                    }),
+                    filter(() => document.querySelectorAll(".oui-tab-switch-item")[1]),
+                    tap(() => {
+                        // 如果不在竞争商品页
+                        !hasClass(document.querySelectorAll(".oui-tab-switch-item")[1], "oui-tab-switch-item-active") && document.querySelectorAll(".oui-tab-switch-item")[1].click()
+                    }),
+                    filter(() => document.querySelector(".alife-dt-card-sycm-common-select") && document.querySelector(".alife-dt-card-sycm-common-select").querySelector("span")),
+                    tap(() => {
+                        // 如果没有弹框被隐藏
+                        if (!document.querySelector(".ant-dropdown") || hasClass(document.querySelector(".ant-dropdown"), ".ant-dropdown-hidden")) {
+                            document.querySelector(".alife-dt-card-sycm-common-select").querySelector("span").click();
+                        }
+                    }),
+                    filter(() => document.querySelectorAll(".ant-input-suffix")[1]),
+                    take(1),
+                    tap(() => {
+                        setLog({ flag: 1, msg: `正在获取竞品${data.id[item]}的数据` });
+                        document.querySelectorAll(".ant-input-suffix")[1].querySelector("i").click()
+                    }),
+                    delay(1000),
+                    tap(() => {
+                        document.querySelectorAll(".ant-input")[1].focus()
+                    }),
+                    delay(500),
+                    tap(() => {
+                        SetValue(document.querySelectorAll(".ant-input")[1], data.id[item]);
+                    }),     
+                    delay(1000),
+                    tap(() => {
+                        !document.querySelector(".oui-typeahead-dropdown-item") && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
+                    }),
+                    filter(() => document.querySelector(".oui-typeahead-dropdown-item")),
+                    tap(() => {
+                        document.querySelector(".oui-typeahead-dropdown-item").click();
+                        setLog({ "flag": (data.id.length === (item + 1) ? 0 : 1), "msg": `获取竞品${data.id[item]}成功` })
+                    })
+                )
                 .subscribe();
         }));
 });
