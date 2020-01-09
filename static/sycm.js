@@ -4,199 +4,299 @@ const { from, interval, timer, concat } = require("rxjs");
 const { filter, take, tap, delay, map, flatMap, last } = require("rxjs/operators");
 const moment = require('moment');
 
-// 发送数据到渲染进程 xhr
-let xhrProxy = new XhrProxy();
-xhrProxy.addHandler(function (xhr) {
-    from(xhrProxy.xhrList).pipe(filter(item => xhr.responseURL.includes(item))).subscribe(item => {
-        // 接口成功
-        var data = JSON.parse(xhr.response);
-        if (0 === data.code) {
-            from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                remote.BrowserWindow.fromId(i.id).webContents.send('send-xhr-data', item, {}, JSON.stringify(data.data));
-            });
-        }
-    });
-});
+// 生意参谋dom信息方法配置
+const DomFactory = function () {
 
-// 发送数据到渲染进程 fetch
-let fetchProxy = new FetchProxy();
-fetchProxy.addHandler(function (params, res) {
-    from(fetchProxy.fetchList).pipe(filter(item => res.clone().url.includes(item))).subscribe(item => {
-        // 接口成功
-        res.clone().json().then(result => {
-            result.content && (result = result.content);
-            if (0 === result.code) {
-                from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                    remote.BrowserWindow.fromId(i.id).webContents.send('send-xhr-data', item, params, result.data);
-                });
-            }
-        });
-    });
-});
+    const $ = function (dom) {
+        return document.querySelector(dom);
+    }
 
-var frequency = 0;
+    const $$ = function (dom) {
+        return document.querySelectorAll(dom);
+    }
+
+    // 主页面
+    const mainPage = {
+        // 导航栏
+        navigationBar: () => $$(".menu-list"),
+        // 竞争按钮
+        competitionBtn: () => $$(".menu-list li")[14].querySelector("a")
+    }
+    // 竞品监控页面
+    const monitorPage = {
+        // 竞品监控按钮
+        monitorBtn: () => $$(".ebase-ModernFrame__leftMenu .level-leaf")[3].querySelector("a"),
+        // 分页下拉
+        paginationSel: () => $(".alife-dt-card-common-table-pagination-container").querySelector(".oui-select"),
+        // 选择分页100
+        paginationSize: () => $$(".ant-select-dropdown li")[3]
+    }
+    // 竞品分析页面
+    const analysisPage = {
+        // 竞品分析
+        analysis: () => $$(".level-leaf")[5],
+        // 竞品分析按钮
+        analysisBtn: () => $$(".level-leaf")[5].querySelector('a'),
+        // 导航条 日
+        day: () => $$(".oui-date-picker-particle-button"),
+        // 导航条 日按钮
+        dayBtn: () => $$(".oui-date-picker-particle-button button")[3],
+        // 加号下拉
+        addSel: () => $$(".alife-dt-card-sycm-common-select"),
+        // 点击加号
+        addBtn: () => $$(".alife-dt-card-sycm-common-select")[1].querySelector("span"),
+        // 搜索输入框
+        analysisInput: () => $(".ant-input"),
+        // 选出的数据
+        analysisList: () => $(".oui-typeahead-dropdown-item"),
+        // 入店关键词下拉
+        storeSearchTermSel: () => $$(".oui-select")[1],
+        // 无线端按钮
+        wireless: () => $$(".ant-select-dropdown li")[1],
+        // 天猫按钮
+        tmall: () => $$(".oui-card-switch .oui-card-switch-item")[1],
+        // pc按钮
+        pc: () => $$(".ant-select-dropdown li")[0],
+        // 淘宝按钮
+        taobao: () => $$(".oui-card-switch .oui-card-switch-item")[0],
+        // 成交关键词按钮
+        TransactionKeywords: () => $$(".oui-tab-switch-item")[1],
+        // 入店来源下拉
+        storeSourceSel: () => $$(".oui-select")[2],
+        // 入店来源无线端
+        storeSourceWireless: () => $$(".ant-select-dropdown")[1].querySelectorAll("li")[0],
+        // 入店来源分页数
+        paginationNum: () => $("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item"),
+        // 入店来源表格数据
+        storeSourceTd: () => $("#sycm-mc-flow-analysis").querySelectorAll("td"),
+        // 入店来源pc端
+        storeSourcePc: () => $$(".ant-select-dropdown")[1].querySelectorAll("li")[1],
+    }
+
+    // 是否在竞争页面
+    function isCompetitionPage() {
+        return document.querySelector(".menu-list")
+            && hasClass(document.querySelector(".menu-list").querySelectorAll("li")[14], "selected");
+    }
+    // 是否在监控商品页面
+    function isMonitorPage() {
+        return hasClass(document.querySelectorAll(".level-leaf")[3], "selected");
+    }
+    // 是否在竞品分析页面
+    function isAnalysis() {
+        return hasClass(document.querySelectorAll(".level-leaf")[5], "selected");
+    }
+    // 是否在竞争配置页面
+    function isConfigurationPage() {
+        return hasClass(document.querySelectorAll(".level-leaf")[11], "selected")
+    }
+    return {
+        mainPage,
+        monitorPage,
+        analysisPage,
+        isCompetitionPage,
+        isMonitorPage,
+        isAnalysis,
+        isConfigurationPage
+    }
+
+}
+
+const { mainPage, monitorPage, analysisPage, isCompetitionPage, isMonitorPage, isAnalysis, isConfigurationPage } = new DomFactory();
+
 // 登录成功后
 ipcRenderer.on('login-success', (event) => {
-
-    // 如果不是第一次，返回 淘宝会多次调接口
-    if (frequency !== 0) {
-        return;
-    }
-    frequency++;
     //点击竞争
-    interval(5000)
-        .pipe(filter(() => document.querySelectorAll(".menu-list").length > 0))
-        .pipe(take(1))
-        .pipe(delay(3000))
-        .pipe(tap(() => { document.querySelector(".menu-list").querySelectorAll('li')[14].querySelector('a').click() }))
-        .subscribe();
-    // 点击监控商品
     interval(1000)
-        .pipe(filter(() => document.querySelectorAll(".ebase-ModernFrame__leftMenu").length > 0))
-        .pipe(filter(() => !hasClass(document.querySelector(".ebase-ModernFrame__leftMenu").querySelectorAll('.level-leaf')[3], "selected")))
-        .pipe(take(1))
-        .pipe(tap(() => { document.querySelector(".ebase-ModernFrame__leftMenu").querySelectorAll('.level-leaf')[3].querySelector('a').click() }))
-        .subscribe();
-    // 点击分页参数
-    interval(1000)
-        .pipe(filter(() => document.querySelectorAll(".alife-dt-card-common-table-pagination-container").length > 0))
-        .pipe(take(1))
-        .pipe(tap(() => document.querySelector(".alife-dt-card-common-table-pagination-container").querySelector('.oui-select').click()))
-        .pipe(delay(1000))
-        .pipe(tap(() => { document.querySelector(".ant-select-dropdown").querySelectorAll('li')[3].click() }))
+        .pipe(
+            filter(() => mainPage.navigationBar().length > 0),
+            take(1),
+            delay(3000),
+            // 点击竞争
+            tap(() => { !isCompetitionPage() && mainPage.competitionBtn().click() }),
+            delay(3000),
+            // 点击监控商品
+            tap(() => { !isMonitorPage() && monitorPage.monitorBtn().click() }),
+            delay(3000),
+            tap(() => monitorPage.paginationSel().click()),
+            delay(3000),
+            // 点击分页参数
+            tap(() => { monitorPage.paginationSize().click() })
+        )
         .subscribe();
 });
 
 // 添加竞品详情
 ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
     interval(1000)
-        .pipe(filter(() => document.querySelectorAll('.level-leaf')[5]))
-        .pipe(tap(() => {
+        .pipe(
+            filter(() => analysisPage.analysis()),
             // 如果不在竞争分析
-            !isAnalysis() && document.querySelectorAll('.level-leaf')[5].querySelector('a').click()
-        }))
-        .pipe(filter(() => document.querySelectorAll(".oui-date-picker-particle-button").length > 0))
-        .pipe(tap(() => {
+            tap(() => {
+                !isAnalysis() && analysisPage.analysisBtn().click()
+            }),
+            filter(() => analysisPage.day().length > 0),
             // 点击日
-            !hasClass(document.querySelector(".oui-date-picker-particle-button").querySelectorAll('button')[3], "ant-btn-primary")
-                && document.querySelector(".oui-date-picker-particle-button").querySelectorAll('button')[3].click()
-        }))
-        .pipe(filter(() => document.querySelectorAll(".alife-dt-card-sycm-common-select").length > 0))
-        .pipe(take(1))
-        .pipe(tap(() => {
+            tap(() => {
+                !hasClass(analysisPage.dayBtn(), "ant-btn-primary") && analysisPage.dayBtn().click()
+            }),
+            filter(() => analysisPage.addSel().length > 0),
+            take(1),
             // 点击加号
-            document.querySelectorAll(".alife-dt-card-sycm-common-select")[1].querySelector("span").click()
-        }))
-        .pipe(delay(1000))
-        .pipe(tap(() => {
-            document.querySelectorAll(".ant-input")[0].focus();
-        }))
-        .pipe(delay(1000))
-        .pipe(tap(() => {
-            SetValue(document.querySelectorAll(".ant-input")[0], goodsname);
-        }))
-        .pipe(delay(1000))
-        .pipe(tap(() => {
-            document.querySelector(".oui-typeahead-dropdown-item").click();
-            setLog({ flag: 1, msg: "开始获取竞品数据，请稍后。。。" });
-        }))
-        .pipe(delay(1000))
-        // 点击下拉
-        .pipe(tap(() => {
-            setLog({ flag: 1, msg: "正在获取关键指标对比，请稍后。。。" });
-            document.querySelectorAll(".oui-select")[1].click();
-        }))
-        .pipe(delay(1000))
-        // 点击无线端
-        .pipe(tap(() => {
-            setLog({ flag: 1, msg: "关键指标对比获取成功。" });
-            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[1].click();
-            setLog({ flag: 1, msg: "正在获取关键词信息，请稍后。。。" });
-        }))
-        .pipe(delay(1000))
-        // 点击天猫
-        .pipe(tap(() => {
-            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[1].click();
-        }))
-        .pipe(delay(1000))
-        // 点击pc端
-        .pipe(tap(() => {
-            document.querySelectorAll(".ant-select-dropdown")[0].querySelectorAll("li")[0].click();
-        }))
-        .pipe(delay(1000))
-        // 点击淘宝
-        .pipe(tap(() => {
-            document.querySelector(".oui-card-switch").querySelectorAll(".oui-card-switch-item")[0].click();
-        }))
-        .pipe(delay(1000))
-        .pipe(tap(() => {
-            window.scroll(0, 2000);
-        }))
-        .pipe(delay(1000))
-        // 点击下拉
-        .pipe(tap(() => {
-            try {
-                document.querySelectorAll(".oui-select")[2].click();
-            } catch (error) {
-                setLog({ flag: 2, msg: "获取数据失败，请重试" });
-            }
-        }))
-        .pipe(delay(1000))
-        .pipe(tap(() => {
-            setLog({ flag: 1, msg: "关键词信息获取成功" });
+            tap(() => {
+                analysisPage.addBtn().click()
+            }),
+            delay(1000),
+            // 聚焦输入框
+            tap(() => {
+                analysisPage.analysisInput().focus()
+            }),
+            delay(1000),
+            // 输入标题获取数据
+            tap(() => {
+                SetValue(analysisPage.analysisInput(), goodsname);
+            }),
+            delay(1000),
+            // 点击数据
+            tap(() => {
+                analysisPage.analysisList().click();
+                setLog({ flag: 1, msg: "开始获取竞品数据，请稍后。。。" });
+            }),
+            delay(1000),
+            // 点击下拉
+            tap(() => {
+                setLog({ flag: 1, msg: "正在获取关键指标对比，请稍后。。。" });
+                analysisPage.storeSearchTermSel().click();
+            }),
+            delay(1000),
             // 点击无线端
-            document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[0].click();
-            setLog({ flag: 1, msg: "正在获取流量数据，数据量较大，请稍后。。。" });
-        }))
-        .pipe(delay(1000))
+            tap(() => {
+                setLog({ flag: 1, msg: "关键指标对比获取成功。" });
+                analysisPage.wireless().click();
+                setLog({ flag: 1, msg: "正在引流关键词信息，请稍后。。。" });
+            }),
+            delay(1000),
+            // 点击天猫
+            tap(() => {
+                analysisPage.tmall().click();
+            }),
+            delay(1000),
+            // 点击pc端
+            tap(() => {
+                analysisPage.pc().click();
+            }),
+            delay(1000),
+            // 点击淘宝
+            tap(() => {
+                analysisPage.taobao().click();
+            }),
+            delay(1000),
+            // 点击成交关键词
+            tap(() => {
+                analysisPage.TransactionKeywords().click();
+            }),
+            delay(1000),
+            // 点击无线端
+            tap(() => {
+                setLog({ flag: 1, msg: "引流关键词信息获取成功。" });
+                analysisPage.wireless().click();
+                setLog({ flag: 1, msg: "正在成交关键词信息，请稍后。。。" });
+            }),
+            delay(1000),
+            // 点击天猫
+            tap(() => {
+                analysisPage.tmall().click();
+            }),
+            delay(1000),
+            // 点击pc端
+            tap(() => {
+                analysisPage.pc().click();
+            }),
+            delay(1000),
+            // 点击淘宝
+            tap(() => {
+                analysisPage.taobao().click();
+            }),
+            delay(1000),
+            // 滚动到底部
+            tap(() => {
+                window.scroll(0, 2000);
+            }),
+            delay(1000),
+            // 点击下拉
+            tap(() => {
+                try {
+                    analysisPage.storeSourceSel().click();
+                } catch (error) {
+                    setLog({ flag: 2, msg: "获取数据失败，请重试" });
+                }
+            }),
+            delay(1000),
+            // 点击无线端
+            tap(() => {
+                setLog({ flag: 1, msg: "成交关键词信息获取成功" });
+                analysisPage.storeSourceWireless().click();
+                setLog({ flag: 1, msg: "正在获取流量数据，数据量较大，请稍后。。。" });
+            }),
+            delay(1000)
+        )
         .subscribe(() => {
-            var _a = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
-            let a = timer(0, 35000)
-                .pipe(take(_a.length))
-                .pipe(tap((i) => {
-                    // 点击下一页
-                    _a[i].click();
-                }));
+            var _a = analysisPage.paginationNum();
+            let a = timer(1000, 35000)
+                .pipe(
+                    take(_a.length),
+                    tap((i) => {
+                        // 点击下一页
+                        _a[i].click();
+                    }),
+                );
 
             a.subscribe(() => {
-                var _b = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
+                var _b = analysisPage.storeSourceTd();
                 let b = timer(0, 1000)
-                    .pipe(take(_b.length))
-                    .pipe(delay(500))
-                    .pipe(filter((i) => (i + 1) % 3 === 0))
-                    .pipe(tap((i) => {
+                    .pipe(
+                        take(_b.length),
+                        delay(500),
+                        filter((i) => (i + 1) % 3 === 0),
                         // 点击趋势
-                        _b[i].querySelector("a").click();
-                    }))
-                    .pipe(last())
-                    .pipe(tap(() => {
-                        document.querySelectorAll(".ant-select-dropdown")[1].querySelectorAll("li")[1].click();
-                    }))
-                    .pipe(delay(1000))
+                        tap((i) => {
+                            _b[i].querySelector("a").click();
+                        }),
+                        last(),
+                        tap(() => {
+                            analysisPage.storeSourcePc().click();
+                        }),
+                        delay(1000)
+                    );
 
                 b.subscribe(() => {
-                    var _c = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll(".ant-pagination-item");
+                    var _c = analysisPage.paginationNum();
                     let c = timer(1000, 35000)
-                        .pipe(take(_c.length))
-                        .pipe(tap((i) => {
-                            // 点击下一页
-                            _c[i].click();
-                        }));
+                        .pipe(
+                            take(_c.length),
+                            tap((i) => {
+                                // 点击下一页
+                                _c[i].click();
+                            })
+                        );
 
                     c.subscribe((j) => {
-                        var _d = document.querySelector("#sycm-mc-flow-analysis").querySelectorAll("td");
+                        var _d = analysisPage.storeSourceTd();
                         let d = timer(0, 1000)
-                            .pipe(take(_d.length))
-                            .pipe(delay(500))
-                            .pipe(filter((i) => (i + 1) % 3 === 0))
-                            .pipe(tap((i) => {
+                            .pipe(
+                                take(_d.length),
+                                delay(500),
+                                filter((i) => (i + 1) % 3 === 0),
                                 // 点击趋势
-                                _d[i].querySelector("a").click();
-                            }))
-                            .pipe(last())
-                            .pipe(tap(() => {
-                                j === (_c.length - 1) && setLog({ flag: 0, msg: "流量数获取成功" });
-                            }))
+                                tap((i) => {
+                                    _d[i].querySelector("a").click();
+                                }),
+                                last(),
+                                tap(() => {
+                                    j === (_c.length - 1) && setLog({ flag: 0, msg: "流量数获取成功" });
+                                }),
+                                delay(1000)
+                            );
 
                         d.subscribe();
                     })
@@ -259,20 +359,6 @@ ipcRenderer.on("add-monitor", (event, data) => {
         }));
 });
 
-// 是否在竞争页面
-function isCompetitionPage() {
-    return document.querySelector(".menu-list")
-        && hasClass(document.querySelector(".menu-list").querySelectorAll("li")[14], "selected");
-}
-// 是否在竞品分析页面
-function isAnalysis() {
-    return hasClass(document.querySelectorAll(".level-leaf")[5], "selected");
-}
-
-// 是否在竞争配置页面
-function isConfigurationPage() {
-    return hasClass(document.querySelectorAll(".level-leaf")[11], "selected")
-}
 
 // 是否有classname
 function hasClass(ele, cls) {
@@ -298,28 +384,25 @@ function SetValue(node, text) {
     node.dispatchEvent(event);
 }
 
-/**
- * 通过劫持原生XMLHttpRequest实现对页面ajax请求的监听
- */
+// 通过劫持原生XMLHttpRequest实现对页面ajax请求的监听
 function XhrProxy() {
 
     this.xhrList = [
         "getPersonalView", // 个人信息
     ];
 
+    // 添加方法
     this.addHandler = function (handler) {
         initProxy();
         gHandlerList.push(handler);
     }
-
+    // 去除方法
     this.removeHandler = function (handler) {
         gHandlerList = gHandlerList.filter(h => h !== handler);
     }
 
-    const READY_STATE_CHANGE = 'readystatechange';
     let gHandlerList = [],  //截获请求的处理函数列表
         gIsInited = false;  //是否已经初始化
-    let T_RSC_HANDLERS = Symbol('readyStateChangeHandler');
     let initProxy = function () {
         if (gIsInited) return;
         gIsInited = true;
@@ -331,13 +414,9 @@ function XhrProxy() {
         let ProxyXHR = class extends winXMLHttpRequest {
             constructor() {
                 super(...arguments);
-                //readystatechange
-                //数组中第0个为页面中调用xhr.onreadystatechange的回调函数
-                //其他的为页面中调用addEventListener('readystatechange')时的回调函数
-                this[T_RSC_HANDLERS] = [null];
                 //调用原生XMLHttpRequest的addEventListener，添加对readystatechange事件的监听
-                super.addEventListener(READY_STATE_CHANGE, async () => {
-                    if (this.readyState == 4 && gHandlerList.length) {//只有4的时候会回调proxyHandler
+                super.addEventListener('readystatechange', async () => {
+                    if (this.readyState == 4 && gHandlerList.length) {
                         try {
                             //调用注册的handler
                             await gHandlerList.map(proxyHandler => proxyHandler.call(this, this));
@@ -347,54 +426,28 @@ function XhrProxy() {
                             console.error(e);
                         }
                     }
-                    //调用页面中注册的回调函数，保证页面中逻辑正常
-                    this[T_RSC_HANDLERS].forEach(handler => handler && handler.apply(this, arguments));
                 });
             }
-            /**
-             * 重写addEventListener函数，对readystatechange事件做特殊处理
-             */
-            addEventListener(type, handler) {
-                if (type == READY_STATE_CHANGE) {
-                    this[T_RSC_HANDLERS].push(handler);
-                }
-                else {
-                    return super.addEventListener(...arguments);
-                }
-            }
-            /**
-             * 重写removeEventListener函数，对readystatechange事件做特殊处理
-             */
-            removeEventListener(type, handler) {
-                if (type == READY_STATE_CHANGE) {
-                    this[T_RSC_HANDLERS] = this[T_RSC_HANDLERS].filter(i => i !== handler);
-                }
-                else {
-                    return super.removeEventListener(...arguments);
-                }
-            }
-            /**
-             * 重写onreadystatechange属性的setter
-             */
-            set onreadystatechange(val) {
-                this[T_RSC_HANDLERS][0] = val;
-            }
-            /**
-             * 重写onreadystatechange属性的getter
-             */
-            get onreadystatechange() {
-                return this[T_RSC_HANDLERS][0] || null;
-            }
-
         }
         //覆盖原生的XMLHttpRequest
         window.XMLHttpRequest = ProxyXHR;
     }
 }
+// 发送数据到渲染进程 xhr
+let xhrProxy = new XhrProxy();
+xhrProxy.addHandler(function (xhr) {
+    from(xhrProxy.xhrList).pipe(filter(item => xhr.responseURL.includes(item))).subscribe(item => {
+        // 接口成功
+        var data = JSON.parse(xhr.response);
+        if (0 === data.code) {
+            from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
+                remote.BrowserWindow.fromId(i.id).webContents.send('send-xhr-data', item, {}, JSON.stringify(data.data));
+            });
+        }
+    });
+});
 
-/**
- * 通过劫持原生fetch实现对页面ajax请求的监听
- */
+// 通过劫持原生fetch实现对页面ajax请求的监听
 function FetchProxy() {
 
     this.addHandler = function (handler) {
@@ -446,4 +499,19 @@ function FetchProxy() {
             })
         }
     }
-} 
+}
+// 发送数据到渲染进程 fetch
+let fetchProxy = new FetchProxy();
+fetchProxy.addHandler(function (params, res) {
+    from(fetchProxy.fetchList).pipe(filter(item => res.clone().url.includes(item))).subscribe(item => {
+        // 接口成功
+        res.clone().json().then(result => {
+            result.content && (result = result.content);
+            if (0 === result.code) {
+                from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
+                    remote.BrowserWindow.fromId(i.id).webContents.send('send-xhr-data', item, params, result.data);
+                });
+            }
+        });
+    });
+});
