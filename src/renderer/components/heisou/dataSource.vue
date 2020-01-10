@@ -1,26 +1,25 @@
 <template>
     <div class="data-source">
         <ul class="data-source-tab">
-            <li :class="{active:tabIndex === 0}" @click="changeTab(0)">引流关键词</li>
-            <li :class="{active:tabIndex === 1}" @click="changeTab(1)">成交关键词</li>
-            <li :class="{active:tabIndex === 2}" @click="changeTab(2)">流量结构</li>
-            <li :class="{active:tabIndex === 3}" @click="changeTab(3)">关键指标</li>
+            <li :class="{active:tabIndex === 0}" @click="changeTab(0)">关键词</li>
+            <li :class="{active:tabIndex === 1}" @click="changeTab(1)">流量结构</li>
+            <li :class="{active:tabIndex === 2}" @click="changeTab(2)">关键指标</li>
         </ul>
         <div class="data-source-table" v-show="tabIndex === 0">
-            <el-table :data="tableData0" border style="width: 100%">
-                <el-table-column prop="" label="开始日期" align="center">
+            <el-table :data="tableData0" border style="width: 100%" height="500">
+                <el-table-column prop="data_date" label="开始日期" align="center" width="150px">
                 </el-table-column>
-                <el-table-column prop="" label="关键词" align="center">
+                <el-table-column prop="compete_keywords" label="关键词" align="center" width="200px">
                 </el-table-column>
-                <el-table-column prop="" label="访客数" align="center">
+                <el-table-column prop="uv" label="访客数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="成交件数" align="center">
+                <el-table-column prop="tradeNumber" label="成交件数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="成交金额" align="center">
+                <el-table-column prop="tradeNum" label="成交金额" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="payRateRatio" label="转化率" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="UV价值" align="center">
+                <el-table-column prop="uvPrice" label="UV价值" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
@@ -30,18 +29,22 @@
             </el-table>
         </div>
         <div class="data-source-table" v-show="tabIndex === 1">
-            <el-table :data="tableData1" border style="width: 100%">
-                <el-table-column prop="" label="开始日期" align="center">
+            <el-table :data="tableData1" border style="width: 100%" height="500">
+                <el-table-column prop="data_date" label="开始日期" align="center" width="150px">
                 </el-table-column>
-                <el-table-column prop="" label="关键词" align="center">
+                <el-table-column prop="source_name" label="渠道" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="访客数" align="center">
+                <el-table-column prop="uv" label="访客数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="成交件数" align="center">
+                <el-table-column prop="" label="成交人数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="成交金额" align="center">
+                <el-table-column prop="payRateRatio" label="转化率" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="tradeNum" label="交易额" align="center">
+                </el-table-column>
+                <el-table-column prop="unitPrice" label="客单价" align="center">
+                </el-table-column>
+                <el-table-column prop="uvPrice" label="UV价值" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
@@ -52,31 +55,6 @@
         </div>
         <div class="data-source-table" v-show="tabIndex === 2">
             <el-table :data="tableData2" border style="width: 100%">
-                <el-table-column prop="" label="开始日期" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="渠道" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="访客数" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="成交人数" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="交易额" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="客单价" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="UV价值" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="一键分析" align="center">
-                    <template slot-scope="scope">
-                        <p>查看</p>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <div class="data-source-table" v-show="tabIndex === 3">
-            <el-table :data="tableData3" border style="width: 100%">
                 <el-table-column prop="" label="开始日期" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="访客数" align="center">
@@ -106,6 +84,7 @@
 <script>
 
 export default {
+    props: ["itemId", "date_range", "t"],
     data() {
         return {
             tabIndex: 0,
@@ -118,6 +97,25 @@ export default {
     methods: {
         changeTab(index) {
             this.tabIndex = index;
+        },
+        getData(){
+            this.getKeywordList();
+            this.getSource();
+        },
+        getKeywordList() {
+            this.$http.post("/crawler/getKeywords", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
+                0 === res.code && (this.tableData0 = res.data);
+            });
+        },
+        getSource(){
+            this.$http.post("/crawler/getSource", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
+                0 === res.code && (this.tableData1 = res.data);
+            });
+        }
+    },
+    watch: {
+        t(val) {
+            val && this.getData()
         }
     }
 }

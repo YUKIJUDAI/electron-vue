@@ -43,7 +43,7 @@
         <div class="info">
             <span class="info-title">宝贝信息</span>
             <el-button type="primary" class="info-btn" @click="addFlag = true">选择宝贝</el-button>
-            <div class="competition-info">
+            <div class="competition-info" v-show="goodsInfo.itemId">
                 <img :src="goodsInfo.pictUrl">
                 <div>
                     <span class="title">{{goodsInfo.goods_name}}</span>
@@ -69,7 +69,7 @@
                 <el-form-item>
                     <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 </el-form-item>
-                <el-button type="primary">开始查询</el-button>
+                <el-button type="primary" @click="t=new Date().getTime()">开始查询</el-button>
                 <el-button type="primary" plain>分析前一天</el-button>
                 <el-button type="primary" plain>分析后一天</el-button>
                 <el-button type="primary" plain>导出excel</el-button>
@@ -86,13 +86,14 @@
                 <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">黑搜分析<i class="hot"></i></li>
             </ul>
         </div>
-        <div class="data" :is="tempList[tabIndex]"></div>
+        <div class="data" :is="tempList[tabIndex]" itemId="43781742541" :date_range="form.date_range" :t="t"></div>
     </div>
 </template>
 
 <script>
 const { ipcRenderer, remote } = require("electron");
 const { from } = require("rxjs");
+const moment = require('moment');
 
 import factory from "@/util/factory";
 import dataSource from "@/components/heisou/dataSource";
@@ -106,7 +107,11 @@ import heisouAnalysis from "@/components/heisou/heisouAnalysis";
 export default {
     data() {
         return {
-            form: {},
+            form: {
+                date: "",
+                dateValue: "",
+                date_range: ""
+            },
             tabIndex: 0,
             tempList: [
                 dataSource,
@@ -129,11 +134,14 @@ export default {
             addFlag: false,
             // 日志
             logList: [],
-            logFlag: true
+            logFlag: true,
+
+            t:""
 
         }
     },
     mounted() {
+        this.form.date = "1";
         this.getList();
         // 获取xhr信息后处理
         ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
@@ -202,6 +210,20 @@ export default {
             this.logList = [];
             this.logFlag = true;
             this.addFlag = false;
+        }
+    },
+    watch: {
+        "form.date"(val) {
+            if (val !== "0") {
+                this.form.dateValue = "";
+                this.form.date_range = moment().subtract(val, 'days').format('YYYY-MM-DD') + "|" + moment().subtract(1, 'days').format('YYYY-MM-DD');
+            }
+        },
+        "form.dateValue"(val) {
+            if (Array.isArray(val)) {
+                this.form.date = "0";
+                this.form.date_range = val[0] + "|" + val[1];
+            }
         }
     }
 }

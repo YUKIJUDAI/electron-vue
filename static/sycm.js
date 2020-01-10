@@ -1,7 +1,7 @@
 const { remote, ipcRenderer } = require('electron');
 const qs = require("qs");
 const { from, interval, timer, concat } = require("rxjs");
-const { filter, take, tap, delay, map, flatMap, last } = require("rxjs/operators");
+const { filter, take, tap, delay, last, mergeMap } = require("rxjs/operators");
 const moment = require('moment');
 
 // 生意参谋dom信息方法配置
@@ -93,7 +93,9 @@ const DomFactory = function () {
         // 删除按钮
         delIcon: () => $$(".ant-input-suffix")[1].querySelector("i"),
         // 数据列表
-        getingData: () => $(".oui-typeahead-dropdown-item")
+        getingData: () => $(".oui-typeahead-dropdown-item"),
+        // 关闭弹窗
+        closeBtn: () => $(".ant-modal-close-x")
     }
 
     // 是否在竞争页面
@@ -262,22 +264,56 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
                 analysisPage.storeSourceWireless().click();
                 setLog({ flag: 1, msg: "正在获取流量数据，数据量较大，请稍后。。。" });
             }),
-            delay(1000)
-        )
-        .subscribe(() => {
-            var _a = analysisPage.paginationNum();
-            let a = timer(1000, 35000)
-                .pipe(
-                    take(_a.length),
-                    tap((i) => {
-                        // 点击下一页
-                        _a[i].click();
-                    }),
-                );
-
-            a.subscribe(() => {
+            delay(1000),
+            mergeMap(() => {
+                var _a = analysisPage.paginationNum()
+                return timer(0, 35000)
+                    .pipe(
+                        take(_a.length),
+                        tap((i) => {
+                            analysisPage.paginationNum()[i].click()
+                        })
+                    )
+            }),
+            mergeMap((j) => {
+                var _a = analysisPage.paginationNum();
                 var _b = analysisPage.storeSourceTd();
-                let b = timer(0, 1000)
+                return timer(0, 1000)
+                    .pipe(
+                        take(_b.length),
+                        delay(500),
+                        filter((i) => (i + 1) % 3 === 0),
+                        // 点击趋势
+                        tap((i) => {
+                            _b[i].querySelector("a").click();
+                        }),
+                        last(),
+                        filter(() => j === (_a.length - 1))
+                    );
+            }),
+            delay(1000),
+            tap(() => {
+                analysisPage.paginationNum()[0].click();
+            }),
+            delay(1000),
+            tap(() => {
+                analysisPage.storeSourcePc().click();
+            }),
+            delay(1000),
+            mergeMap(() => {
+                var _a = analysisPage.paginationNum()
+                return timer(0, 35000)
+                    .pipe(
+                        take(_a.length),
+                        tap((i) => {
+                            analysisPage.paginationNum()[i].click()
+                        })
+                    )
+            }),
+            mergeMap((j) => {
+                var _a = analysisPage.paginationNum();
+                var _b = analysisPage.storeSourceTd();
+                return timer(0, 1000)
                     .pipe(
                         take(_b.length),
                         delay(500),
@@ -288,45 +324,16 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
                         }),
                         last(),
                         tap(() => {
-                            analysisPage.storeSourcePc().click();
+                            j === (_a.length - 1) && setLog({ flag: 0, msg: "流量数获取成功" });
                         }),
-                        delay(1000)
+                        filter(() => j === (_a.length - 1)),
+                        tap(() => {
+                            analysisPage.closeBtn().click();
+                        })
                     );
-
-                b.subscribe(() => {
-                    var _c = analysisPage.paginationNum();
-                    let c = timer(1000, 35000)
-                        .pipe(
-                            take(_c.length),
-                            tap((i) => {
-                                // 点击下一页
-                                _c[i].click();
-                            })
-                        );
-
-                    c.subscribe((j) => {
-                        var _d = analysisPage.storeSourceTd();
-                        let d = timer(0, 1000)
-                            .pipe(
-                                take(_d.length),
-                                delay(500),
-                                filter((i) => (i + 1) % 3 === 0),
-                                // 点击趋势
-                                tap((i) => {
-                                    _d[i].querySelector("a").click();
-                                }),
-                                last(),
-                                tap(() => {
-                                    j === (_c.length - 1) && setLog({ flag: 0, msg: "流量数获取成功" });
-                                }),
-                                delay(1000)
-                            );
-
-                        d.subscribe();
-                    })
-                });
             })
-        });
+        )
+        .subscribe();
 });
 
 // 添加竞品
@@ -335,56 +342,55 @@ ipcRenderer.on("add-monitor", (event, data) => {
     data.id = data.id.split(",");
 
     timer(0, 10000)
-        .pipe(take(data.id.length))
-        .subscribe((item => {
-            // 点击监控商品
-            interval(1000)
-                .pipe(
-                    filter(() => configurationPage.configuration()),
-                    tap(() => {
-                        // 如果不在竞争配置
-                        !isConfigurationPage() && configurationPage.configurationBtn().click()
-                    }),
-                    filter(() => configurationPage.goodsBtn()),
-                    tap(() => {
-                        console.log(1)
-                        // 如果不在竞争商品页
-                        !hasClass(configurationPage.goodsBtn(), "oui-tab-switch-item-active") && configurationPage.goodsBtn().click()
-                    }),
-                    filter(() => configurationPage.search() && configurationPage.addBtn()),
-                    tap(() => {
-                        console.log(2)
-                        // 如果没有弹框被隐藏
-                        if (!configurationPage.popup() || hasClass(configurationPage.popup(), ".ant-dropdown-hidden")) {
-                            configurationPage.addBtn().click();
-                        }
-                    }),
-                    filter(() => configurationPage.del()),
-                    take(1),
-                    tap(() => {
-                        setLog({ flag: 1, msg: `正在获取竞品${data.id[item]}的数据` });
-                        configurationPage.delIcon().click()
-                    }),
-                    delay(1000),
-                    tap(() => {
-                        configurationPage.input().focus()
-                    }),
-                    delay(500),
-                    tap(() => {
-                        SetValue(configurationPage.input(), data.id[item]);
-                    }),
-                    delay(1000),
-                    tap(() => {
-                        !configurationPage.getingData() && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
-                    }),
-                    filter(() => configurationPage.getingData()),
-                    tap(() => {
-                        configurationPage.getingData().click();
-                        setLog({ "flag": (data.id.length === (item + 1) ? 0 : 1), "msg": `获取竞品${data.id[item]}成功` })
-                    })
-                )
-                .subscribe();
-        }));
+        .pipe(
+            take(data.id.length),
+            mergeMap(() => {
+                return interval(1000)
+                    .pipe(
+                        filter(() => configurationPage.configuration()),
+                        tap(() => {
+                            // 如果不在竞争配置
+                            !isConfigurationPage() && configurationPage.configurationBtn().click()
+                        }),
+                        filter(() => configurationPage.goodsBtn()),
+                        tap(() => {
+                            // 如果不在竞争商品页
+                            !hasClass(configurationPage.goodsBtn(), "oui-tab-switch-item-active") && configurationPage.goodsBtn().click()
+                        }),
+                        filter(() => configurationPage.search() && configurationPage.addBtn()),
+                        tap(() => {
+                            // 如果没有弹框被隐藏
+                            if (!configurationPage.popup() || hasClass(configurationPage.popup(), ".ant-dropdown-hidden")) {
+                                configurationPage.addBtn().click();
+                            }
+                        }),
+                        filter(() => configurationPage.del()),
+                        take(1),
+                        tap(() => {
+                            setLog({ flag: 1, msg: `正在获取竞品${data.id[item]}的数据` });
+                            configurationPage.delIcon().click()
+                        }),
+                        delay(1000),
+                        tap(() => {
+                            configurationPage.input().focus()
+                        }),
+                        delay(500),
+                        tap(() => {
+                            SetValue(configurationPage.input(), data.id[item]);
+                        }),
+                        delay(1000),
+                        tap(() => {
+                            !configurationPage.getingData() && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
+                        }),
+                        filter(() => configurationPage.getingData()),
+                        tap(() => {
+                            configurationPage.getingData().click();
+                            setLog({ "flag": (data.id.length === (item + 1) ? 0 : 1), "msg": `获取竞品${data.id[item]}成功` })
+                        })
+                    )
+            })
+        )
+        .subscribe();
 });
 
 
