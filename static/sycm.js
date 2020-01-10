@@ -72,6 +72,29 @@ const DomFactory = function () {
         // 入店来源pc端
         storeSourcePc: () => $$(".ant-select-dropdown")[1].querySelectorAll("li")[1],
     }
+    // 竞品配置页面
+    const configurationPage = {
+        // 竞品配置
+        configuration: () => $$('.level-leaf')[11],
+        // 竞品配置按钮
+        configurationBtn: () => $$('.level-leaf')[11].querySelector('a'),
+        // 竞争商品
+        goodsBtn: () => $$(".oui-tab-switch-item")[1],
+        // 查询竞品
+        search: () => $(".alife-dt-card-sycm-common-select"),
+        // 加号
+        addBtn: () => $(".alife-dt-card-sycm-common-select").querySelector("span"),
+        // 弹框
+        popup: () => $(".ant-dropdown"),
+        // 输入框
+        input: () => $$(".ant-input")[1],
+        // 删除
+        del: () => $$(".ant-input-suffix")[1],
+        // 删除按钮
+        delIcon: () => $$(".ant-input-suffix")[1].querySelector("i"),
+        // 数据列表
+        getingData: () => $(".oui-typeahead-dropdown-item")
+    }
 
     // 是否在竞争页面
     function isCompetitionPage() {
@@ -94,6 +117,7 @@ const DomFactory = function () {
         mainPage,
         monitorPage,
         analysisPage,
+        configurationPage,
         isCompetitionPage,
         isMonitorPage,
         isAnalysis,
@@ -102,7 +126,7 @@ const DomFactory = function () {
 
 }
 
-const { mainPage, monitorPage, analysisPage, isCompetitionPage, isMonitorPage, isAnalysis, isConfigurationPage } = new DomFactory();
+const { mainPage, monitorPage, analysisPage, configurationPage, isCompetitionPage, isMonitorPage, isAnalysis, isConfigurationPage } = new DomFactory();
 
 // 登录成功后
 ipcRenderer.on('login-success', (event) => {
@@ -310,50 +334,52 @@ ipcRenderer.on("add-monitor", (event, data) => {
 
     data.id = data.id.split(",");
 
-    interval(10000)
+    timer(0, 10000)
         .pipe(take(data.id.length))
         .subscribe((item => {
             // 点击监控商品
             interval(1000)
                 .pipe(
-                    filter(()=>document.querySelectorAll('.level-leaf')[11]),
+                    filter(() => configurationPage.configuration()),
                     tap(() => {
                         // 如果不在竞争配置
-                        !isConfigurationPage() && document.querySelectorAll('.level-leaf')[11].querySelector('a').click()
+                        !isConfigurationPage() && configurationPage.configurationBtn().click()
                     }),
-                    filter(() => document.querySelectorAll(".oui-tab-switch-item")[1]),
+                    filter(() => configurationPage.goodsBtn()),
                     tap(() => {
+                        console.log(1)
                         // 如果不在竞争商品页
-                        !hasClass(document.querySelectorAll(".oui-tab-switch-item")[1], "oui-tab-switch-item-active") && document.querySelectorAll(".oui-tab-switch-item")[1].click()
+                        !hasClass(configurationPage.goodsBtn(), "oui-tab-switch-item-active") && configurationPage.goodsBtn().click()
                     }),
-                    filter(() => document.querySelector(".alife-dt-card-sycm-common-select") && document.querySelector(".alife-dt-card-sycm-common-select").querySelector("span")),
+                    filter(() => configurationPage.search() && configurationPage.addBtn()),
                     tap(() => {
+                        console.log(2)
                         // 如果没有弹框被隐藏
-                        if (!document.querySelector(".ant-dropdown") || hasClass(document.querySelector(".ant-dropdown"), ".ant-dropdown-hidden")) {
-                            document.querySelector(".alife-dt-card-sycm-common-select").querySelector("span").click();
+                        if (!configurationPage.popup() || hasClass(configurationPage.popup(), ".ant-dropdown-hidden")) {
+                            configurationPage.addBtn().click();
                         }
                     }),
-                    filter(() => document.querySelectorAll(".ant-input-suffix")[1]),
+                    filter(() => configurationPage.del()),
                     take(1),
                     tap(() => {
                         setLog({ flag: 1, msg: `正在获取竞品${data.id[item]}的数据` });
-                        document.querySelectorAll(".ant-input-suffix")[1].querySelector("i").click()
+                        configurationPage.delIcon().click()
                     }),
                     delay(1000),
                     tap(() => {
-                        document.querySelectorAll(".ant-input")[1].focus()
+                        configurationPage.input().focus()
                     }),
                     delay(500),
                     tap(() => {
-                        SetValue(document.querySelectorAll(".ant-input")[1], data.id[item]);
-                    }),     
+                        SetValue(configurationPage.input(), data.id[item]);
+                    }),
                     delay(1000),
                     tap(() => {
-                        !document.querySelector(".oui-typeahead-dropdown-item") && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
+                        !configurationPage.getingData() && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
                     }),
-                    filter(() => document.querySelector(".oui-typeahead-dropdown-item")),
+                    filter(() => configurationPage.getingData()),
                     tap(() => {
-                        document.querySelector(".oui-typeahead-dropdown-item").click();
+                        configurationPage.getingData().click();
                         setLog({ "flag": (data.id.length === (item + 1) ? 0 : 1), "msg": `获取竞品${data.id[item]}成功` })
                     })
                 )
