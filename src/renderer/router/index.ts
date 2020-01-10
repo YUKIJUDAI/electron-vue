@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     routes: [
         {
-            path: '/',
-            name: 'home',
-            component: require('@/view/home').default,
+            path: "/",
+            name: "home",
+            component: require("@/view/home").default,
             redirect: "/heisou/video",
             children: [
                 {
@@ -111,7 +111,7 @@ export default new Router({
                     path: "ganhuo",
                     component: require("@/view/ganhuo/index").default,
                     children: [
-                        // 视频 
+                        // 视频
                         {
                             path: "videoCenter",
                             component: require("@/view/ganhuo/videoCenter").default,
@@ -129,6 +129,19 @@ export default new Router({
                             component: require("@/view/geren/personCenter").default,
                             meta: { menuIndex: 6, index: 0 }
                         },
+                        // 邀请有奖
+                        {
+                            path: "Invitation",
+                            component: require("@/view/geren/invitation").default,
+                            meta: { menuIndex: 6, index: 1 }
+                        },
+                        // 金币明细
+                        {
+                            path: "goldCoinDetails",
+                            component: require("@/view/geren/goldCoinDetails").default,
+                            meta: { menuIndex: 6, index: 2 }
+                        },
+                        // 账户设置
                         {
                             path: "accountSettings",
                             component: require("@/view/geren/accountSettings").default,
@@ -139,8 +152,8 @@ export default new Router({
             ]
         },
         {
-            path: '*',
-            redirect: '/'
+            path: "*",
+            redirect: "/"
         }
     ]
 });

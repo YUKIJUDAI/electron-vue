@@ -26,19 +26,19 @@
             <div class="head-right">
                 <ul>
                     <li>
-                        <img src="~@/assets/img/gift.png">
+                        <img src="~@/assets/icon/gift.png">
                         <span>邀请有奖</span>
                         <br />
                         <span>获取免费金币</span>
                     </li>
                     <li>
-                        <img src="~@/assets/img/gzh.png">
+                        <img src="~@/assets/icon/gzh.png">
                         <span>微信公众号</span>
                         <br />
                         <span>关注免费得金币</span>
                     </li>
                     <li>
-                        <img src="~@/assets/img/wechat.png">
+                        <img src="~@/assets/icon/wechat.png">
                         <span>加客服好友</span>
                         <br />
                         <span>人工精准对接</span>
@@ -80,12 +80,12 @@
                     </div>
                     <ul>
                         <li>
-                            <img src="~@/assets/img/p.png" class="p">
+                            <img src="~@/assets/icon/p.png" class="p">
                             <p class="p-5">累计邀请人数</p>
                             <p class="p-6">45<span>人</span></p>
                         </li>
                         <li>
-                            <img src="~@/assets/img/m.png" class="m">
+                            <img src="~@/assets/icon/m.png" class="m">
                             <p class="p-5">累计获得奖励 (金币)</p>
                             <p class="p-6">45<span>个</span></p>
                         </li>
@@ -183,8 +183,8 @@ export default {
                 display: flex;
             }
             li {
-                width: 140px;
-                padding: 18px 0 18px 4%;
+                width: 148px;
+                padding: 18px 0 18px 18px;
                 img {
                     .fl;
                     margin-top: 4px;

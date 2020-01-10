@@ -664,7 +664,7 @@ export default {
     margin: 0 20px;
     border-bottom: 1px solid #f5f5f5;
     .data-detail {
-        margin-left: 75px;
+        margin-left: 25px;
         overflow: hidden;
     }
     .data-detail-1 {
