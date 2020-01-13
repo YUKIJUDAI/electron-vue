@@ -48,7 +48,7 @@ const DomFactory = function () {
         // 点击加号
         addBtn: () => $$(".alife-dt-card-sycm-common-select")[1].querySelector("span"),
         // 搜索输入框
-        analysisInput: () => $(".ant-input"),
+        analysisInput: () => $$(".ant-input")[1],
         // 选出的数据
         analysisList: () => $(".oui-typeahead-dropdown-item"),
         // 入店关键词下拉
@@ -73,6 +73,8 @@ const DomFactory = function () {
         storeSourceTd: () => $("#sycm-mc-flow-analysis").querySelectorAll("td"),
         // 入店来源pc端
         storeSourcePc: () => $$(".ant-select-dropdown")[1].querySelectorAll("li")[1],
+        // 关闭弹窗
+        closeBtn: () => $(".ant-modal-close-x")
     }
     // 竞品配置页面
     const configurationPage = {
@@ -95,9 +97,7 @@ const DomFactory = function () {
         // 删除按钮
         delIcon: () => $$(".ant-input-suffix")[1].querySelector("i"),
         // 数据列表
-        getingData: () => $(".oui-typeahead-dropdown-item"),
-        // 关闭弹窗
-        closeBtn: () => $(".ant-modal-close-x")
+        getingData: () => $(".oui-typeahead-dropdown-item")
     }
 
     // 是否在竞争页面
