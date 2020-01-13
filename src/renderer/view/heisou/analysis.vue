@@ -86,7 +86,7 @@
                 <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">黑搜分析<i class="hot"></i></li>
             </ul>
         </div>
-        <div class="data" :is="tempList[tabIndex]" itemId="43781742541" :date_range="form.date_range" :t="t"></div>
+        <div class="data" :is="tempList[tabIndex]" :itemId="goodsInfo.itemId" :date_range="form.date_range" :t="t"></div>
     </div>
 </template>
 
@@ -136,8 +136,7 @@ export default {
             logList: [],
             logFlag: true,
 
-            t:""
-
+            t: ""
         }
     },
     mounted() {
@@ -191,15 +190,22 @@ export default {
         },
         // 获取竞品数据
         getCompeteGoodsInfo(data) {
+            this.goodsInfo = { goods_name: data.goods_name, pictUrl: data.pictUrl, shop_name: data.shop_name, itemId: data.itemId };
+            this.$confirm('是否获取新数据后再分析?', '提示', {
+                confirmButtonText: '获取数据',
+                cancelButtonText: '直接分析'
+            }).then(() => {
+                this.addingFlag = true;
+                from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
+                    remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor-detail", data.goods_name);
+                });
+            }).catch(() => {
+                this.handleClose();
+            });
             if (this.addingFlag) {
                 this.$message.error("请等待当前任务完成后再试");
                 return;
             }
-            this.addingFlag = true;
-            this.goodsInfo = { goods_name: data.goods_name, pictUrl: data.pictUrl, shop_name: data.shop_name, itemId: data.itemId };
-            from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor-detail", data.goods_name);
-            });
         },
         // 竞品关闭
         handleClose() {

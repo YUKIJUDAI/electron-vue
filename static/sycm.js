@@ -7,6 +7,8 @@ const moment = require('moment');
 // 生意参谋dom信息方法配置
 const DomFactory = function () {
 
+    if (!this instanceof DomFactory) return new DomFactory();
+
     const $ = function (dom) {
         return document.querySelector(dom);
     }

@@ -54,22 +54,22 @@
             </el-table>
         </div>
         <div class="data-source-table" v-show="tabIndex === 2">
-            <el-table :data="tableData2" border style="width: 100%">
-                <el-table-column prop="" label="开始日期" align="center">
+            <el-table :data="tableData2" border style="width: 100%"  height="500">
+                <el-table-column prop="analysis_time" label="开始日期" align="center" width="150px">
                 </el-table-column>
-                <el-table-column prop="" label="访客数" align="center">
+                <el-table-column prop="uvIndexNum" label="访客数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="支付买家shu" align="center">
+                <el-table-column prop="payByrCntIndexNum" label="支付买家数" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="支付件数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="收藏数" align="center">
+                <el-table-column prop="cltHitsNum" label="收藏数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="加购数" align="center">
+                <el-table-column prop="cartHitsNum" label="加购数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="payRateRatio" label="转化率" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="交易额" align="center">
+                <el-table-column prop="tradeNum" label="交易额" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
@@ -101,6 +101,7 @@ export default {
         getData(){
             this.getKeywordList();
             this.getSource();
+            this.getCoreIndex();
         },
         getKeywordList() {
             this.$http.post("/crawler/getKeywords", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
@@ -110,6 +111,11 @@ export default {
         getSource(){
             this.$http.post("/crawler/getSource", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
                 0 === res.code && (this.tableData1 = res.data);
+            });
+        },
+        getCoreIndex(){
+            this.$http.post("/crawler/getCoreIndex", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
+                0 === res.code && (this.tableData2 = res.data);
             });
         }
     },
