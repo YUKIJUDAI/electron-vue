@@ -173,6 +173,8 @@ export default {
                         this.goodsInfo = {
                             goods_name: "", pictUrl: "", shop_name: "", itemId: ""
                         };
+                        this.logList = [];
+                        this.logFlag = true;
                     }
                 });
             }

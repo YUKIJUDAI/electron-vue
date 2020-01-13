@@ -133,8 +133,18 @@ function updateHandle() {
     });
     // 执行更新
     autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
+        const dialogOpts = {
+            type: 'info',
+            buttons: ['更新', '不更新'],
+            title: '工具箱更新升级',
+            message: process.platform === 'win32' ? releaseNotes : releaseName,
+            detail: '监测到一个新的版本，请点击更新按钮更新工具箱'
+        }
+
         ipcMain.on('isUpdateNow', (e, arg) => {
-            autoUpdater.quitAndInstall();
+            dialog.showMessageBox(dialogOpts).then((returnValue) => {
+                if (returnValue.response === 0) autoUpdater.quitAndInstall()
+            });
         });
         mainWindow.webContents.send('isUpdateNow');
     });

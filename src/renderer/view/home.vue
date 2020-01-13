@@ -33,7 +33,7 @@
                 <div class="main-left-3">
                     <ul>
                         <router-link to="/heisou/video" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 0}">
-                            <i class="icon-left-li-1"></i>
+                            <i class="iconfont icon-tubiao"></i>
                             <span>极速黑搜</span>
                         </router-link>
                         <router-link to="/heihao/search" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 1}">
@@ -44,12 +44,16 @@
                             <i class="iconfont icon-taobao"></i>
                             <span>淘宝流量</span>
                         </router-link>
+                        <router-link to="/budan/securitySupplement" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 4}">
+                            <i class="iconfont icon-anquan"></i>
+                            <span>安全补单</span>
+                        </router-link>
                         <router-link to="/ganhuo/videoCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
                             <i class="iconfont icon-shipin"></i>
-                            <span>视频中心</span>
+                            <span>干活分享</span>
                         </router-link>
                         <router-link to="/geren/personCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 6}">
-                            <i class="iconfont"></i>
+                            <i class="iconfont icon-ren"></i>
                             <span>个人中心</span>
                         </router-link>
                     </ul>

@@ -108,6 +108,18 @@ export default new Router({
                     ]
                 },
                 {
+                    path: "budan",
+                    component: require("@/view/budan/index").default,
+                    children: [
+                        // 补单中心
+                        {
+                            path: "securitySupplement",
+                            component: require("@/view/budan/securitySupplement").default,
+                            meta: { menuIndex: 4, index: 0 }
+                        }
+                    ]
+                },
+                {
                     path: "ganhuo",
                     component: require("@/view/ganhuo/index").default,
                     children: [
