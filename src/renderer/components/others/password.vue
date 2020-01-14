@@ -3,7 +3,7 @@
         <form class="form">
             <div class="form-input">
                 <i class="phone"></i>
-                <input type="text" placeholder="请输入手机号" v-model="forgetForm.phone">
+                <input type="text" placeholder="请输入手机号" v-model="forgetForm.phone" :disabled="phone">
             </div>
             <div class="form-input">
                 <i class="pwd"></i>
@@ -28,7 +28,7 @@
             </div>
         </form>
         <div class="other clearfix">
-            <span class="registered" @click="goLogin" v-if="b">去登录</span>
+            <span class="registered" @click="goLogin" v-if="type === 2">去登录</span>
         </div>
         <div class="submit" @click="forget">立即修改</div>
     </div>
@@ -39,7 +39,7 @@ import { getPhoneCode } from "@/util/util";
 import { baseUrl } from "@/config/config";
 
 export default {
-    props: ["b"],
+    props: ["type", "phone"],
     data() {
         return {
             baseUrl,
@@ -54,6 +54,7 @@ export default {
         }
     },
     mounted() {
+        if (this.phone) this.forgetForm.phone = this.phone;
         this.getKey();
     },
     methods: {
@@ -80,7 +81,7 @@ export default {
         forget() {
             if (this.submitFlag) return;
             this.submitFlag = true;
-            this.$http.post("/index/forgetPwd", Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
+            this.$http.post(["", "", "/user/editPassword", "/index/forgetPwd", "/user/editPayPwd"][this.type], Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$store.dispatch("set_user_info", { token: "", phone: "" });

@@ -83,7 +83,7 @@
             </div>
         </el-dialog>
         <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">
-            <password v-model="forgetFlag" @goLogin="goLogin" :b="true"></password>
+            <password v-model="forgetFlag" @goLogin="goLogin" :type="2"></password>
         </el-dialog>
     </div>
 </template>
@@ -92,7 +92,7 @@
 const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
-import password from "@/components/password";
+import password from "@/components/others/password";
 import { baseUrl } from "@/config/config";
 
 export default {

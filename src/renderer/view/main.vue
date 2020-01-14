@@ -36,15 +36,15 @@
                 </ul>
             </div>
             <div class="article">
-                <div class="article-list">
+                <div class="article-list" v-for="(value,key,index) in articles" :key="index">
                     <div class="article-title">
-                        补单教程
+                        {{key}}
                         <span class="more">查看更多></span>
                     </div>
                     <ul>
-                        <li>
-                            <p class="p-1">如何在30天内追上竞品目标</p>
-                            <p class="p-2">阅读量 9,410</p>
+                        <li v-for="(item,i) in value" :key="i">
+                            <p class="p-1">{{item.title}}</p>
+                            <p class="p-2">阅读量 {{item.views}}</p>
                         </li>
                     </ul>
                 </div>
@@ -61,28 +61,39 @@ export default {
         return {
             banner: [],
             recommend: [],
-            video: []
+            video: [],
+            articles: {}
         }
     },
     created() {
         this.getBanner();
         this.getRecFunctions();
         this.getVideo();
+        this.getArticles();
     },
     methods: {
+        // 轮播图
         getBanner() {
             this.$http.post("/index/getBanner", { server_name: "bsearch.lethink.net" }).then(res => {
                 0 === res.code && (this.banner = res.data);
             });
         },
+        // 推荐列表
         getRecFunctions() {
             this.$http.post("/index/getRecFunctions").then(res => {
                 0 === res.code && (this.recommend = res.data);
             });
         },
+        // 视频
         getVideo() {
             this.$http.post("/index/getIndexVideos").then(res => {
                 0 === res.code && (this.video = res.data);
+            });
+        },
+        // 文章
+        getArticles() {
+            this.$http.post("/index/getIndexArticles").then(res => {
+                0 === res.code && (this.articles = res.data);
             });
         }
     }
@@ -206,7 +217,7 @@ export default {
         flex-wrap: wrap;
         justify-content: space-between;
         .article-list {
-            flex: 0.45;
+            flex: 0.48;
             .article-title {
                 font-size: 20px;
                 padding-bottom: 13px;

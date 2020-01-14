@@ -26,21 +26,34 @@
                     <el-button plain class="li-3-btn" @click="forgetFlag = true">修改</el-button>
                 </li>
             </ul>
+            <ul class="clearfix">
+                <li class="li-1">支付密码<img src="~@/assets/icon/checked-1.png"></li>
+                <li class="li-2">
+                    <p>使账号更安全，建议您定期更换支付密码，</br>且设置一个包含数字和字母，并长度超过6位以上的密码。</p>
+                </li>
+                <li class="li-3">
+                    <el-button plain class="li-3-btn" @click="payFlag = true">修改</el-button>
+                </li>
+            </ul>
         </div>
-        <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">
-            <password v-model="forgetFlag" :b="false"></password>
+        <el-dialog title="修改密码" :visible.sync="forgetFlag" width="721px">
+            <password v-model="forgetFlag" :type="3" :phone="userPhone"></password>
+        </el-dialog>
+        <el-dialog title="支付密码" :visible.sync="payFlag" width="721px">
+            <password v-model="payFlag" :type="4" :phone="userPhone"></password>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import password from "@/components/password";
+import password from "@/components/others/password";
 
 export default {
     components: { password },
     data() {
         return {
-            forgetFlag: false
+            forgetFlag: false,
+            payFlag: false,
         }
     },
     computed: {
