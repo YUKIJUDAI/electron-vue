@@ -1,6 +1,6 @@
 const axios = require("axios");
 const qs = require("qs");
-const { remote } = require('electron');
+const { remote } = require("electron");
 
 const { baseUrl } = require("@/config/config");
 import store from "@/store";
@@ -13,7 +13,6 @@ const http = axios.create({
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
 });
 
-
 // 请求发送前数据处理
 http.interceptors.request.use(
     config => {
@@ -25,6 +24,7 @@ http.interceptors.request.use(
         const tbInfo = remote.getGlobal("tbInfo");
 
         if (config.headers["Content-Type"] === "application/x-www-form-urlencoded") {
+            if (!config.data) config.data = {};
             config.data.sys = config.data.hasOwnProperty("sys") ? JSON.stringify(Object.assign({ ...tbInfo }, JSON.parse(config.data.sys))) : JSON.stringify({ ...tbInfo });
             config.data = qs.stringify(config.data);
         }
