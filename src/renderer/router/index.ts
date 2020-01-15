@@ -128,11 +128,29 @@ export default new Router({
                     path: "ganhuo",
                     component: require("@/view/ganhuo/index").default,
                     children: [
+                        // 干货
+                        {
+                            path: "realstuffCenter",
+                            component: require("@/view/ganhuo/realstuffCenter").default,
+                            meta: { menuIndex: 5, index: 0 }
+                        },
                         // 视频
                         {
-                            path: "videoCenter",
+                            path: "videoCenter/:id?",
                             component: require("@/view/ganhuo/videoCenter").default,
-                            meta: { menuIndex: 5, index: 0 }
+                            meta: { menuIndex: 5, index: 1 }
+                        },
+                        // 文章
+                        {
+                            path: "articleCenter/:id?",
+                            component: require("@/view/ganhuo/articleCenter").default,
+                            meta: { menuIndex: 5, index: 2 }
+                        },
+                        // 文章详情
+                        {
+                            path: "articleDetail/:id",
+                            component: require("@/view/ganhuo/articleDetail").default,
+                            meta: { menuIndex: 5, index: 2, hasBack: true }
                         }
                     ]
                 },

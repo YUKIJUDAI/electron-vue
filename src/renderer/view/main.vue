@@ -15,11 +15,11 @@
                         <div class="recommend-title">
                             <img :src="item.icon">
                             <p>{{item.function_name}}</p>
-                            <i class="recomment-video-1"></i>
+                            <i class="recomment-video-1" @click="playVideo(item.video_url)"></i>
                         </div>
                         <p class="recommend-con">{{item.function_desc}}</p>
                         <div class="recommend-foot">
-                            <i class="recomment-video-2"></i>
+                            <i class="recomment-video-2" @click="playVideo(item.video_url)"></i>
                             <span>视频教程</span>
                             <el-button type="primary" class="recommend-open" @click="$router.push(item.route)">打开</el-button>
                         </div>
@@ -29,26 +29,29 @@
             <div class="video">
                 <ul>
                     <li v-for="(item,i) in video" :key="i">
-                        <img :src="item.cover_url">
+                        <img :src="item.cover_url" @click="playVideo(item.url)">
                         <p class="video-title">{{item.video_desc}}</p>
                         <span class="video-playback">播放量 {{item.views}}</span>
                     </li>
                 </ul>
             </div>
             <div class="article">
-                <div class="article-list" v-for="(value,key,index) in articles" :key="index">
+                <div class="article-list" v-for="(value,index) in articles" :key="index">
                     <div class="article-title">
-                        {{key}}
-                        <span class="more">查看更多></span>
+                        {{value.title}}
+                        <router-link tag="span" :to="'/ganhuo/articleCenter/' + value.class_id" class="more">查看更多></router-link>
                     </div>
                     <ul>
-                        <li v-for="(item,i) in value" :key="i">
-                            <p class="p-1">{{item.title}}</p>
+                        <li v-for="(item,i) in value.items" :key="i">
+                            <router-link tag="p" class="p-1" :to="'/ganhuo/articleDetail/' + item.id">{{item.title}}</router-link>
                             <p class="p-2">阅读量 {{item.views}}</p>
                         </li>
                     </ul>
                 </div>
             </div>
+            <el-dialog :visible.sync="detialPlay" class="realstuff-dialog">
+                <iframe :src="videoUrl" frameborder="0" allowfullscreen="true" width="100%" height="100%"></iframe>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -62,7 +65,9 @@ export default {
             banner: [],
             recommend: [],
             video: [],
-            articles: {}
+            articles: [],
+            detialPlay: false,
+            videoUrl: ""
         }
     },
     created() {
@@ -95,6 +100,11 @@ export default {
             this.$http.post("/index/getIndexArticles").then(res => {
                 0 === res.code && (this.articles = res.data);
             });
+        },
+        // 视频播放
+        playVideo(url) {
+            this.detialPlay = true;
+            this.videoUrl = url;
         }
     }
 }
@@ -246,6 +256,7 @@ export default {
             text-overflow: ellipsis;
             -o-text-overflow: ellipsis;
             overflow: hidden;
+            cursor: pointer;
         }
         .p-2 {
             .fr;

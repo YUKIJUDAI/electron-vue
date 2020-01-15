@@ -32,7 +32,7 @@
                             <i class="iconfont icon-anquan"></i>
                             <span>安全补单</span>
                         </router-link>
-                        <router-link to="/ganhuo/videoCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
+                        <router-link to="/ganhuo/realstuffCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
                             <i class="iconfont icon-shipin"></i>
                             <span>干活分享</span>
                         </router-link>

@@ -2,10 +2,19 @@
     <div class="ganhuo-index">
         <div class="ganhuo-index-navigation">
             <ul class="ganhuo-index-navigation-ul">
-                <router-link tag="li" to="/ganhuo/videoCenter" :class="{active:$route.meta.index === 0}">
+                <router-link tag="li" to="/ganhuo/realstuffCenter" :class="{active:$route.meta.index === 0}">
+                    <div>干货中心</div>
+                </router-link>
+                <router-link tag="li" to="/ganhuo/videoCenter" :class="{active:$route.meta.index === 1}">
                     <div>视频中心</div>
                 </router-link>
+                <router-link tag="li" to="/ganhuo/articleCenter" :class="{active:$route.meta.index === 2}">
+                    <div>好文分享</div>
+                </router-link>
             </ul>
+            <div class="ganhuo-index-navigation-right">
+                <p @click="$router.go(-1)" v-if="$route.meta.hasBack">返回</p>
+            </div>
         </div>
         <router-view class="ganhuo-main"></router-view>
     </div>
@@ -45,6 +54,21 @@ export default {}
                     color: #ff6801;
                 }
             }
+        }
+        .ganhuo-index-navigation-right {
+            .back {
+                .dib;
+                background: url("~@/assets/icon/back.png") no-repeat;
+                background-size: cover;
+                width: 16px;
+                height: 12px;
+                vertical-align: -3px;
+            }
+            .fr;
+            margin-top: 12px;
+            margin-right: 12px;
+            color: #ff6801;
+            cursor: pointer;
         }
     }
     .ganhuo-main {
