@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <heisou-title></heisou-title>
+        <heisou-title ref="heisouTitle"></heisou-title>
         <div class="body">
             <div class="banner">
                 <el-carousel :interval="6000">
@@ -21,7 +21,7 @@
                         <div class="recommend-foot">
                             <i class="recomment-video-2" @click="playVideo(item.video_url)"></i>
                             <span>视频教程</span>
-                            <el-button type="primary" class="recommend-open" @click="$router.push(item.route)">打开</el-button>
+                            <el-button type="primary" class="recommend-open" @click="open(item.route)">打开</el-button>
                         </div>
                     </li>
                 </ul>
@@ -58,6 +58,8 @@
 
 <script>
 import heisouTitle from "@/components/others/title";
+import { isEmpty } from "@/util/util";
+
 export default {
     components: { heisouTitle },
     data() {
@@ -70,6 +72,11 @@ export default {
             videoUrl: ""
         }
     },
+    computed: {
+        notLogining() {
+            return isEmpty(this.$store.state.userInfo.token);
+        }
+    },
     created() {
         this.getBanner();
         this.getRecFunctions();
@@ -77,6 +84,14 @@ export default {
         this.getArticles();
     },
     methods: {
+        // 打开
+        open(url) {
+            if (this.notLogining) {
+                this.$refs.heisouTitle.goLogin();
+            } else {
+                this.$router.push(url);
+            }
+        },
         // 轮播图
         getBanner() {
             this.$http.post("/index/getBanner", { server_name: "bsearch.lethink.net" }).then(res => {
@@ -112,8 +127,8 @@ export default {
 
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
-
 .body {
+    margin-top: 60px;
     padding: 27px 32px;
     .banner-img {
         width: 100%;

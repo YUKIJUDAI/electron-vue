@@ -2,13 +2,10 @@
     <div class="heishou-index">
         <div class="heishou-index-navigation">
             <ul class="heishou-index-navigation-ul">
-                <router-link tag="li" to="/heisou/video" :class="{active:$route.meta.index === 0}">
-                    <div>视频教程</div>
-                </router-link>
-                <router-link tag="li" to="/heisou/monitor" :class="{active:$route.meta.index === 1}">
+                <router-link tag="li" to="/heisou/monitor" :class="{active:$route.meta.index === 0}">
                     <div>竞品监控</div>
                 </router-link>
-                <router-link tag="li" to="/heisou/analysis" :class="{active:$route.meta.index === 2}">
+                <router-link tag="li" to="/heisou/analysis" :class="{active:$route.meta.index === 1}">
                     <div>竞品分析</div>
                 </router-link>
             </ul>
@@ -20,11 +17,6 @@
 <script>
 
 export default {
-    data() {
-        return {
-
-        }
-    }
 }
 </script>
 

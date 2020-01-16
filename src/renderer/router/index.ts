@@ -20,23 +20,17 @@ export default new Router({
                     path: "heisou",
                     component: require("@/view/heisou/index").default,
                     children: [
-                        // 视频
-                        {
-                            path: "video",
-                            component: require("@/view/heisou/video").default,
-                            meta: { menuIndex: 0, index: 0 }
-                        },
                         // 竞品监控
                         {
                             path: "monitor",
                             component: require("@/view/heisou/monitor").default,
-                            meta: { menuIndex: 0, index: 1 }
+                            meta: { menuIndex: 0, index: 0 }
                         },
                         // 竞品分析
                         {
                             path: "analysis",
                             component: require("@/view/heisou/analysis").default,
-                            meta: { menuIndex: 0, index: 2 }
+                            meta: { menuIndex: 0, index: 1 }
                         }
                     ]
                 },

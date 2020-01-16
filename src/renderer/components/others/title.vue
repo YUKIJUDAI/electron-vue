@@ -2,8 +2,8 @@
     <div class="title">
         <div class="header clearfix" style="-webkit-app-region: drag">
             <router-link class="msg" tag="div" to="/main" style="-webkit-app-region: no-drag">
-                <img src="~@/assets/icon/logo.png" class="logo">
-                <span class="title">黑搜开发器</span>
+                <img src="~@/assets/icon/logo.png" class="logo" />
+                <span class="header-title">黑搜开发器</span>
             </router-link>
             <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
                 <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
@@ -242,6 +242,11 @@ export default {
     height: 60px;
     background: #ff6801;
     box-shadow: 4px 0px 19px 1px rgba(0, 32, 95, 0.15);
+    .fix;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
     .msg {
         .fl;
         margin-left: 1rem;
@@ -252,7 +257,7 @@ export default {
             .wh(30px);
             .fl;
         }
-        .title {
+        .header-title {
             .fl;
             font-size: 20px;
             color: #fff;

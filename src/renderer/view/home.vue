@@ -9,6 +9,11 @@
                     <div class="main-login" v-if="isLogin">{{userPhone}}</div>
                     <div class="main-login" @click="goLogin" v-else>请登录</div>
                 </div>
+                <div class="main-left-ul">
+                    <ul>
+                        <li>金币：<span>3000</span></li>
+                    </ul>
+                </div>
                 <div class="main-left-2 clearfix">
                     <div class="left-2-left" v-if="isLogin">充值</div>
                     <div class="left-2-left" @click="goRegistered" v-else>立即注册</div>
@@ -16,7 +21,7 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <router-link to="/heisou/video" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 0}">
+                        <router-link to="/heisou/monitor" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 0}">
                             <i class="iconfont icon-tubiao"></i>
                             <span>极速黑搜</span>
                         </router-link>
@@ -81,6 +86,7 @@ export default {
     width: 100vw;
     overflow: hidden;
     .body {
+        margin-top: 60px;
         height: calc(~"100vh - 60px - 18px");
         overflow-y: auto;
         .bg-c(#f5f5f5);
@@ -95,7 +101,7 @@ export default {
             .fl;
             .main-left-1 {
                 .rel;
-                padding-bottom: 50px;
+                height: 160px;
                 .identity-tag {
                     .db;
                     .abs;
@@ -122,6 +128,14 @@ export default {
                     background: rgba(66, 187, 223, 1);
                     border-radius: 11px;
                     cursor: pointer;
+                }
+            }
+            .main-left-ul {
+                padding: 0 33px 20px 33px;
+                font-size: 12px;
+                color: #333;
+                span {
+                    color: #ff6801;
                 }
             }
             .main-left-2 {
