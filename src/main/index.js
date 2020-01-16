@@ -1,8 +1,7 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu, Tray } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { autoUpdater } = require("electron-updater");
-// const { uploadUrl } = require("../renderer/config/config");
 
 if (process.env.NODE_ENV !== 'development') {
     global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -10,6 +9,9 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow;
 let sycmWindow;
+let tray;
+let uploadUrl = "http://127.0.0.1:3000/public";
+
 const winURL = process.env.NODE_ENV === 'development'
     ? `http://localhost:9080`
     : `file://${__dirname}/index.html`
@@ -76,6 +78,17 @@ function createWindow() {
     });
     // 启动更新
     updateHandle();
+
+    tray = new Tray(__static + "/logo.ico")
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: '退出', type: 'normal', click() {
+                if (process.platform !== 'darwin') app.quit();
+            }
+        }
+    ])
+    tray.setToolTip('黑搜开发器')
+    tray.setContextMenu(contextMenu)
 }
 
 // 创建生意参谋子窗口
@@ -118,7 +131,7 @@ function createView() {
 // 版本更新
 function updateHandle() {
 
-    autoUpdater.setFeedURL("http://127.0.0.1:3000/public");
+    autoUpdater.setFeedURL(uploadUrl);
     autoUpdater.on('error', function (error) {
         sendUpdateMessage("检查更新出错");
     });
