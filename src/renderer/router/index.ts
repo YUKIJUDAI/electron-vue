@@ -107,6 +107,11 @@ export default new Router({
                     ]
                 },
                 {
+                    path: "zhitongche",
+                    component: require("@/view/zhitongche/index").default,
+                    meta: { menuIndex: 3, index: 0 }
+                },
+                {
                     path: "budan",
                     component: require("@/view/budan/index").default,
                     children: [

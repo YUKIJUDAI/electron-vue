@@ -13,7 +13,7 @@
             <ul class="clearfix right-ul" style="-webkit-app-region: no-drag">
                 <li class="login" @click="goLogin" v-if="!isLogin"><i class="icon-login"></i>登录</li>
                 <li class="registered" @click="goRegistered" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
-                <li class="user" v-if="isLogin">{{userPhone}}</li>
+                <router-link tag="li" to="/geren/personCenter" class="user" v-if="isLogin">{{userPhone}}</router-link>
                 <li class="exit" @click="exit" v-if="isLogin">退出</li>
             </ul>
         </div>

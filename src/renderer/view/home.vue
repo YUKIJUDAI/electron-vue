@@ -33,6 +33,10 @@
                             <i class="iconfont icon-taobao"></i>
                             <span>淘宝流量</span>
                         </router-link>
+                        <router-link to="/zhitongche" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 3}">
+                            <i class="iconfont icon-taobao"></i>
+                            <span>直通车诊断</span>
+                        </router-link>
                         <router-link to="/budan/securitySupplement" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 4}">
                             <i class="iconfont icon-anquan"></i>
                             <span>安全补单</span>
@@ -40,10 +44,6 @@
                         <router-link to="/ganhuo/realstuffCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
                             <i class="iconfont icon-shipin"></i>
                             <span>干活分享</span>
-                        </router-link>
-                        <router-link to="/geren/personCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 6}">
-                            <i class="iconfont icon-ren"></i>
-                            <span>个人中心</span>
                         </router-link>
                     </ul>
                 </div>
