@@ -150,6 +150,12 @@ export default new Router({
                             path: "articleDetail/:id",
                             component: require("@/view/ganhuo/articleDetail").default,
                             meta: { menuIndex: 5, index: 2, hasBack: true }
+                        },
+                        // 导师中心
+                        {
+                            path: "tutorCenter",
+                            component: require("@/view/ganhuo/tutorCenter").default,
+                            meta: { menuIndex: 5, index: 3 }
                         }
                     ]
                 },

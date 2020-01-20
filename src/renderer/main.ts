@@ -5,7 +5,7 @@ import Electron from 'vue-electron';
 
 import http from "@/util/http";
 import "@/assets/theme/index.css";
-// import '@/assets/iconfont/iconfont.css';
+import '@/assets/iconfont/iconfont.css';
 
 import App from "./App.vue";
 import router from "./router";

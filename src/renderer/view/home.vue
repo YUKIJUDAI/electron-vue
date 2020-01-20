@@ -34,7 +34,7 @@
                             <span>淘宝流量</span>
                         </router-link>
                         <router-link to="/zhitongche" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 3}">
-                            <i class="iconfont icon-taobao"></i>
+                            <i class="iconfont icon-zhitongche"></i>
                             <span>直通车诊断</span>
                         </router-link>
                         <router-link to="/budan/securitySupplement" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 4}">
@@ -174,8 +174,12 @@ export default {
                         margin-left: 27px;
                         vertical-align: -2px;
                     }
-                    .icon-taobao {
+                    .icon-taobao
+                     {
                         font-size: 20px;
+                    }
+                    .icon-anquan, .icon-shipin {
+                        font-size: 22px;
                     }
                     span {
                         font-size: 15px;

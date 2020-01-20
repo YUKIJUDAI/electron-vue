@@ -9,5 +9,5 @@ export default {}
 </script>
 
 <style>
-@import url("//at.alicdn.com/t/font_1560804_4vbt7boskfx.css");
+/* @import url("//at.alicdn.com/t/font_1560804_e61nqvix8mo.css"); */
 </style>

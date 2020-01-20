@@ -18,24 +18,14 @@
         </div>
         <div class="tutor">
             <ul class="tutor-ul">
-                <li>
-                    <p class="p-1">王雪莉</p>
-                    <p class="p-2">电商企业的资深运营专业讲师, 独家授课，参与自营店铺平台 运作拥有丰富的行业经验。</p>
-                    <span class="span-1">免费咨询</span>
-                </li>
-                <li>
-                    <p class="p-1">王雪莉</p>
-                    <p class="p-2">电商企业的资深运营专业讲师, 独家授课，参与自营店铺平台 运作拥有丰富的行业经验。</p>
-                    <span class="span-1">免费咨询</span>
-                </li>
-                <li>
-                    <p class="p-1">王雪莉</p>
-                    <p class="p-2">电商企业的资深运营专业讲师, 独家授课，参与自营店铺平台 运作拥有丰富的行业经验。</p>
+                <li v-for="(item,i) in tutor" :key="i">
+                    <p class="p-1">{{item.mentor_name}}</p>
+                    <p class="p-2">{{item.mentor_desc}}</p>
                     <span class="span-1">免费咨询</span>
                 </li>
                 <li class="tutor-title">
                     <p class="p-3">导师中心</p>
-                    <span class="span-2">查看更多></span>
+                    <router-link to="/ganhuo/tutorCenter" tag="span" class="span-2">查看更多></router-link>
                 </li>
             </ul>
         </div>
@@ -65,14 +55,17 @@ export default {
             detialPlay: false,
             videoUrl: "",
             video: [],
-            articles: []
+            articles: [],
+            tutor: []
         }
     },
     mounted() {
         this.getRecVideos();
         this.getArticles();
+        this.getTutor();
     },
     methods: {
+        // 视频
         getRecVideos() {
             this.$http.post("/ganhuo/getRecVideos").then(res => {
                 0 === res.code && (this.video = res.data);
@@ -82,6 +75,12 @@ export default {
         getArticles() {
             this.$http.post("/index/getIndexArticles").then(res => {
                 0 === res.code && (this.articles = res.data);
+            });
+        },
+        // 导师
+        getTutor() {
+            this.$http.post("/ganhuo/getVideoRecMentor").then(res => {
+                0 === res.code && (this.tutor = res.data && res.data.length > 4 ? res.data.slice(0, 3) : res.data);
             });
         },
         // 视频播放
@@ -126,6 +125,7 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            cursor: pointer;
         }
         .li-reading {
             line-height: 20px;
@@ -167,6 +167,7 @@ export default {
                 font-size: 12px;
                 margin-top: 13px;
                 margin-bottom: 11px;
+                height: 60px;
                 color: #666;
                 line-height: 20px;
                 overflow: hidden;
@@ -204,6 +205,7 @@ export default {
         margin-top: 30px;
         ul {
             display: flex;
+            margin-bottom: 26px;
         }
         li {
             width: 190px;
@@ -233,6 +235,7 @@ export default {
         .span-1 {
             font-size: 14px;
             color: rgba(255, 105, 2, 1);
+            cursor: pointer;
         }
         .span-2 {
             font-size: 12px;

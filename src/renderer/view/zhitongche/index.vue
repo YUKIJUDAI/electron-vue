@@ -26,52 +26,31 @@
             </div>
         </div>
         <div class="page-2">
-            <el-carousel height="160px">
-                <el-carousel-item>
-                    <div class="tutor-list">
-                        <ul>
-                            <li>
-                                <div class="tutor-left">
-                                    <img src="">
-                                </div>
-                                <div class="tutor-right">
-                                    <p class="tutor-name">培全</p>
-                                    <p class="tutor-text">黑搜金牌导师，擅长天猫淘宝，官方资深分析师，店铺营业额过千万</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="tutor-left">
-                                    <img src="">
-                                </div>
-                                <div class="tutor-right">
-                                    <p class="tutor-name">培全</p>
-                                    <p class="tutor-text">黑搜金牌导师，擅长天猫淘宝，官方资深分析师，店铺营业额过千万</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="tutor-left">
-                                    <img src="">
-                                </div>
-                                <div class="tutor-right">
-                                    <p class="tutor-name">培全</p>
-                                    <p class="tutor-text">黑搜金牌导师，擅长天猫淘宝，官方资深分析师，店铺营业额过千万</p>
-                                </div>
-                            </li>
-                        </ul>
+            <div class="swiper-container" id="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(item,i) in tutor">
+                        <div class="tutor-list clearfix">
+                            <div class="tutor-left">
+                                <img :src="item.mentor_avatar">
+                            </div>
+                            <div class="tutor-right">
+                                <p class="tutor-name">{{item.mentor_name}}</p>
+                                <p class="tutor-text">{{item.mentor_desc}}</p>
+                            </div>
+                        </div>
                     </div>
-                </el-carousel-item>
-            </el-carousel>
+                </div>
+            </div>
         </div>
         <div class="page-3">
             <el-carousel height="120px" direction="vertical" :interval="20000">
-                <el-carousel-item>
-                    <div class="page-3-title">
-                        春节时如何用1毛拿直通车大流量
-                        <span>爆款打造</span>
-                    </div>
+                <el-carousel-item v-for="(item,i) in recArticle" :key="i">
+                    <router-link tag="div" :to="'/ganhuo/articleDetail/' + item.id" class="page-3-title">
+                        {{item.title}}
+                        <span>{{item.class}}</span>
+                    </router-link>
                     <div class="page-3-txt">
-                        大家最纠结的一个问题是如果现在直通车暂停了等年后在开始推广，会导致PPC上涨、流量很难进来，这个就是我们说到的权重问题，那么过年期间直通车到底
-                        能不能暂停呢？从操作的角度而言，我们每年的直通车都是在过年期间暂停...
+                        {{item.content}}
                     </div>
                 </el-carousel-item>
             </el-carousel>
@@ -96,14 +75,21 @@
 </template>
 
 <script>
+import Swiper from 'swiper';
+import 'swiper/css/swiper.min.css';
+
 export default {
     data() {
         return {
-            articles: []
+            articles: [],
+            recArticle: [],
+            tutor: []
         }
     },
     mounted() {
         this.getArticles();
+        this.getTutor();
+        this.getRecArticle();
     },
     methods: {
         // 文章
@@ -111,7 +97,30 @@ export default {
             this.$http.post("/index/getIndexArticles").then(res => {
                 0 === res.code && (this.articles = res.data);
             });
-        }
+        },
+        // 导师
+        getTutor() {
+            this.$http.post("/ganhuo/getVideoRecMentor").then(res => {
+                if (0 === res.code) {
+                    this.tutor = res.data;
+                    this.$nextTick((res => {
+                        this.swiper = new Swiper("#swiper", {
+                            slidesPerView: 3,
+                            spaceBetween: 16,
+                            autoplay: {
+                                delay: 12000
+                            }
+                        });
+                    }))
+                }
+            });
+        },
+        // 推荐文章
+        getRecArticle() {
+            this.$http.post("/ganhuo/getZtcRecArticle").then(res => {
+                0 === res.code && (this.recArticle = res.data);
+            });
+        },
     }
 }
 </script>
@@ -171,17 +180,9 @@ export default {
     .page-2 {
         .bg-c(#f5f5f5);
         padding: 12px 12px;
-        padding-top: 0;
-        ul {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        li {
-            margin-top: 12px;
-            width: 32.6%;
-            height: 150px;
-            background: rgba(255, 255, 255, 1);
+        .tutor-list {
+            background: #fff;
+            height: 170px;
             border-radius: 8px;
         }
         .tutor-left {
@@ -220,6 +221,7 @@ export default {
             padding: 21px 36px;
             font-size: 16px;
             color: #333;
+            cursor: pointer;
             span {
                 font-size: 12px;
                 color: #fff;
@@ -228,7 +230,7 @@ export default {
             }
         }
         .page-3-txt {
-            padding: 0 36px 21px 36px;
+            margin: 0 36px 21px 36px;
             font-size: 14px;
             color: #666;
             overflow: hidden;
@@ -271,6 +273,7 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            cursor: pointer;
         }
         .li-reading {
             line-height: 20px;

@@ -4,8 +4,8 @@
         <p class="article-detail-msg">
             <i class="views"></i>
             <span>{{article.views}} 阅读量</span>
-            <i class="share"></i>
-            <span> 分享</span>
+            <!-- <i class="share"></i>
+            <span> 分享</span> -->
         </p>
         <div v-html="article.content" class="article-detail-content"></div>
     </div>

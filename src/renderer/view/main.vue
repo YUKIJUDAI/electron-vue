@@ -2,12 +2,12 @@
     <div class="main">
         <heisou-title ref="heisouTitle"></heisou-title>
         <div class="body">
-            <div class="banner">
-                <el-carousel :interval="6000">
-                    <el-carousel-item v-for="(item,i) in banner" :key="i">
+            <div class="swiper-container banner" id="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(item,i) in banner" :key="i">
                         <img :src="item.pic" class="banner-img">
-                    </el-carousel-item>
-                </el-carousel>
+                    </div>
+                </div>
             </div>
             <div class="recommend">
                 <ul>
@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import Swiper from 'swiper';
+import 'swiper/css/swiper.min.css';
 import heisouTitle from "@/components/others/title";
 import { isEmpty } from "@/util/util";
 
@@ -95,6 +97,16 @@ export default {
         // 轮播图
         getBanner() {
             this.$http.post("/index/getBanner", { server_name: "bsearch.lethink.net" }).then(res => {
+                if (0 === res.code) {
+                    this.banner = res.data;
+                    this.$nextTick(() => {
+                        this.swiper = new Swiper("#swiper", {
+                            autoplay: {
+                                delay: 6000
+                            }
+                        });
+                    })
+                }
                 0 === res.code && (this.banner = res.data);
             });
         },
@@ -149,7 +161,6 @@ export default {
         }
         .recommend-title {
             .rel;
-            background-color: red;
             img {
                 .db;
                 width: 100%;

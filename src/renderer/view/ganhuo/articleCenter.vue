@@ -11,8 +11,8 @@
                     <p>
                         <i class="views"></i>
                         <span>{{item.views}} 阅读量</span>
-                        <i class="share"></i>
-                        <span> 分享</span>
+                        <!-- <i class="share"></i>
+                        <span> 分享</span> -->
                     </p>
                 </li>
             </ul>
