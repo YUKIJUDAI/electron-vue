@@ -70,7 +70,7 @@
                         <input type="text" placeholder="请输入手机验证码" v-model="registeredForm.code">
                     </div>
                     <div class="code-safe" v-if="phoneCodeFlag">{{countdown}}</div>
-                    <div class="code-safe" @click="getPhoneCode" v-else>发送验证码</div>
+                    <div class="code-safe" @click="getPhoneCode(1)" v-else>发送验证码</div>
                 </div>
             </form>
             <div class="other clearfix">
@@ -148,7 +148,7 @@ export default {
             this.key = new Date().getTime() + "" + (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000);
         },
         // 获取短信
-        getPhoneCode() {
+        getPhoneCode(type) {
             if (!this.registeredForm.phone) {
                 this.$message.error("请先输入手机号");
                 return;

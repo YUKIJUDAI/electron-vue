@@ -156,7 +156,7 @@ export default {
         .ad {
             .fl;
             .tc;
-            width: 260px;
+            width: 250px;
             height: 220px;
             padding-top: 20px;
             .p-4 {
