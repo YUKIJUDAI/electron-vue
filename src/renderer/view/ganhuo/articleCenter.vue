@@ -87,6 +87,7 @@ export default {
         display: flex;
         justify-content: flex-start;
         border-bottom: 1px solid #eee;
+        margin-top: 1px;
         li {
             padding: 0 12px;
             cursor: pointer;

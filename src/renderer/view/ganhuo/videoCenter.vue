@@ -91,6 +91,7 @@ export default {
         padding: 22px 0 14px 0;
         display: flex;
         justify-content: flex-start;
+        margin-top: 1px;
         li {
             padding: 0 12px;
             cursor: pointer;
