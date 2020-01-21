@@ -57,7 +57,7 @@ export default {
         },
         // 通过分类id获取视频
         getVideosByClass() {
-            this.$http.post("/ganhuo/getVideosByClass", { class_id: this.tabIndex }).then(res => {
+            this.$http.post("/ganhuo/getVideosByClass", { class_id: this.tabIndex, page: this.page }).then(res => {
                 if (0 === res.code) {
                     this.video = res.data.items;
                     this.total_pages = res.data.total_pages;

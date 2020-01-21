@@ -4,7 +4,7 @@
             <el-card class="box-card" v-for="(value,index) in articles" :key="index">
                 <div slot="header" class="clearfix">
                     <span class="card-title">{{value.title}}</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="$route.push('/ganhuo/articleCenter/' + value.class_id)">查看更多></el-button>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push('/ganhuo/articleCenter/' + value.class_id)">查看更多></el-button>
                 </div>
                 <ul>
                     <li v-for="(item,i) in value.items" :key="i">
@@ -208,8 +208,8 @@ export default {
             margin-bottom: 26px;
         }
         li {
-            width: 190px;
             padding-right: 30px;
+            flex: 1;
             img {
                 width: 190px;
                 height: 105px;
@@ -217,7 +217,7 @@ export default {
         }
         .realstuff-list-title {
             .tl;
-            width: 140px;
+            flex: 0.7;
         }
         .p-1 {
             margin-top: 40px;

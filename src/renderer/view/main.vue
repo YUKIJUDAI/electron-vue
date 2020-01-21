@@ -39,11 +39,11 @@
                 <div class="article-list" v-for="(value,index) in articles" :key="index">
                     <div class="article-title">
                         {{value.title}}
-                        <router-link tag="span" :to="'/ganhuo/articleCenter/' + value.class_id" class="more">查看更多></router-link>
+                        <span class="more" @click="open('/ganhuo/articleCenter/' + value.class_id)">查看更多></span>
                     </div>
                     <ul>
                         <li v-for="(item,i) in value.items" :key="i">
-                            <router-link tag="p" class="p-1" :to="'/ganhuo/articleDetail/' + item.id">{{item.title}}</router-link>
+                            <p class="p-1" @click="open('/ganhuo/articleDetail/' + item.id)">{{item.title}}</p>
                             <p class="p-2">阅读量 {{item.views}}</p>
                         </li>
                     </ul>
