@@ -3,6 +3,7 @@ const qs = require("qs");
 const { from, interval, timer, concat } = require("rxjs");
 const { filter, take, tap, delay, last, mergeMap } = require("rxjs/operators");
 const moment = require('moment');
+const robot = require("robotjs");
 
 // 生意参谋dom信息方法配置
 const DomFactory = function () {
@@ -255,85 +256,86 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
             tap(() => {
                 try {
                     analysisPage.storeSourceSel().click();
+                    setLog({ flag: 0, msg: "流量数获取成功" });
                 } catch (error) {
-                    setLog({ flag: 2, msg: "获取数据失败，请重试" });
+                    setLog({ flag: 2, msg: "error1" + error });
                 }
             }),
-            delay(1000),
-            // 点击无线端
-            tap(() => {
-                setLog({ flag: 1, msg: "成交关键词信息获取成功" });
-                analysisPage.storeSourceWireless().click();
-                setLog({ flag: 1, msg: "正在获取流量数据，数据量较大，请稍后。。。" });
-            }),
-            delay(1000),
-            mergeMap(() => {
-                var _a = analysisPage.paginationNum()
-                return timer(0, 35000)
-                    .pipe(
-                        take(_a.length),
-                        tap((i) => {
-                            analysisPage.paginationNum()[i].click()
-                        })
-                    )
-            }),
-            mergeMap((j) => {
-                var _a = analysisPage.paginationNum();
-                var _b = analysisPage.storeSourceTd();
-                return timer(0, 1000)
-                    .pipe(
-                        take(_b.length),
-                        delay(500),
-                        filter((i) => (i + 1) % 3 === 0),
-                        // 点击趋势
-                        tap((i) => {
-                            _b[i].querySelector("a").click();
-                        }),
-                        last(),
-                        filter(() => j === (_a.length - 1))
-                    );
-            }),
-            delay(1000),
-            tap(() => {
-                analysisPage.paginationNum()[0].click();
-            }),
-            delay(1000),
-            tap(() => {
-                analysisPage.storeSourcePc().click();
-            }),
-            delay(1000),
-            mergeMap(() => {
-                var _a = analysisPage.paginationNum()
-                return timer(0, 35000)
-                    .pipe(
-                        take(_a.length),
-                        tap((i) => {
-                            analysisPage.paginationNum()[i].click()
-                        })
-                    )
-            }),
-            mergeMap((j) => {
-                var _a = analysisPage.paginationNum();
-                var _b = analysisPage.storeSourceTd();
-                return timer(0, 1000)
-                    .pipe(
-                        take(_b.length),
-                        delay(500),
-                        filter((i) => (i + 1) % 3 === 0),
-                        // 点击趋势
-                        tap((i) => {
-                            _b[i].querySelector("a").click();
-                        }),
-                        last(),
-                        tap(() => {
-                            j === (_a.length - 1) && setLog({ flag: 0, msg: "流量数获取成功" });
-                        }),
-                        filter(() => j === (_a.length - 1)),
-                        tap(() => {
-                            analysisPage.closeBtn().click();
-                        })
-                    );
-            })
+            // delay(1000),
+            // // 点击无线端
+            // tap(() => {
+            //     setLog({ flag: 1, msg: "成交关键词信息获取成功" });
+            //     analysisPage.storeSourceWireless().click();
+            //     setLog({ flag: 1, msg: "正在获取流量数据，数据量较大，请稍后。。。" });
+            // }),
+            // delay(1000),
+            // mergeMap(() => {
+            //     var _a = analysisPage.paginationNum()
+            //     return timer(0, 35000)
+            //         .pipe(
+            //             take(_a.length),
+            //             tap((i) => {
+            //                 analysisPage.paginationNum()[i].click()
+            //             })
+            //         )
+            // }),
+            // mergeMap((j) => {
+            //     var _a = analysisPage.paginationNum();
+            //     var _b = analysisPage.storeSourceTd();
+            //     return timer(0, 1000)
+            //         .pipe(
+            //             take(_b.length),
+            //             delay(500),
+            //             filter((i) => (i + 1) % 3 === 0),
+            //             // 点击趋势
+            //             tap((i) => {
+            //                 _b[i].querySelector("a").click();
+            //             }),
+            //             last(),
+            //             filter(() => j === (_a.length - 1))
+            //         );
+            // }),
+            // delay(1000),
+            // tap(() => {
+            //     analysisPage.paginationNum()[0].click();
+            // }),
+            // delay(1000),
+            // tap(() => {
+            //     analysisPage.storeSourcePc().click();
+            // }),
+            // delay(1000),
+            // mergeMap(() => {
+            //     var _a = analysisPage.paginationNum()
+            //     return timer(0, 35000)
+            //         .pipe(
+            //             take(_a.length),
+            //             tap((i) => {
+            //                 analysisPage.paginationNum()[i].click()
+            //             })
+            //         )
+            // }),
+            // mergeMap((j) => {
+            //     var _a = analysisPage.paginationNum();
+            //     var _b = analysisPage.storeSourceTd();
+            //     return timer(0, 1000)
+            //         .pipe(
+            //             take(_b.length),
+            //             delay(500),
+            //             filter((i) => (i + 1) % 3 === 0),
+            //             // 点击趋势
+            //             tap((i) => {
+            //                 _b[i].querySelector("a").click();
+            //             }),
+            //             last(),
+            //             tap(() => {
+            //                 j === (_a.length - 1) && setLog({ flag: 0, msg: "流量数获取成功" });
+            //             }),
+            //             filter(() => j === (_a.length - 1)),
+            //             tap(() => {
+            //                 analysisPage.closeBtn().click();
+            //             })
+            //         );
+            // })
         )
         .subscribe();
 });
@@ -458,7 +460,7 @@ function XhrProxy() {
                             await gHandlerList.map(proxyHandler => proxyHandler.call(this, this));
                         }
                         catch (e) {
-                            //TODO 这里可以替换为其他的错误处理逻辑
+                            //其他的错误处理逻辑
                             console.error(e);
                         }
                     }

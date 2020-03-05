@@ -173,8 +173,6 @@ export default {
                         this.goodsInfo = {
                             goods_name: "", pictUrl: "", shop_name: "", itemId: ""
                         };
-                        this.logList = [];
-                        this.logFlag = true;
                     }
                 });
             }
@@ -192,22 +190,24 @@ export default {
         },
         // 获取竞品数据
         getCompeteGoodsInfo(data) {
+            if (this.addingFlag) {
+                this.$message.error("请等待当前任务完成后再试");
+                return;
+            }
             this.goodsInfo = { goods_name: data.goods_name, pictUrl: data.pictUrl, shop_name: data.shop_name, itemId: data.itemId };
             this.$confirm('是否获取新数据后再分析?', '提示', {
                 confirmButtonText: '获取数据',
                 cancelButtonText: '直接分析'
             }).then(() => {
                 this.addingFlag = true;
+                this.logList = [];
+                this.logFlag = true;
                 from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
                     remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor-detail", data.goods_name);
                 });
             }).catch(() => {
                 this.handleClose();
             });
-            if (this.addingFlag) {
-                this.$message.error("请等待当前任务完成后再试");
-                return;
-            }
         },
         // 竞品关闭
         handleClose() {

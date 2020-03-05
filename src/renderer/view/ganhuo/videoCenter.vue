@@ -110,17 +110,19 @@ export default {
         ul {
             width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             flex-flow: wrap;
+            margin-left: -16px;
         }
         li {
-            margin: 20px 0;
-            width: 190px;
+            margin: 20px 16px 0;
+            width: 190px;           
             img {
                 width: 100%;
                 height: auto;
                 min-height: 106px;
                 cursor: pointer;
+                border-radius:4px;
             }
             .video-title {
                 font-size: 14px;

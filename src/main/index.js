@@ -31,15 +31,23 @@ ipcMain.on("max", function () {
     mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
 });
 
+
+
 // 关闭
 ipcMain.on("close", function () {
     mainWindow.close();
 });
 
-// 隐藏淘宝
+// 隐藏生意参谋
 ipcMain.on("hide-sycm", function () {
-    //sycmWindow && sycmWindow.hide();
+    sycmWindow && sycmWindow.hide();
 });
+
+//显示生意参谋
+ipcMain.on("show-sycm", function () {
+    sycmWindow && sycmWindow.showInactive();
+});
+
 
 app.on('ready', createWindow);
 
