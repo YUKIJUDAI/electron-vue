@@ -85,7 +85,7 @@ factory.add("list", {
                 crawler_data: aes(res)
             }
             http.post("/crawler/saveList", data).then(r => {
-                ipcRenderer.send("hide-sycm");
+                //ipcRenderer.send("hide-sycm");
             });
         }
     }

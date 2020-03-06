@@ -9,9 +9,10 @@
                     <div class="main-login" v-if="isLogin">{{userPhone}}</div>
                     <div class="main-login" @click="goLogin" v-else>请登录</div>
                 </div>
-                <div class="main-left-ul">
+                <div class="main-left-ul" v-if="isLogin">
                     <ul>
-                        <li>金币：<span>3000</span></li>
+                        <li>金币余额：<span>3000</span></li>
+                        <li>担保资金：<span>3000</span></li>
                     </ul>
                 </div>
                 <div class="main-left-2 clearfix">
@@ -21,35 +22,19 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <router-link to="/heisou/monitor" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 0}">
+                        <router-link to="/home/index" class="clearfix" tag="li">
                             <i class="iconfont icon-tubiao"></i>
-                            <span>极速黑搜</span>
+                            <span>首页</span>
                         </router-link>
-                        <router-link to="/heihao/search" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 1}">
-                            <i class="iconfont icon-sousuo1"></i>
-                            <span>黑号查询</span>
-                        </router-link>
-                        <router-link to="/liuliang/flow" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 2}">
-                            <i class="iconfont icon-taobao"></i>
-                            <span>淘宝流量</span>
-                        </router-link>
-                        <router-link to="/zhitongche" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 3}">
-                            <i class="iconfont icon-zhitongche"></i>
-                            <span>直通车诊断</span>
-                        </router-link>
-                        <router-link to="/budan/securitySupplement" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 4}">
-                            <i class="iconfont icon-anquan"></i>
-                            <span>安全补单</span>
-                        </router-link>
-                        <router-link to="/ganhuo/realstuffCenter" class="clearfix" tag="li" :class="{active:$route.meta.menuIndex === 5}">
-                            <i class="iconfont icon-shipin"></i>
-                            <span>干活分享</span>
-                        </router-link>
+                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" @click="open(item.route)">
+                            <i :class="['iconfont',item.iconclass]"></i>
+                            <span>{{item.function_name}}</span>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="main-right">
-                <router-view />
+                <router-view @goLogin="goLogin"/>
             </div>
         </div>
     </div>
@@ -67,9 +52,20 @@ export default {
         },
         userPhone() {
             return this.$store.state.userInfo.phone;
+        },
+        menuInfo() {
+            return this.$store.state.menuInfo || [];
         }
     },
     methods: {
+        // 打开
+        open(url) {
+            if (!this.isLogin) {
+                this.$refs.heisouTitle.goLogin();
+            } else {
+                this.$router.push(url);
+            }
+        },
         goLogin() {
             this.$refs.heisouTitle.goLogin()
         },
@@ -160,29 +156,23 @@ export default {
                 }
             }
             .main-left-3 {
+                margin-top: 10px;
                 li {
-                    .l-h(46px);
+                    .l-h(34px);
                     background: #fff;
-                    margin-top: 10px;
                     cursor: pointer;
+                    color: #666;
                     &:hover {
                         background: rgba(241, 245, 251, 1);
                     }
                     i {
                         font-size: 18px;
                         margin-top: 13px;
-                        margin-left: 27px;
+                        margin-left: 33px;
                         vertical-align: -2px;
                     }
-                    .icon-taobao
-                     {
-                        font-size: 20px;
-                    }
-                    .icon-anquan, .icon-shipin {
-                        font-size: 22px;
-                    }
                     span {
-                        font-size: 15px;
+                        font-size: 12px;
                         margin-left: 10px;
                         color: #666666;
                     }

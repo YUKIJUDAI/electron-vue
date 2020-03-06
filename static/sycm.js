@@ -249,7 +249,7 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
             delay(1000),
             // 滚动到底部
             tap(() => {
-                window.scroll(0, 2000);
+                document.querySelector("html").scrollTop = "2000";
             }),
             delay(1000),
             // 点击下拉
