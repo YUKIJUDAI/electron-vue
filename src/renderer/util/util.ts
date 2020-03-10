@@ -18,7 +18,6 @@ export const rand = function(min = 1000, max = 9999):string {
     return Math.floor(Math.random() * (max - min)) + min + "";
 }
 
-
 // 获取验证码
 export const getPhoneCode = function (type, phone, verify, _this) {
     _this.$fetch.post("/index/sendSms", { type, phone, verify_key: _this.key, verify }).then(res => {

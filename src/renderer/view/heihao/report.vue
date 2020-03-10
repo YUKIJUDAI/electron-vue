@@ -16,8 +16,9 @@
                 </el-form-item>
                 <el-form-item label="违规截图：">
                     <p class="up-prompt">请至少上传1张截图，证据不足举报可能会被驳回</p>
-                    <el-upload action="" list-type="picture-card" class="up-upload" :http-request="upload" :action="qnUrl" :show-file-list="false">
-                        <i class="el-icon-plus"></i>
+                    <img :src="qnUrl + item" class="avatar" v-for="(item,i) in formData.images" @click="remove(i)">
+                    <el-upload action="" list-type="picture-card" class="up-upload" :http-request="upload" :action="url" :show-file-list="false">
+                        <i class="el-icon-plus up-upload-icon"></i>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="举报类型：">
@@ -53,12 +54,13 @@ export default {
         return {
             formData: { images: [], content: [] },
             token: "",
+            url: "",
             qnUrl
         }
     },
     created() {
         this.$fetch.post("/upload/getQiniuToken").then(res => {
-            0 === res.code && (this.token = res.data);
+            0 === res.code && (this.token = res.data.token, this.url = res.data.url);
         });
     },
     methods: {
@@ -82,17 +84,22 @@ export default {
             formData.append('key', new Date().getTime() + rand());
             formData.append('token', this.token);
 
-            this.$fetch.post(this.qnUrl, formData, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
-                this.formData.images.push({ url: res.key, name });
+            this.$fetch.post(this.url, formData, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
+                this.formData.images.push(res.key);
                 this.$message.success("上传成功");
             }).catch(error => {
                 this.$message.error("上传失败");
             });
         },
+        // 删除图片
+        remove(i) {
+            this.formData.images.splice(i, 1);
+        },
         submit() {
-            var { wangwang, weixin, qq, images, content, experience } = this.formData;
-            content = content.join(",");
-            this.$fetch.post("/heisou/addReport", { wangwang, weixin, qq, images, content, experience }).then(res => {
+            var data = JSON.parse(JSON.stringify(this.formData));
+            data.content = data.content.join(",");
+            data.images = data.images.join(",");
+            this.$fetch.post("/heisou/addReport", data).then(res => {
                 0 === res.code ? this.$message.success(res.msg) : this.$message.error(res.msg);
             });
         }
@@ -119,7 +126,34 @@ export default {
         color: red;
     }
     .up-upload {
-        margin-top: 10px;
+        margin-top: 20px;
+        .fl;
+    }
+    .up-upload .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .up-upload .el-upload:hover {
+        border-color: #409eff;
+    }
+    .up-upload-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 148px;
+        height: 148px;
+        line-height: 148px;
+        text-align: center;
+    }
+    .avatar {
+        width: 148px;
+        height: 148px;
+        cursor: pointer;
+        .fl;
+        margin-top: 20px;
+        margin-right: 20px;
     }
 }
 </style>
