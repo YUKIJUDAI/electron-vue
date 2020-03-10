@@ -17,6 +17,13 @@ const DomFactory = function () {
         return document.querySelectorAll(dom);
     }
 
+    // 登录页面
+    const loginPage = {
+        userInput: () => $$("input[name='TPL_username']")[0],
+        pwdInput: () => $$("input[name='TPL_password']")[0],
+        submitBtn: () => $("#J_SubmitStatic"),
+        readyFlag: () => $$(".J_Submit")
+    }
     // 主页面
     const mainPage = {
         // 导航栏
@@ -118,6 +125,7 @@ const DomFactory = function () {
         return hasClass(document.querySelectorAll(".level-leaf")[11], "selected")
     }
     return {
+        loginPage,
         mainPage,
         monitorPage,
         analysisPage,
@@ -130,7 +138,25 @@ const DomFactory = function () {
 
 }
 
-const { mainPage, monitorPage, analysisPage, configurationPage, isCompetitionPage, isMonitorPage, isAnalysis, isConfigurationPage } = new DomFactory();
+const { loginPage, mainPage, monitorPage, analysisPage, configurationPage, isCompetitionPage, isMonitorPage, isAnalysis, isConfigurationPage } = new DomFactory();
+
+
+// 自动登录
+ipcRenderer.on("autoLogin", (event, account, pwd) => {
+    console.log(location.href)
+    interval(100)
+        .pipe(
+            filter(() => loginPage.submitBtn().length > 0),
+            take(1),
+            tap((i) => {
+                SetValue(loginPage.readyFlag(), account);
+                SetValue(loginPage.pwdInput(), account);
+                loginPage.submitBtn().click()
+            })
+        )
+        .subscribe()
+
+});
 
 // 登录成功后
 ipcRenderer.on('login-success', (event) => {

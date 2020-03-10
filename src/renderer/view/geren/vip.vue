@@ -41,12 +41,12 @@
             <div class="rechange-0" v-if="pay">
                 <ul>
                     <li>开通账号：18155908820</li>
-                    <li>开通套餐：12个月黑搜会员</li>
-                    <li>支付方式：<span>支付宝</span>付款</li>
+                    <li>开通套餐：{{price[checked].value}}黑搜会员</li>
+                    <li>支付方式：<span>{{["","支付宝"][+pay_type]}}</span>付款</li>
                 </ul>
                 <p class="pay-msg">
                     <i class="alipay"></i>
-                    支付宝扫码，支付<span>198</span>元
+                    支付宝扫码，支付<span>{{price[checked].price}}</span>元
                 </p>
                 <div class="pay-code">
                     <img src="">
@@ -61,14 +61,14 @@
             <div class="recharge-1" v-else>
                 <p class="account">开通账号：18155908820</p>
                 <el-checkbox v-model="protocol" class="protocol">同意《服务条例》</el-checkbox>
-                <ul class="list">
-                    <li class="checked">
-                        <img src="~@/assets/icon/checked.png" class="check">
-                        <div>48<span>元</span></div>
-                        <p>1个月</p>
+                <ul class="list clearfix">
+                    <li :class="{checked:checked === i}" v-for="(item,i) in price" :key="i" @click="checked = i">
+                        <img src="~@/assets/icon/checked.png" class="check" v-show="checked === i">
+                        <div>{{item.price}}<span>元</span></div>
+                        <p>{{item.value}}</p>
                     </li>
                 </ul>
-                <p class="pay-way">支付方式：<span>支付宝</span>付款</p>
+                <p class="pay-way">支付方式：<span>{{["","支付宝"][+pay_type]}}</span>付款</p>
                 <div class="pay" @click="pay=true">开通</div>
             </div>
         </el-dialog>
@@ -81,8 +81,16 @@ export default {
         return {
             dialogVisible: false,
             protocol: true,
-            pay: false
+            pay_type: 1,
+            price: [],
+            pay: false,
+            checked: 0
         }
+    },
+    created() {
+        this.$fetch.post("/price/getVipPrice").then(res => {
+            0 === res.code && (this.pay_type = res.data.pay_type, this.price = res.data.price);
+        });
     },
     methods: {
         handleClose() { }
@@ -231,8 +239,10 @@ export default {
                 height: 160px;
                 background: rgba(255, 255, 255, 1);
                 border: 1px solid rgba(215, 215, 215, 1);
-                margin: 0 15px;
+                margin: 0 10px;
+                .fl;
                 .tc;
+                cursor: pointer;
                 div {
                     margin: 0 25px;
                     padding: 25px 0;

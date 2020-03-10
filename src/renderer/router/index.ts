@@ -17,6 +17,11 @@ export default new Router({
                     component: require("@/view/home/index").default
                 },
                 {
+                    path:"tongzhi",
+                    name:"name",
+                    component:require("@/view/tongzhi/index").default
+                },
+                {
                     path: "heisou",
                     component: require("@/view/heisou/index").default,
                     children: [
@@ -31,6 +36,18 @@ export default new Router({
                             path: "analysis",
                             component: require("@/view/heisou/analysis").default,
                             meta: { index: 1 }
+                        }
+                    ]
+                },
+                {
+                    path: "heisoubinding",
+                    component: require("@/view/heisoubinding/index").default,
+                    children: [
+                        // 生意参谋绑定
+                        {
+                            path: "binding",
+                            component: require("@/view/heisoubinding/binding").default,
+                            meta: { index: 0 }
                         }
                     ]
                 },

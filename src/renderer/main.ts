@@ -2,6 +2,7 @@ import Vue from "vue";
 import echarts from "echarts";
 import ElementUI from "element-ui";
 import Electron from 'vue-electron';
+import VueSocketIO from 'vue-socket.io';
 
 import http from "@/util/http";
 import fetch from "@/util/fetch";
@@ -16,6 +17,17 @@ if (!process.env.IS_WEB) Vue.use(require("vue-electron"));
 
 Vue.use(Electron);
 Vue.use(ElementUI, { size: "small", zIndex: 3000 });
+
+Vue.use(new VueSocketIO({
+    debug: true,
+    connection: 'http://metinseylan.com:1992',
+    vuex: {
+        store,
+        actionPrefix: 'SOCKET_',
+        mutationPrefix: 'SOCKET_'
+    },
+    options: { path: "/my-app/" } 
+}))
 
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$http = http;

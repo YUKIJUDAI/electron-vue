@@ -17,8 +17,8 @@ const winURL = process.env.NODE_ENV === 'development'
     : `file://${__dirname}/index.html`
 
 // 打开生意参谋
-ipcMain.on("open-sycm", function () {
-    createView();
+ipcMain.on("open-sycm", function (e, account, pwd) {
+    createView(account, pwd);
 });
 
 // 最小化
@@ -30,8 +30,6 @@ ipcMain.on("min", function () {
 ipcMain.on("max", function () {
     mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
 });
-
-
 
 // 关闭
 ipcMain.on("close", function () {
@@ -100,7 +98,7 @@ function createWindow() {
 }
 
 // 创建生意参谋子窗口
-function createView() {
+function createView(account, pwd) {
     if (sycmWindow) {
         dialog.showErrorBox("错误提示", "只能登录一个生意参谋");
         return;
@@ -115,10 +113,16 @@ function createView() {
         }
     });
     // 加载网页
-    sycmWindow.webContents.loadURL('https://sycm.taobao.com/custom/login.htm');
+    sycmWindow.webContents.loadURL(
+        'https://sycm.taobao.com/portal/home.htm',
+        { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36" }
+    );
+    sycmWindow.webContents.once("dom-ready", () => {
+        account && pwd && sycmWindow.webContents.send("autoLogin", account, pwd);
+    })
     // 打开调试
-    sycmWindow.webContents.closeDevTools();
-    // sycmWindow.webContents.openDevTools();
+    //sycmWindow.webContents.closeDevTools();
+    sycmWindow.webContents.openDevTools();
     // 存储淘宝信息
     global.tbInfo = {
         loginUserName: "",    //  淘宝登录账户
@@ -129,7 +133,6 @@ function createView() {
         cateId: "",   // 店铺分类id
         cateName: ""  // 店铺分类名字
     };
-
     sycmWindow.on('closed', function () {
         sycmWindow = null;
         global.tbInfo = null;
@@ -138,7 +141,6 @@ function createView() {
 
 // 版本更新
 function updateHandle() {
-
     autoUpdater.setFeedURL(uploadUrl);
     autoUpdater.on('error', function (error) {
         sendUpdateMessage("检查更新出错");
