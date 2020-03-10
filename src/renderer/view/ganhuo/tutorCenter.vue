@@ -37,7 +37,7 @@ export default {
     methods: {
         // 获取导师
         getMentorList() {
-            this.$http.post("/ganhuo/getGanHuoMentorList").then(res => {
+            this.$fetch.post("/ganhuo/getGanHuoMentorList").then(res => {
                 if (0 === res.code) {
                     this.mentorList = res.data;
                     this.index = Object.keys(res.data)[0];

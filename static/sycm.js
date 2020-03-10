@@ -3,7 +3,6 @@ const qs = require("qs");
 const { from, interval, timer, concat } = require("rxjs");
 const { filter, take, tap, delay, last, mergeMap } = require("rxjs/operators");
 const moment = require('moment');
-const robot = require("robotjs");
 
 // 生意参谋dom信息方法配置
 const DomFactory = function () {

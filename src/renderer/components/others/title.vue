@@ -190,7 +190,7 @@ export default {
         login() {
             if (this.submitFlag) return;
             this.submitFlag = true;
-            this.$http.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
+            this.$fetch.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$store.dispatch("set_user_info", { token: res.data.token, phone: this.loginForm.phone });
@@ -211,7 +211,7 @@ export default {
                 return;
             }
             this.submitFlag = true;
-            this.$http.post("/index/register", Object.assign(this.registeredForm, { verify_key: this.key })).then(res => {
+            this.$fetch.post("/index/register", Object.assign(this.registeredForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$message.success(res.msg);

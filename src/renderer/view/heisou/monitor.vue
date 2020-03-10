@@ -317,8 +317,8 @@ export default {
             this.treadFlag = true;
             this.treadActiveData = data;
             this.$nextTick(() => {
-                var a = this.$http.post("/crawler/getTrend", { itemId: data.itemId });
-                var b = this.$http.post("/crawler/getTrendData", { itemId: data.itemId });
+                var a = this.$http.post("/collect/getTrend", { itemId: data.itemId });
+                var b = this.$http.post("/collect/getTrendData", { itemId: data.itemId });
                 axios.all([a, b]).then((res) => {
                     if (0 === res[0].code && 0 === res[1].code) {
                         var arr = [];
@@ -502,7 +502,7 @@ export default {
         },
         // 获取列表数据
         getList() {
-            this.$http.post("/crawler/getCompeteGoods", Object.assign(this.form, { page: this.page })).then(res => {
+            this.$http.post("/collect/getCompeteGoods", Object.assign(this.form, { page: this.page })).then(res => {
                 if (0 === res.code) {
                     this.table = res.data.items;
                     this.total_pages = res.data.total_pages;
@@ -511,7 +511,7 @@ export default {
         },
         // 获取店铺基础数据
         getShop() {
-            this.$http.post("/crawler/getShopTrend", {}).then(res => {
+            this.$http.post("/collect/getShopTrend", {}).then(res => {
                 if (0 === res.code) {
                     this.shopInfo = res.data;
                     let echarts = this.$echarts.init(document.getElementById('data-detail-2'));
@@ -625,7 +625,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$http.post("/crawler/deleteCompeteGoods", { "itemIds": this.selectData }).then(res => {
+                this.$http.post("/collect/deleteCompeteGoods", { "itemIds": this.selectData }).then(res => {
                     if (0 === res.code) {
                         this.$message.success(res.msg);
                         this.page = 1;

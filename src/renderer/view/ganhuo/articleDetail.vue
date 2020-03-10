@@ -23,7 +23,7 @@ export default {
     },
     methods: {
         getArticle() {
-            this.$http.post("/ganhuo/getArticle", { article_id: this.$route.params.id }).then(res => {
+            this.$fetch.post("/ganhuo/getArticle", { article_id: this.$route.params.id }).then(res => {
                 0 === res.code && (this.article = res.data);
             });
         }

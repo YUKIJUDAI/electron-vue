@@ -16,7 +16,7 @@
                 </el-form-item>
                 <el-form-item label="违规截图：">
                     <p class="up-prompt">请至少上传1张截图，证据不足举报可能会被驳回</p>
-                    <el-upload action="" list-type="picture-card" class="up-upload">
+                    <el-upload action="" list-type="picture-card" class="up-upload" :http-request="upload" action="upInfo.host" :show-file-list="false">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                 </el-form-item>
@@ -45,17 +45,52 @@
 </template>
 
 <script>
+import { rand } from "@/util/util";
+
 export default {
     data() {
         return {
-            formData: { images: "123456", content: [] }
+            formData: { images: "123456", content: [] },
+            token: ""
         }
     },
+    created() {
+        this.$fetch.post("/upload/getQiniuToken").then(res => {
+            0 === res.code && (this.token = res.data.token);
+        });
+    },
     methods: {
+        // 上传主图
+        upload(content) {
+            if (content.file.type !== 'image/jpeg' && content.file.type !== 'image/png') {
+                this.$message.error('上传图片只能是JPG和PNG格式!');
+                return;
+            }
+            if (content.file.size / 1024 / 1024 > 0.5) {
+                this.$message.error('上传头像图片大小不能超过500k!');
+                return;
+            }
+            if (this.formData.images.length >= 3) {
+                this.$message.error('最多上传三张图片!');
+                return;
+            }
+            const name = content.file.name;
+            let formData = new FormData();
+            formData.append('file', content.file);
+            formData.append('key', new Date().getTime() + rand());
+            formData.append('token', this.upInfo.token);
+
+            this.$axios.post("", formData, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
+                this.formData.images.push({ url: res.key, name });
+                this.$message.success("上传成功");
+            }).catch(error => {
+                this.$message.error("上传失败");
+            });
+        },
         submit() {
             var { wangwang, weixin, qq, images, content, experience } = this.formData;
             content = content.join(",");
-            this.$http.post("/heisou/addReport", { wangwang, weixin, qq, images, content, experience }).then(res => {
+            this.$fetch.post("/heisou/addReport", { wangwang, weixin, qq, images, content, experience }).then(res => {
                 0 === res.code ? this.$message.success(res.msg) : this.$message.error(res.msg);
             });
         }

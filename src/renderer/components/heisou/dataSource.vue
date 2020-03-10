@@ -104,17 +104,17 @@ export default {
             this.getCoreIndex();
         },
         getKeywordList() {
-            this.$http.post("/crawler/getKeywords", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
+            this.$http.post("/collect/getKeywords", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
                 0 === res.code && (this.tableData0 = res.data);
             });
         },
         getSource(){
-            this.$http.post("/crawler/getSource", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
+            this.$http.post("/collect/getSource", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
                 0 === res.code && (this.tableData1 = res.data);
             });
         },
         getCoreIndex(){
-            this.$http.post("/crawler/getCoreIndex", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
+            this.$http.post("/collect/getCoreIndex", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
                 0 === res.code && (this.tableData2 = res.data);
             });
         }

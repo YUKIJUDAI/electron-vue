@@ -24,13 +24,13 @@ export default new Router({
                         {
                             path: "monitor",
                             component: require("@/view/heisou/monitor").default,
-                            meta: { menuIndex: 0, index: 0 }
+                            meta: { index: 0 }
                         },
                         // 竞品分析
                         {
                             path: "analysis",
                             component: require("@/view/heisou/analysis").default,
-                            meta: { menuIndex: 0, index: 1 }
+                            meta: { index: 1 }
                         }
                     ]
                 },
@@ -42,19 +42,19 @@ export default new Router({
                         {
                             path: "search",
                             component: require("@/view/heihao/search").default,
-                            meta: { menuIndex: 1, index: 0 }
+                            meta: { index: 0 }
                         },
                         // 举报黑号
                         {
                             path: "report",
                             component: require("@/view/heihao/report").default,
-                            meta: { menuIndex: 1, index: 1 }
+                            meta: { index: 1 }
                         },
                         // 举报记录
                         {
                             path: "reportHistory",
                             component: require("@/view/heihao/reportHistory").default,
-                            meta: { menuIndex: 1, index: 2 }
+                            meta: { index: 2 }
                         }
                     ]
                 },
@@ -66,19 +66,19 @@ export default new Router({
                         {
                             path: "flow",
                             component: require("@/view/liuliang/flow").default,
-                            meta: { menuIndex: 2, index: 0 }
+                            meta: { index: 0 }
                         },
                         // 收藏
                         {
                             path: "favorite",
                             component: require("@/view/liuliang/favorite").default,
-                            meta: { menuIndex: 2, index: 1 }
+                            meta: { index: 1 }
                         },
                         // 加购
                         {
                             path: "plusPurchase",
                             component: require("@/view/liuliang/plusPurchase").default,
-                            meta: { menuIndex: 2, index: 2 }
+                            meta: { index: 2 }
                         }
                     ]
                 },
@@ -90,26 +90,26 @@ export default new Router({
                         {
                             path: "flow",
                             component: require("@/view/liuliangliebiao/flow").default,
-                            meta: { menuIndex: 2, index: 0 }
+                            meta: { index: 0 }
                         },
                         // 收藏
                         {
                             path: "favorite",
                             component: require("@/view/liuliangliebiao/favorite").default,
-                            meta: { menuIndex: 2, index: 1 }
+                            meta: { index: 1 }
                         },
                         // 加购
                         {
                             path: "plusPurchase",
                             component: require("@/view/liuliangliebiao/plusPurchase").default,
-                            meta: { menuIndex: 2, index: 2 }
+                            meta: { index: 2 }
                         }
                     ]
                 },
                 {
                     path: "zhitongche",
                     component: require("@/view/zhitongche/index").default,
-                    meta: { menuIndex: 3, index: 0 }
+                    meta: { index: 0 }
                 },
                 {
                     path: "budan",
@@ -119,7 +119,7 @@ export default new Router({
                         {
                             path: "securitySupplement",
                             component: require("@/view/budan/securitySupplement").default,
-                            meta: { menuIndex: 4, index: 0 }
+                            meta: { index: 0 }
                         }
                     ]
                 },
@@ -131,31 +131,31 @@ export default new Router({
                         {
                             path: "realstuffCenter",
                             component: require("@/view/ganhuo/realstuffCenter").default,
-                            meta: { menuIndex: 5, index: 0 }
+                            meta: { index: 0 }
                         },
                         // 视频
                         {
                             path: "videoCenter/:id?",
                             component: require("@/view/ganhuo/videoCenter").default,
-                            meta: { menuIndex: 5, index: 1 }
+                            meta: { index: 1 }
                         },
                         // 文章
                         {
                             path: "articleCenter/:id?",
                             component: require("@/view/ganhuo/articleCenter").default,
-                            meta: { menuIndex: 5, index: 2 }
+                            meta: { index: 2 }
                         },
                         // 文章详情
                         {
                             path: "articleDetail/:id",
                             component: require("@/view/ganhuo/articleDetail").default,
-                            meta: { menuIndex: 5, index: 2, hasBack: true }
+                            meta: { index: 2, hasBack: true }
                         },
                         // 导师中心
                         {
                             path: "tutorCenter",
                             component: require("@/view/ganhuo/tutorCenter").default,
-                            meta: { menuIndex: 5, index: 3 }
+                            meta: { index: 3 }
                         }
                     ]
                 },
@@ -167,25 +167,31 @@ export default new Router({
                         {
                             path: "personCenter",
                             component: require("@/view/geren/personCenter").default,
-                            meta: { menuIndex: 6, index: 0 }
+                            meta: { index: 0 }
                         },
                         // 邀请有奖
                         {
                             path: "Invitation",
                             component: require("@/view/geren/invitation").default,
-                            meta: { menuIndex: 6, index: 1 }
+                            meta: { index: 1 }
                         },
                         // 金币明细
                         {
                             path: "goldCoinDetails",
                             component: require("@/view/geren/goldCoinDetails").default,
-                            meta: { menuIndex: 6, index: 2 }
+                            meta: { index: 2 }
                         },
                         // 账户设置
                         {
                             path: "accountSettings",
                             component: require("@/view/geren/accountSettings").default,
-                            meta: { menuIndex: 6, index: 3 }
+                            meta: { index: 3 }
+                        },
+                        // vip充值
+                        {
+                            path: "vip",
+                            component: require("@/view/geren/vip").default,
+                            meta: { index: 4 }
                         }
                     ]
                 }

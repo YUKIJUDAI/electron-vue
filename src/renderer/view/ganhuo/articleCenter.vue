@@ -48,7 +48,7 @@ export default {
         },
         // 获取文章分类
         getVideosClasses() {
-            this.$http.post("/ganhuo/getArticlesClasses").then(res => {
+            this.$fetch.post("/ganhuo/getArticlesClasses").then(res => {
                 if (0 === res.code) {
                     this.tabs = res.data;
                     !this.$route.params.id && res.data && res.data.length > 1 && this.$router.push("/ganhuo/articleCenter/" + res.data[0].id);
@@ -57,7 +57,7 @@ export default {
         },
         // 通过分类id获取文章
         getArticlesByClass() {
-            this.$http.post("/ganhuo/getArticlesByClass", { class_id: this.tabIndex, page: this.page }).then(res => {
+            this.$fetch.post("/ganhuo/getArticlesByClass", { class_id: this.tabIndex, page: this.page }).then(res => {
                 if (0 === res.code) {
                     this.articles = res.data.items;
                     this.total_pages = res.data.total_pages;

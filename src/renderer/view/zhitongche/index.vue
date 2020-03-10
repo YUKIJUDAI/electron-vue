@@ -94,13 +94,13 @@ export default {
     methods: {
         // 文章
         getArticles() {
-            this.$http.post("/index/getIndexArticles").then(res => {
+            this.$fetch.post("/index/getIndexArticles").then(res => {
                 0 === res.code && (this.articles = res.data);
             });
         },
         // 导师
         getTutor() {
-            this.$http.post("/ganhuo/getVideoRecMentor").then(res => {
+            this.$fetch.post("/ganhuo/getVideoRecMentor").then(res => {
                 if (0 === res.code) {
                     this.tutor = res.data;
                     this.$nextTick((res => {
@@ -117,7 +117,7 @@ export default {
         },
         // 推荐文章
         getRecArticle() {
-            this.$http.post("/ganhuo/getZtcRecArticle").then(res => {
+            this.$fetch.post("/ganhuo/getZtcRecArticle").then(res => {
                 0 === res.code && (this.recArticle = res.data);
             });
         },

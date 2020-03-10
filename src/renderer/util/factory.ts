@@ -39,7 +39,7 @@ factory.add("trend", {
             sys: JSON.stringify({ ...params }),
             crawler_data: JSON.stringify(res.data)
         }
-        http.post("/crawler/saveShopTrend", data).then();
+        http.post("/collect/saveShopTrend", data).then();
     }
 });
 
@@ -52,7 +52,7 @@ factory.add("overview", {
             sys: JSON.stringify({ ...params }),
             crawler_data: JSON.stringify(res.data)
         }
-        http.post("/crawler/saveShopOverview", data).then();
+        http.post("/collect/saveShopOverview", data).then();
     }
 });
 
@@ -69,7 +69,7 @@ factory.add("getShopCate", {
             source: 'getShopCate',
             crawler_data: JSON.stringify(result)
         }
-        // http.post("/crawler/saveLog", data).then(r => {
+        // http.post("/collect/saveLog", data).then(r => {
 
         // });
     }
@@ -84,7 +84,7 @@ factory.add("list", {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: aes(res)
             }
-            http.post("/crawler/saveList", data).then(r => {
+            http.post("/collect/saveList", data).then(r => {
                 //ipcRenderer.send("hide-sycm");
             });
         }
@@ -99,7 +99,7 @@ factory.add("getSingleMonitoredInfo", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/addCompeteInfo", data).then();
+        http.post("/collect/addCompeteInfo", data).then();
     }
 });
 
@@ -111,7 +111,7 @@ factory.add("getCoreIndexes", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/saveLog", data).then();
+        http.post("/collect/saveLog", data).then();
     }
 });
 
@@ -123,7 +123,7 @@ factory.add("getCoreTrend", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/addCoreTrend", data).then();
+        http.post("/collect/addCoreTrend", data).then();
     }
 });
 
@@ -135,7 +135,7 @@ factory.add("getKeywords", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/addKeywords", data).then();
+        http.post("/collect/addKeywords", data).then();
     }
 });
 
@@ -147,7 +147,7 @@ factory.add("getFlowSource", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res)
         }
-        http.post("/crawler/addFlowSource", data).then();
+        http.post("/collect/addFlowSource", data).then();
     }
 });
 
@@ -158,7 +158,7 @@ factory.add("getSourceTrend", {
             sys: JSON.stringify({ ...params }),
             crawler_data: JSON.stringify(res)
         }
-        http.post("/crawler/addSourceTrend", data).then();
+        http.post("/collect/addSourceTrend", data).then();
     }
 })
 

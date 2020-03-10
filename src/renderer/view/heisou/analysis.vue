@@ -184,7 +184,7 @@ export default {
         },
         // 获取列表数据
         getList() {
-            this.$http.post("/crawler/getCompeteGoodsList", {}).then(res => {
+            this.$http.post("/collect/getCompeteGoodsList", {}).then(res => {
                 0 === res.code && (this.goodsList = res.data);
             });
         },

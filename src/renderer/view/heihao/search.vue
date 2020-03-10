@@ -134,7 +134,7 @@ export default {
     methods: {
         // 获取淘宝会员信息
         getBaseInfo() {
-            this.$http.post("/heisou/baseInfo", { wangwang: this.wangwang }).then((res) => {
+            this.$fetch.post("/heisou/baseInfo", { wangwang: this.wangwang }).then((res) => {
                 if (0 === res.code) {
                     this.baseInfo = res.data;
                 } else {
@@ -144,7 +144,7 @@ export default {
         },
         // 获取打标信息
         getMarking() {
-            this.$http.post("/heisou/find", { wangwang: this.wangwang }).then((res) => {
+            this.$fetch.post("/heisou/find", { wangwang: this.wangwang }).then((res) => {
                 if (0 === res.code) {
                     this.tableData = [res.data]
                 } else {

@@ -67,19 +67,19 @@ export default {
     methods: {
         // 视频
         getRecVideos() {
-            this.$http.post("/ganhuo/getRecVideos").then(res => {
+            this.$fetch.post("/ganhuo/getRecVideos").then(res => {
                 0 === res.code && (this.video = res.data);
             });
         },
         // 文章
         getArticles() {
-            this.$http.post("/index/getIndexArticles").then(res => {
+            this.$fetch.post("/index/getIndexArticles").then(res => {
                 0 === res.code && (this.articles = res.data);
             });
         },
         // 导师
         getTutor() {
-            this.$http.post("/ganhuo/getVideoRecMentor").then(res => {
+            this.$fetch.post("/ganhuo/getVideoRecMentor").then(res => {
                 0 === res.code && (this.tutor = res.data && res.data.length > 4 ? res.data.slice(0, 3) : res.data);
             });
         },

@@ -81,7 +81,7 @@ export default {
         forget() {
             if (this.submitFlag) return;
             this.submitFlag = true;
-            this.$http.post(["", "", "/user/editPassword", "/index/forgetPwd", "/user/editPayPwd"][this.type], Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
+            this.$fetch.post(["", "", "/user/editPassword", "/index/forgetPwd", "/user/editPayPwd"][this.type], Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$store.dispatch("set_user_info", { token: "", phone: "" });

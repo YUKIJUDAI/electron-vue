@@ -14,6 +14,9 @@
                 <router-link tag="li" to="/geren/accountSettings" :class="{active:$route.meta.index === 3}">
                     <div>账户设置</div>
                 </router-link>
+                <router-link tag="li" to="/geren/vip" :class="{active:$route.meta.index === 4}">
+                    <div>VIP充值</div>
+                </router-link>
             </ul>
         </div>
         <router-view class="geren-main"></router-view>

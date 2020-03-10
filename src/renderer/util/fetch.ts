@@ -2,30 +2,26 @@ const axios = require("axios");
 const qs = require("qs");
 const { remote } = require("electron");
 
-const { heisouBaseUrl } = require("@/config/config");
+const { baseUrl } = require("@/config/config");
 import store from "@/store";
 
-// 创建新http - 黑搜
+// 创建新http - 其他
 
-const http = axios.create({
+const fetch = axios.create({
     timeout: 10000,
-    baseURL: heisouBaseUrl,
+    baseURL: baseUrl,
     headers: { "Content-Type": "application/x-www-form-urlencoded" }
 });
 
 // 请求发送前数据处理
-http.interceptors.request.use(
+fetch.interceptors.request.use(
     config => {
         // 添加token
         const token = store.state.userInfo.token;
         token && (config.headers.token = token);
 
-        // 添加tbInfo
-        const tbInfo = remote.getGlobal("tbInfo");
-
         if (config.headers["Content-Type"] === "application/x-www-form-urlencoded") {
             if (!config.data) config.data = {};
-            config.data.sys = config.data.hasOwnProperty("sys") ? JSON.stringify(Object.assign({ ...tbInfo }, JSON.parse(config.data.sys))) : JSON.stringify({ ...tbInfo });
             config.data = qs.stringify(config.data);
         }
         return config;
@@ -36,7 +32,7 @@ http.interceptors.request.use(
 );
 
 // 请求发送后数据处理
-http.interceptors.response.use(
+fetch.interceptors.response.use(
     res => {
         return res.data;
     },
@@ -45,4 +41,4 @@ http.interceptors.response.use(
     }
 );
 
-export default http;
+export default fetch;

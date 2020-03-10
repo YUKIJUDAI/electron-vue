@@ -152,7 +152,7 @@ export default {
             data.type = this.type;
             data.plan.forEach((item, i) => item.hour = item.hour.join(","));
             data.plan = JSON.stringify(data.plan);
-            this.$http.post("/lieliu/addTask", data).then(res => {
+            this.$fetch.post("/lieliu/addTask", data).then(res => {
                 0 === res.code ? this.$success(res.msg) : this.$message.error(res.msg);
             });
         }

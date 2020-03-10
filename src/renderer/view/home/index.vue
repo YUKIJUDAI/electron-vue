@@ -23,7 +23,7 @@
                         <span>{{item.people}}</span>
                         <i class="recomment-video-2" @click="playVideo(item.video_url)"></i>
                         <span>视频教程</span>
-                        <el-button type="primary" class="recommend-open" @click="open(item.route)">打开</el-button>
+                        <div class="recommend-open" @click="open(item.route)">打开</div>
                     </div>
                 </li>
             </ul>
@@ -68,7 +68,7 @@ export default {
         },
         // 轮播图
         getBanner() {
-            this.$http.post("/index/getBanner", { server_name: "bsearch.lethink.net" }).then(res => {
+            this.$fetch.post("/index/getBanner", { server_name: "bsearch.lethink.net" }).then(res => {
                 if (0 === res.code) {
                     this.banner = res.data;
                     this.$nextTick(() => {
@@ -83,7 +83,7 @@ export default {
         },
         // 推荐列表
         getRecFunctions() {
-            this.$http.post("/index/getRecFunctions").then(res => {
+            this.$fetch.post("/index/getRecFunctions").then(res => {
                 0 === res.code && (this.recommend = res.data, this.$store.dispatch("set_menu_info", res.data));
             });
         },
@@ -186,10 +186,12 @@ export default {
                 .tc;
                 width: 50px;
                 height: 24px;
-                line-height: 5px;
+                line-height: 24px;
+                color: #fff;
                 background: rgba(255, 104, 1, 1);
                 font-size: 12px;
                 border-radius: 4px;
+                cursor: pointer;
             }
         }
     }

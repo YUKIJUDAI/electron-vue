@@ -9,13 +9,19 @@ export const isOnline = function () {
 }
 
 // 验证是否为空
-export const isEmpty = function (str) {
+export const isEmpty = function (str):boolean {
     return Object.prototype.toString.call(str) === "[object Null]" || Object.prototype.toString.call(str) === "[object Undefined]" || str === "";
 }
 
+// 随机数
+export const rand = function(min = 1000, max = 9999):string {
+    return Math.floor(Math.random() * (max - min)) + min + "";
+}
+
+
 // 获取验证码
 export const getPhoneCode = function (type, phone, verify, _this) {
-    _this.$http.post("/index/sendSms", { type, phone, verify_key: _this.key, verify }).then(res => {
+    _this.$fetch.post("/index/sendSms", { type, phone, verify_key: _this.key, verify }).then(res => {
         if (0 === res.code) {
             _this.$message.success(res.msg);
             _this.phoneCodeFlag = true;
@@ -30,7 +36,7 @@ export const getPhoneCode = function (type, phone, verify, _this) {
 }
 
 // 权重算法
-export const weightFn = function (arr, sum) {
+export const weightFn = function (arr, sum):Array<string> {
     // arr总和
     var nums = arr.reduce((prev, curr, idx, arr) => +prev + +curr);
     // 根据权重得出的新数组

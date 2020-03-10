@@ -61,7 +61,7 @@ export default {
     methods: {
         getList() {
             var { wangwang, date_range, status } = this.searchForm;
-            this.$http.post("/heisou/getReportLogs", { wangwang, date_range, status, page: this.page }).then(res => {
+            this.$fetch.post("/heisou/getReportLogs", { wangwang, date_range, status, page: this.page }).then(res => {
                 if (0 === res.code) {
                     this.tableData = res.data.items;
                     this.total_pages = res.data.total_pages;

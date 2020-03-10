@@ -8,7 +8,7 @@ declare module "*.vue" {
 
 declare module "vue/types/vue" {
     interface Vue {
-        $http: any;
+        $fetch: any;
         $message: ElMessage;
         $echarts: any;
         $confirm: ElMessageBoxShortcutMethod;

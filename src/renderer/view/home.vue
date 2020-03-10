@@ -6,7 +6,7 @@
                 <div class="main-left-1">
                     <img src="~@/assets/img/level-1.png" class="identity-tag">
                     <img src="~@/assets/img/admin.png" class="avatar">
-                    <div class="main-login" v-if="isLogin">{{userPhone}}</div>
+                    <router-link to="/geren/personCenter" tag="div" class="main-login" v-if="isLogin">{{userPhone}}</router-link>
                     <div class="main-login" @click="goLogin" v-else>请登录</div>
                 </div>
                 <div class="main-left-ul" v-if="isLogin">
@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="main-right">
-                <router-view @goLogin="goLogin"/>
+                <router-view @goLogin="goLogin" />
             </div>
         </div>
     </div>
