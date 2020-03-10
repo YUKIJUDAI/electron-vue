@@ -16,7 +16,7 @@
                 </el-form-item>
                 <el-form-item label="违规截图：">
                     <p class="up-prompt">请至少上传1张截图，证据不足举报可能会被驳回</p>
-                    <el-upload action="" list-type="picture-card" class="up-upload" :http-request="upload" action="upInfo.host" :show-file-list="false">
+                    <el-upload action="" list-type="picture-card" class="up-upload" :http-request="upload" :action="qnUrl" :show-file-list="false">
                         <i class="el-icon-plus"></i>
                     </el-upload>
                 </el-form-item>
@@ -46,17 +46,19 @@
 
 <script>
 import { rand } from "@/util/util";
+import { qnUrl } from "@/config/config";
 
 export default {
     data() {
         return {
-            formData: { images: "123456", content: [] },
-            token: ""
+            formData: { images: [], content: [] },
+            token: "",
+            qnUrl
         }
     },
     created() {
         this.$fetch.post("/upload/getQiniuToken").then(res => {
-            0 === res.code && (this.token = res.data.token);
+            0 === res.code && (this.token = res.data);
         });
     },
     methods: {
@@ -78,9 +80,9 @@ export default {
             let formData = new FormData();
             formData.append('file', content.file);
             formData.append('key', new Date().getTime() + rand());
-            formData.append('token', this.upInfo.token);
+            formData.append('token', this.token);
 
-            this.$axios.post("", formData, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
+            this.$fetch.post(this.qnUrl, formData, { headers: { "Content-Type": "multipart/form-data" } }).then(res => {
                 this.formData.images.push({ url: res.key, name });
                 this.$message.success("上传成功");
             }).catch(error => {
