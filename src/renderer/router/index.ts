@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+const { remote } = require("electron");
 
 Vue.use(Router);
 
@@ -77,7 +78,10 @@ export default new Router({
                         {
                             path: "binding",
                             component: require("@/view/heisoubinding/binding").default,
-                            meta: { index: 0 }
+                            meta: { index: 0 },
+                            beforeEnter(to, from, next) {
+                                remote.getGlobal("tbInfo") ? next("/heisou/monitor") : next();
+                            }
                         }
                     ]
                 },

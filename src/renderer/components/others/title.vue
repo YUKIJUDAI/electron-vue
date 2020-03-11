@@ -95,6 +95,7 @@ import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
 import { baseUrl } from "@/config/config";
+import factory from "@/util/factory";
 
 export default {
     components: { password },
@@ -129,10 +130,11 @@ export default {
     },
     sockets: {
         connect: function () {
+            this.$socket.emit('send', '你好')
             console.log('socket connected')
         },
-        customEmit: function (data) {
-            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        getMsg: function (data) {
+            console.log(data)
         }
     },
     mounted() {
@@ -149,6 +151,19 @@ export default {
         ipcRenderer.on("isUpdateNow", () => {
             ipcRenderer.send("isUpdateNow");
         });
+
+        // 获取xhr信息后处理
+        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
+            if (factory.obj[type]) {
+                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
+            }
+        });
+
+        // 获取成功后跳转
+        ipcRenderer.on('get-success', (event, type) => {
+            this.$router.push("/heisou/monitor");
+        });
+
         this.getKey();
     },
     methods: {
@@ -202,7 +217,7 @@ export default {
             this.$fetch.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", { token: res.data.token, phone: this.loginForm.phone });
+                    this.$store.dispatch("set_user_info", { token: res.data.token, phone: this.loginForm.phone, user_id: red });
                     this.$message.success(res.msg);
                     this.loginFlag = false;
                 } else {

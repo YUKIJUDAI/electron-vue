@@ -124,7 +124,6 @@
                     <el-button type="primary" size="small" @click="addDialog">新增商品监控</el-button>
                     <el-button type="info" plain size="small" v-if="updateFlag">更新中</el-button>
                     <el-button type="info" plain size="small" @click="update" v-else>更新数据</el-button>
-                    <el-button type="info" plain size="small" @click="opensycm">打开生意参谋</el-button>
                 </el-form-item>
                 </br>
                 <!-- 日期下拉 -->
@@ -300,9 +299,6 @@ export default {
         });
     },
     methods: {
-        opensycm() {
-            ipcRenderer.send("open-sycm");
-        },
         // 关闭趋势
         treadClose() {
             this.tread = "30";

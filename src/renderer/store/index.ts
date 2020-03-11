@@ -16,6 +16,7 @@ const mutations = {
     SET_USER_INFO(state, obj) {
         remote.getGlobal("userInfo").token = obj.token;
         remote.getGlobal("userInfo").phone = obj.phone;
+        remote.getGlobal("userInfo").user_id = obj.user_id;
         state.userInfo = obj;
     },
     SET_MENU_INFO(state, arr) {

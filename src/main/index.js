@@ -80,7 +80,8 @@ function createWindow() {
     // 存储用户信息
     global.userInfo = {
         token: "",      //token
-        phone: ""      // 手机号
+        phone: "",      // 手机号
+        user_id: "", //用户id
     }
     mainWindow.on('closed', function () {
         mainWindow = null;

@@ -162,7 +162,6 @@ ipcRenderer.on("autoLogin", (event, account, pwd) => {
             }),
         )
         .subscribe()
-
 });
 
 // 登录成功后
