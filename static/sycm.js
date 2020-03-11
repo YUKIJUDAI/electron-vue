@@ -21,7 +21,7 @@ const DomFactory = function () {
     const loginPage = {
         userInput: () => $$("input[name='TPL_username']")[0],
         pwdInput: () => $$("input[name='TPL_password']")[0],
-        submitBtn: () => $("#J_SubmitStatic"),
+        submitBtn: () => $(".J_Submit"),
         readyFlag: () => $$(".J_Submit")
     }
     // 主页面
@@ -143,16 +143,23 @@ const { loginPage, mainPage, monitorPage, analysisPage, configurationPage, isCom
 
 // 自动登录
 ipcRenderer.on("autoLogin", (event, account, pwd) => {
-    console.log(location.href)
+    console.log(account, pwd)
     interval(100)
         .pipe(
-            filter(() => loginPage.submitBtn().length > 0),
+            filter(() => loginPage.readyFlag().length > 0),
             take(1),
-            tap((i) => {
-                SetValue(loginPage.readyFlag(), account);
+            delay(2000),
+            tap(() => {
+                SetValue(loginPage.userInput(), account);
+            }),
+            delay(2000),
+            tap(() => {
                 SetValue(loginPage.pwdInput(), account);
-                loginPage.submitBtn().click()
-            })
+            }),
+            delay(2000),
+            tap(() => {
+                loginPage.submitBtn().click();
+            }),
         )
         .subscribe()
 
@@ -160,6 +167,7 @@ ipcRenderer.on("autoLogin", (event, account, pwd) => {
 
 // 登录成功后
 ipcRenderer.on('login-success', (event) => {
+    console.log("login-success")
     //点击竞争
     interval(1000)
         .pipe(

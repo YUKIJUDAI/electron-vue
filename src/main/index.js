@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu, Tray } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu, Tray, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { autoUpdater } = require("electron-updater");
@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow;
 let sycmWindow;
+let adWindow;
 let tray;
 let uploadUrl = "http://127.0.0.1:3000/public";
 
@@ -16,9 +17,25 @@ const winURL = process.env.NODE_ENV === 'development'
     ? `http://localhost:9080`
     : `file://${__dirname}/index.html`
 
+
+app.on('ready', createWindow);
+
+app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('activate', function () {
+    if (mainWindow === null) createWindow();
+});
+
+
 // 打开生意参谋
 ipcMain.on("open-sycm", function (e, account, pwd) {
-    createView(account, pwd);
+    createSycmWindow(account, pwd);
+});
+
+ipcMain.on("open-ad", function () {
+    createAdView();
 });
 
 // 最小化
@@ -46,23 +63,13 @@ ipcMain.on("show-sycm", function () {
     sycmWindow && sycmWindow.showInactive();
 });
 
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit();
-});
-
-app.on('activate', function () {
-    if (mainWindow === null) createWindow();
-});
-
 // 创建窗口
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280, height: 800, autoHideMenuBar: true,
         minWidth: 1280, minHeight: 800, frame: false,
         webPreferences: {
+            devTools: true,
             webviewTag: true,
             webSecurity: true,
             nodeIntegration: true
@@ -70,9 +77,6 @@ function createWindow() {
     });
     // 加载网页
     mainWindow.loadURL(winURL);
-    // 打开调试
-    mainWindow.webContents.closeDevTools();
-    // mainWindow.webContents.openDevTools();
     // 存储用户信息
     global.userInfo = {
         token: "",      //token
@@ -97,8 +101,21 @@ function createWindow() {
     tray.setContextMenu(contextMenu)
 }
 
+//创建广告弹出
+function createAdView() {
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+    let adWindow = new BrowserWindow({
+        width: 300, height: 400,
+        x: width - 300, y: height - 400,
+        resizable: false, movable: false,
+        frame: false, modal: true
+    })
+    adWindow.webContents.loadURL(__static + "/ad.html");
+    adWindow.webContents.closeDevTools();
+}
+
 // 创建生意参谋子窗口
-function createView(account, pwd) {
+function createSycmWindow(account, pwd) {
     if (sycmWindow) {
         dialog.showErrorBox("错误提示", "只能登录一个生意参谋");
         return;
@@ -106,23 +123,20 @@ function createView(account, pwd) {
     sycmWindow = new BrowserWindow({
         width: 1000, height: 800, parent: mainWindow, autoHideMenuBar: true,
         webPreferences: {
+            devTools: true,
             webviewTag: true,
             webSecurity: true,
-            nodeIntegration: true,
             preload: __static + "/sycm.js"
         }
     });
     // 加载网页
     sycmWindow.webContents.loadURL(
-        'https://sycm.taobao.com/portal/home.htm',
+        'https://login.taobao.com/member/login.jhtml?from=sycm&full_redirect=true&style=minisimple&minititle=&minipara=0,0,0&sub=true&redirect_url=http://sycm.taobao.com/portal/home.htm',
         { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36" }
     );
     sycmWindow.webContents.once("dom-ready", () => {
         account && pwd && sycmWindow.webContents.send("autoLogin", account, pwd);
-    })
-    // 打开调试
-    //sycmWindow.webContents.closeDevTools();
-    sycmWindow.webContents.openDevTools();
+    });
     // 存储淘宝信息
     global.tbInfo = {
         loginUserName: "",    //  淘宝登录账户

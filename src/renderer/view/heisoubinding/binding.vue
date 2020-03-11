@@ -8,9 +8,9 @@
                 <p class="account-name">OLAY官方旗舰店</p>
                 <div class="start" @click="opensycm('汇璟旗舰店:小芳','xf123456')">启动</div>
             </li>
-            <li class="binding-list-add">
+            <li class="binding-list-add" @click="opensycm">
                 <img src="~@/assets/icon/binding-add.png" class="add">
-                <p class="bind" @click="opensycm">绑定生参账号</p>
+                <p class="bind">绑定生参账号</p>
             </li>
         </ul>
     </div>
