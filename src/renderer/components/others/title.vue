@@ -14,6 +14,7 @@
                 <li class="login" @click="goLogin" v-if="!isLogin"><i class="icon-login"></i>登录</li>
                 <li class="registered" @click="goRegistered" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
                 <router-link tag="li" to="/geren/personCenter" class="user" v-if="isLogin">{{userPhone}}</router-link>
+                <router-link v-if="isLogin" tag="li" to="/tongzhi/announcement"><img src="~@/assets/icon/notification.png" class="notification"></router-link>
                 <li class="exit" @click="exit" v-if="isLogin">退出</li>
             </ul>
         </div>
@@ -299,7 +300,7 @@ export default {
         }
         .login,
         .user {
-            margin-right: 15px;
+            margin-right: 10px;
         }
         .icon-login {
             .wh(17px);
@@ -314,6 +315,14 @@ export default {
             margin-right: 3px;
             vertical-align: -4px;
             background: url("~@/assets/icon/registered.png") no-repeat;
+        }
+        .exit {
+            margin-left: 15px;
+        }
+        .notification {
+            width: 21px;
+            height: 16px;
+            margin-top: 7px;
         }
     }
     .right-button {

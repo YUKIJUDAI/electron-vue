@@ -2,10 +2,19 @@
     <div class="tongzhi-index">
         <div class="tongzhi-index-navigation clearfix">
             <ul class="tongzhi-index-navigation-ul">
-                <!-- <router-link tag="li" to="/tongzhi/flow" :class="{active:$route.meta.index === 0}">
-                    <div>流量任务</div>
-                </router-link> -->
+                <router-link tag="li" to="/tongzhi/announcement" :class="{active:$route.meta.index === 0}">
+                    <div>公告</div>
+                </router-link>
+                <router-link tag="li" to="/tongzhi/news" :class="{active:$route.meta.index === 1}">
+                    <div>消息</div>
+                </router-link>
+                <router-link tag="li" to="/tongzhi/push" :class="{active:$route.meta.index === 2}">
+                    <div>推送</div>
+                </router-link>
             </ul>
+            <div class="tongzhi-index-navigation-right">
+                <p @click="$router.go(-1)" v-if="$route.meta.hasBack">返回</p>
+            </div>
         </div>
         <router-view class="tongzhi-main">
         </router-view>
@@ -46,6 +55,12 @@ export default {}
                 }
             }
         }
+    }
+    .tongzhi-index-navigation-right {
+        .fr;
+        margin-top: 12px;
+        color: #ff6801;
+        cursor: pointer;
     }
 }
 </style>

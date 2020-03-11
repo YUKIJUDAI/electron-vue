@@ -17,9 +17,39 @@ export default new Router({
                     component: require("@/view/home/index").default
                 },
                 {
-                    path:"tongzhi",
-                    name:"name",
-                    component:require("@/view/tongzhi/index").default
+                    path: "tongzhi",
+                    name: "name",
+                    component: require("@/view/tongzhi/index").default,
+                    children: [
+                        // 公告
+                        {
+                            path: "announcement",
+                            component: require("@/view/tongzhi/announcement").default,
+                            meta: { index: 0 }
+                        },
+                        // 消息
+                        {
+                            path: "news",
+                            component: require("@/view/tongzhi/news").default,
+                            meta: { index: 1 }
+                        },
+                        // 推送
+                        {
+                            path: "push",
+                            component: require("@/view/tongzhi/push").default,
+                            meta: { index: 2 }
+                        },
+                        // 详情
+                        {
+                            path: "detail",
+                            component: require("@/view/tongzhi/detail").default,
+                            meta: { index: 0, hasBack: true },
+                            beforeEnter(to, from, next) {
+                                to.meta.index = from.meta.index;
+                                next();
+                            }
+                        }
+                    ]
                 },
                 {
                     path: "heisou",
