@@ -7,7 +7,7 @@ import { createPersistedState } from "vuex-electron";
 Vue.use(Vuex);
 
 const state = {
-    userInfo: { phone: "", token: "" }, // 用户信息
+    userInfo: { phone: "", token: "" ,user_id:""}, // 用户信息
     taobaoInfo: {}, // 淘宝信息
     menuInfo: [] // 菜单信息
 };

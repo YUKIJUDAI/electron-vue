@@ -1,14 +1,23 @@
 <template>
     <div class="detail">
-        <div class="title">有哪些诗句第一眼打动了你？</div>
-        <div class="time">2020-01-13</div>
-        <div class="content">wenan文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案</div>
+        <div class="title">{{data.title}}</div>
+        <div class="time">{{data.create_time}}</div>
+        <div class="content" v-html="data.content"></div>
     </div>
 </template>
 
 <script>
 export default {
-
+    data() {
+        return {
+            data: {}
+        }
+    },
+    mounted() {
+        this.$fetch.post("/message/getMessageDetail", { id: this.$route.params.id }).then(res => {
+            0 === res.code && (this.data = res.data);
+        })
+    }
 }
 </script>
 

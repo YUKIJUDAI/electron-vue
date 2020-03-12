@@ -1,6 +1,6 @@
 <template>
     <div class="announcement">
-        <message></message>
+        <message :type="3"></message>
     </div>
 </template>
 

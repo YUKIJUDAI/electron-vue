@@ -1,11 +1,11 @@
 <template>
     <div class="message">
         <ul>
-            <router-link tag="li" to="/tongzhi/detail">
-                <p class="title">有哪些诗句第一眼打动了你？</p>
+            <router-link tag="li" :to="'/tongzhi/detail/' + item.id" v-for="(item,i) in list" :key="i">
+                <p class="title">{{item.title}}</p>
                 <div class="clearfix li-div">
-                    <p class="content">文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案文案</p>
-                    <p class="time">2020-01-13</p>
+                    <p class="content" v-html="item.content"></p>
+                    <p class="time">{{item.create_time}}</p>
                 </div>
             </router-link>
         </ul>
@@ -18,14 +18,23 @@
 
 <script>
 export default {
+    props: ["type"],
     data() {
         return {
+            list: [],
             page: 1,
             total_pages: 1,
         }
     },
+    mounted() {
+        this.getList();
+    },
     methods: {
-        getList() { }
+        getList() {
+            this.$fetch.post("/message/getMessageList", { page: this.page, type: this.type }).then(res => {
+                0 === res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages);
+            })
+        }
     }
 }
 </script>

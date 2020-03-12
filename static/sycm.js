@@ -148,15 +148,15 @@ ipcRenderer.on("autoLogin", (event, account, pwd) => {
         .pipe(
             filter(() => loginPage.readyFlag().length > 0),
             take(1),
-            delay(2000),
+            delay(~~(Math.random()*5000)),
             tap(() => {
                 SetValue(loginPage.userInput(), account);
             }),
-            delay(2000),
+            delay(~~(Math.random()*4000)),
             tap(() => {
-                SetValue(loginPage.pwdInput(), account);
+                SetValue(loginPage.pwdInput(), pwd);
             }),
-            delay(2000),
+            delay(~~(Math.random()*3000)),
             tap(() => {
                 loginPage.submitBtn().click();
             }),

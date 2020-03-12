@@ -14,7 +14,10 @@
                 <li class="login" @click="goLogin" v-if="!isLogin"><i class="icon-login"></i>登录</li>
                 <li class="registered" @click="goRegistered" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
                 <router-link tag="li" to="/geren/personCenter" class="user" v-if="isLogin">{{userPhone}}</router-link>
-                <router-link v-if="isLogin" tag="li" to="/tongzhi/announcement"><img src="~@/assets/icon/notification.png" class="notification"></router-link>
+                <router-link v-if="isLogin" tag="li" to="/tongzhi/announcement" class="message">
+                    <img src="~@/assets/icon/notification.png" class="notification" @click="unreadMessage = false">
+                    <i class="point" v-show="unreadMessage"></i>
+                </router-link>
                 <li class="exit" @click="exit" v-if="isLogin">退出</li>
             </ul>
         </div>
@@ -94,13 +97,16 @@ const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
-import { baseUrl } from "@/config/config";
+import { baseUrl, wsUrl } from "@/config/config";
 import factory from "@/util/factory";
 
 export default {
     components: { password },
     data() {
         return {
+            websock: null,
+            unreadMessage: false,
+
             baseUrl,
             // 登录表格
             loginForm: {},
@@ -126,15 +132,6 @@ export default {
         },
         userPhone() {
             return this.$store.state.userInfo.phone;
-        }
-    },
-    sockets: {
-        connect: function () {
-            this.$socket.emit('send', '你好')
-            console.log('socket connected')
-        },
-        getMsg: function (data) {
-            console.log(data)
         }
     },
     mounted() {
@@ -163,10 +160,27 @@ export default {
         ipcRenderer.on('get-success', (event, type) => {
             this.$router.push("/heisou/monitor");
         });
-
+        this.openSocket();
         this.getKey();
     },
     methods: {
+        // 打开socket
+        openSocket() {
+            if (!this.isLogin) return;
+            this.websock = new WebSocket(wsUrl);
+            this.websock.onopen = () => {
+                this.websock.send(this.$store.state.userInfo.user_id);
+            }
+            this.websock.onerror = () => {
+                this.openSocket();
+            };
+            this.websock.onmessage = (e) => {
+                const redata = JSON.parse(e.data);
+                if (redata.type === 1 || redata.type === 3) {
+                    this.unreadMessage = true;
+                }
+            };
+        },
         // 随机key
         getKey() {
             this.key = new Date().getTime() + "" + (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000);
@@ -217,9 +231,10 @@ export default {
             this.$fetch.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", { token: res.data.token, phone: this.loginForm.phone, user_id: red });
+                    this.$store.dispatch("set_user_info", { token: res.data.token, phone: res.data.user_phone, user_id: res.data.user_id });
                     this.$message.success(res.msg);
                     this.loginFlag = false;
+                    this.openSocket();
                 } else {
                     this.getKey();
                     this.$message.error(res.msg);
@@ -248,7 +263,7 @@ export default {
         },
         // 退出
         exit() {
-            this.$store.dispatch("set_user_info", { token: "", phone: "" });
+            this.$store.dispatch("set_user_info", { token: "", phone: "", user_id: "" });
             this.$router.replace("/");
         },
         // 最大化 最小化 关闭
@@ -293,6 +308,17 @@ export default {
         font-size: 14px;
         color: #fefefe;
         padding-right: 30px;
+        .message {
+            .rel;
+        }
+        .point {
+            .abs;
+            top: 4px;
+            right: -4px;
+            .wh(8px);
+            border-radius: 5px;
+            background: red;
+        }
         li {
             margin-top: 15px;
             cursor: pointer;

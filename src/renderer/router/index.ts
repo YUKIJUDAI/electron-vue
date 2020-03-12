@@ -42,7 +42,7 @@ export default new Router({
                         },
                         // 详情
                         {
-                            path: "detail",
+                            path: "detail/:id",
                             component: require("@/view/tongzhi/detail").default,
                             meta: { index: 0, hasBack: true },
                             beforeEnter(to, from, next) {
