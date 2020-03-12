@@ -4,6 +4,10 @@ const { from, interval, timer, concat } = require("rxjs");
 const { filter, take, tap, delay, last, mergeMap } = require("rxjs/operators");
 const moment = require('moment');
 
+if (window.sycm) return;
+
+window.sycm = true;
+
 // 生意参谋dom信息方法配置
 const DomFactory = function () {
 
@@ -148,15 +152,15 @@ ipcRenderer.on("autoLogin", (event, account, pwd) => {
         .pipe(
             filter(() => loginPage.readyFlag().length > 0),
             take(1),
-            delay(~~(Math.random()*5000)),
+            delay(Math.floor(Math.random() * (7000 - 3000)) + 3000),
             tap(() => {
                 SetValue(loginPage.userInput(), account);
             }),
-            delay(~~(Math.random()*4000)),
+            delay(Math.floor(Math.random() * (5000 - 2000)) + 2000),
             tap(() => {
                 SetValue(loginPage.pwdInput(), pwd);
             }),
-            delay(~~(Math.random()*3000)),
+            delay(Math.floor(Math.random() * (3000 - 1000)) + 1000),
             tap(() => {
                 loginPage.submitBtn().click();
             }),

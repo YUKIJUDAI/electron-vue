@@ -57,7 +57,7 @@
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
             </div>
-            <p class="settlement-p-1">任务耗时 <span>180</span> 秒，单个任务 <span>6</span> 金币，合计消费 <span>600</span> 金币</p>
+            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>6</span> 金币，合计消费 <span>600</span> 金币</p>
             <br />
             <p class="settlement-p-2">升级<span>普通会员</span> 本次可节省 <span>80</span> 金币，合计消费 <span>520</span> 金币</p>
         </div>
@@ -80,6 +80,7 @@ export default {
             days: 0,
             countbydays: 100,
             flag: true,
+            taskTime: ["100-180", "30-50", "30-50", "", "", "", "", "30-100", "", "30-30", "30-30", " 100-180"],
             form: {
                 dateValue: "",
                 begin_time: "",
@@ -101,7 +102,7 @@ export default {
     },
     methods: {
         // 查排名
-        open(){
+        open() {
             shell.openExternal("https://www.kehuda.com/");
         },
         // 改变数值
