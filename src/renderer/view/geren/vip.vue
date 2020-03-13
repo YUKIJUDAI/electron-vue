@@ -41,21 +41,21 @@
             <div class="rechange-0" v-if="pay">
                 <ul>
                     <li>开通账号：18155908820</li>
-                    <li>开通套餐：{{price[checked].value}}黑搜会员</li>
-                    <li>支付方式：<span>{{["","支付宝"][+pay_type]}}</span>付款</li>
+                    <li>开通套餐：{{payMsg.month}}个月黑搜会员</li>
+                    <li>支付方式：<span>{{["","支付宝","微信"][+pay_type]}}</span>付款</li>
                 </ul>
                 <p class="pay-msg">
-                    <i class="alipay"></i>
-                    支付宝扫码，支付<span>{{price[checked].price}}</span>元
+                    <i class="alipay" v-show="pay_type === '1'"></i>
+                    <i class="wx" v-show="pay_type === '2'"></i>
+                    支付宝扫码，支付<span>{{payMsg.amount/100}}</span>元
                 </p>
                 <div class="pay-code">
-                    <img src="">
+                    <img :src="payMsg.url">
                 </div>
                 <div class="pay-result">
-                    <img src="~@/assets/icon/pay-success.png">
-                    <img src="~@/assets/icon/pay-error.png">
-                    <img src="~@/assets/icon/pay-timeout.png">
-                    <p>开通会员成功</p>
+                    <img src="~@/assets/icon/pay-success.png" v-show="payState === 1">
+                    <img src="~@/assets/icon/pay-error.png" v-show="payState === 2">
+                    <p>{{["支付后请稍等几分钟，如充值成功后无到账，请重启本软件查看","会员支付成功","会员支付失败"][payState]}}</p>
                 </div>
             </div>
             <div class="recharge-1" v-else>
@@ -68,32 +68,88 @@
                         <p>{{item.value}}</p>
                     </li>
                 </ul>
-                <p class="pay-way">支付方式：<span>{{["","支付宝"][+pay_type]}}</span>付款</p>
-                <div class="pay" @click="pay=true">开通</div>
+                <p class="pay-way">
+                    支付方式：
+                    <el-select v-model="pay_type" placeholder="请选择" size="small">
+                        <el-option label="支付宝" value="1"></el-option>
+                        <el-option label="微信" value="2"></el-option>
+                    </el-select>
+                </p>
+
+                <div class="pay" @click="toPay()">开通</div>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+import { interval, fromPromise } from "rxjs";
+import { mergeMap, take } from "rxjs/operators"
+
 export default {
     data() {
         return {
             dialogVisible: false,
             protocol: true,
-            pay_type: 1,
+            pay_type: "1",
             price: [],
             pay: false,
-            checked: 0
+            checked: 0,
+            payMsg: {},
+            payState: 0 // 0进行中 1 成功 2失败 
         }
     },
     created() {
         this.$fetch.post("/price/getVipPrice").then(res => {
-            0 === res.code && (this.pay_type = res.data.pay_type, this.price = res.data.price);
+            0 === res.code && (this.price = res.data.price);
         });
     },
     methods: {
-        handleClose() { }
+        handleClose() {
+            this.dialogVisible = false;
+            this.pay = false;
+        },
+        toPay() {
+            this.$fetch.post(
+                "/pay/createOrder",
+                { type: this.pay_type, user_id: this.$store.state.userInfo.user_id, serve_id: this.price[this.checked].id }
+            ).then(res => {
+                if (0 === res.code) {
+                    this.payMsg = res.data;
+                    this.pay = true;
+                }
+            });
+        }
+    },
+    watch: {
+        pay(val) {
+            if (!val) {
+                return;
+            }
+            var o = interval(12000).pipe(
+                take(25),
+                mergeMap((i) => {
+                    return new Promise((resolve, reject) => {
+                        if (i === 25) {
+                            resolve({ code: 2000 })
+                        } else {
+                            this.$fetch.post("pay/getOrderStatus", { order_no: this.payMsg.order_no }).then((res) => {
+                                resolve(res)
+                            });
+                        }
+                    })
+                })
+            ).subscribe((res) => {
+                if (0 === res.code) {
+                    this.payState = 1;
+                    o.unSubscribe();
+                } else if (2000 === res.code) {
+                    this.payState = 2;
+                } else {
+                    this.payState = 0;
+                }
+            })
+        }
     }
 }
 </script>
@@ -198,6 +254,12 @@ export default {
                 .wh(20px);
                 vertical-align: -4px;
             }
+            .wx {
+                .dib;
+                background: url("~@/assets/icon/wx.png") no-repeat;
+                .wh(20px);
+                vertical-align: -4px;
+            }
             span {
                 font-size: 20px;
             }
@@ -208,6 +270,9 @@ export default {
             border: 1px solid rgba(215, 215, 215, 1);
             margin: 0 auto;
             margin-top: 22px;
+            img {
+                width: 100%;
+            }
         }
         .pay-result {
             .tc;

@@ -19,10 +19,10 @@ factory.add("getPersonalView", {
     callback: function(params, res) {
         const data = JSON.parse(res);
         remote.getGlobal("tbInfo").loginUserName = data.loginUserName; //  淘宝登录账户
-        remote.getGlobal("tbInfo").runAsShopId = data.runAsShopId; //  店铺id
+        remote.getGlobal("tbInfo").runAsShopId = data.runAsShopId + ""; //  店铺id
         remote.getGlobal("tbInfo").runAsShopTitle = data.runAsShopTitle; //  当前店铺名称
-        remote.getGlobal("tbInfo").loginUserId = data.loginUserId; //  淘宝登录用户id
-        remote.getGlobal("tbInfo").runAsUserId = data.runAsUserId; //  当前使用的淘宝用户id
+        remote.getGlobal("tbInfo").loginUserId = data.loginUserId + ""; //  淘宝登录用户id
+        remote.getGlobal("tbInfo").runAsUserId = data.runAsUserId + ""; //  当前使用的淘宝用户id
         http.post("/user/relateTbAccount", { tb_account: data.loginUserName, tb_user_id: data.loginUserId }).then(res => {
             0 === res.code &&
                 from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
