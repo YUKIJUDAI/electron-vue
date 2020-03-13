@@ -57,9 +57,9 @@
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
             </div>
-            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>6</span> 金币，合计消费 <span>600</span> 金币</p>
+            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price}}</span> 金币，合计消费 <span>{{price * countbydays}}</span> 金币</p>
             <br />
-            <p class="settlement-p-2">升级<span>普通会员</span> 本次可节省 <span>80</span> 金币，合计消费 <span>520</span> 金币</p>
+            <p class="settlement-p-2" v-show="vip_level === 0">升级<span>黑搜会员</span> 每单可节省 <span>{{price - vip_price}}</span> 金币，合计节省 <span>{{(price - vip_price)*countbydays}}</span> 金币</p>
         </div>
     </div>
 </template>
@@ -80,6 +80,8 @@ export default {
             days: 0,
             countbydays: 100,
             flag: true,
+            price: 0, // 价格
+            vip_price: 0,
             taskTime: ["100-180", "30-50", "30-50", "", "", "", "", "30-100", "", "30-30", "30-30", " 100-180"],
             form: {
                 dateValue: "",
@@ -97,10 +99,25 @@ export default {
             }
         }
     },
+    computed: {
+        vip_level() {
+            return this.$store.state.userInfo.vip_level;
+        }
+    },
     mounted() {
         this.form.dateValue = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
+        this.getPrice();
     },
     methods: {
+        getPrice() {
+            // 获取单价
+            this.$fetch.post("/price/getLieLiuPrice", { type: this.type }).then(res => {
+                if (0 === res.code) {
+                    this.price = this.vip_level === 0 ? res.data.price : res.data.vip_price;
+                    this.vip_price = res.data.vip_price;
+                }
+            });
+        },
         // 查排名
         open() {
             shell.openExternal("https://www.kehuda.com/");
@@ -175,6 +192,7 @@ export default {
             } else {
                 this.flag = true;
             }
+            this.getPrice();
         }
     }
 }

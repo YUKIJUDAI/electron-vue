@@ -4,6 +4,7 @@ dist/web/*
 build/*
 server/node_modules
 server/static/public
+static/logs/
 !build/icons
 node_modules/
 npm-debug.log

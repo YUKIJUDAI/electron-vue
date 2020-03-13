@@ -7,6 +7,7 @@
         "jsx": "preserve",
         "jsxFactory": "h",
         "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
         "experimentalDecorators": true,
         "allowJs": true,
         "module": "esnext",

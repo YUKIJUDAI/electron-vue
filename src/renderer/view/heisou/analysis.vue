@@ -142,12 +142,6 @@ export default {
     mounted() {
         this.form.date = "1";
         this.getList();
-        // 获取xhr信息后处理
-        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
-            if (factory.obj[type]) {
-                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
-            }
-        });
         // 获取日志
         ipcRenderer.on("get-log", (event, data) => {
             // flag 0 成功  1进行中  2 失败

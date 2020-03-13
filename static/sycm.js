@@ -4,6 +4,7 @@ const { from, interval, timer, concat } = require("rxjs");
 const { filter, take, tap, delay, last, mergeMap } = require("rxjs/operators");
 const moment = require('moment');
 
+
 // 生意参谋dom信息方法配置
 const DomFactory = function () {
 
@@ -140,10 +141,8 @@ const DomFactory = function () {
 
 const { loginPage, mainPage, monitorPage, analysisPage, configurationPage, isCompetitionPage, isMonitorPage, isAnalysis, isConfigurationPage } = new DomFactory();
 
-
 // 自动登录
 ipcRenderer.on("autoLogin", (event, account, pwd) => {
-    console.log(account, pwd)
     interval(100)
         .pipe(
             filter(() => loginPage.readyFlag().length > 0),
@@ -166,7 +165,6 @@ ipcRenderer.on("autoLogin", (event, account, pwd) => {
 
 // 登录成功后
 ipcRenderer.on('login-success', (event) => {
-    console.log("login-success")
     //点击竞争
     interval(1000)
         .pipe(
@@ -539,7 +537,6 @@ function FetchProxy() {
         "getFlowSource", // 入店来源
         "getSourceTrend", // 入店来源趋势
         "getSingleMonitoredInfo", // 竞争商品信息
-        "trend", //竞品趋势信息
         "getShopCate", // 店铺分类信息
     ]
 

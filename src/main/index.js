@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog, Menu, Tray, screen } = require('ele
 const path = require('path');
 const fs = require('fs');
 const { autoUpdater } = require("electron-updater");
+const log4js = require('log4js');
 
 if (process.env.NODE_ENV !== 'development') {
     global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -12,6 +13,19 @@ let sycmWindow;
 let adWindow;
 let tray;
 let uploadUrl = "http://127.0.0.1:3000/public";
+
+// 日志
+let log = log4js.getLogger("error");
+log4js.configure({
+    "appenders": {
+        "console": { "type": "console", "category": "console" },
+        "error": { "type": "dateFile", "filename": __static + "/logs/error-log.log", maxLogSize: 10240, backups: 3, }
+    },
+    "categories": {
+        "default": { "appenders": ["console"], "level": "all" },
+        "error": { "appenders": ["error"], "level": "error" }
+    }
+});
 
 const winURL = process.env.NODE_ENV === 'development'
     ? `http://localhost:9080`
@@ -27,6 +41,26 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
     if (mainWindow === null) createWindow();
 });
+
+// 开启日志
+ipcMain.on("log", function (e) {
+    log = log4js.getLogger("error");
+    log4js.configure({
+        "appenders": {
+            "console": { "type": "console", "category": "console" },
+            "error": { "type": "dateFile", pattern: "-yyyy-MM-dd", "filename": __static + "/logs/error-log-" + ".log" }
+        },
+        "categories": {
+            "default": { "appenders": ["console"], "level": "all" },
+            "error": { "appenders": ["error"], "level": "error" }
+        }
+    });
+});
+
+// 输出日志
+ipcMain.on("log", function (e, err) {
+    log.error("我错了");
+})
 
 
 // 打开生意参谋
@@ -77,15 +111,8 @@ function createWindow() {
     });
     // 加载网页
     mainWindow.loadURL(winURL);
-    // 存储用户信息
-    global.userInfo = {
-        token: "",      //token
-        phone: "",      // 手机号
-        user_id: "", //用户id
-    }
     mainWindow.on('closed', function () {
         mainWindow = null;
-        global.userInfo = null;
     });
     // 启动更新
     updateHandle();

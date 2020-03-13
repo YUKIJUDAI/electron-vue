@@ -58,7 +58,7 @@ export default {
     },
     computed: {
         userPhone() {
-            return this.$store.state.userInfo.phone;
+            return this.$store.state.userInfo.user_phone;
         }
     },
 }

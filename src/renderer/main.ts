@@ -2,6 +2,7 @@ import Vue from "vue";
 import echarts from "echarts";
 import ElementUI from "element-ui";
 import Electron from "vue-electron";
+const { ipcRenderer } = require("electron");
 
 import http from "@/util/http";
 import fetch from "@/util/fetch";
@@ -22,6 +23,10 @@ Vue.prototype.$http = http;
 Vue.prototype.$fetch = fetch;
 
 Vue.config.productionTip = false;
+
+Vue.prototype.$log = function(txt) {
+    ipcRenderer.send("log", txt);
+};
 
 /* eslint-disable no-new */
 new Vue({

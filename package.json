@@ -1,6 +1,6 @@
 {
     "name": "my-project",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -53,6 +53,7 @@
         "fork-ts-checker-webpack-plugin": "^3.1.1",
         "less": "^3.10.3",
         "less-loader": "^5.0.0",
+        "log4js": "^6.1.2",
         "moment": "^2.24.0",
         "qs": "^6.9.1",
         "run-electron": "^1.0.0",

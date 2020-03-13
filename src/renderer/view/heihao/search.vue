@@ -128,8 +128,19 @@ export default {
             wangwang: "",
             tableData: [],
             baseInfo: {},
-            searchFlag: false
+            searchFlag: false,
+            blackNum: 0
         }
+    },
+    computed: {
+        vip_level() {
+            return this.$store.state.userInfo.vip_level;
+        }
+    },
+    mounted() {
+        this.$fetch.post("/user/getBlackNum").then(res => {
+            0 === res.code && (this.blackNum = +res.data);
+        });
     },
     methods: {
         // 获取淘宝会员信息
@@ -137,6 +148,7 @@ export default {
             this.$fetch.post("/heisou/baseInfo", { wangwang: this.wangwang }).then((res) => {
                 if (0 === res.code) {
                     this.baseInfo = res.data;
+                    this.vip_level === 0 && this.$message.info("您还有" + (this.blackNum - 1) + "次可用,充值会员后可无限次使用");
                 } else {
                     this.$message.error(res.msg);
                 }
@@ -154,6 +166,10 @@ export default {
         },
         // 搜索
         search() {
+            if (this.blackNum <= 0 && this.vip_level === 0) {
+                this.$message.error("您的免费次数已用完,充值会员后可无限次使用");
+                return;
+            }
             if (this.wangwang === "") {
                 this.$message.error("请输入旺旺号");
                 return;

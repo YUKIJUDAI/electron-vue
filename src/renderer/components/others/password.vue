@@ -84,7 +84,7 @@ export default {
             this.$fetch.post(["", "", "/user/editPassword", "/index/forgetPwd", "/user/editPayPwd"][this.type], Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", { token: "", phone: "" });
+                    this.$store.dispatch("set_user_info", { token: "", phone: "", user_id: "", vip_level: 0 });
                     this.$message.success(res.msg);
                     this.$emit("input", false);
                     this.$router.replace("/");

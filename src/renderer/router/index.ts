@@ -10,11 +10,11 @@ export default new Router({
             path: "/",
             name: "home",
             component: require("@/view/home").default,
-            redirect: "/main",
+            redirect: "/index",
             children: [
                 {
-                    path: "main",
-                    name: "main",
+                    path: "index",
+                    name: "index",
                     component: require("@/view/home/index").default
                 },
                 {

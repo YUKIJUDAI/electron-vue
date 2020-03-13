@@ -131,10 +131,11 @@ export default {
             return !isEmpty(this.$store.state.userInfo.token);
         },
         userPhone() {
-            return this.$store.state.userInfo.phone;
+            return this.$store.state.userInfo.user_phone;
         }
     },
     mounted() {
+
         // 判断在线离线状态
         isOnline();
 
@@ -231,7 +232,7 @@ export default {
             this.$fetch.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", { token: res.data.token, phone: res.data.user_phone, user_id: res.data.user_id });
+                    this.$store.dispatch("set_user_info", res.data);
                     this.$message.success(res.msg);
                     this.loginFlag = false;
                     this.openSocket();
@@ -263,7 +264,7 @@ export default {
         },
         // 退出
         exit() {
-            this.$store.dispatch("set_user_info", { token: "", phone: "", user_id: "" });
+            this.$store.dispatch("set_user_info", { token: "", phone: "", user_id: "", vip_level: 0 });
             this.$router.replace("/");
         },
         // 最大化 最小化 关闭

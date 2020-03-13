@@ -109,7 +109,7 @@ export default {
             return !isEmpty(this.$store.state.userInfo.token);
         },
         userPhone() {
-            return this.$store.state.userInfo.phone;
+            return this.$store.state.userInfo.user_phone;
         }
     },
 }
