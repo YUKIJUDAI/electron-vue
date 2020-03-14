@@ -135,32 +135,11 @@ export default {
         }
     },
     mounted() {
-
         // 判断在线离线状态
         isOnline();
-
         // 获取更新
         ipcRenderer.send("checkForUpdate");
-        // 输出更新信息
-        ipcRenderer.on("message", (event, text) => {
-            console.log(text);
-        });
-        // 更新
-        ipcRenderer.on("isUpdateNow", () => {
-            ipcRenderer.send("isUpdateNow");
-        });
 
-        // 获取xhr信息后处理
-        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
-            if (factory.obj[type]) {
-                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
-            }
-        });
-
-        // 获取成功后跳转
-        ipcRenderer.on('get-success', (event, type) => {
-            this.$router.push("/heisou/monitor");
-        });
         this.openSocket();
         this.getKey();
     },

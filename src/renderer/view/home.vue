@@ -22,14 +22,14 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <router-link to="/home/index" class="clearfix" tag="li">
-                            <i class="iconfont icon-tubiao"></i>
-                            <span>首页</span>
-                        </router-link>
                         <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" @click="open(item.route)">
                             <i :class="['iconfont',item.iconclass]"></i>
                             <span>{{item.function_name}}</span>
                         </li>
+                        <router-link to="/geren/personCenter"  class="clearfix" tag="li">
+                            <i class="iconfont icon-tubiao"></i>
+                            <span>个人中心</span>
+                        </router-link>
                     </ul>
                 </div>
             </div>
@@ -51,7 +51,7 @@ export default {
             return !isEmpty(this.$store.state.userInfo.token);
         },
         userPhone() {
-            return this.$store.state.userInfo.phone;
+            return this.$store.state.userInfo.user_phone;
         },
         menuInfo() {
             return this.$store.state.menuInfo || [];

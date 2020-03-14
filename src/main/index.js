@@ -59,15 +59,15 @@ ipcMain.on("log", function (e) {
 
 // 输出日志
 ipcMain.on("log", function (e, err) {
-    log.error("我错了");
+    log.error(err);
 })
-
 
 // 打开生意参谋
 ipcMain.on("open-sycm", function (e, account, pwd) {
     createSycmWindow(account, pwd);
 });
 
+// 打开广告
 ipcMain.on("open-ad", function () {
     createAdView();
 });
@@ -125,8 +125,8 @@ function createWindow() {
             }
         }
     ])
-    tray.setToolTip('黑搜开发器')
-    tray.setContextMenu(contextMenu)
+    tray.setToolTip('黑搜开发器');
+    tray.setContextMenu(contextMenu);
 }
 
 //创建广告弹出
@@ -184,18 +184,6 @@ function createSycmWindow(account, pwd) {
 // 版本更新
 function updateHandle() {
     autoUpdater.setFeedURL(uploadUrl);
-    autoUpdater.on('error', function (error) {
-        sendUpdateMessage("检查更新出错");
-    });
-    autoUpdater.on('checking-for-update', function () {
-        sendUpdateMessage("正在检查更新……");
-    });
-    autoUpdater.on('update-available', function (info) {
-        sendUpdateMessage("检测到新版本，正在下载……");
-    });
-    autoUpdater.on('update-not-available', function (info) {
-        sendUpdateMessage("现在使用的就是最新版本，不用更新");
-    });
     // 执行更新
     autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
         const dialogOpts = {
@@ -205,22 +193,13 @@ function updateHandle() {
             message: process.platform === 'win32' ? releaseNotes : releaseName,
             detail: '监测到一个新的版本，请点击更新按钮更新工具箱'
         }
-
-        ipcMain.on('isUpdateNow', (e, arg) => {
-            dialog.showMessageBox(dialogOpts).then((returnValue) => {
-                if (returnValue.response === 0) autoUpdater.quitAndInstall()
-            });
+        dialog.showMessageBox(dialogOpts).then((returnValue) => {
+            if (returnValue.response === 0) autoUpdater.quitAndInstall()
         });
-        mainWindow.webContents.send('isUpdateNow');
     });
 
     ipcMain.on("checkForUpdate", () => {
         //执行自动更新检查
         autoUpdater.checkForUpdates();
     });
-}
-
-// 通过main进程发送事件给renderer进程
-function sendUpdateMessage(text) {
-    mainWindow.webContents.send('message', text)
 }

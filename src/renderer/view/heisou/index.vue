@@ -17,6 +17,19 @@
 <script>
 
 export default {
+    mounted() {
+        // 获取xhr信息后处理
+        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
+            if (factory.obj[type]) {
+                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
+            }
+        });
+
+        // 获取成功后跳转
+        ipcRenderer.on('get-success', (event, type) => {
+            this.$router.push("/heisou/monitor");
+        });
+    }
 }
 </script>
 

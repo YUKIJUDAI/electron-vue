@@ -14,7 +14,7 @@ const state = {
 
 const mutations = {
     SET_USER_INFO(state, obj) {
-        state.userInfo = obj;
+        state.userInfo = Object.assign(obj, state.userInfo);
     },
     SET_MENU_INFO(state, arr) {
         state.menuInfo = arr;

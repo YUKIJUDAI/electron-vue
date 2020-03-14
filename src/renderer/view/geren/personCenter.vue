@@ -6,21 +6,23 @@
                     <img src="~@/assets/img/admin.png">
                 </div>
                 <div class="head-left-2">
-                    <p class="p-1">您好，{{userPhone}}<img src="~@/assets/img/vip-1.png" /><span>升级</span></p>
+                    <p class="p-1">您好，{{userPhone}}<img src="~@/assets/img/vip-1.png" />
+                        <router-link to="/geren/vip" v-show="vipLevel === 0" tag="span">升级</router-link>
+                    </p>
                     <ul class="clearfix">
-                        <li>
+                        <!-- <li>
                             <p>可用担保金额：<span></span></p>
-                        </li>
+                        </li> -->
                         <li>
                             <p>金币余额：<span></span></p>
                         </li>
                     </ul>
-                    <p class="p-2">冻结中担保金：</p>
+                    <!-- <p class="p-2">冻结中担保金：</p> -->
                 </div>
                 <div class="head-left-3">
                     <el-button size="small" type="primary" class="head-left-3-btn">充值</el-button>
                     <br />
-                    <el-button size="small" plain class="head-left-3-btn">提现</el-button>
+                    <!-- <el-button size="small" plain class="head-left-3-btn">提现</el-button> -->
                 </div>
             </div>
             <div class="head-right">
@@ -47,7 +49,7 @@
             </div>
         </div>
         <p class="p-3">邀请商家注册：https://heisou.com/u/2584325354/<span>复制链接</span></p>
-        <p class="p-4">成功注册送7天VIP 商家付费享受10%分佣</p>
+        <!-- <p class="p-4">成功注册送7天VIP 商家付费享受10%分佣</p> -->
         <div class="body">
             <div class="body-con">
                 <el-card class="box-card">
@@ -110,6 +112,9 @@ export default {
         },
         userPhone() {
             return this.$store.state.userInfo.user_phone;
+        },
+        vipLevel() {
+            return this.$store.state.userInfo.vip_level;
         }
     },
 }

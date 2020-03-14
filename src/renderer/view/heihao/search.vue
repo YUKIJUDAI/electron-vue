@@ -103,10 +103,10 @@
             <div class="information-desk">
                 <div class="information-title">
                     <p class="information-title-p1">黑号查询信息台</p>
-                    <p class="information-title-p2">2019-12-13 更新</p>
+                    <p class="information-title-p2">{{fake.heisou_time}} 更新</p>
                 </div>
                 <div class="information-con">
-                    <p>累计可疑号总数：<span>9468161</span> (昨日新增：<span>14958</span>) <br />昨日查出黑号：<span>1709</span> ，昨日查出黑号比例：<span>11.43%</span> </br>昨日已帮商家挽回经济损失约：<span>194.454 万元</span></p>
+                    <p>累计可疑号总数：<span>{{fake.heisou_total}}</span> (昨日新增：<span>{{fake.heisou_add}}</span>) <br />昨日查出黑号：<span>{{fake.heisou_black}}</span> ，昨日查出黑号比例：<span>{{fake.heisou_lv}}</span> </br>昨日已帮商家挽回经济损失约：<span>{{fake.heisou_money}}</span></p>
                 </div>
                 <div class="information-prompt">
                     <p>
@@ -129,7 +129,8 @@ export default {
             tableData: [],
             baseInfo: {},
             searchFlag: false,
-            blackNum: 0
+            blackNum: 0,
+            fake: {}
         }
     },
     computed: {
@@ -140,6 +141,9 @@ export default {
     mounted() {
         this.$fetch.post("/user/getBlackNum").then(res => {
             0 === res.code && (this.blackNum = +res.data);
+        });
+        this.$fetch.post("/heisou/getFake").then(res => {
+            0 === res.code && (this.fake = res.data);
         });
     },
     methods: {

@@ -21,11 +21,13 @@ Vue.use(ElementUI, { size: "small", zIndex: 3000 });
 Vue.prototype.$echarts = echarts;
 Vue.prototype.$http = http;
 Vue.prototype.$fetch = fetch;
-
-Vue.config.productionTip = false;
-
 Vue.prototype.$log = function(txt) {
     ipcRenderer.send("log", txt);
+};
+
+Vue.config.productionTip = false;
+Vue.config.errorHandler = function(err, vm, info) {
+    ipcRenderer.send("log", err);
 };
 
 /* eslint-disable no-new */

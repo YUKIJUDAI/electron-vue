@@ -188,7 +188,7 @@ export default {
         .tutor-left {
             .fl;
             img {
-                margin-left: 24px;
+                margin-left: 14px;
                 margin-top: 14px;
                 .dib;
                 .wh(50px);

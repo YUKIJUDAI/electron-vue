@@ -38,29 +38,13 @@
             </ul>
         </div>
         <el-dialog :visible.sync="dialogVisible" title="开通黑搜高级会员" width="690px" :before-close="handleClose">
-            <div class="rechange-0" v-if="pay">
-                <ul>
-                    <li>开通账号：18155908820</li>
-                    <li>开通套餐：{{payMsg.month}}个月黑搜会员</li>
-                    <li>支付方式：<span>{{["","支付宝","微信"][+pay_type]}}</span>付款</li>
-                </ul>
-                <p class="pay-msg">
-                    <i class="alipay" v-show="pay_type === '1'"></i>
-                    <i class="wx" v-show="pay_type === '2'"></i>
-                    支付宝扫码，支付<span>{{payMsg.amount/100}}</span>元
-                </p>
-                <div class="pay-code">
-                    <img :src="payMsg.url">
-                </div>
-                <div class="pay-result">
-                    <img src="~@/assets/icon/pay-success.png" v-show="payState === 1">
-                    <img src="~@/assets/icon/pay-error.png" v-show="payState === 2">
-                    <p>{{["支付后请稍等几分钟，如充值成功后无到账，请重启本软件查看","会员支付成功","会员支付失败"][payState]}}</p>
-                </div>
-            </div>
+            <paytel v-if="pay" :pay_type="pay_type" :serve_id="price[checked].id"></paytel>
             <div class="recharge-1" v-else>
-                <p class="account">开通账号：18155908820</p>
-                <el-checkbox v-model="protocol" class="protocol">同意《服务条例》</el-checkbox>
+                <div class="account clearfix">
+                    <p>开通账号：<span>{{$store.state.userInfo.user_phone}}</span></p>
+                    <p>开通时常：<span>{{price[checked].value}}</span></p>
+                    <p>到期时间：<span>{{price[checked].vip_end_time}}</span></p>
+                </div>
                 <ul class="list clearfix">
                     <li :class="{checked:checked === i}" v-for="(item,i) in price" :key="i" @click="checked = i">
                         <img src="~@/assets/icon/checked.png" class="check" v-show="checked === i">
@@ -68,35 +52,36 @@
                         <p>{{item.value}}</p>
                     </li>
                 </ul>
-                <p class="pay-way">
-                    支付方式：
-                    <el-select v-model="pay_type" placeholder="请选择" size="small">
-                        <el-option label="支付宝" value="1"></el-option>
-                        <el-option label="微信" value="2"></el-option>
-                    </el-select>
-                </p>
+                <div class="pay-way">
+                    <p>支付方式：</p>
+                    <div @click="pay_type = 1" class="pay-way-o" :class="{active:pay_type === 1}">支付宝</div>
+                    <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div>
 
-                <div class="pay" @click="toPay()">开通</div>
+                    <div class="pay" @click="toPay()">开通</div>
+                    <div class="protocol">
+                        <el-checkbox v-model="protocol">同意《服务条例》</el-checkbox>
+                    </div>
+
+                </div>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import { interval, fromPromise } from "rxjs";
-import { mergeMap, take } from "rxjs/operators"
+
+import paytel from "@/components/others/pay";
 
 export default {
+    components: { paytel },
     data() {
         return {
             dialogVisible: false,
             protocol: true,
-            pay_type: "1",
+            pay_type: 1,
             price: [],
             pay: false,
-            checked: 0,
-            payMsg: {},
-            payState: 0 // 0进行中 1 成功 2失败 
+            checked: 0
         }
     },
     created() {
@@ -110,15 +95,7 @@ export default {
             this.pay = false;
         },
         toPay() {
-            this.$fetch.post(
-                "/pay/createOrder",
-                { type: this.pay_type, user_id: this.$store.state.userInfo.user_id, serve_id: this.price[this.checked].id }
-            ).then(res => {
-                if (0 === res.code) {
-                    this.payMsg = res.data;
-                    this.pay = true;
-                }
-            });
+            this.pay = true;
         }
     },
     watch: {
@@ -126,29 +103,7 @@ export default {
             if (!val) {
                 return;
             }
-            var o = interval(12000).pipe(
-                take(25),
-                mergeMap((i) => {
-                    return new Promise((resolve, reject) => {
-                        if (i === 25) {
-                            resolve({ code: 2000 })
-                        } else {
-                            this.$fetch.post("pay/getOrderStatus", { order_no: this.payMsg.order_no }).then((res) => {
-                                resolve(res)
-                            });
-                        }
-                    })
-                })
-            ).subscribe((res) => {
-                if (0 === res.code) {
-                    this.payState = 1;
-                    o.unSubscribe();
-                } else if (2000 === res.code) {
-                    this.payState = 2;
-                } else {
-                    this.payState = 0;
-                }
-            })
+            
         }
     }
 }
@@ -229,72 +184,16 @@ export default {
     .right {
         width: 34%;
     }
-    .rechange-0 {
-        padding: 0 20px;
-        ul {
-            li {
-                font-size: 14px;
-                color: #333;
-                padding-bottom: 15px;
-                font-weight: bold;
-                span {
-                    color: #188fff;
-                }
-            }
-        }
-        .pay-msg {
-            font-size: 14px;
-            .tc;
-            margin-top: 33px;
-            color: #333;
-            font-weight: bold;
-            .alipay {
-                .dib;
-                background: url("~@/assets/icon/alipay.png") no-repeat;
-                .wh(20px);
-                vertical-align: -4px;
-            }
-            .wx {
-                .dib;
-                background: url("~@/assets/icon/wx.png") no-repeat;
-                .wh(20px);
-                vertical-align: -4px;
-            }
-            span {
-                font-size: 20px;
-            }
-        }
-        .pay-code {
-            .wh(140px);
-            padding: 10px;
-            border: 1px solid rgba(215, 215, 215, 1);
-            margin: 0 auto;
-            margin-top: 22px;
-            img {
-                width: 100%;
-            }
-        }
-        .pay-result {
-            .tc;
-            margin-top: 50px;
-            p {
-                .l-h(60px);
-            }
-        }
-    }
     .recharge-1 {
         padding: 0 20px;
         .account {
             font-size: 14px;
             color: #333;
             font-weight: bold;
-        }
-        .protocol {
-            margin-top: 10px;
-            color: #999;
-            font-size: 12px;
-            .el-checkbox__input.is-checked + .el-checkbox__label {
-                color: #999;
+            display: flex;
+            justify-content: space-between;
+            span {
+                color: #ff6801;
             }
         }
         .list {
@@ -339,19 +238,50 @@ export default {
             margin-top: 30px;
             font-size: 14px;
             color: #333;
-            span {
-                color: #188fff;
+            .pay-way-o {
+                .tc;
+                margin-top: 14px;
+                width: 120px;
+                .l-h(36px);
+                background: rgba(255, 255, 255, 1);
+                border: 1px solid rgba(215, 215, 215, 1);
+                .fl;
+                margin-left: 36px;
+                cursor: pointer;
+                .rel;
+                &:first-of-type {
+                    margin-left: 0;
+                }
+            }
+            .active {
+                border: 1px solid #ff6801;
+                &:after {
+                    .abs;
+                    top: 0;
+                    right: 0;
+                    .wh(24px);
+                    .db;
+                    background: url("~@/assets/icon/checked-0.png") no-repeat;
+                    content: close-quote;
+                }
             }
         }
         .pay {
             width: 260px;
             .l-h(42px);
-            margin: 40px auto;
+            margin: 0 auto;
+            margin-top: 80px;
             background: rgb(255, 104, 1);
             .tc;
             font-size: 16px;
             color: #fff;
             cursor: pointer;
+        }
+        .protocol {
+            margin-top: 10px;
+            color: #999;
+            font-size: 12px;
+            .tc;
         }
     }
 }
