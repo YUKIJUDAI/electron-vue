@@ -7,17 +7,17 @@
                 </div>
                 <div class="head-left-2">
                     <p class="p-1">
-                        您好，{{userPhone}}
-                        <img src="~@/assets/img/vip-0.png" v-show="vipLevel === 0" />
-                        <img src="~@/assets/img/vip-1.png" v-show="vipLevel === 1" />
-                        <router-link to="/geren/vip" v-show="vipLevel === 0" tag="span">升级</router-link>
+                        您好，{{userInfo.username}}
+                        <img src="~@/assets/img/vip-0.png" v-show="userInfo.vip_level === 0" />
+                        <img src="~@/assets/img/vip-1.png" v-show="userInfo.vip_level === 1" />
+                        <router-link to="/geren/vip" v-show="userInfo.vip_level === 0" tag="span">升级</router-link>
                     </p>
                     <ul class="clearfix">
                         <!-- <li>
                             <p>可用担保金额：<span></span></p>
                         </li> -->
                         <li>
-                            <p>积分余额：<span></span></p>
+                            <p>积分余额：<span>{{userInfo.gold}}</span></p>
                         </li>
                     </ul>
                     <!-- <p class="p-2">冻结中担保金：</p> -->
@@ -51,7 +51,7 @@
                 </ul>
             </div>
         </div>
-        <p class="p-3">邀请商家注册：https://heisou.com/u/2584325354/<span>复制链接</span></p>
+        <p class="p-3">邀请商家注册：{{userInfo.invite_url}}<span>复制链接</span></p>
         <!-- <p class="p-4">成功注册送7天VIP 商家付费享受10%分佣</p> -->
         <div class="body">
             <div class="body-con">
@@ -61,17 +61,17 @@
                         <el-button style="float: right; padding: 3px 0" type="text">查看更多></el-button>
                     </div>
                     <ul>
-                        <li>
+                        <!-- <li>
                             <p class="p-5">竞品已监控</p>
                             <p class="p-6">45<span>天</span></p>
-                        </li>
+                        </li> -->
                         <li>
                             <p class="p-5">黑号已查询</p>
-                            <p class="p-6">45<span>次</span></p>
+                            <p class="p-6">{{userInfo.black_num}}<span>次</span></p>
                         </li>
                         <li>
                             <p class="p-5">流量已发布</p>
-                            <p class="p-6">45<span>单</span></p>
+                            <p class="p-6">{{userInfo.lieliu_count}}<span>单</span></p>
                         </li>
                     </ul>
                 </el-card>
@@ -84,16 +84,16 @@
                         <el-button style="float: right; padding: 3px 0" type="text">查看更多></el-button>
                     </div>
                     <ul>
-                        <li>
+                        <router-link tag="li" to="/geren/Invitation">
                             <img src="~@/assets/icon/p.png" class="p">
                             <p class="p-5">累计邀请人数</p>
-                            <p class="p-6">45<span>人</span></p>
-                        </li>
-                        <li>
+                            <p class="p-6">{{userInfo.invite_count}}<span>人</span></p>
+                        </router-link>
+                        <!-- <li>
                             <img src="~@/assets/icon/m.png" class="m">
                             <p class="p-5">累计获得奖励 (积分)</p>
                             <p class="p-6">45<span>个</span></p>
-                        </li>
+                        </li> -->
                         <li>
                             <el-button size="small" type="primary" class="invite">立即邀请</el-button>
                         </li>
@@ -116,20 +116,25 @@ export default {
     components: { rechange },
     data() {
         return {
-            dialogVisible: false
+            dialogVisible: false,
+            userInfo: {},
         }
     },
     computed: {
         isLogin() {
             return !isEmpty(this.$store.state.userInfo.token);
-        },
-        userPhone() {
-            return this.$store.state.userInfo.user_phone;
-        },
-        vipLevel() {
-            return this.$store.state.userInfo.vip_level;
         }
     },
+    mounted() {
+        this.getUserInfo();
+    },
+    methods: {
+        getUserInfo() {
+            this.$fetch.post("/user/getUserInfo").then(res => {
+                this.userInfo = res.data;
+            })
+        }
+    }
 }
 </script>
 
