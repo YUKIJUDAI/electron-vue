@@ -10,7 +10,7 @@
                 </li>
                 <li>
                     <img src="~@/assets/icon/m-1.png" class="m">
-                    <p class="p-5">累计获得奖励 (金币)</p>
+                    <p class="p-5">累计获得奖励 (积分)</p>
                     <p class="p-6">45<span>个</span></p>
                 </li>
                 <li class="no-border">
@@ -31,7 +31,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="发布任务" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="奖励金币" align="center">
+                <el-table-column prop="" label="奖励积分" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="奖励VIP天数" align="center">
                 </el-table-column>

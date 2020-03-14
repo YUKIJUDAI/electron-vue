@@ -9,12 +9,12 @@
                 </li>
                 <li>
                     <img src="~@/assets/icon/m-2.png" class="m">
-                    <p class="p-5">收入(金币)</p>
+                    <p class="p-5">收入(积分)</p>
                     <p class="p-6">45</p>
                 </li>
                 <li class="no-border">
                     <img src="~@/assets/icon/m-3.png" class="v">
-                    <p class="p-5">支出(金币)</p>
+                    <p class="p-5">支出(积分)</p>
                     <p class="p-6">45</p>
                 </li>
                 <li class="no-border last-li">
@@ -28,7 +28,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="交易类型" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="交易金额（金币）" align="center">
+                <el-table-column prop="" label="交易金额（积分）" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="账户余额（元）" align="center">
                 </el-table-column>

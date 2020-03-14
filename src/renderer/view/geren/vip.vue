@@ -61,7 +61,6 @@
                     <div class="protocol">
                         <el-checkbox v-model="protocol">同意《服务条例》</el-checkbox>
                     </div>
-
                 </div>
             </div>
         </el-dialog>

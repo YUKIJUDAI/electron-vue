@@ -45,7 +45,7 @@ export default {
         return {
             payMsg: {},
             seconds: 300,
-            payState: 1, // 0进行中 1 成功 2失败 ,
+            payState: 0, // 0进行中 1 成功 2失败 ,
             timeout: false,
         }
     },

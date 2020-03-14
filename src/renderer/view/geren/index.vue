@@ -9,7 +9,7 @@
                     <div>邀请有奖</div>
                 </router-link>
                 <router-link tag="li" to="/geren/goldCoinDetails" :class="{active:$route.meta.index === 2}">
-                    <div>金币明细</div>
+                    <div>积分明细</div>
                 </router-link>
                 <router-link tag="li" to="/geren/accountSettings" :class="{active:$route.meta.index === 3}">
                     <div>账户设置</div>

@@ -28,7 +28,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="任务备注" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="总价(金币)" align="center">
+                <el-table-column prop="" label="总价(积分)" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="发布量" align="center">
                 </el-table-column>

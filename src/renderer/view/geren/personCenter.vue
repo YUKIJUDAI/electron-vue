@@ -6,7 +6,10 @@
                     <img src="~@/assets/img/admin.png">
                 </div>
                 <div class="head-left-2">
-                    <p class="p-1">您好，{{userPhone}}<img src="~@/assets/img/vip-1.png" />
+                    <p class="p-1">
+                        您好，{{userPhone}}
+                        <img src="~@/assets/img/vip-0.png" v-show="vipLevel === 0" />
+                        <img src="~@/assets/img/vip-1.png" v-show="vipLevel === 1" />
                         <router-link to="/geren/vip" v-show="vipLevel === 0" tag="span">升级</router-link>
                     </p>
                     <ul class="clearfix">
@@ -14,13 +17,13 @@
                             <p>可用担保金额：<span></span></p>
                         </li> -->
                         <li>
-                            <p>金币余额：<span></span></p>
+                            <p>积分余额：<span></span></p>
                         </li>
                     </ul>
                     <!-- <p class="p-2">冻结中担保金：</p> -->
                 </div>
                 <div class="head-left-3">
-                    <el-button size="small" type="primary" class="head-left-3-btn">充值</el-button>
+                    <el-button size="small" type="primary" class="head-left-3-btn" @click="dialogVisible = true">充值</el-button>
                     <br />
                     <!-- <el-button size="small" plain class="head-left-3-btn">提现</el-button> -->
                 </div>
@@ -31,13 +34,13 @@
                         <img src="~@/assets/icon/gift.png">
                         <span>邀请有奖</span>
                         <br />
-                        <span>获取免费金币</span>
+                        <span>获取免费积分</span>
                     </li>
                     <li>
                         <img src="~@/assets/icon/gzh.png">
                         <span>微信公众号</span>
                         <br />
-                        <span>关注免费得金币</span>
+                        <span>关注免费得积分</span>
                     </li>
                     <li>
                         <img src="~@/assets/icon/wechat.png">
@@ -88,7 +91,7 @@
                         </li>
                         <li>
                             <img src="~@/assets/icon/m.png" class="m">
-                            <p class="p-5">累计获得奖励 (金币)</p>
+                            <p class="p-5">累计获得奖励 (积分)</p>
                             <p class="p-6">45<span>个</span></p>
                         </li>
                         <li>
@@ -99,13 +102,23 @@
                 <img src="~@/assets/img/ad-2.png" class="ad">
             </div>
         </div>
+        <el-dialog :visible.sync="dialogVisible" title="积分充值" width="690px">
+            <rechange></rechange>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import { isEmpty } from "@/util/util";
+import rechange from "@/components/others/recharge";
 
 export default {
+    components: { rechange },
+    data() {
+        return {
+            dialogVisible: false
+        }
+    },
     computed: {
         isLogin() {
             return !isEmpty(this.$store.state.userInfo.token);

@@ -4,15 +4,16 @@
         <div class="body clearfix">
             <div class="main-left">
                 <div class="main-left-1">
-                    <img src="~@/assets/img/level-1.png" class="identity-tag">
+                    <img src="~@/assets/img/level-0.png" class="identity-tag" v-show="viplevel === 0">
+                    <img src="~@/assets/img/level-1.png" class="identity-tag" v-show="viplevel === 1">
                     <img src="~@/assets/img/admin.png" class="avatar">
                     <router-link to="/geren/personCenter" tag="div" class="main-login" v-if="isLogin">{{userPhone}}</router-link>
                     <div class="main-login" @click="goLogin" v-else>请登录</div>
                 </div>
                 <div class="main-left-ul" v-if="isLogin">
                     <ul>
-                        <li>金币余额：<span>3000</span></li>
-                        <li>担保资金：<span>3000</span></li>
+                        <li>积分余额：<span>3000</span></li>
+                        <!-- <li>担保资金：<span>3000</span></li> -->
                     </ul>
                 </div>
                 <div class="main-left-2 clearfix">
@@ -52,6 +53,9 @@ export default {
         },
         userPhone() {
             return this.$store.state.userInfo.user_phone;
+        },
+        viplevel(){
+            return this.$store.state.userInfo.vip_level;
         },
         menuInfo() {
             return this.$store.state.menuInfo || [];

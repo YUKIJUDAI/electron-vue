@@ -226,7 +226,7 @@ export default new Router({
                             component: require("@/view/geren/invitation").default,
                             meta: { index: 1 }
                         },
-                        // 金币明细
+                        // 积分明细
                         {
                             path: "goldCoinDetails",
                             component: require("@/view/geren/goldCoinDetails").default,
