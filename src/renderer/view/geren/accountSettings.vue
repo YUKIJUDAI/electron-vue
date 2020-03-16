@@ -3,16 +3,16 @@
         <div class="title">基本信息</div>
         <el-form label-width="120px" class="form" label-position="left">
             <el-form-item label="登录账号">
-                <p>{{userPhone}}</p>
+                <p>{{userInfo.username}}</p>
             </el-form-item>
             <el-form-item label="绑定手机">
-                <p>{{userPhone}}</p>
+                <p>{{userInfo.username}}</p>
             </el-form-item>
             <el-form-item label="邀请链接">
-                <p><span class="copy">复制</span></p>
+                <p>{{userInfo.invite_url}}<span class="copy" @click="copy(userInfo.invite_url)">复制</span></p>
             </el-form-item>
             <el-form-item label="最近登录时间">
-                <p></p>
+                <p>{{userInfo.last_login_time}}</p>
             </el-form-item>
         </el-form>
         <div class="title">密码设置</div>
@@ -37,16 +37,17 @@
             </ul>
         </div>
         <el-dialog title="修改密码" :visible.sync="forgetFlag" width="721px">
-            <password v-model="forgetFlag" :type="3" :phone="userPhone"></password>
+            <password v-model="forgetFlag" :type="3" :phone="userInfo.username"></password>
         </el-dialog>
         <el-dialog title="支付密码" :visible.sync="payFlag" width="721px">
-            <password v-model="payFlag" :type="4" :phone="userPhone"></password>
+            <password v-model="payFlag" :type="4" :phone="userInfo.username"></password>
         </el-dialog>
     </div>
 </template>
 
 <script>
 import password from "@/components/others/password";
+import copy from "clipboard-copy";
 
 export default {
     components: { password },
@@ -54,6 +55,7 @@ export default {
         return {
             forgetFlag: false,
             payFlag: false,
+            userInfo: {}
         }
     },
     computed: {
@@ -61,6 +63,17 @@ export default {
             return this.$store.state.userInfo.user_phone;
         }
     },
+    mounted() {
+        this.$fetch.post("/user/getUserInfo").then(res => {
+            0 === res.code && (this.userInfo = res.data);
+        });
+    },
+    methods: {
+        copy(val) {
+            copy(val);
+            this.$message("复制成功");
+        },
+    }
 }
 </script>
 

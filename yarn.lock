@@ -2181,6 +2181,11 @@ cli-spinners@^2.0.0:
   resolved "https://registry.npm.taobao.org/cli-spinners/download/cli-spinners-2.2.0.tgz#e8b988d9206c692302d8ee834e7a85c0144d8f77"
   integrity sha1-6LmI2SBsaSMC2O6DTnqFwBRNj3c=
 
+clipboard-copy@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/clipboard-copy/-/clipboard-copy-3.1.0.tgz#4c59030a43d4988990564a664baeafba99f78ca4"
+  integrity sha512-Xsu1NddBXB89IUauda5BIq3Zq73UWkjkaQlPQbLNvNsd5WBMnTWPNKYR6HGaySOxGYZ+BKxP2E9X4ElnI3yiPA==
+
 cliui@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/cliui/download/cliui-2.1.0.tgz#4b475760ff80264c762c3a1719032e91c7fea0d1"

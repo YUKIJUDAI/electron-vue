@@ -23,11 +23,11 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" @click="open(item.route)">
+                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.path === item.route}" @click="open(item.route)">
                             <i :class="['iconfont',item.iconclass]"></i>
                             <span>{{item.function_name}}</span>
                         </li>
-                        <router-link to="/geren/personCenter"  class="clearfix" tag="li">
+                        <router-link to="/geren/personCenter"  class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" tag="li">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </router-link>

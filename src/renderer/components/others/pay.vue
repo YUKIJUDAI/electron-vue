@@ -40,7 +40,7 @@ import { interval, fromPromise } from "rxjs";
 import { mergeMap, take, filter, tap } from "rxjs/operators"
 
 export default {
-    props: ["pay_type", "serve_id"],
+    props: ["pay_type", "serve_id", "num"],
     data() {
         return {
             payMsg: {},
@@ -54,7 +54,8 @@ export default {
     },
     methods: {
         getMsg() {
-            this.$fetch.post("/pay/createOrder", { type: this.pay_type, user_id: this.$store.state.userInfo.user_id, serve_id: this.serve_id }).then(res => {
+            var data = { type: this.pay_type, user_id: this.$store.state.userInfo.user_id, serve_id: this.serve_id, num: this.num };
+            this.$fetch.post("/pay/createOrder", data).then(res => {
                 if (0 === res.code) {
                     this.payMsg = res.data;
                     this.getResult();

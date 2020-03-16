@@ -1,9 +1,9 @@
 <template>
     <div class="recharge">
-        <p class="p1">积分不可提现。1人民币等于100积分。</p>
-        <p class="p2">充值账号：<span>18156305520</span></p>
-        <p class="p3">充值金额<input type="text" placeholder="请输入不小于10的整数"></p>
-        <p class="p4">充值总额<span>100元</span> （充值￥100元，获得10000积分)</p>
+        <p class="p1">积分不可提现。1人民币等于{{data.value}}积分。</p>
+        <p class="p2">充值账号：<span>{{userPhone}}</span></p>
+        <p class="p3">充值金额<input type="number" placeholder="请输入不小于10的整数" v-model="value" maxlength="9"></p>
+        <p class="p4">充值总额<span>{{value}}元</span> （充值￥{{value}}元，获得{{value*data.value}}积分)</p>
         <div class="pay-way">
             <p>支付方式：</p>
             <div @click="pay_type = 1" class="pay-way-o" :class="{active:pay_type === 1}">支付宝</div>
@@ -22,8 +22,23 @@ export default {
     data() {
         return {
             protocol: true,
-            pay_type: 1
+            pay_type: 1,
+            data: {},
+            value: 10
         }
+    },
+    computed: {
+        userPhone() {
+            return this.$store.state.userInfo.user_phone;
+        },
+    },
+    mounted() {
+        this.$fetch.post("/price/getGoldPrice").then(res => {
+            0 === res.code && (this.data = res.data);
+        });
+    },
+    methods: {
+
     }
 }
 </script>
