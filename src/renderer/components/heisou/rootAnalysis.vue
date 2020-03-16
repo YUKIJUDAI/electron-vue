@@ -23,7 +23,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="转化率" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="符合标题" align="center">
+                <el-table-column prop="" label="标题词" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="流量词" align="center">
                 </el-table-column>

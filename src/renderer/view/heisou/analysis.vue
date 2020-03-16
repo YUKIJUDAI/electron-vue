@@ -95,7 +95,6 @@ const { ipcRenderer, remote } = require("electron");
 const { from } = require("rxjs");
 const moment = require('moment');
 
-import factory from "@/util/factory";
 import dataSource from "@/components/heisou/dataSource";
 import keywordAnalysis from "@/components/heisou/keywordAnalysis";
 import rootAnalysis from "@/components/heisou/rootAnalysis";

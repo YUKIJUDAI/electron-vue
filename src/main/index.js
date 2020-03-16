@@ -42,21 +42,6 @@ app.on('activate', function () {
     if (mainWindow === null) createWindow();
 });
 
-// 开启日志
-ipcMain.on("log", function (e) {
-    log = log4js.getLogger("error");
-    log4js.configure({
-        "appenders": {
-            "console": { "type": "console", "category": "console" },
-            "error": { "type": "dateFile", pattern: "-yyyy-MM-dd", "filename": __static + "/logs/error-log-" + ".log" }
-        },
-        "categories": {
-            "default": { "appenders": ["console"], "level": "all" },
-            "error": { "appenders": ["error"], "level": "error" }
-        }
-    });
-});
-
 // 输出日志
 ipcMain.on("log", function (e, err) {
     log.error(err);
@@ -176,6 +161,7 @@ function createSycmWindow(account, pwd) {
         cateName: ""  // 店铺分类名字
     };
     sycmWindow.on('closed', function () {
+        mainWindow.webContents.send("router-to", "/heisoubinding/binding");
         sycmWindow = null;
         global.tbInfo = null;
     });

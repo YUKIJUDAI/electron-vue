@@ -27,7 +27,7 @@
                             <i :class="['iconfont',item.iconclass]"></i>
                             <span>{{item.function_name}}</span>
                         </li>
-                        <router-link to="/geren/personCenter"  class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" tag="li">
+                        <router-link to="/geren/personCenter" class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" tag="li">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </router-link>
@@ -44,6 +44,8 @@
 <script>
 import heisouTitle from "@/components/others/title";
 import { isEmpty } from "@/util/util";
+const { ipcRenderer, remote } = require("electron");
+import factory from "@/util/factory";
 
 export default {
     components: { heisouTitle },
@@ -54,12 +56,24 @@ export default {
         userPhone() {
             return this.$store.state.userInfo.user_phone;
         },
-        viplevel(){
+        viplevel() {
             return this.$store.state.userInfo.vip_level;
         },
         menuInfo() {
             return this.$store.state.menuInfo || [];
         }
+    },
+    mounted() {
+        // 获取xhr信息后处理
+        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
+            if (factory.obj[type]) {
+                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
+            }
+        });
+        // 页面跳转跳转
+        ipcRenderer.on('router-to', (event, router) => {
+            this.$router.push(router);
+        });
     },
     methods: {
         // 打开

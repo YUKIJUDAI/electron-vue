@@ -9,7 +9,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="出现天数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="符合标题" align="center">
+                <el-table-column prop="" label="标题词" align="center">
                 </el-table-column>
             </el-table>
             <el-table border class="form-table form-table2" :header-cell-style="headStyle">
@@ -19,7 +19,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="出现天数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="符合标题" align="center">
+                <el-table-column prop="" label="标题词" align="center">
                 </el-table-column>
             </el-table>
             <el-table border class="form-table form-table3" :header-cell-style="headStyle">
@@ -37,7 +37,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="出现天数" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="符合标题" align="center">
+                <el-table-column prop="" label="标题词" align="center">
                 </el-table-column>
             </el-table>
         </div>

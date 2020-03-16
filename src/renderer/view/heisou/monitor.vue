@@ -212,8 +212,6 @@ const { from } = require("rxjs");
 const moment = require('moment');
 import axios from "axios";
 
-import factory from "@/util/factory";
-
 export default {
     data() {
         return {

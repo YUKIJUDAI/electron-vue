@@ -1,6 +1,6 @@
 {
     "name": "my-project",
-    "version": "0.1.3",
+    "version": "0.1.9",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",

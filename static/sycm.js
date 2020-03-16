@@ -378,7 +378,7 @@ ipcRenderer.on("add-monitor", (event, data) => {
     timer(0, 10000)
         .pipe(
             take(data.id.length),
-            mergeMap(() => {
+            mergeMap((item) => {
                 return interval(1000)
                     .pipe(
                         filter(() => configurationPage.configuration()),

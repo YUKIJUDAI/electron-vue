@@ -1,12 +1,11 @@
 <template>
     <div class="binding">
         <ul class="binding-list">
-            <li class="binding-list-li">
-                <img src="~@/assets/icon/binding-del.png" class="del" @click="del">
+            <li class="binding-list-li" v-for="(item,i) in list" :key="i">
+                <img src="~@/assets/icon/binding-del.png" class="del" @click="del(item.id)">
                 <img src="~@/assets/icon/binding-shop.png" class="shop">
-                <p class="shop-name">OLAY官方旗舰店</p>
-                <p class="account-name">OLAY官方旗舰店</p>
-                <div class="start" @click="opensycm('汇璟旗舰店:小芳','xf123456')">启动</div>
+                <p class="shop-name">{{item.tb_account}}</p>
+                <div class="start" @click="opensycm(item.tb_account,item.tb_password)">启动</div>
             </li>
             <li class="binding-list-add" @click="opensycm">
                 <img src="~@/assets/icon/binding-add.png" class="add">
@@ -17,25 +16,37 @@
 </template>
 
 <script>
-const { ipcRenderer, remote } = require("electron");
+const { ipcRenderer } = require("electron");
 
 export default {
+    data() {
+        return {
+            list: []
+        }
+    },
+    mounted() {
+        this.getList();
+    },
     methods: {
-        del() {
+        getList() {
+            this.$fetch.post("/user/getRelateTbList").then(res => {
+                0 === res.code && (this.list = res.data);
+            });
+        },
+        del(id) {
             this.$confirm('是否删除该账号?', '确认删除', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
+                this.$fetch.post("/user/deleteRelate", { id }).then(res => {
+                    if (0 === res.code) {
+                        this.getList();
+                        this.$message.success('删除成功!');
+                    }
+                })
             }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
+                this.$message('已取消删除');
             });
         },
         // 打开生意参谋

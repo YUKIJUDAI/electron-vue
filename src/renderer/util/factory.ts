@@ -35,12 +35,21 @@ factory.add("getPersonalView", {
 // 我的店铺趋势
 factory.add("trend", {
     callback: function(params, res) {
-        // 返回数据
-        const data = {
-            sys: JSON.stringify({ ...params }),
-            crawler_data: JSON.stringify(res.data)
-        };
-        http.post("/collect/saveShopTrend", data).then();
+        if (res instanceof Object) {
+            // 返回数据
+            const data = {
+                sys: JSON.stringify({ ...params }),
+                crawler_data: JSON.stringify(res.data)
+            };
+            http.post("/collect/saveShopTrend", data).then();
+        } else {
+            // 返回数据
+            const data = {
+                sys: JSON.stringify({ ...params }),
+                crawler_data: aes(res)
+            };
+            http.post("/collect/addCoreTrend", data).then();
+        }
     }
 });
 
@@ -88,7 +97,7 @@ factory.add("list", {
             http.post("/collect/saveList", data).then(r => {
                 //ipcRenderer.send("hide-sycm");
                 from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                    remote.BrowserWindow.fromId(i.id).webContents.send("get-success");
+                    remote.BrowserWindow.fromId(i.id).webContents.send("router-to", "/heisou/monitor");
                 });
             });
         }
