@@ -4,18 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hello</title>
+    <title></title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            padding: 20px;
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>
-    我是广告
+
 </body>
 <script>
 
     window.onload = function () {
-        let params = new URLSearchParams(location.href);
+        let params = new URLSearchParams(location.search);
         let id = params.get('id');
-        let id = params.get('proxyid');
+        let proxyid = params.get('proxyid');
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://bsearch.lethink.net/index/getadsinfo", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.send("id=" + id + "&proxyid=" + proxyid);
+        // 处理返回数据
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var data = JSON.parse(xhr.responseText);
+                if (0 === data.code) {
+                    document.title = data.data.title;
+                    document.body.innerHTML = data.data.content;
+                }
+            }
+        };
     }
 </script>
 

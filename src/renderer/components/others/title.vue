@@ -97,7 +97,7 @@ const { ipcRenderer } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
-import { baseUrl, wsUrl } from "@/config/config";
+import { baseUrl, wsUrl, proxyid } from "@/config/config";
 import factory from "@/util/factory";
 
 export default {
@@ -156,8 +156,11 @@ export default {
             };
             this.websock.onmessage = (e) => {
                 const redata = JSON.parse(e.data);
+                console.log("redata", redata)
                 if (redata.type === 1 || redata.type === 3) {
                     this.unreadMessage = true;
+                } else if (redata.type == 2) {
+                    ipcRenderer.send("open-ad", redata.ads_id, proxyid);
                 }
             };
         },
@@ -249,6 +252,11 @@ export default {
         // 最大化 最小化 关闭
         toMainFn(type) {
             ipcRenderer.send(type);
+        }
+    },
+    watch: {
+        isLogin() {
+            this.openSocket();
         }
     }
 }

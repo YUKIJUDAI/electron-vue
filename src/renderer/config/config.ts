@@ -5,4 +5,4 @@ const qnUrl = "http://file.bsearch.lethink.net/";
 const wsUrl = "ws://47.99.101.142:2046/";
 const proxyid = 1;
 
-export { uploadUrl, baseUrl, heisouBaseUrl, qnUrl, wsUrl };
+export { uploadUrl, baseUrl, heisouBaseUrl, qnUrl, wsUrl, proxyid };

@@ -53,7 +53,7 @@ ipcMain.on("open-sycm", function (e, account, pwd) {
 });
 
 // 打开广告
-ipcMain.on("open-ad", function (id, proxyid) {
+ipcMain.on("open-ad", function (e, id, proxyid) {
     createAdView(id, proxyid);
 });
 
@@ -118,12 +118,13 @@ function createWindow() {
 function createAdView(id, proxyid) {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
     let adWindow = new BrowserWindow({
-        width: 300, height: 400,
-        x: width - 300, y: height - 400,
+        width: 250, height: 300,
+        x: width - 260, y: height - 305,
         parent: mainWindow, autoHideMenuBar: true,
-        resizable: false, movable: false
+        resizable: false, movable: false,
+        minimizable: false, maximizable: false
     })
-    adWindow.webContents.loadURL(__static + "/ad.html?id=" + id + "&proxyid=" + proxyid);
+    adWindow.webContents.loadURL(__static + "/ad.html?proxyid=" + proxyid + "&id=" + id);
     adWindow.webContents.closeDevTools();
 }
 
