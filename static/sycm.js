@@ -291,12 +291,7 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
             delay(1000),
             // 点击下拉
             tap(() => {
-                try {
-                    analysisPage.storeSourceSel().click();
-                    setLog({ flag: 0, msg: "流量数获取成功" });
-                } catch (error) {
-                    setLog({ flag: 2, msg: "error1" + error });
-                }
+                analysisPage.storeSourceSel().click();
             }),
             delay(1000),
             // 点击无线端

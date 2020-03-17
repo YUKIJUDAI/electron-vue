@@ -13,19 +13,19 @@
                         <router-link to="/geren/vip" v-show="userInfo.vip_level === 0" tag="span">升级</router-link>
                     </p>
                     <ul class="clearfix">
-                        <!-- <li>
+                        <li>
                             <p>可用担保金额：<span></span></p>
-                        </li> -->
+                        </li>
                         <li>
                             <p>积分余额：<span>{{userInfo.gold}}</span></p>
                         </li>
                     </ul>
-                    <!-- <p class="p-2">冻结中担保金：</p> -->
+                    <p class="p-2">冻结中担保金：</p>
                 </div>
                 <div class="head-left-3">
                     <el-button size="small" type="primary" class="head-left-3-btn" @click="$router.push('/geren/goldCoinDetails')">充值</el-button>
                     <br />
-                    <!-- <el-button size="small" plain class="head-left-3-btn">提现</el-button> -->
+                    <el-button size="small" plain class="head-left-3-btn">提现</el-button>
                 </div>
             </div>
             <div class="head-right">
@@ -52,7 +52,7 @@
             </div>
         </div>
         <p class="p-3">邀请商家注册：{{userInfo.invite_url}}<span @click="copy(userInfo.invite_url)">复制链接</span></p>
-        <!-- <p class="p-4">成功注册送7天VIP 商家付费享受10%分佣</p> -->
+        <p class="p-4">成功注册送7天VIP 商家付费享受10%分佣</p>
         <div class="body">
             <div class="body-con">
                 <el-card class="box-card">
@@ -61,10 +61,10 @@
                         <el-button style="float: right; padding: 3px 0" type="text">查看更多></el-button>
                     </div>
                     <ul>
-                        <!-- <li>
+                        <li>
                             <p class="p-5">竞品已监控</p>
                             <p class="p-6">45<span>天</span></p>
-                        </li> -->
+                        </li>
                         <li>
                             <p class="p-5">黑号已查询</p>
                             <p class="p-6">{{userInfo.black_num}}<span>次</span></p>
@@ -89,11 +89,11 @@
                             <p class="p-5">累计邀请人数</p>
                             <p class="p-6">{{userInfo.invite_count}}<span>人</span></p>
                         </router-link>
-                        <!-- <li>
+                        <li>
                             <img src="~@/assets/icon/m.png" class="m">
                             <p class="p-5">累计获得奖励 (积分)</p>
-                            <p class="p-6">45<span>个</span></p>
-                        </li> -->
+                            <p class="p-6">0<span>个</span></p>
+                        </li>
                         <li>
                             <el-button size="small" type="primary" class="invite">立即邀请</el-button>
                         </li>

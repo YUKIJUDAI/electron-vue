@@ -1,6 +1,6 @@
 {
     "name": "my-project",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -28,6 +28,9 @@
             {
                 "provider": "generic",
                 "url": "http://localhost:3000/public"
+
+
+                
             }
         ],
         "win": {

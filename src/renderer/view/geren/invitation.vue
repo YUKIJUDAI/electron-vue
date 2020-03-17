@@ -8,16 +8,16 @@
                     <p class="p-5">累计邀请人数</p>
                     <p class="p-6">{{total_items}}<span>人</span></p>
                 </li>
-                <!-- <li>
+                <li>
                     <img src="~@/assets/icon/m-1.png" class="m">
                     <p class="p-5">累计获得奖励 (积分)</p>
-                    <p class="p-6">45<span>个</span></p>
-                </li> -->
-                <!-- <li class="no-border">
+                    <p class="p-6">0<span>个</span></p>
+                </li>
+                <li class="no-border">
                     <img src="~@/assets/icon/v-1.png" class="v">
                     <p class="p-5">累计获得VIP天数</p>
-                    <p class="p-6">45<span>天</span></p>
-                </li> -->
+                    <p class="p-6">0<span>天</span></p>
+                </li>
                 <li class="no-border last-li">
                     <el-button size="small" type="primary" class="invite">立即邀请</el-button>
                 </li>
@@ -34,12 +34,12 @@
                         {{["未发布","已发布"][+scope.row.bonus_status]}}
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="bonus" label="奖励积分" align="center">
+                <el-table-column prop="bonus" label="奖励积分" align="center">
                 </el-table-column>
                 <el-table-column prop="vip_days" label="奖励VIP天数" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="奖励状态" align="center">
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
         </div>
         <div class="pagination">

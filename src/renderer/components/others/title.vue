@@ -156,7 +156,6 @@ export default {
             };
             this.websock.onmessage = (e) => {
                 const redata = JSON.parse(e.data);
-                console.log("redata", redata)
                 if (redata.type === 1 || redata.type === 3) {
                     this.unreadMessage = true;
                 } else if (redata.type == 2) {
@@ -246,7 +245,7 @@ export default {
         },
         // 退出
         exit() {
-            this.$store.dispatch("set_user_info", { token: "", phone: "", user_id: "", vip_level: 0 });
+            this.$store.dispatch("set_user_info", { });
             this.$router.replace("/");
         },
         // 最大化 最小化 关闭

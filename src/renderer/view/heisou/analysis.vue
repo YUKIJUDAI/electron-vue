@@ -86,7 +86,7 @@
                 <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">黑搜分析<i class="hot"></i></li>
             </ul>
         </div>
-        <div class="data" :is="tempList[tabIndex]" :itemId="goodsInfo.itemId" :date_range="form.date_range" :t="t"></div>
+        <div class="data" :is="tempList[tabIndex]" :itemId="goodsInfo.itemId" :date_range="form.date_range" :t="t" :title="goodsInfo.goods_name"></div>
     </div>
 </template>
 

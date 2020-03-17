@@ -4,16 +4,16 @@
         <div class="body clearfix">
             <div class="main-left">
                 <div class="main-left-1">
-                    <img src="~@/assets/img/level-0.png" class="identity-tag" v-show="viplevel === 0">
-                    <img src="~@/assets/img/level-1.png" class="identity-tag" v-show="viplevel === 1">
+                    <img src="~@/assets/img/level-0.png" class="identity-tag" v-show="userInfo.vip_level === 0">
+                    <img src="~@/assets/img/level-1.png" class="identity-tag" v-show="userInfo.vip_level === 1">
                     <img src="~@/assets/img/admin.png" class="avatar">
-                    <router-link to="/geren/personCenter" tag="div" class="main-login" v-if="isLogin">{{userPhone}}</router-link>
+                    <router-link to="/geren/personCenter" tag="div" class="main-login" v-if="isLogin">{{userInfo.user_phone}}</router-link>
                     <div class="main-login" @click="goLogin" v-else>请登录</div>
                 </div>
                 <div class="main-left-ul" v-if="isLogin">
                     <ul>
-                        <li>积分余额：<span>3000</span></li>
-                        <!-- <li>担保资金：<span>3000</span></li> -->
+                        <li>积分余额：<span>{{userInfo.gold}}</span></li>
+                        <li>担保资金：<span>0</span></li>
                     </ul>
                 </div>
                 <div class="main-left-2 clearfix">
@@ -53,11 +53,8 @@ export default {
         isLogin() {
             return !isEmpty(this.$store.state.userInfo.token);
         },
-        userPhone() {
-            return this.$store.state.userInfo.user_phone;
-        },
-        viplevel() {
-            return this.$store.state.userInfo.vip_level;
+        userInfo() {
+            return this.$store.state.userInfo;
         },
         menuInfo() {
             return this.$store.state.menuInfo || [];
@@ -74,8 +71,17 @@ export default {
         ipcRenderer.on('router-to', (event, router) => {
             this.$router.push(router);
         });
+
+        this.getUserInfo();
     },
     methods: {
+        getUserInfo() {
+            if (this.isLogin) {
+                this.$fetch.post("/user/getUserInfo").then(res => {
+                    0 == res.code && this.$store.dispatch("set_user_info", { gold: res.data.gold });
+                });
+            }
+        },
         // 打开
         open(url) {
             if (!this.isLogin) {
@@ -89,6 +95,11 @@ export default {
         },
         goRegistered() {
             this.$refs.heisouTitle.goRegistered()
+        }
+    },
+    watch: {
+        isLogin(val) {
+            this.getUserInfo();
         }
     }
 }

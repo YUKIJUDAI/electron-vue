@@ -2,9 +2,9 @@
     <div class="data-source">
         <ul class="data-source-tab">
             <li :class="{active:tabIndex === 0}" @click="changeTab(0)">引流关键词</li>
-            <li :class="{active:tabIndex === 0}" @click="changeTab(1)">成交关键词</li>
-            <li :class="{active:tabIndex === 1}" @click="changeTab(2)">流量结构</li>
-            <li :class="{active:tabIndex === 2}" @click="changeTab(3)">关键指标</li>
+            <li :class="{active:tabIndex === 1}" @click="changeTab(1)">成交关键词</li>
+            <li :class="{active:tabIndex === 2}" @click="changeTab(2)">流量结构</li>
+            <li :class="{active:tabIndex === 3}" @click="changeTab(3)">关键指标</li>
         </ul>
         <div class="data-source-table" v-show="tabIndex === 0">
             <el-table :data="tableData0" border style="width: 100%" height="500">
@@ -14,7 +14,7 @@
                 </el-table-column>
                 <el-table-column prop="uv" label="访客数" align="center">
                 </el-table-column>
-                <el-table-column prop="payByrCntIndexNum " label="成交件数" align="center">
+                <el-table-column prop="payByrCntIndexNum" label="成交件数" align="center">
                 </el-table-column>
                 <el-table-column prop="tradeNum" label="成交金额" align="center">
                 </el-table-column>
@@ -37,7 +37,7 @@
                 </el-table-column>
                 <el-table-column prop="uv" label="访客数" align="center">
                 </el-table-column>
-                <el-table-column prop="payByrCntIndexNum " label="成交件数" align="center">
+                <el-table-column prop="payByrCntIndexNum" label="成交件数" align="center">
                 </el-table-column>
                 <el-table-column prop="tradeNum" label="成交金额" align="center">
                 </el-table-column>
@@ -58,7 +58,7 @@
                 </el-table-column>
                 <el-table-column prop="uv" label="访客数" align="center">
                 </el-table-column>
-                <el-table-column prop="payByrCntIndexNum " label="成交人数" align="center">
+                <el-table-column prop="payByrCntIndexNum" label="成交人数" align="center">
                 </el-table-column>
                 <el-table-column prop="payRateRatio" label="转化率" align="center">
                 </el-table-column>

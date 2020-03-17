@@ -79,7 +79,11 @@ export default {
             ).subscribe((res) => {
                 if (0 === res.code) {
                     this.payState = 1;
-                    this.$store.dispatch("set_user_info", { vip_level: 1 });
+                    if (num) {
+                        this.$store.dispatch("set_user_info", { gold: this.$store.state.userInfo.gold + num });
+                    } else {
+                        this.$store.dispatch("set_user_info", { vip_level: 1 });
+                    }
                     o.unSubscribe();
                 } else {
                     this.payState = 0;
