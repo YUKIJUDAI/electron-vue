@@ -53,8 +53,8 @@ ipcMain.on("open-sycm", function (e, account, pwd) {
 });
 
 // 打开广告
-ipcMain.on("open-ad", function () {
-    createAdView();
+ipcMain.on("open-ad", function (id, proxyid) {
+    createAdView(id, proxyid);
 });
 
 // 最小化
@@ -115,15 +115,15 @@ function createWindow() {
 }
 
 //创建广告弹出
-function createAdView() {
+function createAdView(id, proxyid) {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
     let adWindow = new BrowserWindow({
         width: 300, height: 400,
         x: width - 300, y: height - 400,
-        resizable: false, movable: false,
-        frame: false, modal: true
+        parent: mainWindow, autoHideMenuBar: true,
+        resizable: false, movable: false
     })
-    adWindow.webContents.loadURL(__static + "/ad.html");
+    adWindow.webContents.loadURL(__static + "/ad.html?id=" + id + "&proxyid=" + proxyid);
     adWindow.webContents.closeDevTools();
 }
 
@@ -134,7 +134,8 @@ function createSycmWindow(account, pwd) {
         return;
     }
     sycmWindow = new BrowserWindow({
-        width: 1000, height: 800, parent: mainWindow, autoHideMenuBar: true,
+        width: 1000, height: 800,
+        parent: mainWindow, autoHideMenuBar: true,
         webPreferences: {
             devTools: true,
             webviewTag: true,
@@ -148,17 +149,19 @@ function createSycmWindow(account, pwd) {
         { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36" }
     );
     sycmWindow.webContents.once("dom-ready", () => {
+        sycmWindow.webContents.send("dom-ready");
         account && pwd && sycmWindow.webContents.send("autoLogin", account, pwd);
     });
     // 存储淘宝信息
     global.tbInfo = {
         loginUserName: "",    //  淘宝登录账户
-        runAsShopId: "",           //  店铺id
-        runAsShopTitle: "",      //  当前店铺名称
-        loginUserId: "",  //  淘宝登录用户id
-        runAsUserId: "",     //  当前使用的淘宝用户id
-        cateId: "",   // 店铺分类id
-        cateName: ""  // 店铺分类名字
+        tb_password: "",       // 淘宝密码
+        runAsShopId: "",      //  店铺id
+        runAsShopTitle: "",   //  当前店铺名称
+        loginUserId: "",      //  淘宝登录用户id
+        runAsUserId: "",      //  当前使用的淘宝用户id
+        cateId: "",           // 店铺分类id
+        cateName: ""          // 店铺分类名字
     };
     sycmWindow.on('closed', function () {
         mainWindow.webContents.send("router-to", "/heisoubinding/binding");
