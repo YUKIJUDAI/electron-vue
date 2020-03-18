@@ -19,14 +19,14 @@
             </el-table-column>
             <el-table-column prop="" label="加购率%" align="center">
             </el-table-column>
-            <el-table-column prop="" label="转化率%" align="center">
+            <el-table-column prop="" label="转化率/%%" align="center">
             </el-table-column>
             <el-table-column prop="" label="手淘搜索" align="center">
                 <el-table-column prop="" label="访客数" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="成交量" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="成交额" align="center">
                 </el-table-column>
@@ -36,7 +36,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="成交量" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="成交额" align="center">
                 </el-table-column>
@@ -46,7 +46,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="成交量" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="成交额" align="center">
                 </el-table-column>
@@ -56,7 +56,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="成交量" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="成交额" align="center">
                 </el-table-column>
@@ -66,7 +66,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="成交量" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="成交额" align="center">
                 </el-table-column>

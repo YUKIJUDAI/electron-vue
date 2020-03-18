@@ -10,7 +10,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="推荐词根" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="推荐转化率" align="center">
+                <el-table-column prop="" label="推荐转化率/%" align="center">
                     <el-table-column prop="" label="日期" align="center">
                     </el-table-column>
                     <el-table-column prop="" label="数值" align="center">

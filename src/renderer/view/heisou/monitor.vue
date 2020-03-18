@@ -64,7 +64,7 @@
                                 <el-table-column prop="tradeNum" label="买家数"> </el-table-column>
                                 <el-table-column prop="payAmount" label="支付金额"> </el-table-column>
                                 <el-table-column prop="price" label="客单价"> </el-table-column>
-                                <el-table-column prop="payRateRatio" label="转化率"> </el-table-column>
+                                <el-table-column prop="payRateRatio" label="转化率/%"> </el-table-column>
                                 <el-table-column prop="uvPrice" label="UV价值"> </el-table-column>
                             </el-table>
                         </el-tab-pane>
@@ -183,7 +183,7 @@
                 <el-table-column prop="tradeNum" label="买家数" align="center"> </el-table-column>
                 <el-table-column prop="payAmount" label="支付金额" align="center"> </el-table-column>
                 <el-table-column prop="price" label="客单价" align="center"> </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" align="center"> </el-table-column>
+                <el-table-column prop="payRateRatio" label="转化率/%" align="center"> </el-table-column>
                 <el-table-column prop="uvPrice" label="UV价值" align="center"> </el-table-column>
 
                 <el-table-column label="深度智能分析" width="120" align="center">
@@ -430,7 +430,7 @@ export default {
                         }
                     },
                     {
-                        name: '转化率/%',
+                        name: '转化率',
                         type: 'value',
                         position: "right",
                         offset: 90,

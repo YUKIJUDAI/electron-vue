@@ -21,7 +21,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="成交金额" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="转化率" align="center">
+                <el-table-column prop="" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="标题词" align="center">
                 </el-table-column>

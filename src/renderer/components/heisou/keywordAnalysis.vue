@@ -42,10 +42,7 @@
                 </el-table-column>
                 <el-table-column prop="trade_money" label="成交金额" align="center">
                 </el-table-column>
-                <el-table-column label="转化率" align="center">
-                    <template slot-scope="scope">
-                        {{scope.row.payRateRadio}}%
-                    </template>
+                <el-table-column prop="payRateRadio" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="count" label="出现天数" align="center">
                 </el-table-column>
@@ -172,7 +169,7 @@ export default {
                         }
                     },
                     {
-                        name: '转化率/%',
+                        name: '转化率',
                         type: 'value',
                         position: "right",
                         offset: 20,

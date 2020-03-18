@@ -18,7 +18,7 @@
                 </el-table-column>
                 <el-table-column prop="tradeNum" label="成交金额" align="center">
                 </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" align="center">
+                <el-table-column prop="payRateRatio" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="uvPrice" label="UV价值" align="center">
                 </el-table-column>
@@ -41,7 +41,7 @@
                 </el-table-column>
                 <el-table-column prop="tradeNum" label="成交金额" align="center">
                 </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" align="center">
+                <el-table-column prop="payRateRatio" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
@@ -60,7 +60,7 @@
                 </el-table-column>
                 <el-table-column prop="payByrCntIndexNum" label="成交人数" align="center">
                 </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" align="center">
+                <el-table-column prop="payRateRatio" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="tradeNum" label="交易额" align="center">
                 </el-table-column>
@@ -89,7 +89,7 @@
                 </el-table-column>
                 <el-table-column prop="cartHitsNum" label="加购数" align="center">
                 </el-table-column>
-                <el-table-column prop="payRateRatio" label="转化率" align="center">
+                <el-table-column prop="payRateRatio" label="转化率/%" align="center">
                 </el-table-column>
                 <el-table-column prop="tradeNum" label="交易额" align="center">
                 </el-table-column>

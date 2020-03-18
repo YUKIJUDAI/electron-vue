@@ -208,6 +208,16 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
             }),
             filter(() => analysisPage.addSel().length > 0),
             take(1),
+            tap(() => {
+                // 去除缓存
+                for (var i = 0; i < localStorage.length; i++) {
+                    var key = localStorage.key(i);
+                    if (key.includes("getKeywords") || key.includes("getFlowSource") || key.includes("getSourceTrend")) {
+                        localStorage.removeItem(key);
+                    }
+                }
+            }),
+            delay(1000),
             // 点击加号
             tap(() => {
                 analysisPage.addBtn().click()
