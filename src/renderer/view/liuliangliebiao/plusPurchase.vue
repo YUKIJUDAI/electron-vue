@@ -1,5 +1,5 @@
 <template>
-    <liuliang-list></liuliang-list>
+    <liuliang-list :type="3"></liuliang-list>
 </template>
 
 <script>

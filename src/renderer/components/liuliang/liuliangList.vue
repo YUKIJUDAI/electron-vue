@@ -3,40 +3,32 @@
         <div class="liuliang-form">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item>
-                    <el-date-picker size="small" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                    <el-date-picker size="small" type="daterange" value-format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" v-model="date">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item>
-                    <el-input placeholder="查询关键词" size="small"></el-input>
+                    <el-input placeholder="查询关键词" size="small" v-model="keyword"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-select placeholder="选择状态" clearable size="small">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                    <el-button type="primary" @click="getList">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="liuliang-table">
-            <el-table border style="width: 100%">
-                <el-table-column prop="" label="类型" align="center">
+            <el-table border style="width: 100%" :data="list">
+                <el-table-column prop="type" label="类型" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="关键词/商品ID" align="center">
+                <el-table-column prop="keyword" label="关键词/商品ID" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="任务备注" align="center">
+                <el-table-column prop="gold" label="总价(积分)" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="总价(积分)" align="center">
+                <el-table-column prop="count" label="发布量" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="发布量" align="center">
+                <el-table-column prop="lave" label="剩余量" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="剩余量" align="center">
+                <el-table-column prop="status" label="处理状态" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="处理状态" align="center">
-                </el-table-column>
-                <el-table-column prop="" label="发布时间" align="center">
+                <el-table-column prop="create_time" label="发布时间" align="center">
                 </el-table-column>
             </el-table>
         </div>
@@ -49,14 +41,27 @@
 
 <script>
 export default {
+    props: ["type"],
     data() {
         return {
+            list: [],
+            date: "",
+            keyword: "",
             page: 1,
             total_pages: 1,
         }
     },
+    mounted() {
+        this.getList();
+    },
     methods: {
-        getList() { }
+        getList() {
+            var date1 = this.date ? this.date[0] : "";
+            var date2 = this.date ? this.date[1] : "";
+            this.$fetch.post("/lieliu/getLieliuList", { date1, date2, keyword: this.keyword, type: this.type, page: this.page }).then(res => {
+                0 === res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages);
+            });
+        }
     }
 }
 </script>
