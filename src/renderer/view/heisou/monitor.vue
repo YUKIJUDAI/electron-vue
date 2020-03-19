@@ -57,7 +57,7 @@
                             <div id="echarts" style="height:400px;padding:0 50px;"></div>
                         </el-tab-pane>
                         <el-tab-pane label="显示列表" name="second">
-                            <el-table :data="treadTable" style="width: 100%" border height="400">
+                            <el-table :data="treadTable" style="width: 100%" border height="500">
                                 <el-table-column prop="itemId" label="宝贝ID" width="120"> </el-table-column>
                                 <el-table-column prop="analysis_time_str" label="日期" width="120"> </el-table-column>
                                 <el-table-column prop="uvIndexNum" label="访客数"> </el-table-column>

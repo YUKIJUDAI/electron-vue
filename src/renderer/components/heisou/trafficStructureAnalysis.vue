@@ -1,7 +1,7 @@
 <template>
     <div class="traffi-structure-analysis clearfix">
         <div class="traffi-structure-analysis-left">
-            <el-table border style="width: 100%" :data="flowStructure" height="400">
+            <el-table border style="width: 100%" :data="flowStructure" height="500">
                 <el-table-column prop="_id" label="渠道" align="center">
                 </el-table-column>
                 <el-table-column prop="uv" label="访客数" align="center">
@@ -20,7 +20,7 @@
             </el-table>
         </div>
         <div class="traffi-structure-analysis-right">
-            <el-table border style="width: 100%" :data="keywordsTrend" height="400">
+            <el-table border style="width: 100%" :data="keywordsTrend" height="500">
                 <el-table-column prop="data_date" label="日期" align="center">
                 </el-table-column>
                 <el-table-column prop="pageName" label="渠道" align="center">
