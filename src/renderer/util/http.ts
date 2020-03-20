@@ -5,7 +5,7 @@ const { remote } = require("electron");
 const { heisouBaseUrl } = require("@/config/config");
 import store from "@/store";
 
-// 创建新http - 黑搜
+// 创建新http - 火星情报
 
 const http = axios.create({
     timeout: 10000,

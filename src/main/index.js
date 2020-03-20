@@ -110,7 +110,7 @@ function createWindow() {
             }
         }
     ])
-    tray.setToolTip('黑搜开发器');
+    tray.setToolTip('火星情报');
     tray.setContextMenu(contextMenu);
 }
 

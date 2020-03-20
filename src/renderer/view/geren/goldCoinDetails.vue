@@ -10,12 +10,12 @@
                 <li>
                     <img src="~@/assets/icon/m-2.png" class="m">
                     <p class="p-5">收入(积分)</p>
-                    <p class="p-6">{{data.gold_outlay}}</p>
+                    <p class="p-6">{{data.gold_income}}</p>
                 </li>
                 <li class="no-border">
                     <img src="~@/assets/icon/m-3.png" class="v">
                     <p class="p-5">支出(积分)</p>
-                    <p class="p-6">{{data.gold_income}}</p>
+                    <p class="p-6">{{data.gold_outlay}}</p>
                 </li>
                 <li class="no-border last-li">
                     <el-button size="small" type="primary" class="invite" @click="dialogVisible = true">立即充值</el-button>

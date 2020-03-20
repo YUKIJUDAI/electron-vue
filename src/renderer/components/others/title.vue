@@ -3,7 +3,7 @@
         <div class="header clearfix" style="-webkit-app-region: drag">
             <router-link class="msg" tag="div" to="/main" style="-webkit-app-region: no-drag">
                 <img src="~@/assets/icon/logo.png" class="logo" />
-                <span class="header-title">黑搜开发器</span>
+                <span class="header-title">火星情报</span>
             </router-link>
             <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
                 <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
@@ -21,7 +21,7 @@
                 <li class="exit" @click="exit" v-if="isLogin">退出</li>
             </ul>
         </div>
-        <el-dialog title="欢迎登录黑搜开发器" :visible.sync="loginFlag" width="558px">
+        <el-dialog title="欢迎登录火星情报" :visible.sync="loginFlag" width="558px">
             <div class="login-dialog">
                 <form class="form">
                     <div class="form-input">
@@ -49,7 +49,7 @@
                 <div class="submit" @click="login">登录</div>
             </div>
         </el-dialog>
-        <el-dialog title="欢迎注册黑搜开发器" :visible.sync="registeredFlag" width="721px">
+        <el-dialog title="欢迎注册火星情报" :visible.sync="registeredFlag" width="721px">
             <form class="form">
                 <div class="form-input">
                     <i class="phone"></i>
@@ -83,7 +83,7 @@
             <div class="submit" @click="registered">立即注册</div>
             <div class="protocol clearfix">
                 <input type="checkbox" class="protocol-checkbox" v-model="protocolFlag" />
-                <p>我已仔细阅读并同意接受<span>《黑搜开发器服务协议》</span></p>
+                <p>我已仔细阅读并同意接受<span>《火星情报服务协议》</span></p>
             </div>
         </el-dialog>
         <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">

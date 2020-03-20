@@ -16,7 +16,7 @@
         "rebuildsqlite3": "electron-rebuild -f -w .\\node_modules\\better-sqlite3"
     },
     "build": {
-        "productName": "黑搜",
+        "productName": "火星情报",
         "appId": "com.example.yourapp",
         "directories": {
             "output": "build/${productName}_${version}"

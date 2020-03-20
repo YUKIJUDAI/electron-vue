@@ -3,7 +3,7 @@
         <div class="left">
             <ul>
                 <li class="head">功能特权</li>
-                <li>急速黑搜</li>
+                <li>精品透视</li>
                 <li>黑号/标签查询</li>
                 <li>卡首屏/魔搜</li>
                 <li>流量</li>
@@ -37,7 +37,7 @@
                 <li>体验发布</li>
             </ul>
         </div>
-        <el-dialog :visible.sync="dialogVisible" title="开通黑搜高级会员" width="690px" :before-close="handleClose">
+        <el-dialog :visible.sync="dialogVisible" title="开通火星情报高级会员" width="690px" :before-close="handleClose">
             <paytel v-if="pay" :pay_type="pay_type" :serve_id="price[checked].id"></paytel>
             <div class="recharge-1" v-else>
                 <div class="account clearfix">
