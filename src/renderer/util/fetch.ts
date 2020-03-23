@@ -1,6 +1,5 @@
 const axios = require("axios");
 const qs = require("qs");
-const { remote } = require("electron");
 
 const { baseUrl, proxyid } = require("@/config/config");
 import store from "@/store";

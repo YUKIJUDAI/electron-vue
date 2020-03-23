@@ -1,6 +1,6 @@
 const axios = require("axios");
 const qs = require("qs");
-const { remote } = require("electron");
+const { remote, ipcRenderer } = require("electron");
 
 const { heisouBaseUrl } = require("@/config/config");
 import store from "@/store";

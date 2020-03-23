@@ -390,6 +390,15 @@ ipcRenderer.on("add-monitor", (event, data) => {
     timer(0, 10000)
         .pipe(
             take(data.id.length),
+            tap(() => {
+                // 去除缓存
+                for (var i = 0; i < localStorage.length; i++) {
+                    var key = localStorage.key(i);
+                    if (key.includes("getCoreIndexes") || key.includes("getCoreTrend")) {
+                        localStorage.removeItem(key);
+                    }
+                }
+            }),
             mergeMap((item) => {
                 return interval(1000)
                     .pipe(
@@ -438,7 +447,6 @@ ipcRenderer.on("add-monitor", (event, data) => {
         )
         .subscribe();
 });
-
 
 // 是否有classname
 function hasClass(ele, cls) {

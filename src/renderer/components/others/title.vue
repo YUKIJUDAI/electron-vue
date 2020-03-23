@@ -135,6 +135,7 @@ export default {
         }
     },
     mounted() {
+
         // 判断在线离线状态
         isOnline();
         // 获取更新

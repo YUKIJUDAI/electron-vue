@@ -15,17 +15,15 @@ let tray;
 let uploadUrl = "http://127.0.0.1:3000/public";
 
 // 日志
-let log = log4js.getLogger("error");
 log4js.configure({
-    "appenders": {
-        "console": { "type": "console", "category": "console" },
-        "error": { "type": "dateFile", "filename": __static + "/logs/error-log.log", maxLogSize: 10240, backups: 3, }
+    appenders: {
+        error: { type: "dateFile", filename: __static + "/logs/error-log.log", pattern: ".yyyy-MM-dd", maxLogSize: 10240, backups: 3 }
     },
-    "categories": {
-        "default": { "appenders": ["console"], "level": "all" },
-        "error": { "appenders": ["error"], "level": "error" }
+    categories: {
+        default: { appenders: ["error"], level: "debug" }
     }
 });
+let logError = log4js.getLogger("default");
 
 const winURL = process.env.NODE_ENV === 'development'
     ? `http://localhost:9080`
@@ -44,7 +42,7 @@ app.on('activate', function () {
 
 // 输出日志
 ipcMain.on("log", function (e, err) {
-    log.error(err);
+    logHttp.debug(err);
 })
 
 // 打开生意参谋

@@ -51,7 +51,7 @@ factory.add("trend", {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: aes(res)
             };
-            http.post("/collect/addCoreTrend", data).then();
+            http.post("/collect/addCoreTrendForMonitor", data).then();
         }
     }
 });
