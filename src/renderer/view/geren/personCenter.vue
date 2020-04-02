@@ -124,6 +124,7 @@ export default {
     methods: {
         getUserInfo() {
             this.$fetch.post("/user/getUserInfo").then(res => {
+                
                 this.userInfo = res.data;
             });
         },

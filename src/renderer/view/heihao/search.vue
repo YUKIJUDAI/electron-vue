@@ -9,6 +9,10 @@
                     <el-button type="primary" @click="search">立即查询</el-button>
                 </el-form-item>
             </el-form>
+            <div class="nums">
+                <p>剩余次数：<span>{{+blackNum > 0 ? blackNum : '无限制'}}</span></p>
+                <p>非会员: <router-link tag="span" to="/geren/vip" v-show="vip_level === 0">马上开通</router-link></p>
+            </div>
         </div>
         <div class="searched" v-if="searchFlag">
             <div class="info">
@@ -206,6 +210,22 @@ export default {
         font-size: 0;
         padding-top: 40px;
     }
+    .nums {
+        padding-bottom: 24px;
+        margin-left: 80px;
+        display: flex;
+        font-size: 14px;
+        color: #666;
+        p {
+            &:nth-of-type(2) {
+                padding-left: 30px;
+            }
+        }
+        span {
+            color: #ff6801;
+            cursor: pointer;
+        }
+    }
     .info {
         margin-top: 25px;
         background: rgba(255, 248, 243, 1);
@@ -290,6 +310,7 @@ export default {
         }
     }
     .introduction {
+        width: 90%;
         height: 180px;
         background: rgba(255, 249, 245, 1);
         border-radius: 20px;

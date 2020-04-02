@@ -1,15 +1,15 @@
 <template>
     <div class="reportHistory">
         <div class="reportHistory-title">
-            <el-form :inline="true" :model="searchForm" label-width="80px">
-                <el-form-item label="旺旺号">
+            <el-form :inline="true" :model="searchForm" label-width="70px" label-position="left">
+                <el-form-item label="旺旺号码">
                     <el-input placeholder="请输入旺旺号" v-model="searchForm.wangwang" style="width:150px"></el-input>
                 </el-form-item>
                 <el-form-item label="查询日期">
                     <el-date-picker type="daterange" v-model="searchForm.date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:300px">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="状态">
+                <el-form-item label="举报状态">
                     <el-select style="width:150px" v-model="searchForm.status">
                         <el-option label="全部" value="0"></el-option>
                         <el-option label="已通过" value="1"></el-option>
@@ -85,7 +85,7 @@ export default {
 .reportHistory {
     padding: 0 20px;
     .reportHistory-title {
-        padding: 30px 0;
+        padding: 30px 0 0 0;
         font-size: 0;
     }
     .pagination {

@@ -36,6 +36,7 @@
                             <div class="tutor-right">
                                 <p class="tutor-name">{{item.mentor_name}}</p>
                                 <p class="tutor-text">{{item.mentor_desc}}</p>
+                                <div class="tutor-btn">在线咨询</div>
                             </div>
                         </div>
                     </div>
@@ -182,7 +183,7 @@ export default {
         padding: 12px 12px;
         .tutor-list {
             background: #fff;
-            height: 170px;
+            height: 160px;
             border-radius: 8px;
         }
         .tutor-left {
@@ -213,6 +214,17 @@ export default {
                 display: -webkit-box;
                 -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;
+            }
+            .tutor-btn {
+                .tc;
+                cursor: pointer;
+                width: 80px;
+                .l-h(26px);
+                background: rgba(255, 255, 255, 1);
+                border: 1px solid rgba(255, 104, 1, 1);
+                border-radius: 4px;
+                font-size: 14px;
+                color: #FF6801;
             }
         }
     }

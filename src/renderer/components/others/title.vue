@@ -237,7 +237,9 @@ export default {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$message.success(res.msg);
+                    this.$store.dispatch("set_user_info", res.data);
                     this.registeredFlag = false;
+                    this.openSocket();
                 } else {
                     this.getKey();
                     this.$message.error(res.msg);
@@ -248,6 +250,7 @@ export default {
         exit() {
             this.$store.dispatch("set_user_info", { });
             this.$router.replace("/");
+            this.websock.close();
         },
         // 最大化 最小化 关闭
         toMainFn(type) {

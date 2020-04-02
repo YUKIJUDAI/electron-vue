@@ -42,7 +42,7 @@ app.on('activate', function () {
 
 // 输出日志
 ipcMain.on("log", function (e, err) {
-    logHttp.debug(err);
+    logError.debug(err);
 })
 
 // 打开生意参谋

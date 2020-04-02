@@ -90,8 +90,14 @@ export default {
     },
     mounted() {
         this.getList();
+        this.getGoldPrice();
     },
     methods: {
+        getGoldPrice() {
+            this.$fetch.post("/price/getGoldPrice").then(res => {
+                0 == res.code && (this.orderMsg = res.data);
+            });
+        },
         getList() {
             this.$fetch.post("/user/getIncomeList", { page: this.page }).then(res => {
                 0 == res.code && (this.data = res.data, this.total_pages = res.data.total_pages);
@@ -100,6 +106,11 @@ export default {
         handleClose() {
             this.dialogVisible = false;
             this.paying = true;
+        }
+    },
+    watch: {
+        num(val, oldval) {
+            if (val !== oldval) this.num = Math.abs(~~val);
         }
     }
 }
