@@ -16,7 +16,7 @@
                 </el-form-item>
                 <el-form-item label="违规截图：">
                     <p class="up-prompt">请至少上传1张截图，证据不足举报可能会被驳回</p>
-                    <img :src="qnUrl + item" class="avatar" v-for="(item,i) in formData.images" @click="remove(i)">
+                    <img :src="qnUrl + item" class="avatar" v-for="(item,i) in formData.images" @click="formData.images.splice(i, 1)">
                     <el-upload action="" list-type="picture-card" class="up-upload" :http-request="upload" :action="url" :show-file-list="false">
                         <i class="el-icon-plus up-upload-icon"></i>
                     </el-upload>
@@ -52,18 +52,25 @@ import { qnUrl } from "@/config/config";
 export default {
     data() {
         return {
+            // 举报提交表单
             formData: { images: [], content: [] },
+            // 七牛token
             token: "",
+            // 七牛上传url
             url: "",
+            // 七牛地址
             qnUrl
         }
     },
     created() {
-        this.$fetch.post("/upload/getQiniuToken").then(res => {
-            0 === res.code && (this.token = res.data.token, this.url = res.data.url);
-        });
+        this.getQiniuToken();
     },
     methods: {
+        // 获取七牛数据
+        async getQiniuToken() {
+            var res = await this.$fetch.post("/upload/getQiniuToken");
+            0 === res.code && ([this.token, this.url] = [res.data.token, res.data.url]);
+        },
         // 上传主图
         upload(content) {
             if (content.file.type !== 'image/jpeg' && content.file.type !== 'image/png') {
@@ -91,17 +98,13 @@ export default {
                 this.$message.error("上传失败");
             });
         },
-        // 删除图片
-        remove(i) {
-            this.formData.images.splice(i, 1);
-        },
-        submit() {
+        // 提交表单
+        async submit() {
             var data = JSON.parse(JSON.stringify(this.formData));
             data.content = data.content.join(",");
             data.images = data.images.join(",");
-            this.$fetch.post("/heisou/addReport", data).then(res => {
-                0 === res.code ? this.$message.success(res.msg) : this.$message.error(res.msg);
-            });
+            var res = await this.$fetch.post("/heisou/addReport", data);
+            0 === res.code ? (this.$message.success(res.msg), this.formData = { images: [], content: [] }) : this.$message.error(res.msg);
         }
     }
 }

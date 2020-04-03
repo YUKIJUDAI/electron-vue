@@ -19,13 +19,7 @@
 
 <script>
 
-export default {
-    data() {
-        return {
-
-        }
-    }
-}
+export default {}
 </script>
 
 <style lang="less" scoped>

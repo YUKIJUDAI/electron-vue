@@ -53,7 +53,7 @@ export default {
             key: ""
         }
     },
-    mounted() {
+    created() {
         if (this.phone) this.forgetForm.phone = this.phone;
         this.getKey();
     },
@@ -78,21 +78,21 @@ export default {
             this.$emit("goLogin");
         },
         // 忘记密码
-        forget() {
+        async forget() {
             if (this.submitFlag) return;
             this.submitFlag = true;
-            this.$fetch.post(["", "", "/index/forgetPwd", "/user/editPassword", "/user/editPayPwd"][this.type], Object.assign(this.forgetForm, { verify_key: this.key })).then(res => {
-                this.submitFlag = false;
-                if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", { });
-                    this.$message.success(res.msg);
-                    this.$emit("input", false);
-                    this.$router.replace("/");
-                } else {
-                    this.getKey();
-                    this.$message.error(res.msg);
-                }
-            });
+            var url = ["", "", "/index/forgetPwd", "/user/editPassword", "/user/editPayPwd"][this.type];
+            var res = await this.$fetch.post(url, Object.assign(this.forgetForm, { verify_key: this.key }));
+            this.submitFlag = false;
+            if (0 === res.code) {
+                this.$store.dispatch("set_user_info", {});
+                this.$message.success(res.msg);
+                this.$emit("input", false);
+                this.$router.replace("/");
+            } else {
+                this.getKey();
+                this.$message.error(res.msg);
+            }
         },
     }
 }

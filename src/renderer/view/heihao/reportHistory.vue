@@ -49,7 +49,9 @@
 export default {
     data() {
         return {
+            // 搜索条件
             searchForm: { status: "0" },
+            // 表格数据
             tableData: [],
             total_pages: 1,
             page: 1
@@ -59,23 +61,15 @@ export default {
         this.getList();
     },
     methods: {
-        getList() {
-            var { wangwang, date_range, status } = this.searchForm;
-            this.$fetch.post("/heisou/getReportLogs", { wangwang, date_range, status, page: this.page }).then(res => {
-                if (0 === res.code) {
-                    this.tableData = res.data.items;
-                    this.total_pages = res.data.total_pages;
-                }
-            });
+        // 获取列表数据
+        async getList() {
+            var res = await this.$fetch.post("/heisou/getReportLogs", Object.assign(this.searchForm, { page: this.page }));
+            0 === res.code && (this.tableData = res.data.items, this.total_pages = res.data.total_pages);
         }
     },
     watch: {
         "searchForm.date"(val) {
-            if (Array.isArray(val)) {
-                this.searchForm.date_range = val[0] + "|" + val[1];
-            } else {
-                this.searchForm.date_range = "";
-            }
+            this.searchForm.date_range = Array.isArray(val) ? val[0] + "|" + val[1] : "";
         }
     }
 }

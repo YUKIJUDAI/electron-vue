@@ -49,18 +49,17 @@ export default {
             timeout: false,
         }
     },
-    mounted() {
+    created() {
         this.getMsg();
     },
     methods: {
-        getMsg() {
+        async getMsg() {
             var data = { type: this.pay_type, user_id: this.$store.state.userInfo.user_id, serve_id: this.serve_id, num: this.num };
-            this.$fetch.post("/pay/createOrder", data).then(res => {
-                if (0 === res.code) {
-                    this.payMsg = res.data;
-                    this.getResult();
-                }
-            });
+            var res = await this.$fetch.post("/pay/createOrder", data);
+            if (0 === res.code) {
+                this.payMsg = res.data;
+                this.getResult();
+            }
         },
         getResult() {
             this.seconds = 300;
@@ -79,11 +78,7 @@ export default {
             ).subscribe((res) => {
                 if (0 === res.code) {
                     this.payState = 1;
-                    if (num) {
-                        this.$store.dispatch("set_user_info", { gold: this.$store.state.userInfo.gold + num });
-                    } else {
-                        this.$store.dispatch("set_user_info", { vip_level: 1 });
-                    }
+                    this.$store.dispatch("set_user_info", num ? { gold: this.$store.state.userInfo.gold + num } : { vip_level: 1 });
                     o.unSubscribe();
                 } else {
                     this.payState = 0;

@@ -63,12 +63,14 @@ export default {
             return this.$store.state.userInfo.user_phone;
         }
     },
-    mounted() {
-        this.$fetch.post("/user/getUserInfo").then(res => {
-            0 === res.code && (this.userInfo = res.data);
-        });
+    created() {
+        this.getUserInfo();
     },
     methods: {
+        async getUserInfo() {
+            var res = await this.$fetch.post("/user/getUserInfo");
+            0 === res.code && (this.userInfo = res.data);
+        },
         copy(val) {
             copy(val);
             this.$message("复制成功");

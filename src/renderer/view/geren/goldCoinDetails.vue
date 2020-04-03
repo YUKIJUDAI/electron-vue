@@ -88,20 +88,18 @@ export default {
             return this.$store.state.userInfo.user_phone;
         }
     },
-    mounted() {
+    created() {
         this.getList();
         this.getGoldPrice();
     },
     methods: {
-        getGoldPrice() {
-            this.$fetch.post("/price/getGoldPrice").then(res => {
-                0 == res.code && (this.orderMsg = res.data);
-            });
+        async getGoldPrice() {
+            var res = await this.$fetch.post("/price/getGoldPrice");
+            0 == res.code && (this.orderMsg = res.data);
         },
-        getList() {
-            this.$fetch.post("/user/getIncomeList", { page: this.page }).then(res => {
-                0 == res.code && (this.data = res.data, this.total_pages = res.data.total_pages);
-            });
+        async getList() {
+            var res = await this.$fetch.post("/user/getIncomeList", { page: this.page });
+            0 == res.code && (this.data = res.data, this.total_pages = res.data.total_pages);
         },
         handleClose() {
             this.dialogVisible = false;

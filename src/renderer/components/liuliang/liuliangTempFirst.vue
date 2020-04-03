@@ -70,6 +70,7 @@ const moment = require('moment');
 import { weightFn } from "@/util/util";
 import { strictEqual } from 'assert';
 
+// 默认配置 , 空配置
 var defaultData = [2, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 2, 1],
     emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -77,12 +78,19 @@ export default {
     props: ["type"],
     data() {
         return {
+            // 任务时常
             days: 0,
+            // 任务天数
             countbydays: 100,
+            // 是否显示关键词
             flag: true,
-            price: 0, // 价格
+            // 价格
+            price: 0,
+            // vip价格
             vip_price: 0,
+            // 任务时常
             taskTime: ["100-180", "30-50", "30-50", "", "", "", "", "30-100", "", "30-30", "30-30", " 100-180"],
+            // 提交的表单
             form: {
                 dateValue: "",
                 begin_time: "",
@@ -104,19 +112,18 @@ export default {
             return this.$store.state.userInfo.vip_level;
         }
     },
-    mounted() {
+    created() {
         this.form.dateValue = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
         this.getPrice();
     },
     methods: {
-        getPrice() {
+        async getPrice() {
             // 获取单价
-            this.$fetch.post("/price/getLieLiuPrice", { type: this.type }).then(res => {
-                if (0 === res.code) {
-                    this.price = this.vip_level === 0 ? res.data.price : res.data.vip_price;
-                    this.vip_price = res.data.vip_price;
-                }
-            });
+            var res = await this.$fetch.post("/price/getLieLiuPrice", { type: this.type });
+            if (0 === res.code) {
+                this.price = this.vip_level === 0 ? res.data.price : res.data.vip_price;
+                this.vip_price = res.data.vip_price;
+            }
         },
         // 查排名
         open() {

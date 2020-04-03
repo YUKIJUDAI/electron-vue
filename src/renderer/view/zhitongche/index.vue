@@ -94,34 +94,25 @@ export default {
     },
     methods: {
         // 文章
-        getArticles() {
-            this.$fetch.post("/index/getIndexArticles").then(res => {
-                0 === res.code && (this.articles = res.data);
-            });
+        async getArticles() {
+            var res = await this.$fetch.post("/index/getIndexArticles")
+            0 === res.code && (this.articles = res.data);
         },
         // 导师
-        getTutor() {
-            this.$fetch.post("/ganhuo/getVideoRecMentor").then(res => {
-                if (0 === res.code) {
-                    this.tutor = res.data;
-                    this.$nextTick((res => {
-                        this.swiper = new Swiper("#swiper", {
-                            slidesPerView: 3,
-                            spaceBetween: 16,
-                            autoplay: {
-                                delay: 12000
-                            }
-                        });
-                    }))
-                }
-            });
+        async getTutor() {
+            var res = await this.$fetch.post("/ganhuo/getVideoRecMentor");
+            if (0 === res.code) {
+                this.tutor = res.data;
+                this.$nextTick((res => {
+                    this.swiper = new Swiper("#swiper", { slidesPerView: 3, spaceBetween: 16, autoplay: { delay: 12000 } });
+                }));
+            }
         },
         // 推荐文章
-        getRecArticle() {
-            this.$fetch.post("/ganhuo/getZtcRecArticle").then(res => {
-                0 === res.code && (this.recArticle = res.data);
-            });
-        },
+        async getRecArticle() {
+            var res = await this.$fetch.post("/ganhuo/getZtcRecArticle");
+            0 === res.code && (this.recArticle = res.data);
+        }
     }
 }
 </script>
@@ -224,7 +215,7 @@ export default {
                 border: 1px solid rgba(255, 104, 1, 1);
                 border-radius: 4px;
                 font-size: 14px;
-                color: #FF6801;
+                color: #ff6801;
             }
         }
     }

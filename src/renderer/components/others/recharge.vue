@@ -33,12 +33,13 @@ export default {
         },
     },
     mounted() {
-        this.$fetch.post("/price/getGoldPrice").then(res => {
-            0 === res.code && (this.data = res.data);
-        });
+        this.getGoldPrice();
     },
     methods: {
-
+        async getGoldPrice() {
+            var res = await this.$fetch.post("/price/getGoldPrice");
+            0 === res.code && (this.data = res.data);
+        }
     }
 }
 </script>

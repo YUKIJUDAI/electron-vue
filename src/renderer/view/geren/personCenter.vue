@@ -115,18 +115,18 @@ export default {
             userInfo: {}
         }
     },
-    mounted() {
+    created() {
         this.getUserInfo();
-        this.$fetch.post("/price/getGoldPrice").then(res => {
-            0 === res.code && (this.orderMsg = res.data);
-        });
+        this.getGoldPrice();
     },
     methods: {
-        getUserInfo() {
-            this.$fetch.post("/user/getUserInfo").then(res => {
-                
-                this.userInfo = res.data;
-            });
+        async getGoldPrice() {
+            var res = await this.$fetch.post("/price/getGoldPrice");
+            0 === res.code && (this.orderMsg = res.data);
+        },
+        async getUserInfo() {
+            var res = await this.$fetch.post("/user/getUserInfo");
+            0 === res.code && (this.userInfo = res.data);
         },
         copy(val) {
             copy(val);

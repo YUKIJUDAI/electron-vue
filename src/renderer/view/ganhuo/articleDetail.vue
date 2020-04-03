@@ -22,10 +22,9 @@ export default {
         this.getArticle();
     },
     methods: {
-        getArticle() {
-            this.$fetch.post("/ganhuo/getArticle", { article_id: this.$route.params.id }).then(res => {
-                0 === res.code && (this.article = res.data);
-            });
+        async getArticle() {
+            var res = await this.$fetch.post("/ganhuo/getArticle", { article_id: this.$route.params.id });
+            0 === res.code && (this.article = res.data);
         }
     }
 }

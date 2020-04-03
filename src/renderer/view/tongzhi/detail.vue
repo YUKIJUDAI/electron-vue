@@ -13,10 +13,14 @@ export default {
             data: {}
         }
     },
-    mounted() {
-        this.$fetch.post("/message/getMessageDetail", { id: this.$route.params.id }).then(res => {
+    created() {
+        this.getMessageDetail();
+    },
+    methods: {
+        async getMessageDetail() {
+            var res = await this.$fetch.post("/message/getMessageDetail", { id: this.$route.params.id });
             0 === res.code && (this.data = res.data);
-        })
+        }
     }
 }
 </script>

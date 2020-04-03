@@ -30,10 +30,9 @@ export default {
         this.getList();
     },
     methods: {
-        getList() {
-            this.$fetch.post("/message/getMessageList", { page: this.page, type: this.type }).then(res => {
-                0 === res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages);
-            })
+        async getList() {
+            var res = await this.$fetch.post("/message/getMessageList", { page: this.page, type: this.type });
+            0 === res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages);
         }
     }
 }

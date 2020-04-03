@@ -35,7 +35,7 @@ export default {
             page: 1,
         }
     },
-    mounted() {
+    created() {
         this.getVideosClasses();
         if (this.$route.params.id) {
             this.tabIndex = this.$route.params.id;
@@ -47,22 +47,20 @@ export default {
             this.$router.push("/ganhuo/articleCenter/" + id);
         },
         // 获取文章分类
-        getVideosClasses() {
-            this.$fetch.post("/ganhuo/getArticlesClasses").then(res => {
-                if (0 === res.code) {
-                    this.tabs = res.data;
-                    !this.$route.params.id && res.data && res.data.length > 1 && this.$router.push("/ganhuo/articleCenter/" + res.data[0].id);
-                }
-            })
+        async getVideosClasses() {
+            var res = await this.$fetch.post("/ganhuo/getArticlesClasses");
+            if (0 === res.code) {
+                this.tabs = res.data;
+                !this.$route.params.id && res.data && res.data.length > 1 && this.$router.push("/ganhuo/articleCenter/" + res.data[0].id);
+            };
         },
         // 通过分类id获取文章
-        getArticlesByClass() {
-            this.$fetch.post("/ganhuo/getArticlesByClass", { class_id: this.tabIndex, page: this.page }).then(res => {
-                if (0 === res.code) {
-                    this.articles = res.data.items;
-                    this.total_pages = res.data.total_pages;
-                }
-            })
+        async getArticlesByClass() {
+            var res = await this.$fetch.post("/ganhuo/getArticlesByClass", { class_id: this.tabIndex, page: this.page });
+            if (0 === res.code) {
+                this.articles = res.data.items;
+                this.total_pages = res.data.total_pages;
+            };
         },
     },
     watch: {

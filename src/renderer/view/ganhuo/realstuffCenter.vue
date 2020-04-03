@@ -59,29 +59,26 @@ export default {
             tutor: []
         }
     },
-    mounted() {
+    created() {
         this.getRecVideos();
         this.getArticles();
         this.getTutor();
     },
     methods: {
         // 视频
-        getRecVideos() {
-            this.$fetch.post("/ganhuo/getRecVideos").then(res => {
-                0 === res.code && (this.video = res.data);
-            });
+        async getRecVideos() {
+            var res = await this.$fetch.post("/ganhuo/getRecVideos");
+            0 === res.code && (this.video = res.data);
         },
         // 文章
-        getArticles() {
-            this.$fetch.post("/index/getIndexArticles").then(res => {
-                0 === res.code && (this.articles = res.data);
-            });
+        async getArticles() {
+            var res = await this.$fetch.post("/index/getIndexArticles");
+            0 === res.code && (this.articles = res.data);
         },
         // 导师
-        getTutor() {
-            this.$fetch.post("/ganhuo/getVideoRecMentor").then(res => {
-                0 === res.code && (this.tutor = res.data && res.data.length > 4 ? res.data.slice(0, 3) : res.data);
-            });
+        async getTutor() {
+            var res = await this.$fetch.post("/ganhuo/getVideoRecMentor");
+            0 === res.code && (this.tutor = res.data && res.data.length > 4 ? res.data.slice(0, 3) : res.data);
         },
         // 视频播放
         playVideo(url) {

@@ -32,10 +32,7 @@ export default {
     },
     methods: {
         changeBtn(index) {
-            if (this.type === index) {
-                return;
-            }
-            this.type = index;
+            this.type !== index && (this.type = index);
         }
     }
 }

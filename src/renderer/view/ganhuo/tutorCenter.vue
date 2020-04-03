@@ -31,29 +31,25 @@ export default {
             swiper: ""
         }
     },
-    mounted() {
+    created() {
         this.getMentorList();
     },
     methods: {
         // 获取导师
-        getMentorList() {
-            this.$fetch.post("/ganhuo/getGanHuoMentorList").then(res => {
-                if (0 === res.code) {
-                    this.mentorList = res.data;
-                    this.index = Object.keys(res.data)[0];
-                    this.$nextTick(() => {
-                        this.swiper = new Swiper("#swiper", {
-                            slidesPerView: 4,
-                            spaceBetween: 12
-                        });
-                    })
-                }
-            });
+        async getMentorList() {
+            var res = await this.$fetch.post("/ganhuo/getGanHuoMentorList");
+            if (0 === res.code) {
+                this.mentorList = res.data;
+                this.index = Object.keys(res.data)[0];
+                this.$nextTick(() => {
+                    this.swiper = new Swiper("#swiper", { slidesPerView: 4, spaceBetween: 12 });
+                })
+            }
         },
         changeTab(key) {
             this.index = key;
             this.$nextTick(() => {
-                this.swiper && this.swiper.update()
+                this.swiper && this.swiper.update();
             })
         }
     }

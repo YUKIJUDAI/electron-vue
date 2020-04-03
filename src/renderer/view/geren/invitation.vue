@@ -59,14 +59,13 @@ export default {
             page: 1
         }
     },
-    mounted(){
+    created() {
         this.getList();
     },
     methods: {
-        getList() {
-            this.$fetch.post("/user/getInviteList", { page: this.page }).then(res => {
-                0 == res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages, this.total_items = res.data.total_items);
-            });
+        async getList() {
+            var res = await this.$fetch.post("/user/getInviteList", { page: this.page });
+            0 == res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages, this.total_items = res.data.total_items);
         }
     }
 }

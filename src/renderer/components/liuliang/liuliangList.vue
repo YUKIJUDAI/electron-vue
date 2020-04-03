@@ -51,16 +51,15 @@ export default {
             total_pages: 1,
         }
     },
-    mounted() {
+    created() {
         this.getList();
     },
     methods: {
-        getList() {
+        async getList() {
             var date1 = this.date ? this.date[0] : "";
             var date2 = this.date ? this.date[1] : "";
-            this.$fetch.post("/lieliu/getLieliuList", { date1, date2, keyword: this.keyword, type: this.type, page: this.page }).then(res => {
-                0 === res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages);
-            });
+            var res = await this.$fetch.post("/lieliu/getLieliuList", { date1, date2, keyword: this.keyword, type: this.type, page: this.page });
+            0 === res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages);
         }
     }
 }

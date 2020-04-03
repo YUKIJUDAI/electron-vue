@@ -11,7 +11,8 @@
             </el-form>
             <div class="nums">
                 <p>剩余次数：<span>{{+blackNum > 0 ? blackNum : '无限制'}}</span></p>
-                <p>非会员: <router-link tag="span" to="/geren/vip" v-show="vip_level === 0">马上开通</router-link></p>
+                <p>非会员: <router-link tag="span" to="/geren/vip" v-show="vip_level === 0">马上开通</router-link>
+                </p>
             </div>
         </div>
         <div class="searched" v-if="searchFlag">
@@ -129,11 +130,17 @@
 export default {
     data() {
         return {
+            // 旺旺号
             wangwang: "",
+            // 表格数据
             tableData: [],
+            // 基础数据
             baseInfo: {},
+            // 是否已搜索flag
             searchFlag: false,
+            // 剩余查询黑号次数
             blackNum: 0,
+            // 假数据
             fake: {}
         }
     },
@@ -142,35 +149,37 @@ export default {
             return this.$store.state.userInfo.vip_level;
         }
     },
-    mounted() {
-        this.$fetch.post("/user/getBlackNum").then(res => {
-            0 === res.code && (this.blackNum = +res.data);
-        });
-        this.$fetch.post("/heisou/getFake").then(res => {
-            0 === res.code && (this.fake = res.data);
-        });
+    created() {
+        this.getBlackNum();
+        this.getFake();
     },
     methods: {
+        // 获取剩余黑号查询次数
+        async getBlackNum() {
+            var res = await this.$fetch.post("/user/getBlackNum");
+            0 === res.code && (this.blackNum = +res.data);
+        },
+        // 获取假数据
+        async getFake() {
+            var res = await this.$fetch.post("/heisou/getFake");
+            0 === res.code && (this.fake = res.data);
+        },
         // 获取淘宝会员信息
-        getBaseInfo() {
-            this.$fetch.post("/heisou/baseInfo", { wangwang: this.wangwang }).then((res) => {
-                if (0 === res.code) {
-                    this.baseInfo = res.data;
-                    this.vip_level === 0 && this.$message.info("您还有" + (this.blackNum - 1) + "次可用,充值会员后可无限次使用");
-                } else {
-                    this.$message.error(res.msg);
-                }
-            });
+        async getBaseInfo() {
+            var res = await this.$fetch.post("/heisou/baseInfo", { wangwang: this.wangwang });
+            if (0 !== res.code) {
+                this.$message.error(res.msg);
+                return;
+            }
+            if (0 === this.vip_level) {
+                this.$message.info("您还有" + (this.blackNum - 1) + "次可用,充值会员后可无限次使用");
+            }
+            this.baseInfo = res.data;
         },
         // 获取打标信息
-        getMarking() {
-            this.$fetch.post("/heisou/find", { wangwang: this.wangwang }).then((res) => {
-                if (0 === res.code) {
-                    this.tableData = [res.data]
-                } else {
-                    this.$message.error(res.msg);
-                }
-            });
+        async getMarking() {
+            var res = this.$fetch.post("/heisou/find", { wangwang: this.wangwang });
+            0 === res.code ? this.tableData = [res.data] : this.$message.error(res.msg);
         },
         // 搜索
         search() {
