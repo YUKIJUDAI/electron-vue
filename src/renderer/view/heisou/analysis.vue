@@ -70,8 +70,8 @@
                     <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 </el-form-item>
                 <el-button type="primary" @click="t=new Date().getTime()">开始查询</el-button>
-                <el-button type="primary" plain>分析前一天</el-button>
-                <el-button type="primary" plain>分析后一天</el-button>
+                <el-button type="primary" plain @click="prevDay">分析前一天</el-button>
+                <el-button type="primary" plain @click="nextDay">分析后一天</el-button>
                 <!-- <el-button type="primary" plain>导出excel</el-button> -->
             </el-form>
         </div>
@@ -180,6 +180,15 @@ export default {
             this.$http.post("/collect/getCompeteGoodsList", {}).then(res => {
                 0 === res.code && (this.goodsList = res.data);
             });
+        },
+        // 上一天
+        prevDay() {
+            this.form.dateValue = [moment(this.form.dateValue[0]).subtract(1, 'days').format('YYYY-MM-DD'), moment(this.form.dateValue[1]).subtract(1, 'days').format('YYYY-MM-DD')];
+            this.t = new Date().getTime();
+        },
+        nextDay() {
+            this.form.dateValue = [moment(this.form.dateValue[0]).add(1, 'days').format('YYYY-MM-DD'), moment(this.form.dateValue[1]).add(1, 'days').format('YYYY-MM-DD')];
+            this.t = new Date().getTime();
         },
         // 获取竞品数据
         getCompeteGoodsInfo(data) {
