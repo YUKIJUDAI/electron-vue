@@ -49,7 +49,7 @@
                 </el-table-column> -->
             </el-table>
         </div>
-                <div class="root-analysis-table clearfix" v-if="type === 'keywords'">
+        <div class="root-analysis-table clearfix" v-if="type === 'keywords'">
             <div class="root-analysis-textarea">
                 <el-select placeholder="请选择" @change="change(1)" v-model="checked2">
                     <el-option v-for="(item,i) in root2" :key="i" :label="item" :value="item">
@@ -115,6 +115,9 @@ export default {
             checked2: "",
         }
     },
+    mounted(){
+        this.itemId && this.getData();
+    },
     methods: {
         getData() {
             this.getTitle();
@@ -149,7 +152,7 @@ export default {
                     arr.push(item);
                 }
             });
-            console.log(arr,type)
+            console.log(arr, type)
             if (type === 0) {
                 this.tableList1 = arr;
             } else if (type === 1) {

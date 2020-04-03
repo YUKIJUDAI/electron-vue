@@ -86,6 +86,9 @@ export default {
             report: []
         }
     },
+    mounted(){
+        this.itemId && this.getData();
+    },
     methods: {
         getData() {
             this.$http.post("/analysis/report", { itemId: this.itemId, date_range: this.date_range }).then((res) => {

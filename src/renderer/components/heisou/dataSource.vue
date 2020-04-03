@@ -116,6 +116,9 @@ export default {
             tableData3: []
         }
     },
+    mounted(){
+        this.itemId && this.getData();
+    },
     methods: {
         changeTab(index) {
             this.tabIndex = index;

@@ -102,6 +102,7 @@ factory.add("list", {
                 from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
                     remote.BrowserWindow.fromId(i.id).webContents.send("router-to", "/heisou/monitor");
                 });
+                ipcRenderer.send("max");
             });
         }
     }

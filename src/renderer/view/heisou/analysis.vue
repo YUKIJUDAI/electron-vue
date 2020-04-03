@@ -72,7 +72,7 @@
                 <el-button type="primary" @click="t=new Date().getTime()">开始查询</el-button>
                 <el-button type="primary" plain>分析前一天</el-button>
                 <el-button type="primary" plain>分析后一天</el-button>
-                <el-button type="primary" plain>导出excel</el-button>
+                <!-- <el-button type="primary" plain>导出excel</el-button> -->
             </el-form>
         </div>
         <div class="tab">
@@ -83,7 +83,7 @@
                 <li :class="{active:tabIndex === 3}" @click="changeTab(3)">流量结构分析</li>
                 <li :class="{active:tabIndex === 4}" @click="changeTab(4)">火星情报报表</li>
                 <li :class="{active:tabIndex === 5}" @click="changeTab(5)">宝贝信息</li>
-                <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">火星情报分析<i class="hot"></i></li>
+                <!-- <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">火星情报分析<i class="hot"></i></li> -->
             </ul>
         </div>
         <div class="data" :is="tempList[tabIndex]" :itemId="goodsInfo.itemId" :date_range="form.date_range" :t="t" :title="goodsInfo.goods_name"></div>

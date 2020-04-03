@@ -74,6 +74,9 @@ export default {
             myChart: ""
         }
     },
+    mounted(){
+        this.itemId && this.getData();
+    },
     methods: {
         headStyle({ row, column, rowIndex, columnIndex }) {
             if (columnIndex === 0) {

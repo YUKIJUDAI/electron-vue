@@ -49,6 +49,9 @@ export default {
             keywordsTrend: []
         }
     },
+    mounted(){
+        this.itemId && this.getData();
+    },
     methods: {
         getData() {
             this.$http.post("/analysis/flowStructure", { itemId: this.itemId, date_range: this.date_range }).then(res => {
@@ -252,10 +255,10 @@ export default {
     }
     .traffi-structure-analysis-left {
         margin-right: 26px;
-        width: 45%;
+        width: 48%;
     }
     .traffi-structure-analysis-right {
-        width: 45%;
+        width: 48%;
     }
     .echarts-left {
         margin-top: 30px;

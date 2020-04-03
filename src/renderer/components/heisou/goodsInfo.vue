@@ -62,6 +62,9 @@ export default {
             tableData1: [],
         }
     },
+    mounted(){
+        this.itemId && this.getData();
+    },
     methods: {
         changeTab(index) {
             this.tabIndex = index;
