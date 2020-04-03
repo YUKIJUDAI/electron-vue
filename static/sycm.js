@@ -20,10 +20,11 @@ const DomFactory = function () {
 
     // 登录页面
     const loginPage = {
-        userInput: () => $$("input[name='TPL_username']")[0],
-        pwdInput: () => $$("input[name='TPL_password']")[0],
-        submitBtn: () => $(".J_Submit"),
-        readyFlag: () => $$(".J_Submit")
+        userInput: () => [$$("input[name='TPL_username']")[0], $$("input[name='fm-login-id']")[0]],
+        pwdInput: () => [$$("input[name='TPL_password']")[0], $$("input[name='fm-login-password']")[0]],
+        submitBtn: () => [$(".J_Submit"), $(".fm-submit")],
+        readyFlag1: () => $$(".J_Submit"),
+        readyFlag2: () => $$(".fm-submit"),
     }
     // 主页面
     const mainPage = {
@@ -143,29 +144,47 @@ const { loginPage, mainPage, monitorPage, analysisPage, configurationPage, isCom
 
 // dom-ready
 ipcRenderer.on("dom-ready", (event) => {
-    loginPage.submitBtn().addEventListener("click", () => {
-        remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput().value;
-    });
+    try {
+        loginPage.submitBtn()[0].addEventListener("click", () => {
+            remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput()[0].value;
+        }); 
+    } catch (error) {
+        loginPage.submitBtn()[1].addEventListener("click", () => {
+            remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput()[1].value;
+        });
+    }
 });
 
 // 自动登录
 ipcRenderer.on("autoLogin", (event, account, pwd) => {
     interval(100)
         .pipe(
-            filter(() => loginPage.readyFlag().length > 0),
+            filter(() => loginPage.readyFlag1().length > 0 || loginPage.readyFlag2().length > 0),
             take(1),
             delay(Math.floor(Math.random() * (7000 - 3000)) + 3000),
             tap(() => {
-                SetValue(loginPage.userInput(), account);
+                try {
+                    SetValue(loginPage.userInput()[0], account);
+                } catch (error) {
+                    SetValue(loginPage.userInput()[1], account);
+                }
             }),
             delay(Math.floor(Math.random() * (5000 - 2000)) + 2000),
             tap(() => {
-                SetValue(loginPage.pwdInput(), pwd);
+                try {
+                    SetValue(loginPage.pwdInput()[0], pwd);
+                } catch (error) {
+                    SetValue(loginPage.pwdInput()[1], pwd);
+                }
             }),
             delay(Math.floor(Math.random() * (3000 - 1000)) + 1000),
             tap(() => {
-                loginPage.submitBtn().click();
-            }),
+                try {
+                    loginPage.submitBtn()[0].click();
+                } catch (error) {
+                    loginPage.submitBtn()[1].click();
+                }
+            })
         )
         .subscribe()
 });

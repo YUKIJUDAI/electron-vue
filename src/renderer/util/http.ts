@@ -10,7 +10,9 @@ import store from "@/store";
 const http = axios.create({
     timeout: 10000,
     baseURL: heisouBaseUrl,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
 });
 
 // 请求发送前数据处理

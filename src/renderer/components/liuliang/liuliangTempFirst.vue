@@ -171,7 +171,7 @@ export default {
             data.plan.forEach((item, i) => item.hour = item.hour.join(","));
             data.plan = JSON.stringify(data.plan);
             this.$fetch.post("/lieliu/addTask", data).then(res => {
-                0 === res.code ? this.$success(res.msg) : this.$message.error(res.msg);
+                0 === res.code ? this.$message.success(res.msg) : this.$message.error(res.msg);
             });
         }
     },

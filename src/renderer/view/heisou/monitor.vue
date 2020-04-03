@@ -273,20 +273,29 @@ export default {
         // 获取日志
         ipcRenderer.on("get-log", (event, data) => {
             // flag 0 成功  1进行中  2 失败
-            if (data.flag === 1 && this.logFlag) {
-                this.logList.push(data.msg);
+            if (!this.logFlag) {
+                return;
             }
-            if (data.flag === 0 && this.logFlag) {
-                this.addingFlag = false;
-                this.updateFlag = false;
-                this.logFlag = false;
-                this.logList.push(data.msg);
-            }
-            if (data.flag === 2 && this.logFlag) {
-                this.addingFlag = false;
-                this.updateFlag = false;
-                this.logFlag = false;
-                this.logList.push(data.msg);
+            switch (data.flag) {
+                case 0:
+                    this.addingFlag = false;
+                    this.updateFlag = false;
+                    this.logFlag = false;
+                    this.logList.push(data.msg);
+                    this.addFlag = false;
+                    this.$message.success("数据获取成功，请点击开始查询按钮查看");
+                    break;
+                case 1:
+                    this.logList.push(data.msg);
+                    break;
+                case 2:
+                    this.addingFlag = false;
+                    this.updateFlag = false;
+                    this.logFlag = false;
+                    this.logList.push(data.msg);
+                    break;
+                default:
+                    break;
             }
         });
     },
