@@ -1,14 +1,14 @@
 <template>
     <div class="heisou-monitor">
         <!-- 新增竞品监控 -->
-        <el-dialog title="新增竞品配置监控" :visible.sync="addFlag" width="700px" :close-on-click-modal="false" :close-on-press-escape="false">
+        <el-dialog title="新增竞品配置监控" :visible.sync="addFlag" width="700px" :close-on-click-modal="false" :close-on-press-escape="false" :before-close="handleClose">
             <div class="add">
-                <el-form ref="form" :model="add" label-width="80px" :inline="true">
+                <el-form ref="form" :model="addData" label-width="80px" :inline="true">
                     <el-form-item label="竞品ID">
-                        <el-input type="textarea" :rows="5" placeholder="请输入竞品ID,多个竞品已','号隔开" v-model="add.id" style="width:200px"></el-input>
+                        <el-input type="textarea" :rows="5" placeholder="请输入竞品ID,多个竞品已','号隔开" v-model="addData.id" style="width:200px"></el-input>
                     </el-form-item>
                     <el-form-item label="监控天数">
-                        <el-select v-model="add.time" placeholder="请选择" style="width:200px">
+                        <el-select v-model="addData.time" placeholder="请选择" style="width:200px">
                             <el-option label="最近30天" value="30"></el-option>
                             <el-option label="最近60天" value="60"></el-option>
                             <el-option label="最近90天" value="90"></el-option>
@@ -16,7 +16,7 @@
                         </br>
                         </br>
                         <el-button type="primary" size="small" v-if="addingFlag">获取中。。。</el-button>
-                        <el-button type="primary" size="small" @click="addMonitor(add,true)" v-else>开始获取</el-button>
+                        <el-button type="primary" size="small" @click="addMonitor()" v-else>开始获取</el-button>
                     </el-form-item>
                 </el-form>
                 <el-card class="box-card">
@@ -122,8 +122,7 @@
             <el-form :inline="true" :model="form" class="demo-form-inline">
                 <el-form-item label="新增竞品">
                     <el-button type="primary" size="small" @click="addDialog">新增商品监控</el-button>
-                    <el-button type="info" plain size="small" v-if="updateFlag">更新中</el-button>
-                    <el-button type="info" plain size="small" @click="update" v-else>更新数据</el-button>
+                    <el-button type="info" plain size="small" @click="update">更新数据</el-button>
                 </el-form-item>
                 </br>
                 <!-- 日期下拉 -->
@@ -237,12 +236,11 @@ export default {
             // 新增竞品
             addFlag: false,
             addingFlag: false,
-            updateFlag: false,
             // 日志
             logList: [],
             logFlag: true,
             // 添加监控表单
-            add: { time: "30" },
+            addData: { time: "30" },
 
             // 趋势
             treadFlag: false,
@@ -279,20 +277,23 @@ export default {
             switch (data.flag) {
                 case 0:
                     this.addingFlag = false;
-                    this.updateFlag = false;
                     this.logFlag = false;
                     this.logList.push(data.msg);
-                    this.addFlag = false;
-                    this.$message.success("数据获取成功，请点击开始查询按钮查看");
+                    this.$alert('数据获取成功,请点击开始查询重新获取数据', '', {
+                        confirmButtonText: '确定',
+                        callback: this.handleClose
+                    });
                     break;
                 case 1:
                     this.logList.push(data.msg);
                     break;
                 case 2:
                     this.addingFlag = false;
-                    this.updateFlag = false;
                     this.logFlag = false;
                     this.logList.push(data.msg);
+                    this.$alert('数据获取失败', '', {
+                        confirmButtonText: '确定'
+                    });
                     break;
                 default:
                     break;
@@ -338,7 +339,7 @@ export default {
             this.addingFlag = false;
             this.logList = [];
             this.logFlag = true;
-            this.add = { time: "30" };
+            this.addData = { time: "30" };
             this.addFlag = true;
         },
         // 更新竞品
@@ -347,12 +348,22 @@ export default {
                 this.$message.error("请至少选择一条数据");
                 return;
             }
-            this.updateFlag = true;
-            this.addMonitor({ id: this.selectData, date: "30" });
+            this.addFlag = true;
+            this.addData = { id: this.selectData, time: "30" };
+            this.addMonitor();
+        },
+        handleClose() {
+            if (this.addingFlag) {
+                this.$message.error("请等待当前任务完成后再关闭");
+                return;
+            }
+            this.logList = [];
+            this.logFlag = true;
+            this.addFlag = false;
         },
         // 添加竞品
-        addMonitor(data, flag) {
-            if (!this.add.id && flag) {
+        addMonitor() {
+            if (!this.addData.id) {
                 this.$message.error("请输入竞品ID");
                 return;
             }
@@ -360,7 +371,7 @@ export default {
             this.logFlag = true;
             this.logList = [];
             from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor", data);
+                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor", this.addData);
             });
         },
         // 创建图表

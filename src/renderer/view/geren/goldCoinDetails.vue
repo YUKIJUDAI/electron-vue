@@ -26,10 +26,7 @@
             <el-table border style="width: 100%" :data="data.items">
                 <el-table-column prop="create_time" label="交易时间" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="交易类型" align="center">
-                    <template slot-scope="scope">
-                        {{ ["充值","支出"][+scope.row.type] }}
-                    </template>
+                <el-table-column prop="type" label="交易类型" align="center">
                 </el-table-column>
                 <el-table-column prop="amount" label="交易金额（积分）" align="center">
                 </el-table-column>

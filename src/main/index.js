@@ -134,7 +134,7 @@ function createSycmWindow(account, pwd) {
     }
     sycmWindow = new BrowserWindow({
         width: 1000, height: 800,
-        parent: mainWindow, autoHideMenuBar: true,
+        autoHideMenuBar: true,
         webPreferences: {
             devTools: true,
             webviewTag: true,

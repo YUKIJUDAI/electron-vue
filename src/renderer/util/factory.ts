@@ -16,7 +16,12 @@ var factory = new Factory();
 
 // 个淘宝人信息
 factory.add("getPersonalView", {
+    index: 0,
     callback: function(params, res) {
+        if (this.index > 1) {
+            return;
+        }
+        this.index++;
         const data = JSON.parse(res);
         const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: remote.getGlobal("tbInfo").tb_password };
 

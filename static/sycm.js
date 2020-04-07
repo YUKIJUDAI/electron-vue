@@ -1,9 +1,8 @@
 const { remote, ipcRenderer } = require('electron');
 const qs = require("qs");
 const { from, interval, timer, concat } = require("rxjs");
-const { filter, take, tap, delay, last, mergeMap } = require("rxjs/operators");
+const { filter, take, tap, delay, last, mergeMap, catchError } = require("rxjs/operators");
 const moment = require('moment');
-
 
 // 生意参谋dom信息方法配置
 const DomFactory = function () {
@@ -147,7 +146,7 @@ ipcRenderer.on("dom-ready", (event) => {
     try {
         loginPage.submitBtn()[0].addEventListener("click", () => {
             remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput()[0].value;
-        }); 
+        });
     } catch (error) {
         loginPage.submitBtn()[1].addEventListener("click", () => {
             remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput()[1].value;
@@ -184,6 +183,9 @@ ipcRenderer.on("autoLogin", (event, account, pwd) => {
                 } catch (error) {
                     loginPage.submitBtn()[1].click();
                 }
+            }),
+            catchError(err => {
+                ipcRenderer.send("log", "自动登录->" + err.toString());
             })
         )
         .subscribe()
@@ -206,7 +208,80 @@ ipcRenderer.on('login-success', (event) => {
             tap(() => monitorPage.paginationSel().click()),
             delay(3000),
             // 点击分页参数
-            tap(() => { monitorPage.paginationSize().click() })
+            tap(() => { monitorPage.paginationSize().click() }),
+            catchError(err => {
+                ipcRenderer.send("log", "登录成功后->" + err.toString());
+            })
+        )
+        .subscribe();
+});
+
+// 添加竞品
+ipcRenderer.on("add-monitor", (event, data) => {
+
+    data.id = data.id.split(",");
+
+    timer(0, 10000)
+        .pipe(
+            take(data.id.length),
+            tap(() => {
+                // 去除缓存
+                for (var i = 0; i < localStorage.length; i++) {
+                    var key = localStorage.key(i);
+                    if (key.includes("getCoreIndexes") || key.includes("getCoreTrend")) {
+                        localStorage.removeItem(key);
+                    }
+                }
+            }),
+            mergeMap((item) => {
+                return interval(1000)
+                    .pipe(
+                        filter(() => configurationPage.configuration()),
+                        tap(() => {
+                            // 如果不在竞争配置
+                            !isConfigurationPage() && configurationPage.configurationBtn().click()
+                        }),
+                        filter(() => configurationPage.goodsBtn()),
+                        tap(() => {
+                            // 如果不在竞争商品页
+                            !hasClass(configurationPage.goodsBtn(), "oui-tab-switch-item-active") && configurationPage.goodsBtn().click()
+                        }),
+                        filter(() => configurationPage.search() && configurationPage.addBtn()),
+                        tap(() => {
+                            // 如果没有弹框被隐藏
+                            if (!configurationPage.popup() || hasClass(configurationPage.popup(), ".ant-dropdown-hidden")) {
+                                configurationPage.addBtn().click();
+                            }
+                        }),
+                        filter(() => configurationPage.del()),
+                        take(1),
+                        tap(() => {
+                            setLog({ flag: 1, msg: `正在获取竞品${data.id[item]}的数据` });
+                            configurationPage.delIcon().click()
+                        }),
+                        delay(1000),
+                        tap(() => {
+                            configurationPage.input().focus()
+                        }),
+                        delay(500),
+                        tap(() => {
+                            SetValue(configurationPage.input(), data.id[item]);
+                        }),
+                        delay(1000),
+                        tap(() => {
+                            !configurationPage.getingData() && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
+                        }),
+                        filter(() => configurationPage.getingData()),
+                        tap(() => {
+                            configurationPage.getingData().click();
+                            setLog({ "flag": (data.id.length === (item + 1) ? 0 : 1), "msg": `获取竞品${data.id[item]}成功` })
+                        }),
+                        catchError(err => {
+                            setLog({ flag: 2, msg: "竞品获取失败，请重试" });
+                            ipcRenderer.send("log", "添加竞品" + err.toString());
+                        })
+                    )
+            })
         )
         .subscribe();
 });
@@ -396,72 +471,10 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
                             analysisPage.closeBtn().click();
                         })
                     );
-            })
-        )
-        .subscribe();
-});
-
-// 添加竞品
-ipcRenderer.on("add-monitor", (event, data) => {
-
-    data.id = data.id.split(",");
-
-    timer(0, 10000)
-        .pipe(
-            take(data.id.length),
-            tap(() => {
-                // 去除缓存
-                for (var i = 0; i < localStorage.length; i++) {
-                    var key = localStorage.key(i);
-                    if (key.includes("getCoreIndexes") || key.includes("getCoreTrend")) {
-                        localStorage.removeItem(key);
-                    }
-                }
             }),
-            mergeMap((item) => {
-                return interval(1000)
-                    .pipe(
-                        filter(() => configurationPage.configuration()),
-                        tap(() => {
-                            // 如果不在竞争配置
-                            !isConfigurationPage() && configurationPage.configurationBtn().click()
-                        }),
-                        filter(() => configurationPage.goodsBtn()),
-                        tap(() => {
-                            // 如果不在竞争商品页
-                            !hasClass(configurationPage.goodsBtn(), "oui-tab-switch-item-active") && configurationPage.goodsBtn().click()
-                        }),
-                        filter(() => configurationPage.search() && configurationPage.addBtn()),
-                        tap(() => {
-                            // 如果没有弹框被隐藏
-                            if (!configurationPage.popup() || hasClass(configurationPage.popup(), ".ant-dropdown-hidden")) {
-                                configurationPage.addBtn().click();
-                            }
-                        }),
-                        filter(() => configurationPage.del()),
-                        take(1),
-                        tap(() => {
-                            setLog({ flag: 1, msg: `正在获取竞品${data.id[item]}的数据` });
-                            configurationPage.delIcon().click()
-                        }),
-                        delay(1000),
-                        tap(() => {
-                            configurationPage.input().focus()
-                        }),
-                        delay(500),
-                        tap(() => {
-                            SetValue(configurationPage.input(), data.id[item]);
-                        }),
-                        delay(1000),
-                        tap(() => {
-                            !configurationPage.getingData() && setLog({ flag: (data.id.length === (item + 1) ? 2 : 1), msg: `竞品${data.id[item]}不存在` })
-                        }),
-                        filter(() => configurationPage.getingData()),
-                        tap(() => {
-                            configurationPage.getingData().click();
-                            setLog({ "flag": (data.id.length === (item + 1) ? 0 : 1), "msg": `获取竞品${data.id[item]}成功` })
-                        })
-                    )
+            catchError(err => {
+                setLog({ flag: 2, msg: "竞品获取失败，请重试" });
+                ipcRenderer.send("log", "自动登录->" + err.toString());
             })
         )
         .subscribe();

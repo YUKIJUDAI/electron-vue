@@ -3,15 +3,16 @@
         <div class="search">
             <el-form :inline="true" label-width="80px" label-position="left">
                 <el-form-item label="用户旺旺">
-                    <el-input v-model="wangwang" size="small" style="width:495px"></el-input>
+                    <el-input v-model="wangwang" size="small" style="width:495px" placeholder="请输入要查询的黑号旺旺"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search">立即查询</el-button>
                 </el-form-item>
             </el-form>
             <div class="nums">
-                <p>剩余次数：<span>{{+blackNum > 0 ? blackNum : '无限制'}}</span></p>
-                <p>非会员: <router-link tag="span" to="/geren/vip" v-show="vip_level === 0">马上开通</router-link>
+                <p>今日剩余：<span>{{+blackNum.type > 0 ? blackNum.type + '/' + blackNum.black_limit + '次，高级会员享受无限次查询' : '无限制'}}</span></p>
+                <p v-show="vip_level === 0">
+                    <router-link tag="span" to="/geren/vip">立即开通</router-link>
                 </p>
             </div>
         </div>
@@ -20,7 +21,7 @@
                 <div class="info-con">
                     <div class="info-title">
                         <p class="info-title-p1">用户常规信息<span>（免费查询）</span></p>
-                        <p class="info-title-p2">查询时间</p>
+                        <p class="info-title-p2">查询时间：{{baseInfo.time}}</p>
                     </div>
                     <ul class="info-ul">
                         <li>
@@ -78,31 +79,72 @@
                 </div>
                 <el-table :data="tableData" border style="width: 100%" :header-cell-style="{'text-align':'center','background':'#FF6801','border-color':'#FF6801','color':'#fff'}">
                     <el-table-column prop="pd" label="跑单">
+                        <template slot-scope="scope" slot="header">
+                            跑单
+                            <el-tooltip content="拿到商家的返款，就恶意退款跑了" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="qz" label="敲诈">
+                        <template slot-scope="scope" slot="header">
+                            敲诈
+                            <el-tooltip content="用各种方式威胁你给钱" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="pz" label="骗子">
+                        <template slot-scope="scope" slot="header">
+                            骗子
+                            <el-tooltip content="用各种方式骗你钱了" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="dj" label="打假">
+                        <template slot-scope="scope" slot="header">
+                            打假
+                            <el-tooltip content="用各种方式威胁你给钱" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="cp" label="差评">
+                        <template slot-scope="scope" slot="header">
+                            差评
+                            <el-tooltip content="接完了单给了你差评进行要挟" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="pt" label="P图">
+                        <template slot-scope="scope" slot="header">
+                            P图
+                            <el-tooltip content="用工商，发票，字体，商标，假货各种方式来坑你钱了" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="jq" label="降权">
+                        <template slot-scope="scope" slot="header">
+                            降权
+                            <el-tooltip content="被稽查系统判定虚假交易过导致商家单品降权的帐号，下面的数字为黑号捕手用户数，实际降权的店铺数是大于等于显示出来的数字的" placement="top">
+                                <i class="iconfont icon-wenhao"></i>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                 </el-table>
-                <p class="msg-result">此账号不是黑号，此次查询不消耗次数和VIP日查询次数</p>
+                <p class="msg-result" v-show="tableData.is_black === 0">此账号不是黑号，此次查询不消耗次数</p>
             </div>
         </div>
         <div class="unsearch" v-else>
             <div class="introduction">
                 <ul>
-                    <li><i class="icon-star"></i>免费提供基础查询，如存在点数将自动执行深度查询；</li>
-                    <li><i class="icon-star"></i>深度查询结果为黑号，将扣除1次次数；</li>
-                    <li><i class="icon-star"></i>VIP用户深度查询出黑号，优先扣除1次当日剩余次数，剩余次数不足将扣1个点数； </li>
-                    <li><i class="icon-star"></i>深度查询结果不是黑号，不扣点数和当日剩余次数 ；</li>
-                    <li><i class="icon-star"></i>当日重复查询同一账号，不会重复计费。</li>
+                    <li><i class="icon-star"></i>免费提供基础查询，如存在次数将自动执行深度查询；</li>
+                    <li><i class="icon-star"></i>深度查询结果为黑号，将扣除一次次数；</li>
+                    <li><i class="icon-star"></i>深度查询结果不是黑号，不扣当日剩余次数</li>
+                    <li><i class="icon-star"></i>当日重复查询同一账号，不会重复计次数。</li>
                 </ul>
             </div>
             <div class="information-desk">
@@ -127,6 +169,8 @@
 </template>
 
 <script>
+const moment = require('moment');
+
 export default {
     data() {
         return {
@@ -139,7 +183,7 @@ export default {
             // 是否已搜索flag
             searchFlag: false,
             // 剩余查询黑号次数
-            blackNum: 0,
+            blackNum: {},
             // 假数据
             fake: {}
         }
@@ -157,7 +201,7 @@ export default {
         // 获取剩余黑号查询次数
         async getBlackNum() {
             var res = await this.$fetch.post("/user/getBlackNum");
-            0 === res.code && (this.blackNum = +res.data);
+            0 === res.code && (this.blackNum = res.data);
         },
         // 获取假数据
         async getFake() {
@@ -171,14 +215,13 @@ export default {
                 this.$message.error(res.msg);
                 return;
             }
-            if (0 === this.vip_level) {
-                this.$message.info("您还有" + (this.blackNum - 1) + "次可用,充值会员后可无限次使用");
-            }
             this.baseInfo = res.data;
+            this.baseInfo.time = moment().format('YYYY-MM-DD HH:MM:SS')
+            this.vip_level !== 1 && this.getBlackNum();
         },
         // 获取打标信息
         async getMarking() {
-            var res = this.$fetch.post("/heisou/find", { wangwang: this.wangwang });
+            var res = await this.$fetch.post("/heisou/find", { wangwang: this.wangwang });
             0 === res.code ? this.tableData = [res.data] : this.$message.error(res.msg);
         },
         // 搜索
@@ -236,7 +279,6 @@ export default {
         }
     }
     .info {
-        margin-top: 25px;
         background: rgba(255, 248, 243, 1);
         border-radius: 20px;
         .info-con {
@@ -285,6 +327,9 @@ export default {
     }
     .msg {
         margin-top: 25px;
+        .icon-wenhao {
+            font-size: 12px;
+        }
         .msg-title {
             font-size: 0;
             height: 30px;
@@ -320,7 +365,7 @@ export default {
     }
     .introduction {
         width: 90%;
-        height: 180px;
+        height: 150px;
         background: rgba(255, 249, 245, 1);
         border-radius: 20px;
         ul {

@@ -2,7 +2,7 @@
     <div class="flow">
         <div class="flow-form">
             <el-form label-width="80px" label-position="left">
-                <el-form-item label="活动区域">
+                <el-form-item label="活动类型">
                     <ul class="flow-select">
                         <li class="flow-select-btn" :class="{'flow-select-btn-active':type === 11}" @click="changeBtn(11)">
                             <i class="iconfont icon-sousuo"></i>

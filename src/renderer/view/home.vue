@@ -12,14 +12,54 @@
                 </div>
                 <div class="main-left-ul" v-if="isLogin">
                     <ul>
+                        <li>会员状态：<span>{{userInfo.vip_level === 0 ? '普通会员' : '高级会员'}}</span></li>
                         <li>积分余额：<span>{{userInfo.gold}}</span></li>
-                        <li>担保资金：<span>0</span></li>
+                        <!-- <li>担保资金：<span>0</span></li> -->
                     </ul>
                 </div>
                 <div class="main-left-2 clearfix">
-                    <div class="left-2-left" v-if="isLogin">充值</div>
-                    <div class="left-2-left" @click="goRegistered" v-else>立即注册</div>
-                    <div class="left-2-right">联系客服</div>
+                    <el-popover placement="bottom" trigger="hover" :offset="44">
+                        <div class="hover">
+                            <p>周经理</p>
+                            <ul>
+                                <li>
+                                    <i class="iconfont icon-shouji1"></i>
+                                    手机：<span>18188202288</span>
+                                </li>
+                                <li>
+                                    <i class="iconfont icon-QQ"></i>
+                                    Q Q：<span>88714568</span>
+                                </li>
+                                <li>
+                                    <i class="iconfont icon-weixin"></i>
+                                    微信：<span>18188202288</span>
+                                </li>
+                            </ul>
+                            <img src="">
+                        </div>
+                        <div class="left-2-left" slot="reference">客户经理</div>
+                    </el-popover>
+                    <el-popover placement="bottom" trigger="hover" :offset="-43">
+                        <div class="hover">
+                            <p>周经理</p>
+                            <ul>
+                                <li>
+                                    <i class="iconfont icon-shouji1"></i>
+                                    手机：<span>18188202288</span>
+                                </li>
+                                <li>
+                                    <i class="iconfont icon-QQ"></i>
+                                    Q Q：<span>88714568</span>
+                                </li>
+                                <li>
+                                    <i class="iconfont icon-weixin"></i>
+                                    微信：<span>18188202288</span>
+                                </li>
+                            </ul>
+                            <img src="">
+                        </div>
+                        <div class="left-2-right" slot="reference">售后客服</div>
+                    </el-popover>
                 </div>
                 <div class="main-left-3">
                     <ul>
@@ -162,6 +202,9 @@ export default {
                 span {
                     color: #ff6801;
                 }
+                li {
+                    height: 24px;
+                }
             }
             .main-left-2 {
                 .left-2-left {
@@ -177,6 +220,7 @@ export default {
                 .left-2-right {
                     .fl;
                     .l-h(34px);
+                    color: #FF6902;
                     font-size: 14px;
                     .tc;
                     border: 1px solid rgba(255, 105, 2, 1);
@@ -224,6 +268,41 @@ export default {
             background: rgba(255, 255, 255, 1);
             box-shadow: -4px 0px 11px 1px rgba(0, 32, 95, 0.1);
         }
+    }
+}
+</style>
+<style lang="less">
+.el-popper[x-placement^=bottom] {
+    margin-top: 0;
+}
+.hover {
+    width: 138px;
+    font-size: 12px;
+    i {
+        vertical-align: -1px;
+    }
+    p {
+        font-size: 14px;
+        color: #333;
+    }
+    ul {
+        margin-top: 12px;
+        li {
+            height: 16px;
+            line-height: 16px;
+            margin-bottom: 7px;
+            color: #999;
+        }
+        span {
+            color: #333;
+        }
+    }
+    img {
+        margin: 0 auto;
+        margin-top: 15px;
+        width: 84px;
+        height: 84px;
+        display: block;
     }
 }
 </style>

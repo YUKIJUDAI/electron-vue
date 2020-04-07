@@ -69,7 +69,6 @@ export default {
                 arr.push({ name: item._id, value: item.uv });
                 arrTitle.push(item._id);
             });
-            console.log(arr)
             var option = {
                 title: {
                     text: '访问渠道占比'
@@ -78,14 +77,6 @@ export default {
                     trigger: 'item',
                     formatter: '{b} : {c} ({d}%)'
                 },
-                // legend: {
-                //     type: 'scroll',
-                //     orient: 'vertical',
-                //     left: 10,
-                //     top: 20,
-                //     bottom: 20,
-                //     data: arrTitle,
-                // },
                 series: [
                     {
                         type: 'pie',

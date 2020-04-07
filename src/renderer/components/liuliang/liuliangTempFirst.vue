@@ -1,41 +1,49 @@
 <template>
     <div class="liuliangTempFirst">
         <el-form label-width="80px" label-position="left">
-            <!-- 日期下拉 -->
-            <el-form-item :model="form" label="监控日期">
-                <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
-                <br />
-                <p class="statistics">任务时长<span>{{days}}</span>天，每天发布<span>{{countbydays}}</span>个任务，此次合计发布<span>{{countbydays*days}}</span>个任务</p>
-            </el-form-item>
             <el-form-item label="商品链接">
-                <el-input placeholder="请输入商品链接" style="width:700px" v-model="form.target"></el-input>
+                <el-input placeholder="请输入商品链接" style="width:700px" v-model="form.target" @change="changeTarget"></el-input>
             </el-form-item>
-            <el-form-item :label="flag ? '关键词' + (i + 1) : '数量'" v-for="(item,i) in form.plan" :key="i">
-                <div class="keywords">
-                    <el-input placeholder="请输入关键词" class="input-with-select" v-model="item.keyword" style="width:250px" v-if="flag">
-                        <el-button slot="append" icon="el-icon-search" @click="open">查排名</el-button>
-                    </el-input>
-                    <div :class="[flag ? 'keywords-right':'keywords-left']">
-                        <span class="keywords-span-1" v-if="flag">数量</span>
-                        <el-input-number :min="1" :max="9999" v-model="item.count" @change="smartAllocation(i)"></el-input-number>
-                        <span class="keywords-span-2" @click="smartAllocation(i)">智能分配</span>
-                        <span class="keywords-span-3" @click="empty(i)">清空</span>
-                        <i class="iconfont icon-jianhao" @click="removePlan(i)" v-if="form.plan.length > 1"></i>
-                        <i class="iconfont icon-jiahao" @click="addPlan(i)" v-if="flag"></i>
+            <template v-for="(item,i) in form.plan">
+                <el-form-item :label="'关键词' + (i + 1)" v-show="flag === 0 || flag === 1">
+                    <div class="keywords">
+                        <el-input placeholder="请输入关键词" class="input-with-select" v-model="item.keyword" style="width:600px">
+                            <el-button slot="append" icon="el-icon-search" @click="open(i)">查排名</el-button>
+                        </el-input>
+                        <div class="keywords-right">
+                            <i class="iconfont icon-jianhao" @click="removePlan(i)" v-show="form.plan.length > 1"></i>
+                            <i class="iconfont icon-jiahao" @click="addPlan(i)"></i>
+                        </div>
                     </div>
-                    <br />
-                    <el-collapse v-model="item.collapse">
-                        <el-collapse-item :title="'共 '+ item.count +'个任务，已分配 '+ item.assigned + '个任务，未分配 ' + item.unassigned + ' 个'" name="1">
-                            <ul class="clearfix">
-                                <li v-for="(value,j) in item.hour" :key="j">
-                                    <p :class="{'color':j > 19 }">{{j > 9 ? j + ":00" : "0" + j + ":00"}}</p>
-                                    <input type="number" v-model="item.hour[j]" @change="changeInput(i)" min="0">
-                                </li>
-                            </ul>
-                        </el-collapse-item>
-                    </el-collapse>
-                </div>
-            </el-form-item>
+                </el-form-item>
+                <el-form-item label="每日数量">
+                    <div class="keywords">
+                        <el-input-number :min="1" :max="9999" v-model="item.count" @change="smartAllocation(i)"></el-input-number>
+                        <el-radio-group v-show="flag === 3" style="margin-left:40px">
+                            <el-radio :label="0">自动当天完成</el-radio>
+                            <el-radio :label="1">手动指定时段</el-radio>
+                        </el-radio-group>
+                        <div class="keywords-right show" v-show="flag === 0">
+                            <span>展现</span>
+                            <el-input size="small" style="width:80px" v-model="item.show" @change="changeShow(i)"></el-input>
+                            <span class="circle" @click="item.multiple = 1,item.show=item.multiple * item.count" :class="{active:item.multiple===1}">1倍</span>
+                            <span class="circle" @click="item.multiple = 3,item.show=item.multiple * item.count" :class="{active:item.multiple===3}">3倍</span>
+                            <span class="circle" @click="item.multiple = 5,item.show=item.multiple * item.count" :class="{active:item.multiple===5}">5倍</span>
+                        </div>
+                        <br />
+                        <el-collapse v-model="item.collapse" v-show="flag !== 2">
+                            <el-collapse-item :title="'共 '+ item.count +'个任务，已分配 '+ item.assigned + '个任务，未分配 ' + item.unassigned + ' 个'" name="1">
+                                <ul class="clearfix">
+                                    <li v-for="(value,j) in item.hour" :key="j">
+                                        <p :class="{'color':j > 19 }">{{j > 9 ? j + ":00" : "0" + j + ":00"}}</p>
+                                        <input type="number" v-model="item.hour[j]" @change="changeInput(i)" min="0">
+                                    </li>
+                                </ul>
+                            </el-collapse-item>
+                        </el-collapse>
+                    </div>
+                </el-form-item>
+            </template>
             <el-form-item label="浏览时间">
                 <el-select size="small" style="width:200px" v-model="form.browse_time">
                     <el-option label="100 - 180秒(免费)" value="100-180"></el-option>
@@ -50,6 +58,15 @@
                     <el-option label="随机浏览商品" value="1"></el-option>
                     <el-option label="深度浏览商品" value="2"></el-option>
                 </el-select>
+            </el-form-item>
+            <el-form-item label="任务备注">
+                <el-input size="small" style="width: 700px;"></el-input>
+            </el-form-item>
+            <!-- 日期下拉 -->
+            <el-form-item :model="form" label="任务日期">
+                <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
+                <br />
+                <p class="statistics">任务时长<span>{{days}}</span>天，每天发布<span>{{countbydays}}</span>个任务，此次合计发布<span>{{countbydays*days}}</span>个任务</p>
             </el-form-item>
         </el-form>
         <div class="settlement">
@@ -67,6 +84,7 @@
 <script>
 const { shell } = require("electron");
 const moment = require('moment');
+const qs = require("qs");
 import { weightFn } from "@/util/util";
 import { strictEqual } from 'assert';
 
@@ -83,13 +101,15 @@ export default {
             // 任务天数
             countbydays: 100,
             // 是否显示关键词
-            flag: true,
+            flag: 0,
             // 价格
             price: 0,
             // vip价格
             vip_price: 0,
             // 任务时常
             taskTime: ["100-180", "30-50", "30-50", "", "", "", "", "30-100", "", "30-30", "30-30", " 100-180"],
+            // 展现
+            show: 300,
             // 提交的表单
             form: {
                 dateValue: "",
@@ -102,7 +122,9 @@ export default {
                     assigned: 100,
                     unassigned: 0,
                     count: 100,
-                    collapse: ["1"]
+                    collapse: ["1"],
+                    show: 300,
+                    multiple: 3
                 }]
             }
         }
@@ -110,7 +132,7 @@ export default {
     computed: {
         vip_level() {
             return this.$store.state.userInfo.vip_level;
-        }
+        },
     },
     created() {
         this.form.dateValue = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
@@ -126,19 +148,32 @@ export default {
             }
         },
         // 查排名
-        open() {
-            shell.openExternal("https://www.kehuda.com/");
+        open(i) {
+            var id = qs.parse(this.form.target.split('?')[1]).id;
+            var keyword = this.form.plan[i].keyword || "";
+            shell.openExternal("https://www.kehuda.com/#username=" + id + "&keyword=" + keyword + "&shebei=1");
+        },
+        // 改变url
+        changeTarget() {
+            if (!this.form.target) return;
+            this.form.target = this.form.target.split("?")[0] + "?id=" + qs.parse(this.form.target.split('?')[1]).id;
+        },
+        changeShow(i) {
+            if (this.form.plan[i].show % this.form.plan[i].count !== 0) {
+                this.form.plan[i].show = this.form.plan[i].count * Math.ceil(this.form.plan[i].show / this.form.plan[i].count);
+            }
+            this.form.plan[i].multiple = this.form.plan[i].show % this.form.plan[i].count;
         },
         // 改变数值
         changeInput(i) {
-            this.form.plan[i].assigned = this.form.plan[i].hour.reduce((prev, curr, idx, arr) => +prev + +curr);
-            this.form.plan[i].unassigned = this.form.plan[i].count - this.form.plan[i].assigned;
-        },
-        // 清空
-        empty(i) {
-            this.form.plan[i].hour = emptyData;
-            this.form.plan[i].assigned = 0;
-            this.form.plan[i].unassigned = this.form.plan[i].count - this.form.plan[i].assigned;
+            this.form.plan[i].count = this.form.plan[i].hour.reduce((prev, curr, idx, arr) => +prev + +curr);
+            this.form.plan[i].assigned = this.form.plan[i].count;
+            var countbydays = 0;
+            this.form.plan.map((item, i) => countbydays += item.count);
+            this.countbydays = countbydays;
+            this.form.plan[i].show = this.form.plan[i].count * this.form.plan[i].multiple;
+            this.form.plan[i].assigned = this.form.plan[i].count;
+            this.form.plan[i].unassigned = 0;
         },
         // 添加计划
         addPlan(i) {
@@ -148,7 +183,9 @@ export default {
                 assigned: 100,
                 unassigned: 0,
                 count: 100,
-                collapse: ["1"]
+                collapse: ["1"],
+                show: 300,
+                multiple: 3
             });
             var countbydays = 0;
             this.form.plan.map((item, i) => countbydays += item.count);
@@ -166,6 +203,7 @@ export default {
             var countbydays = 0;
             this.form.plan.map((item, i) => countbydays += item.count);
             this.countbydays = countbydays;
+            this.form.plan[i].show = this.form.plan[i].count * this.form.plan[i].multiple;
             this.form.plan[i].assigned = this.form.plan[i].count;
             this.form.plan[i].unassigned = 0;
             this.form.plan[i].hour = weightFn(defaultData, this.form.plan[i].count);
@@ -190,14 +228,22 @@ export default {
             }
         },
         "type"(val) {
-            if ([2, 7, 10].includes(val)) {
-                this.flag = false;
+            if ([0, 9, 11].includes(val)) {
+                this.flag = 0;
+            } else if ([1].includes(val)) {
+                this.flag = 1;
+            } else if ([2].includes(val)) {
+                this.flag = 2;
                 this.form.plan = [this.form.plan[0]];
                 var countbydays = 0;
                 this.form.plan.map((item, i) => countbydays += item.count);
                 this.countbydays = countbydays;
-            } else {
-                this.flag = true;
+            } else if ([7, 10].includes(val)) {
+                this.flag = 3;
+                this.form.plan = [this.form.plan[0]];
+                var countbydays = 0;
+                this.form.plan.map((item, i) => countbydays += item.count);
+                this.countbydays = countbydays;
             }
             this.getPrice();
         }
@@ -225,6 +271,20 @@ export default {
     }
     .keywords {
         width: 700px;
+        .show {
+            color: #333;
+            .circle {
+                border: 1px solid #dcdfe6;
+                border-radius: 20px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+            .active {
+                border: 1px solid #ff6801;
+                background: #ff6801;
+                color: #fff;
+            }
+        }
         .keywords-right {
             .fr;
         }
