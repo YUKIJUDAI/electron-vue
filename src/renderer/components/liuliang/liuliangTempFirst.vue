@@ -74,9 +74,9 @@
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
             </div>
-            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price}}</span> 积分，合计消费 <span>{{price * countbydays}}</span> 积分</p>
+            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price}}</span> 积分，合计消费 <span>{{price * countbydays*days}}</span> 积分</p>
             <br />
-            <p class="settlement-p-2" v-show="vip_level === 0">升级<span>火星情报会员</span> 每单可节省 <span>{{price - vip_price}}</span> 积分，合计节省 <span>{{(price - vip_price)*countbydays}}</span> 积分</p>
+            <p class="settlement-p-2" v-show="vip_level === 0">升级<span>火星情报会员</span> 每单可节省 <span>{{price - vip_price}}</span> 积分，合计节省 <span>{{(price - vip_price)*countbydays*days}}</span> 积分</p>
         </div>
     </div>
 </template>
