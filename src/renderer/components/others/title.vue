@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-input">
                         <i class="invite_code"></i>
-                        <input type="text" placeholder="请输入邀请码（选填）" v-model="registeredForm.password">
+                        <input type="text" placeholder="请输入邀请码（选填）" v-model="registeredForm.invite_code">
                     </div>
                     <div class="clearfix form-margin">
                         <div class="form-input form-input-code">
