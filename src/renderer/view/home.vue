@@ -19,41 +19,41 @@
                 </div>
                 <div class="main-left-2 clearfix">
                     <el-popover placement="bottom" trigger="hover" :offset="44">
-                        <div class="hover">
-                            <p>周经理</p>
+                        <div class="_hover">
+                            <p></p>
                             <ul>
                                 <li>
                                     <i class="iconfont icon-shouji1"></i>
-                                    手机：<span>18188202288</span>
+                                    手机：<span>{{info.boss_phone}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
-                                    Q Q：<span>88714568</span>
+                                    Q Q：<span>{{info.boss_qq}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-weixin"></i>
-                                    微信：<span>18188202288</span>
+                                    微信：<span>{{info.boss_wechat}}</span>
                                 </li>
                             </ul>
-                            <img src="">
+                            <img :src="info.boss_qr_code">
                         </div>
                         <div class="left-2-left" slot="reference">客户经理</div>
                     </el-popover>
                     <el-popover placement="bottom" trigger="hover" :offset="-43">
-                        <div class="hover">
+                        <div class="_hover">
                             <p>周经理</p>
                             <ul>
                                 <li>
                                     <i class="iconfont icon-shouji1"></i>
-                                    手机：<span>18188202288</span>
+                                    手机：<span>{{info.kefu_phone}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
-                                    Q Q：<span>88714568</span>
+                                    Q Q：<span>{{info.kefu_qq}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-weixin"></i>
-                                    微信：<span>18188202288</span>
+                                    微信：<span>{{info.kefu_wechat}}</span>
                                 </li>
                             </ul>
                             <img src="">
@@ -89,6 +89,11 @@ import factory from "@/util/factory";
 
 export default {
     components: { heisouTitle },
+    data() {
+        return {
+            info: {}
+        }
+    },
     computed: {
         isLogin() {
             return !isEmpty(this.$store.state.userInfo.token);
@@ -107,20 +112,29 @@ export default {
                 typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
             }
         });
+        // 输出更新信息
+        ipcRenderer.on("message", (event, text) => {
+            console.log(text);
+        });
         // 页面跳转跳转
         ipcRenderer.on('router-to', (event, router) => {
             this.$router.push(router);
         });
 
         this.getUserInfo();
+        this.getServiceCode();
     },
     methods: {
-        getUserInfo() {
-            if (this.isLogin) {
-                this.$fetch.post("/user/getUserInfo").then(res => {
-                    0 == res.code && this.$store.dispatch("set_user_info", { gold: res.data.gold });
-                });
+        async getServiceCode() {
+            var res = await this.$fetch.post("/index/getServiceCode");
+            0 === res.code && (this.info = res.data);
+        },
+        async getUserInfo() {
+            if (!this.isLogin) {
+                return;
             }
+            var res = await this.$fetch.post("/user/getUserInfo");
+            0 === res.code && this.$store.dispatch("set_user_info", { gold: res.data.gold });
         },
         // 打开
         open(url) {
@@ -220,7 +234,7 @@ export default {
                 .left-2-right {
                     .fl;
                     .l-h(34px);
-                    color: #FF6902;
+                    color: #ff6902;
                     font-size: 14px;
                     .tc;
                     border: 1px solid rgba(255, 105, 2, 1);
@@ -272,10 +286,10 @@ export default {
 }
 </style>
 <style lang="less">
-.el-popper[x-placement^=bottom] {
+.el-popper[x-placement^="bottom"] {
     margin-top: 0;
 }
-.hover {
+._hover {
     width: 138px;
     font-size: 12px;
     i {

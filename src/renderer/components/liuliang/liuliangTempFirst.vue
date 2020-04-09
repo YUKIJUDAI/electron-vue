@@ -3,6 +3,16 @@
         <el-form label-width="80px" label-position="left">
             <el-form-item label="商品链接">
                 <el-input placeholder="请输入商品链接" style="width:700px" v-model="form.target" @change="changeTarget"></el-input>
+                <div class="goods_info" v-show="goodsFlag">
+                    <div class="goods_info_left">
+                        <img :src="form.goods_img">
+                    </div>
+                    <div class="goods_info_right">
+                        <p class="goods_info_title">{{form.goods_title}}</p>
+                        <span>店铺：{{form.shop_name}}</span>
+                        <span>旺旺：{{form.wwid}}</span>
+                    </div>
+                </div>
             </el-form-item>
             <template v-for="(item,i) in form.plan">
                 <el-form-item :label="'关键词' + (i + 1)" v-show="flag === 0 || flag === 1">
@@ -19,19 +29,19 @@
                 <el-form-item label="每日数量">
                     <div class="keywords">
                         <el-input-number :min="1" :max="9999" v-model="item.count" @change="smartAllocation(i)"></el-input-number>
-                        <el-radio-group v-show="flag === 3" style="margin-left:40px">
+                        <el-radio-group v-show="flag === 3" style="margin-left:40px" v-model="automatic">
                             <el-radio :label="0">自动当天完成</el-radio>
                             <el-radio :label="1">手动指定时段</el-radio>
                         </el-radio-group>
                         <div class="keywords-right show" v-show="flag === 0">
                             <span>展现</span>
-                            <el-input size="small" style="width:80px" v-model="item.show" @change="changeShow(i)"></el-input>
-                            <span class="circle" @click="item.multiple = 1,item.show=item.multiple * item.count" :class="{active:item.multiple===1}">1倍</span>
-                            <span class="circle" @click="item.multiple = 3,item.show=item.multiple * item.count" :class="{active:item.multiple===3}">3倍</span>
-                            <span class="circle" @click="item.multiple = 5,item.show=item.multiple * item.count" :class="{active:item.multiple===5}">5倍</span>
+                            <el-input size="small" style="width:80px" v-model="item.show_count" @change="changeShow(i)"></el-input>
+                            <span class="circle" @click="item.multiple = 1,item.show_count=item.multiple * item.count" :class="{active:item.multiple===1}">1倍</span>
+                            <span class="circle" @click="item.multiple = 3,item.show_count=item.multiple * item.count" :class="{active:item.multiple===3}">3倍</span>
+                            <span class="circle" @click="item.multiple = 5,item.show_count=item.multiple * item.count" :class="{active:item.multiple===5}">5倍</span>
                         </div>
                         <br />
-                        <el-collapse v-model="item.collapse" v-show="flag !== 2">
+                        <el-collapse v-model="item.collapse" v-show="flag !== 2 && automatic === 1">
                             <el-collapse-item :title="'共 '+ item.count +'个任务，已分配 '+ item.assigned + '个任务，未分配 ' + item.unassigned + ' 个'" name="1">
                                 <ul class="clearfix">
                                     <li v-for="(value,j) in item.hour" :key="j">
@@ -44,15 +54,12 @@
                     </div>
                 </el-form-item>
             </template>
-            <el-form-item label="浏览时间">
-                <el-select size="small" style="width:200px" v-model="form.browse_time">
-                    <el-option label="100 - 180秒(免费)" value="100-180"></el-option>
-                    <el-option label="180 - 280秒" value="180-280"></el-option>
-                    <el-option label="280 - 380秒" value="280-380"></el-option>
-                    <el-option label="380 - 480秒" value="380-480"></el-option>
+            <el-form-item label="浏览时间" v-show="flag === 0 || flag === 1">
+                <el-select size="small" style="width:200px" v-model="form.browse_time" @change="changeBorwseTime">
+                    <el-option :label="item.serve_name" :value="item.value" v-for="(item,i) in browse_time[type]"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="浏览深度">
+            <el-form-item label="浏览深度" v-show="flag === 0 || flag === 1">
                 <el-select size="small" style="width:200px" v-model="form.depth">
                     <el-option label="不浏览其他商品" value="0"></el-option>
                     <el-option label="随机浏览商品" value="1"></el-option>
@@ -60,7 +67,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="任务备注">
-                <el-input size="small" style="width: 700px;"></el-input>
+                <el-input size="small" style="width: 700px;" v-model="form.remark"></el-input>
             </el-form-item>
             <!-- 日期下拉 -->
             <el-form-item :model="form" label="任务日期">
@@ -74,9 +81,9 @@
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
             </div>
-            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price}}</span> 积分，合计消费 <span>{{price * countbydays*days}}</span> 积分</p>
+            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price[type].price + browse_price}}</span> 积分，合计消费 <span>{{(price[type].price + browse_price)*countbydays*days}}</span> 积分</p>
             <br />
-            <p class="settlement-p-2" v-show="vip_level === 0">升级<span>火星情报会员</span> 每单可节省 <span>{{price - vip_price}}</span> 积分，合计节省 <span>{{(price - vip_price)*countbydays*days}}</span> 积分</p>
+            <p class="settlement-p-2" v-show="vip_level === 0">升级<span>火星情报会员</span> 每单可节省 <span>{{price[type].price + browse_price - price[type].vip_price}}</span> 积分，合计节省 <span>{{(price[type].price + browse_price - price[type].vip_price)*countbydays*days}}</span> 积分</p>
         </div>
     </div>
 </template>
@@ -86,7 +93,6 @@ const { shell } = require("electron");
 const moment = require('moment');
 const qs = require("qs");
 import { weightFn } from "@/util/util";
-import { strictEqual } from 'assert';
 
 // 默认配置 , 空配置
 var defaultData = [2, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 2, 1],
@@ -102,14 +108,18 @@ export default {
             countbydays: 100,
             // 是否显示关键词
             flag: 0,
+            // 商品flag
+            goodsFlag: false,
+            // 时间自动手动
+            automatic: 1,
             // 价格
-            price: 0,
-            // vip价格
-            vip_price: 0,
+            price: [],
+            // 浏览时间
+            browse_time: [],
+            // 浏览价格
+            browse_price: 0,
             // 任务时常
             taskTime: ["100-180", "30-50", "30-50", "", "", "", "", "30-100", "", "30-30", "30-30", " 100-180"],
-            // 展现
-            show: 300,
             // 提交的表单
             form: {
                 dateValue: "",
@@ -123,7 +133,7 @@ export default {
                     unassigned: 0,
                     count: 100,
                     collapse: ["1"],
-                    show: 300,
+                    show_count: 300,
                     multiple: 3
                 }]
             }
@@ -132,7 +142,7 @@ export default {
     computed: {
         vip_level() {
             return this.$store.state.userInfo.vip_level;
-        },
+        }
     },
     created() {
         this.form.dateValue = [moment().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')];
@@ -143,8 +153,17 @@ export default {
             // 获取单价
             var res = await this.$fetch.post("/price/getLieLiuPrice", { type: this.type });
             if (0 === res.code) {
-                this.price = this.vip_level === 0 ? res.data.price : res.data.vip_price;
-                this.vip_price = res.data.vip_price;
+                var a = [], b = [];
+                res.data.price.forEach((item, i) => {
+                    item.price = this.vip_level === 0 ? item.price : item.vip_price;
+                    a[item.type] = item;
+                });
+                b[0] = res.data.app;
+                b[9] = res.data.app;
+                b[11] = res.data.app;
+                b[1] = res.data.pc;
+                this.price = a;
+                this.browse_time = b;
             }
         },
         // 查排名
@@ -154,15 +173,26 @@ export default {
             shell.openExternal("https://www.kehuda.com/#username=" + id + "&keyword=" + keyword + "&shebei=1");
         },
         // 改变url
-        changeTarget() {
+        async changeTarget() {
             if (!this.form.target) return;
             this.form.target = this.form.target.split("?")[0] + "?id=" + qs.parse(this.form.target.split('?')[1]).id;
+            var res = await this.$fetch.post("/lieliu/getGoodsInfo", { url: this.form.target });
+            if (0 === res.code) {
+                this.form = Object.assign(this.form, res.data);
+                this.goodsFlag = true;
+            } else {
+                this.form = Object.assign(this.form, { "goods_title": "", "goods_img": "", "shop_name": "", "wwid": "" });
+                this.goodsFlag = false;
+            }
+        },
+        changeBorwseTime(value) {
+            this.browse_price = this.browse_time[this.type].filter(item => item.value === value)[0].price;
         },
         changeShow(i) {
-            if (this.form.plan[i].show % this.form.plan[i].count !== 0) {
-                this.form.plan[i].show = this.form.plan[i].count * Math.ceil(this.form.plan[i].show / this.form.plan[i].count);
+            if (this.form.plan[i].show_count % this.form.plan[i].count !== 0) {
+                this.form.plan[i].show_count = this.form.plan[i].count * Math.ceil(this.form.plan[i].show_count / this.form.plan[i].count);
             }
-            this.form.plan[i].multiple = this.form.plan[i].show % this.form.plan[i].count;
+            this.form.plan[i].multiple = this.form.plan[i].show_count % this.form.plan[i].count;
         },
         // 改变数值
         changeInput(i) {
@@ -171,7 +201,7 @@ export default {
             var countbydays = 0;
             this.form.plan.map((item, i) => countbydays += item.count);
             this.countbydays = countbydays;
-            this.form.plan[i].show = this.form.plan[i].count * this.form.plan[i].multiple;
+            this.form.plan[i].show_count = this.form.plan[i].count * this.form.plan[i].multiple;
             this.form.plan[i].assigned = this.form.plan[i].count;
             this.form.plan[i].unassigned = 0;
         },
@@ -184,7 +214,7 @@ export default {
                 unassigned: 0,
                 count: 100,
                 collapse: ["1"],
-                show: 300,
+                show_count: 300,
                 multiple: 3
             });
             var countbydays = 0;
@@ -203,7 +233,7 @@ export default {
             var countbydays = 0;
             this.form.plan.map((item, i) => countbydays += item.count);
             this.countbydays = countbydays;
-            this.form.plan[i].show = this.form.plan[i].count * this.form.plan[i].multiple;
+            this.form.plan[i].show_count = this.form.plan[i].count * this.form.plan[i].multiple;
             this.form.plan[i].assigned = this.form.plan[i].count;
             this.form.plan[i].unassigned = 0;
             this.form.plan[i].hour = weightFn(defaultData, this.form.plan[i].count);
@@ -230,8 +260,10 @@ export default {
         "type"(val) {
             if ([0, 9, 11].includes(val)) {
                 this.flag = 0;
+                this.form.browse_time = "100-180";
             } else if ([1].includes(val)) {
                 this.flag = 1;
+                this.form.browse_time = "30-50";
             } else if ([2].includes(val)) {
                 this.flag = 2;
                 this.form.plan = [this.form.plan[0]];
@@ -245,7 +277,7 @@ export default {
                 this.form.plan.map((item, i) => countbydays += item.count);
                 this.countbydays = countbydays;
             }
-            this.getPrice();
+            this.automatic = 1;
         }
     }
 }
@@ -257,6 +289,30 @@ export default {
     .rel;
     min-height: calc(~"88vh - 217px");
     padding-bottom: 80px;
+    .goods_info {
+        margin-top: 20px;
+        display: flex;
+        .goods_info_left {
+            .wh(80px);
+            img {
+                .wh(100%);
+            }
+        }
+        .goods_info_right {
+            margin-left: 30px;
+            p {
+                margin-bottom: 10px;
+                font-size: 16px;
+                color: #333;
+            }
+            span {
+                color: #999;
+                &:nth-child(3) {
+                    padding-left: 200px;
+                }
+            }
+        }
+    }
     .statistics {
         margin-top: 10px;
         font-size: 16px;

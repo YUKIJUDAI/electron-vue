@@ -142,18 +142,6 @@ export default new Router({
                             path: "flow",
                             component: require("@/view/liuliangliebiao/flow").default,
                             meta: { index: 0 }
-                        },
-                        // 收藏
-                        {
-                            path: "favorite",
-                            component: require("@/view/liuliangliebiao/favorite").default,
-                            meta: { index: 1 }
-                        },
-                        // 加购
-                        {
-                            path: "plusPurchase",
-                            component: require("@/view/liuliangliebiao/plusPurchase").default,
-                            meta: { index: 2 }
                         }
                     ]
                 },

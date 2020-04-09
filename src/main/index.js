@@ -12,7 +12,7 @@ let mainWindow;
 let sycmWindow;
 let adWindow;
 let tray;
-let uploadUrl = "http://127.0.0.1:3000/public";
+let uploadUrl = "http://mars.lethink.net/update";
 
 // 日志
 log4js.configure({
@@ -98,7 +98,7 @@ function createWindow() {
         mainWindow = null;
     });
     // 启动更新
-    updateHandle();
+    // updateHandle();
 
     tray = new Tray(__static + "/logo.ico")
     const contextMenu = Menu.buildFromTemplate([
@@ -172,6 +172,18 @@ function createSycmWindow(account, pwd) {
 // 版本更新
 function updateHandle() {
     autoUpdater.setFeedURL(uploadUrl);
+    autoUpdater.on('error', function (error) {
+        sendUpdateMessage(error.toString());
+    });
+    autoUpdater.on('checking-for-update', function () {
+        sendUpdateMessage("正在检查更新……");
+    });
+    autoUpdater.on('update-available', function (info) {
+        sendUpdateMessage("检测到新版本，正在下载……");
+    });
+    autoUpdater.on('update-not-available', function (info) {
+        sendUpdateMessage("现在使用的就是最新版本，不用更新");
+    });
     // 执行更新
     autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
         const dialogOpts = {
@@ -182,7 +194,9 @@ function updateHandle() {
             detail: '监测到一个新的版本，请点击更新按钮更新工具箱'
         }
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
-            if (returnValue.response === 0) autoUpdater.quitAndInstall()
+            if (returnValue.response === 0) {
+                sendUpdateMessage("install");
+            }
         });
     });
 
@@ -190,4 +204,9 @@ function updateHandle() {
         //执行自动更新检查
         autoUpdater.checkForUpdates();
     });
+}
+
+// 通过main进程发送事件给renderer进程
+function sendUpdateMessage(text) {
+    mainWindow.webContents.send('message', text)
 }

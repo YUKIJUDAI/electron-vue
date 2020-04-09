@@ -13,7 +13,7 @@
                 </router-link>
             </ul>
             <div class="liuliang-index-navigation-right">
-                <router-link tag="p" :to="['/liuliangliebiao/flow','/liuliangliebiao/favorite','/liuliangliebiao/plusPurchase'][$route.meta.index]">任务管理</router-link>
+                <router-link tag="p" to="/liuliangliebiao/flow">任务管理</router-link>
             </div>
         </div>
         <router-view class="liuliang-main">

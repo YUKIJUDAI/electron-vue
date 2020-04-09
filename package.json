@@ -1,6 +1,6 @@
 {
-    "name": "my-project",
-    "version": "0.4.0",
+    "name": "hxqb",
+    "version": "0.4.3",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -27,11 +27,11 @@
         "publish": [
             {
                 "provider": "generic",
-                "url": "http://localhost:3000/public"                
+                "url": "http://mars.lethink.net/update"                
             }
         ],
         "win": {
-            "artifactName": "${productName}_setup_${version}.${ext}",
+            "artifactName": "hxqb_setup_${version}.${ext}",
             "target": "nsis",
             "icon": "static/logo.ico"
         },

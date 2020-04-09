@@ -3,7 +3,7 @@
         <div class="header clearfix" style="-webkit-app-region: drag">
             <router-link class="msg" tag="div" to="/main" style="-webkit-app-region: no-drag">
                 <img src="~@/assets/icon/logo.png" class="logo" />
-                <span class="header-title">火星情报</span>
+                <span class="header-title">火星情报v{{version_num}}</span>
             </router-link>
             <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
                 <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
@@ -21,7 +21,7 @@
                 <li class="exit" @click="exit" v-if="isLogin">退出</li>
             </ul>
         </div>
-        <el-dialog title="欢迎登录火星情报" :visible.sync="loginFlag" width="558px">
+        <el-dialog title="欢迎登录火星情报" :visible.sync="loginFlag" width="558px" :close-on-click-modal="false">
             <div class="login-dialog">
                 <form class="form">
                     <div class="form-input">
@@ -49,7 +49,7 @@
                 <div class="submit" @click="login">登录</div>
             </div>
         </el-dialog>
-        <el-dialog title="欢迎注册火星情报" :visible.sync="registeredFlag" width="721px">
+        <el-dialog title="欢迎注册火星情报" :visible.sync="registeredFlag" width="721px" :close-on-click-modal="false">
             <form class="form">
                 <div class="form-input">
                     <i class="phone"></i>
@@ -89,15 +89,28 @@
         <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">
             <password v-model="forgetFlag" @goLogin="goLogin" :type="2"></password>
         </el-dialog>
+        <el-dialog title="火星情报版本更新" :visible.sync="updateFlag" width="558px" class="update" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+            <div class="update-version">
+                升级版本：v{{versionData.version_num}}
+                <span class="must" v-show="versionData.status === '1'">强制升级</span>
+                <span class="unmust" v-show="versionData.status === '0'">推荐升级</span>
+            </div>
+            <div class="update-con" v-html="versionData.remark"></div>
+            <div class="update-btn">
+                <el-button class="to-update" type="primary" @click="download">立即下载</el-button>
+                <el-button class="cancel-update" v-if="versionData.status === '1'" @click="toMainFn('close')">暂不下载</el-button>
+                <el-button class="cancel-update" v-if="versionData.status === '0'" @click="updateFlag = false">以后再说</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, shell } = require("electron");
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
-import { baseUrl, wsUrl, proxyid } from "@/config/config";
+import { baseUrl, wsUrl, proxyid, version_num } from "@/config/config";
 import factory from "@/util/factory";
 
 export default {
@@ -112,10 +125,15 @@ export default {
             loginForm: {},
             // 注册表格
             registeredForm: {},
+            // 更新信息
+            versionData: {},
+            version_num,
 
             loginFlag: false,
             registeredFlag: false,
             forgetFlag: false,
+            // 更新弹窗
+            updateFlag: false,
             phoneCodeFlag: false,
             // 协议
             protocolFlag: true,
@@ -135,16 +153,20 @@ export default {
         }
     },
     mounted() {
-
         // 判断在线离线状态
         isOnline();
         // 获取更新
-        ipcRenderer.send("checkForUpdate");
+        // ipcRenderer.send("checkForUpdate");
 
         this.openSocket();
         this.getKey();
+        this.getAppVersion();
     },
     methods: {
+        // 下载
+        download() {
+            shell.openExternal(this.versionData.file);
+        },
         // 打开socket
         openSocket() {
             if (!this.isLogin) return;
@@ -167,6 +189,16 @@ export default {
         // 随机key
         getKey() {
             this.key = new Date().getTime() + "" + (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000);
+        },
+        // 获取版本信息
+        async getAppVersion() {
+            var res = await this.$fetch.post("/index/getAppVersion", { version_num });
+            if (0 === res.code) {
+                this.updateFlag = true;
+                this.versionData = res.data;
+            } else if (7000 === res.code) {
+                this.updateFlag = false;
+            }
         },
         // 获取短信
         getPhoneCode(type) {
@@ -248,7 +280,7 @@ export default {
         },
         // 退出
         exit() {
-            this.$store.dispatch("set_user_info", { });
+            this.$store.dispatch("set_user_info", {});
             this.$router.replace("/");
             this.websock.close();
         },
@@ -536,6 +568,49 @@ export default {
             color: #459ff3;
             cursor: pointer;
         }
+    }
+}
+.update {
+    .update-version {
+        padding: 0 30px;
+        font-size: 20px;
+        color: #333;
+        .l-h(30px);
+    }
+    .update-con {
+        padding: 0 30px;
+        font-size: 16px;
+        margin-top: 20px;
+        color: #666;
+    }
+    .update-btn {
+        .tc;
+        padding: 0 30px;
+        margin-top: 40px;
+    }
+    .must {
+        .dib;
+        margin-left: 20px;
+        width: 80px;
+        .l-h(26px);
+        font-size: 12px;
+        background: red;
+        color: #fff;
+        .tc;
+        border-radius: 4px;
+        vertical-align: 3px;
+    }
+    .unmust {
+        .dib;
+        margin-left: 20px;
+        width: 80px;
+        .l-h(26px);
+        font-size: 12px;
+        background: #ff6801;
+        color: #fff;
+        .tc;
+        border-radius: 4px;
+        vertical-align: 3px;
     }
 }
 </style>
