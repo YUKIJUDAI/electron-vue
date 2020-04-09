@@ -3,7 +3,7 @@
         <div class="header clearfix" style="-webkit-app-region: drag">
             <router-link class="msg" tag="div" to="/main" style="-webkit-app-region: no-drag">
                 <img src="~@/assets/icon/logo.png" class="logo" />
-                <span class="header-title">火星情报v{{version_num}}</span>
+                <span class="header-title">火星情报<i>v{{version_num}}</i></span>
             </router-link>
             <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
                 <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
@@ -21,10 +21,10 @@
                 <li class="exit" @click="exit" v-if="isLogin">退出</li>
             </ul>
         </div>
-        <el-dialog title="欢迎登录火星情报" :visible.sync="loginFlag" width="558px" :close-on-click-modal="false">
+        <el-dialog title="欢迎登录" :visible.sync="loginFlag" width="558px" :close-on-click-modal="false">
             <div class="login-dialog">
                 <form class="form">
-                    <div class="form-input">
+                    <div class="form-input form-input-first">
                         <i class="user"></i>
                         <input type="text" placeholder="请输入用户名" v-model="loginForm.phone">
                     </div>
@@ -35,7 +35,7 @@
                     <div class="clearfix form-margin">
                         <div class="form-input form-input-code">
                             <i class="code"></i>
-                            <input type="text" placeholder="请输入图形验证码" v-model="loginForm.verify">
+                            <input type="text" placeholder="请输入验证码" v-model="loginForm.verify">
                         </div>
                         <div class="code-img">
                             <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
@@ -43,63 +43,69 @@
                     </div>
                 </form>
                 <div class="other clearfix">
-                    <span class="forget-pwd" @click="goForget">忘记密码</span>
+                    <span class="forget-pwd" @click="goForget">忘记密码?</span>
                     <span class="registered" @click="goRegistered">免费注册</span>
                 </div>
                 <div class="submit" @click="login">登录</div>
             </div>
         </el-dialog>
-        <el-dialog title="欢迎注册火星情报" :visible.sync="registeredFlag" width="721px" :close-on-click-modal="false">
-            <form class="form">
-                <div class="form-input">
-                    <i class="phone"></i>
-                    <input type="text" placeholder="请输入11位注册手机号" v-model="registeredForm.phone">
-                </div>
-                <div class="form-input">
-                    <i class="pwd"></i>
-                    <input type="password" placeholder="登录密码由6-20位字母和数字组成" v-model="registeredForm.password">
-                </div>
-                <div class="clearfix form-margin">
-                    <div class="form-input form-input-code">
-                        <i class="code"></i>
-                        <input type="text" placeholder="请输入图形验证码" v-model="registeredForm.verify">
+        <el-dialog title="免费注册" :visible.sync="registeredFlag" width="721px" :close-on-click-modal="false">
+            <div class="login-dialog">
+                <form class="form">
+                    <div class="form-input form-input-first">
+                        <i class="phone"></i>
+                        <input type="text" placeholder="请输入11位注册手机号" v-model="registeredForm.phone">
                     </div>
-                    <div class="code-img">
-                        <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
+                    <div class="form-input">
+                        <i class="pwd"></i>
+                        <input type="password" placeholder="登录密码由6-20位字母和数字组成" v-model="registeredForm.password">
                     </div>
-                </div>
-                <div class="clearfix form-margin">
-                    <div class="form-input form-input-code">
-                        <i class="safe"></i>
-                        <input type="text" placeholder="请输入手机验证码" v-model="registeredForm.code">
+                    <div class="form-input">
+                        <i class="invite_code"></i>
+                        <input type="text" placeholder="请输入邀请码（选填）" v-model="registeredForm.password">
                     </div>
-                    <div class="code-safe" v-if="phoneCodeFlag">{{countdown}}</div>
-                    <div class="code-safe" @click="getPhoneCode(1)" v-else>发送验证码</div>
+                    <div class="clearfix form-margin">
+                        <div class="form-input form-input-code">
+                            <i class="code"></i>
+                            <input type="text" placeholder="请输入验证码" v-model="registeredForm.verify">
+                        </div>
+                        <div class="code-img">
+                            <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
+                        </div>
+                    </div>
+                    <div class="clearfix form-margin">
+                        <div class="form-input form-input-code">
+                            <i class="safe"></i>
+                            <input type="text" placeholder="请输入手机验证码" v-model="registeredForm.code">
+                        </div>
+                        <div class="code-safe" v-if="phoneCodeFlag">{{countdown}}</div>
+                        <div class="code-safe" @click="getPhoneCode(1)" v-else>发送验证码</div>
+                    </div>
+                </form>
+                <div class="other clearfix">
+                    <span class="registered" @click="goLogin">已有账号？点击登录</span>
                 </div>
-            </form>
-            <div class="other clearfix">
-                <span class="registered" @click="goLogin">去登录</span>
-            </div>
-            <div class="submit" @click="registered">立即注册</div>
-            <div class="protocol clearfix">
-                <input type="checkbox" class="protocol-checkbox" v-model="protocolFlag" />
-                <p>我已仔细阅读并同意接受<span>《火星情报服务协议》</span></p>
+                <div class="submit" @click="registered">注册</div>
+                <div class="protocol clearfix">
+                    <input type="checkbox" class="protocol-checkbox" v-model="protocolFlag" />
+                    <p>我已阅读并同意接受<span>《服务协议》</span></p>
+                </div>
             </div>
         </el-dialog>
         <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">
             <password v-model="forgetFlag" @goLogin="goLogin" :type="2"></password>
         </el-dialog>
-        <el-dialog title="火星情报版本更新" :visible.sync="updateFlag" width="558px" class="update" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+        <el-dialog title="版本更新" :visible.sync="updateFlag" width="558px" class="update" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
             <div class="update-version">
                 升级版本：v{{versionData.version_num}}
-                <span class="must" v-show="versionData.status === '1'">强制升级</span>
-                <span class="unmust" v-show="versionData.status === '0'">推荐升级</span>
+                <span class="must" v-show="versionData.is_force === 1">强制升级</span>
+                <span class="unmust" v-show="versionData.is_force === 0">推荐升级</span>
             </div>
             <div class="update-con" v-html="versionData.remark"></div>
             <div class="update-btn">
                 <el-button class="to-update" type="primary" @click="download">立即下载</el-button>
-                <el-button class="cancel-update" v-if="versionData.status === '1'" @click="toMainFn('close')">暂不下载</el-button>
-                <el-button class="cancel-update" v-if="versionData.status === '0'" @click="updateFlag = false">以后再说</el-button>
+                <el-button class="cancel-update" v-if="versionData.is_force === 1" @click="toMainFn('close')">暂不下载</el-button>
+                <el-button class="cancel-update" v-if="versionData.is_force === 0" @click="updateFlag = false">以后再说</el-button>
             </div>
         </el-dialog>
     </div>
@@ -324,6 +330,11 @@ export default {
             font-size: 20px;
             color: #fff;
             margin-left: 15px;
+            i {
+                padding-left: 5px;
+                font-size: 14px;
+                font-style: normal;
+            }
         }
     }
     .right-ul {
@@ -427,14 +438,14 @@ export default {
     .form-input {
         width: 380px;
         margin: 0 auto;
-        margin-top: 29px;
-        .l-h(46px);
+        margin-top: 20px;
+        .l-h(40px);
         background: rgba(255, 255, 255, 1);
         border: 1px solid rgba(221, 221, 221, 1);
         border-radius: 3px;
         .user {
             .fl;
-            margin-top: 13px;
+            margin-top: 10px;
             margin-left: 20px;
             width: 17px;
             height: 21px;
@@ -442,23 +453,31 @@ export default {
         }
         .pwd {
             .fl;
-            margin-top: 13px;
+            margin-top: 10px;
             margin-left: 20px;
             width: 18px;
             height: 21px;
             .bg("~@/assets/icon/pwd.png");
         }
-        .code {
+        .invite_code {
             .fl;
-            margin-top: 13px;
+            margin-top: 10px;
             margin-left: 20px;
             width: 18px;
-            height: 21px;
+            height: 18px;
+            .bg("~@/assets/icon/invite_code.png");
+        }
+        .code {
+            .fl;
+            margin-top: 10px;
+            margin-left: 20px;
+            width: 16px;
+            height: 19px;
             .bg("~@/assets/icon/code.png");
         }
         .phone {
             .fl;
-            margin-top: 11px;
+            margin-top: 9px;
             margin-left: 18px;
             width: 16px;
             height: 24px;
@@ -466,7 +485,7 @@ export default {
         }
         .safe {
             .fl;
-            margin-top: 11px;
+            margin-top: 9px;
             margin-left: 17px;
             width: 18px;
             height: 23px;
@@ -476,15 +495,18 @@ export default {
             .fl;
             .l-h(30px);
             width: 280px;
-            margin-top: 9px;
-            margin-left: 25px;
+            margin-top: 6px;
+            margin-left: 20px;
             border: 0;
-            font-size: 16px;
+            font-size: 14px;
             color: #999;
             &:focus {
                 outline: 0;
             }
         }
+    }
+    .form-input-first {
+        margin-top: 0px;
     }
     .form-margin {
         font-size: 0;
@@ -502,13 +524,14 @@ export default {
         .fl;
         width: 118px;
         margin-left: 20px;
-        margin-top: 29px;
-        height: 48px;
+        margin-top: 20px;
+        height: 40px;
         border-radius: 3px;
+        border: 1px solid #ddd;
         cursor: pointer;
+        overflow: hidden;
         img {
             width: 100%;
-            height: 100%;
             margin-top: 10px;
         }
     }
@@ -516,13 +539,14 @@ export default {
         .fl;
         width: 118px;
         margin-left: 20px;
-        margin-top: 29px;
-        .l-h(46px);
-        font-size: 16px;
+        margin-top: 20px;
+        .l-h(42px);
+        font-size: 14px;
         .tc;
         color: #fff;
         background: rgba(255, 104, 1, 1);
         cursor: pointer;
+        border-radius: 2px;
     }
 }
 .other {
@@ -530,7 +554,7 @@ export default {
     margin: 0 auto;
     margin-top: 14px;
     font-size: 14px;
-    color: #ff6801;
+    color: #777;
     cursor: pointer;
     .forget-pwd {
         .fl;
@@ -544,11 +568,12 @@ export default {
     background: rgba(255, 104, 1, 1);
     .l-h(48px);
     margin: 0 auto;
-    margin-top: 35px;
+    margin-top: 20px;
     .tc;
     color: #fff;
-    font-size: 19px;
+    font-size: 18px;
     cursor: pointer;
+    border-radius: 2px;
 }
 .protocol {
     width: 380px;
@@ -615,14 +640,19 @@ export default {
 }
 </style>
 <style lang="less">
+.el-dialog {
+    border-radius: 4px;
+}
 .el-dialog__header {
     background-color: #ff6801;
     text-align: center;
     color: #fff;
-    padding: 20px;
+    padding: 14px 20px;
+    border-radius: 4px 4px 0 0;
 }
 .el-dialog__title {
     color: #fff;
+    font-size: 20px;
 }
 .el-dialog__headerbtn .el-dialog__close {
     color: #fff;
@@ -630,5 +660,8 @@ export default {
 .el-dialog__headerbtn:focus .el-dialog__close,
 .el-dialog__headerbtn:hover .el-dialog__close {
     color: #fff;
+}
+.el-dialog__body {
+    padding: 50px 30px;
 }
 </style>

@@ -81,9 +81,9 @@
                 <li :class="{active:tabIndex === 1}" @click="changeTab(1)">关键词分析</li>
                 <li :class="{active:tabIndex === 2}" @click="changeTab(2)">词根分析</li>
                 <li :class="{active:tabIndex === 3}" @click="changeTab(3)">流量结构分析</li>
-                <li :class="{active:tabIndex === 4}" @click="changeTab(4)">火星情报报表</li>
+                <li :class="{active:tabIndex === 4}" @click="changeTab(4)">黑搜报表</li>
                 <li :class="{active:tabIndex === 5}" @click="changeTab(5)">宝贝信息</li>
-                <!-- <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">火星情报分析<i class="hot"></i></li> -->
+                <!-- <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">黑搜分析<i class="hot"></i></li> -->
             </ul>
         </div>
         <div class="data" :is="tempList[tabIndex]" :itemId="goodsInfo.itemId" :date_range="form.date_range" :t="t" :title="goodsInfo.goods_name"></div>

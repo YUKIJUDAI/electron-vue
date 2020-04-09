@@ -67,10 +67,10 @@
                             <i :class="['iconfont',item.iconclass]"></i>
                             <span>{{item.function_name}}</span>
                         </li>
-                        <router-link to="/geren/personCenter" class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" tag="li">
+                        <li class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" @click="open('/geren/personCenter')">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
-                        </router-link>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -290,8 +290,11 @@ export default {
     margin-top: 0;
 }
 ._hover {
-    width: 138px;
+    margin: -12px;
+    padding: 12px;
+    width: 150px;
     font-size: 12px;
+    background: #eee;
     i {
         vertical-align: -1px;
     }
@@ -312,8 +315,7 @@ export default {
         }
     }
     img {
-        margin: 0 auto;
-        margin-top: 15px;
+        margin: 15px auto;
         width: 84px;
         height: 84px;
         display: block;

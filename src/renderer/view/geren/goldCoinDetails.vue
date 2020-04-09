@@ -52,9 +52,6 @@
                     <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div>
 
                     <div class="pay" @click="paying = false">开通</div>
-                    <div class="protocol">
-                        <el-checkbox v-model="protocol">同意《服务条例》</el-checkbox>
-                    </div>
                 </div>
             </div>
             <pay v-else :pay_type="pay_type" :num="num" :serve_id="orderMsg.id"></pay>
@@ -73,7 +70,6 @@ export default {
             page: 1,
             data: { items: [] },
             paying: true,
-            protocol: true,
             pay_type: 1,
             orderMsg: {},
             num: 10,

@@ -1,7 +1,7 @@
 <template>
     <div class="password">
         <form class="form">
-            <div class="form-input">
+            <div class="form-input form-input-first">
                 <i class="phone"></i>
                 <input type="text" placeholder="请输入手机号" v-model="forgetForm.phone" :disabled="phone">
             </div>
@@ -12,7 +12,7 @@
             <div class="clearfix form-margin">
                 <div class="form-input form-input-code">
                     <i class="code"></i>
-                    <input type="text" placeholder="请输入图形验证码" v-model="forgetForm.verify">
+                    <input type="text" placeholder="请输入验证码" v-model="forgetForm.verify">
                 </div>
                 <div class="code-img">
                     <img :src="baseUrl + '/index/getNoTokenVerify?key=' + key" @click="getKey">
@@ -106,14 +106,14 @@ export default {
         .form-input {
             width: 380px;
             margin: 0 auto;
-            margin-top: 29px;
-            .l-h(46px);
+            margin-top: 20px;
+            .l-h(40px);
             background: rgba(255, 255, 255, 1);
             border: 1px solid rgba(221, 221, 221, 1);
             border-radius: 3px;
             .user {
                 .fl;
-                margin-top: 13px;
+                margin-top: 10px;
                 margin-left: 20px;
                 width: 17px;
                 height: 21px;
@@ -121,23 +121,31 @@ export default {
             }
             .pwd {
                 .fl;
-                margin-top: 13px;
+                margin-top: 10px;
                 margin-left: 20px;
                 width: 18px;
                 height: 21px;
                 .bg("~@/assets/icon/pwd.png");
             }
-            .code {
+            .invite_code {
                 .fl;
-                margin-top: 13px;
+                margin-top: 10px;
                 margin-left: 20px;
                 width: 18px;
-                height: 21px;
+                height: 18px;
+                .bg("~@/assets/icon/invite_code.png");
+            }
+            .code {
+                .fl;
+                margin-top: 10px;
+                margin-left: 20px;
+                width: 16px;
+                height: 19px;
                 .bg("~@/assets/icon/code.png");
             }
             .phone {
                 .fl;
-                margin-top: 11px;
+                margin-top: 9px;
                 margin-left: 18px;
                 width: 16px;
                 height: 24px;
@@ -145,7 +153,7 @@ export default {
             }
             .safe {
                 .fl;
-                margin-top: 11px;
+                margin-top: 9px;
                 margin-left: 17px;
                 width: 18px;
                 height: 23px;
@@ -155,15 +163,18 @@ export default {
                 .fl;
                 .l-h(30px);
                 width: 280px;
-                margin-top: 9px;
-                margin-left: 25px;
+                margin-top: 6px;
+                margin-left: 20px;
                 border: 0;
-                font-size: 16px;
+                font-size: 14px;
                 color: #999;
                 &:focus {
                     outline: 0;
                 }
             }
+        }
+        .form-input-first {
+            margin-top: 0px;
         }
         .form-margin {
             font-size: 0;
@@ -181,13 +192,14 @@ export default {
             .fl;
             width: 118px;
             margin-left: 20px;
-            margin-top: 29px;
-            height: 48px;
+            margin-top: 20px;
+            height: 40px;
             border-radius: 3px;
+            border: 1px solid #ddd;
             cursor: pointer;
+            overflow: hidden;
             img {
                 width: 100%;
-                height: 100%;
                 margin-top: 10px;
             }
         }
@@ -195,13 +207,14 @@ export default {
             .fl;
             width: 118px;
             margin-left: 20px;
-            margin-top: 29px;
-            .l-h(46px);
-            font-size: 16px;
+            margin-top: 20px;
+            .l-h(42px);
+            font-size: 14px;
             .tc;
             color: #fff;
             background: rgba(255, 104, 1, 1);
             cursor: pointer;
+            border-radius: 2px;
         }
     }
     .other {
@@ -209,7 +222,7 @@ export default {
         margin: 0 auto;
         margin-top: 14px;
         font-size: 14px;
-        color: #ff6801;
+        color: #777;
         cursor: pointer;
         .forget-pwd {
             .fl;
@@ -223,11 +236,12 @@ export default {
         background: rgba(255, 104, 1, 1);
         .l-h(48px);
         margin: 0 auto;
-        margin-top: 35px;
+        margin-top: 20px;
         .tc;
         color: #fff;
-        font-size: 19px;
+        font-size: 18px;
         cursor: pointer;
+        border-radius: 2px;
     }
 }
 </style>

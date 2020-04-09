@@ -10,9 +10,6 @@
             <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div>
 
             <div class="pay" @click="toPay()">开通</div>
-            <div class="protocol">
-                <el-checkbox v-model="protocol">同意《服务条例》</el-checkbox>
-            </div>
         </div>
     </div>
 </template>
@@ -21,7 +18,6 @@
 export default {
     data() {
         return {
-            protocol: true,
             pay_type: 1,
             data: {},
             value: 10

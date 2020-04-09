@@ -37,7 +37,7 @@
                 <li>体验发布</li>
             </ul>
         </div>
-        <el-dialog :visible.sync="dialogVisible" title="开通火星情报高级会员" width="690px" :before-close="handleClose">
+        <el-dialog :visible.sync="dialogVisible" title="开通高级会员" width="690px" :before-close="handleClose">
             <paytel v-if="pay" :pay_type="pay_type" :serve_id="price[checked].id"></paytel>
             <div class="recharge-1" v-else>
                 <div class="account clearfix">
@@ -58,9 +58,6 @@
                     <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div>
 
                     <div class="pay" @click="toPay()">开通</div>
-                    <div class="protocol">
-                        <el-checkbox v-model="protocol">同意《服务条例》</el-checkbox>
-                    </div>
                 </div>
             </div>
         </el-dialog>
@@ -76,7 +73,6 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            protocol: true,
             pay_type: 1,
             price: [],
             pay: false,
@@ -275,12 +271,6 @@ export default {
             font-size: 16px;
             color: #fff;
             cursor: pointer;
-        }
-        .protocol {
-            margin-top: 10px;
-            color: #999;
-            font-size: 12px;
-            .tc;
         }
     }
 }
