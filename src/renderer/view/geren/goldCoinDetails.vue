@@ -49,7 +49,7 @@
                 <div class="pay-way">
                     <p>支付方式：</p>
                     <div @click="pay_type = 1" class="pay-way-o" :class="{active:pay_type === 1}">支付宝</div>
-                    <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div>
+                    <!-- <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div> -->
 
                     <div class="pay" @click="paying = false">开通</div>
                 </div>

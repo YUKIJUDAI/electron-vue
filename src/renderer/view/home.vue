@@ -20,7 +20,7 @@
                 <div class="main-left-2 clearfix">
                     <el-popover placement="bottom" trigger="hover" :offset="44">
                         <div class="_hover">
-                            <p></p>
+                            <p>{{info.boss_name}}</p>
                             <ul>
                                 <li>
                                     <i class="iconfont icon-shouji1"></i>
@@ -41,7 +41,7 @@
                     </el-popover>
                     <el-popover placement="bottom" trigger="hover" :offset="-43">
                         <div class="_hover">
-                            <p>周经理</p>
+                            <p>{{info.kefu_name}}</p>
                             <ul>
                                 <li>
                                     <i class="iconfont icon-shouji1"></i>
@@ -56,7 +56,7 @@
                                     微信：<span>{{info.kefu_wechat}}</span>
                                 </li>
                             </ul>
-                            <img src="">
+                            <img :src="info.kefu_qr_code">
                         </div>
                         <div class="left-2-right" slot="reference">售后客服</div>
                     </el-popover>

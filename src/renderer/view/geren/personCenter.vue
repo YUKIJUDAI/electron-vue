@@ -51,8 +51,8 @@
                 </ul>
             </div>
         </div>
-        <p class="p-3">邀请商家注册：{{userInfo.invite_url}}<span @click="copy(userInfo.invite_url)">复制链接</span></p>
-        <p class="p-4">成功注册送7天VIP 商家付费享受10%分佣</p>
+        <p class="p-3">邀请码：{{userInfo.invite_url}}，<span @click="copy(userInfo.invite_url)">点击复制邀请链接</span></p>
+        <p class="p-4">邀请商家成功注册送7天VIP会员</p>
         <div class="body">
             <div class="body-con">
                 <el-card class="box-card">
@@ -63,7 +63,7 @@
                     <ul>
                         <li>
                             <p class="p-5">竞品已监控</p>
-                            <p class="p-6">45<span>天</span></p>
+                            <p class="p-6">0<span>天</span></p>
                         </li>
                         <li>
                             <p class="p-5">黑号已查询</p>
