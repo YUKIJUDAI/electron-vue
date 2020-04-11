@@ -92,6 +92,12 @@
                 </div>
             </div>
         </el-dialog>
+        <el-dialog title="功能维护中" :visible.sync="upholeFlag" width="400px">
+            <div class="uphole">
+                <img src="~@/assets/img/uphold.png" alt="">
+                <p>该功能维护中，敬请期待...</p>
+            </div>
+        </el-dialog>
         <el-dialog title="忘记密码" :visible.sync="forgetFlag" width="721px">
             <password v-model="forgetFlag" @goLogin="goLogin" :type="2"></password>
         </el-dialog>
@@ -135,6 +141,7 @@ export default {
             versionData: {},
             version_num,
 
+            upholeFlag: false,
             loginFlag: false,
             registeredFlag: false,
             forgetFlag: false,
@@ -205,6 +212,10 @@ export default {
             } else if (7000 === res.code) {
                 this.updateFlag = false;
             }
+        },
+        // 维护页面
+        goUphold(){
+            this.upholeFlag = true;
         },
         // 获取短信
         getPhoneCode(type) {
@@ -636,6 +647,19 @@ export default {
         .tc;
         border-radius: 4px;
         vertical-align: 3px;
+    }
+}
+.uphole {
+    display: flex;
+    img {
+        .db;
+        padding-left: 15px;
+    }
+    p {
+        font-size: 16px;
+        color: #666;
+        margin-top: 19px;
+        margin-left: 26px;
     }
 }
 </style>

@@ -63,11 +63,15 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.path === item.route}" @click="open(item.route)">
+                        <router-link tag="li" class="clearfix" to="/index" :class="{active:$route.path === '/index'}">
+                            <i class="iconfont icon-shouye"></i>
+                            <span>首页</span>
+                        </router-link>
+                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.path === item.route}" @click="open(item.route,item.is_uphold)">
                             <i :class="['iconfont',item.iconclass]"></i>
-                            <span>{{item.function_name}}</span>
+                            <span>{{item.copy_title}}</span>
                         </li>
-                        <li class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" @click="open('/geren/personCenter')">
+                        <li class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" @click="open('/geren/personCenter',false)">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </li>
@@ -137,9 +141,13 @@ export default {
             0 === res.code && this.$store.dispatch("set_user_info", { gold: res.data.gold });
         },
         // 打开
-        open(url) {
+        open(url, is_uphold) {
             if (!this.isLogin) {
                 this.$refs.heisouTitle.goLogin();
+                return;
+            }
+            if (Boolean(is_uphold)) {
+                this.$refs.heisouTitle.goUphold();
             } else {
                 this.$router.push(url);
             }

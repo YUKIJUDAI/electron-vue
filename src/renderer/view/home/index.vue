@@ -10,7 +10,7 @@
         <div class="recommend">
             <p class="title">推荐工具</p>
             <ul>
-                <li v-for="(item,i) in recommend" :key="i">
+                <li v-for="(item,i) in recommend" :key="i" v-if="item.is_recommend === 1">
                     <div class="recommend-top clearfix">
                         <img :src="item.icon">
                         <div class="recommend-msg">
@@ -23,7 +23,8 @@
                         <span>{{item.people}}</span>
                         <i class="recomment-video-2" @click="playVideo(item.video_url)"></i>
                         <span>视频教程</span>
-                        <div class="recommend-open" @click="open(item.route)">打开</div>
+                        <div class="recommend-open" v-if="item.is_uphold === 0" @click="open(item.route)">打开</div>
+                        <div class="recommend-open recommend-unopen" v-else>维护中</div>
                     </div>
                 </li>
             </ul>
@@ -59,7 +60,7 @@ export default {
     },
     methods: {
         // 打开
-        open(url) {
+        open(url, is_uphold) {
             if (this.notLogining) {
                 this.$emit("goLogin");
             } else {
@@ -126,7 +127,7 @@ export default {
         li {
             margin-bottom: 20px;
             margin-left: 20px;
-            width: 230px;
+            width: 226px;
             height: 136px;
             background: rgba(255, 255, 255, 1);
             border: 1px solid rgba(255, 195, 154, 1);
@@ -134,6 +135,7 @@ export default {
         }
         .recommend-top {
             padding-top: 24px;
+            height: 60px;
             img {
                 .fl;
                 .wh(40px);
@@ -192,6 +194,10 @@ export default {
                 font-size: 12px;
                 border-radius: 4px;
                 cursor: pointer;
+            }
+            .recommend-unopen {
+                background: #eee;
+                color: #333;
             }
         }
     }
