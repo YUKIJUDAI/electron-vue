@@ -80,7 +80,15 @@ export default new Router({
                             component: require("@/view/heisoubinding/binding").default,
                             meta: { index: 0 },
                             beforeEnter(to, from, next) {
-                                remote.getGlobal("tbInfo") ? next("/heisou/monitor") : next();
+                                if (remote.getGlobal("tbInfo")) {
+                                    if (remote.getGlobal("tbInfo").hasOwnProperty("runAsShopId") && remote.getGlobal("tbInfo").runAsShopId !== "") {
+                                        next("/heisou/monitor");
+                                    } else {
+                                        next();
+                                    }
+                                } else {
+                                    next();
+                                }
                             }
                         }
                     ]

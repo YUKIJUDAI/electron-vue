@@ -51,7 +51,7 @@
                 </ul>
             </div>
         </div>
-        <p class="p-3">邀请码：{{userInfo.invite_url}}，<span @click="copy(userInfo.invite_url)">点击复制邀请链接</span></p>
+        <p class="p-3">邀请码：{{userInfo.invite_url | code}}，<span @click="copy(userInfo.invite_url)">点击复制邀请链接</span></p>
         <p class="p-4">邀请商家成功注册送7天VIP会员</p>
         <div class="body">
             <div class="body-con">
@@ -108,6 +108,7 @@
 <script>
 import { isEmpty } from "@/util/util";
 import copy from "clipboard-copy";
+const qs = require("qs");
 
 export default {
     data() {
@@ -118,6 +119,11 @@ export default {
     created() {
         this.getUserInfo();
         this.getGoldPrice();
+    },
+    filters: {
+        code(val) {
+            return isEmpty(val) ? "" : qs.parse(val.split("?")[1]).invite_code;
+        }
     },
     methods: {
         async getGoldPrice() {

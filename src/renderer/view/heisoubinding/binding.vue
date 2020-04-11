@@ -12,16 +12,34 @@
                 <p class="bind">绑定生参账号</p>
             </li>
         </ul>
+        <el-dialog title="请绑定生意参谋" :visible.sync="bindingFlag" width="450px" class="bingding-flag">
+            <p>一键分析本店以及竞品</p>
+            <p>流量/词根/转化率/金额/客单等真实数据</p>
+            <p>深度透视需购买 市场洞察标准版</p>
+            <el-button type="primary" @click="opensycm" class="bingding-btn">立即绑定</el-button>
+        </el-dialog>
+        <div class="swiper-container bg" id="swiper" v-show="bindingFlag">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(item,i) in picList">
+                    <img :src="item.pic" style="width:100%;height:100%">
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 const { ipcRenderer } = require("electron");
+import axios from "axios";
+import Swiper from 'swiper';
 
 export default {
     data() {
         return {
-            list: []
+            list: [],
+            bindingFlag: false,
+            swiper: "",
+            picList: []
         }
     },
     mounted() {
@@ -29,9 +47,26 @@ export default {
     },
     methods: {
         getList() {
-            this.$fetch.post("/user/getRelateTbList").then(res => {
-                0 === res.code && (this.list = res.data);
-            });
+            var a = this.$fetch.post("/user/getRelateTbList");
+            var b = this.$fetch.post("/index/getFunctionPic");
+
+            axios.all([a,b]).then(res => {
+                if (0 === res[0].code && 0 === res[1].code) {
+                    this.list = res[0].data;
+                    this.picList = res[1].data;
+
+                    if (res[0].data.length === 0) {
+                        this.bindingFlag = true;
+                        this.$nextTick(() => {
+                            this.swiper = new Swiper("#swiper", {
+                                autoplay: {
+                                    delay: 4000
+                                }
+                            });
+                        })
+                    }
+                }
+            })
         },
         del(id) {
             this.$confirm('是否删除该账号?', '确认删除', {
@@ -62,6 +97,13 @@ export default {
 .binding {
     margin: 0 15px;
     margin-top: 20px;
+    .bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+    }
     ul {
         display: flex;
         flex-wrap: wrap;
@@ -123,6 +165,17 @@ export default {
             color: #ffa600;
             margin-top: 30px;
             cursor: pointer;
+        }
+    }
+    .bingding-flag {
+        p {
+            font-size: 16px;
+            color: #999;
+            line-height: 30px;
+        }
+        .bingding-btn {
+            margin-top: 20px;
+            margin-left: 300px;
         }
     }
 }

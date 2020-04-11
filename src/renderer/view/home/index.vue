@@ -36,6 +36,7 @@
 </template>
 
 <script>
+const { shell } = require("electron");
 import Swiper from 'swiper';
 import 'swiper/css/swiper.min.css';
 import { isEmpty } from "@/util/util";
@@ -46,7 +47,8 @@ export default {
             banner: [],
             recommend: [],
             detialPlay: false,
-            videoUrl: ""
+            videoUrl: "",
+            swiper: ""
         }
     },
     computed: {
@@ -60,7 +62,7 @@ export default {
     },
     methods: {
         // 打开
-        open(url, is_uphold) {
+        open(url) {
             if (this.notLogining) {
                 this.$emit("goLogin");
             } else {
@@ -76,6 +78,13 @@ export default {
                         this.swiper = new Swiper("#swiper", {
                             autoplay: {
                                 delay: 6000
+                            },
+                            on: {
+                                click: () => {
+                                    var url = this.banner[this.swiper.realIndex].url;
+                                    url.includes("http") ? shell.openExternal(url) : this.open(url);
+                                    shell.openExternal(this.banner[this.swiper.realIndex].url);
+                                }
                             }
                         });
                     })

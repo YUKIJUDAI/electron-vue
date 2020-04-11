@@ -83,8 +83,8 @@ ipcMain.on("show-sycm", function () {
 // 创建窗口
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1280, height: 800, autoHideMenuBar: true,
-        minWidth: 1280, minHeight: 800, frame: false,
+        width: 1280, height: 920, autoHideMenuBar: true,
+        minWidth: 1280, minHeight: 920, frame: false,
         webPreferences: {
             devTools: true,
             webviewTag: true,

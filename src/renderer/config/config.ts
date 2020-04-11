@@ -4,6 +4,6 @@ const heisouBaseUrl = "http://bsearch-api.lethink.net";
 const qnUrl = "http://file.bsearch.lethink.net/";
 const wsUrl = "ws://47.99.101.142:2046/";
 const proxyid = 1;
-const version_num = "0.4.4";
+const version_num = "0.4.7";
 
 export { uploadUrl, baseUrl, heisouBaseUrl, qnUrl, wsUrl, proxyid,version_num };
