@@ -178,11 +178,6 @@ export default new Router({
                             path: "dataChange",
                             component: require("@/view/zhuanhua/dataChange").default,
                             meta: { index: 0 }
-                        },
-                        {
-                            path: "dataReduction",
-                            component: require("@/view/zhuanhua/dataReduction").default,
-                            meta: { index: 1 }
                         }
                     ]
                 },

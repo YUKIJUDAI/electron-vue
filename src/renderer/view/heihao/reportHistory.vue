@@ -77,9 +77,8 @@ export default {
 
 <style lang="less" scoped>
 .reportHistory {
-    padding: 0 20px;
     .reportHistory-title {
-        padding: 30px 0 0 0;
+        padding: 15px 0 0 0;
         font-size: 0;
     }
     .pagination {

@@ -93,8 +93,6 @@ export default {
 @import url("~@/assets/less/commom.less");
 
 .realstuff-center {
-    margin-top: 15px;
-    padding: 0 20px;
     .realstuff-top {
         display: flex;
         justify-content: space-between;

@@ -75,7 +75,6 @@ export default {
 @import url("~@/assets/less/commom.less");
 
 .invitation {
-    padding: 0 20px;
     .img {
         width: 100%;
         height: auto;

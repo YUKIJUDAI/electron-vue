@@ -84,9 +84,8 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 .video-center {
-    margin: 0 20px;
     .video-center-tab {
-        padding: 22px 0 14px 0;
+        padding: 0 0 14px 0;
         display: flex;
         justify-content: flex-start;
         margin-top: 1px;

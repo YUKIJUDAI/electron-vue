@@ -41,7 +41,6 @@ export default {
                 { name: "流量指数", rename: "访客人数" },
                 { name: "支付转化指数", rename: "支付转化率" },
                 { name: "交易指数", rename: "交易金额" },
-                { name: "关键词交易指数", rename: "关键词交易金额" },
                 { name: "加购人气", rename: "加购人数" },
                 { name: "搜索人气", rename: "搜索人数" },
                 { name: "客群指数", rename: "支付人数" },
@@ -71,7 +70,7 @@ export default {
         margin-top: 30px;
         display: flex;
         p {
-            width: 80px;
+            width: 60px;
             font-size: 14px;
             .l-h(34px);
         }
@@ -97,7 +96,7 @@ export default {
         }
     }
     .body {
-        margin-top: 60px;
+        margin-top: 40px;
         padding: 0 20px;
         display: flex;
         .body-input {

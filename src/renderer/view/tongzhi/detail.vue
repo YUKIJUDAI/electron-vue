@@ -27,7 +27,6 @@ export default {
 
 <style lang="less" scoped>
 .detail {
-    padding: 0 20px;
     .title {
         font-size: 16px;
         color: #333;

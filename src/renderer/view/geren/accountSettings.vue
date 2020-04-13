@@ -83,9 +83,8 @@ export default {
 @import url("~@/assets/less/commom.less");
 
 .accountSettings {
-    padding: 0 20px;
     .title {
-        margin-top: 40px;
+        margin-top: 25px;
         font-size: 18px;
         color: #333;
     }

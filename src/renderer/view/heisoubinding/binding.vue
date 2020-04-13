@@ -95,8 +95,6 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 .binding {
-    margin: 0 15px;
-    margin-top: 20px;
     .bg {
         position: fixed;
         top: 0;

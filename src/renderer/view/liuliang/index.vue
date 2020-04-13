@@ -1,7 +1,7 @@
 <template>
-    <div class="liuliang-index">
-        <div class="liuliang-index-navigation clearfix">
-            <ul class="liuliang-index-navigation-ul">
+    <div class="main-container">
+        <div class="main-container-navigation clearfix">
+            <ul class="main-container-navigation-ul">
                 <router-link tag="li" to="/liuliang/flow" :class="{active:$route.meta.index === 0}">
                     <div>流量任务</div>
                 </router-link>
@@ -12,12 +12,11 @@
                     <div>加购任务</div>
                 </router-link>
             </ul>
-            <div class="liuliang-index-navigation-right">
+            <div class="main-container-navigation-right">
                 <router-link tag="p" to="/liuliangliebiao/flow">任务管理</router-link>
             </div>
         </div>
-        <router-view class="liuliang-main">
-        </router-view>
+        <router-view class="main-container-view"></router-view>
     </div>
 </template>
 
@@ -25,41 +24,61 @@
 export default {}
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import url("~@/assets/less/commom.less");
-.liuliang-index {
-    padding-top: 15px;
-    min-height: calc(~"87vh - 15px");
-    .liuliang-index-navigation {
-        margin: 0 20px;
-        border-bottom: 1px solid #d5d5d5;
-        height: 45px;
-        .liuliang-index-navigation-ul {
-            .fl;
-            li {
-                .fl;
-                padding-top: 12px;
-                padding-bottom: 10px;
-                width: 105px;
-                .tc;
-                cursor: pointer;
-                div {
-                    font-size: 16px;
-                    border-right: 1px solid #d5d5d5;
-                }
-            }
-            .active {
-                border-bottom: 3px solid #ff6801;
-                div {
-                    color: #ff6801;
-                }
-            }
+.flow {
+    padding-bottom: 0 !important;
+    .flow-select-btn {
+        .fl;
+        cursor: pointer;
+        width: 120px;
+        .l-h(34px);
+        margin-right: 16px;
+        color: #666;
+        background: rgba(241, 245, 248, 1);
+        border: 1px solid rgba(210, 210, 210, 1);
+        span {
+            margin-left: 5px;
+            font-size: 14px;
         }
-        .liuliang-index-navigation-right {
-            .fr;
-            margin-top: 12px;
-            color: #ff6801;
-            cursor: pointer;
+    }
+    .icon-sousuo,
+    .icon-dianpu,
+    .icon-gouwuche {
+        color: #666;
+        margin-left: 15px;
+    }
+    .icon-shouji,
+    .icon-qiantai,
+    .icon-lianjie {
+        color: #666;
+        margin-left: 15px;
+    }
+    .icon-shouji {
+        font-size: 18px;
+        vertical-align: -2px;
+    }
+    .icon-lianjie {
+        font-size: 20px;
+        vertical-align: -2px;
+    }
+    .icon-gouwuche {
+        font-size: 18px;
+        vertical-align: -2px;
+    }
+    .icon-sousuo {
+        font-size: 18px;
+        vertical-align: -2px;
+    }
+    .icon-dianpu {
+        font-size: 18px;
+        vertical-align: -2px;
+    }
+    .flow-select-btn-active {
+        background: rgba(255, 104, 1, 1);
+        color: #fff;
+        i {
+            color: #fff;
         }
     }
 }

@@ -294,6 +294,50 @@ export default {
 }
 </style>
 <style lang="less">
+@import url("~@/assets/less/commom.less");
+.main-container {
+    padding-top: 15px;
+    min-height: calc(~"87vh - 15px");
+    .main-container-navigation {
+        margin: 0 20px;
+        border-bottom: 1px solid #d5d5d5;
+        height: 45px;
+    }
+    .main-container-navigation-ul {
+        .fl;
+        li {
+            .fl;
+            padding-top: 12px;
+            padding-bottom: 10px;
+            width: 105px;
+            .tc;
+            cursor: pointer;
+            div {
+                font-size: 16px;
+                border-right: 1px solid #d5d5d5;
+            }
+        }
+        .active {
+            border-bottom: 3px solid #ff6801;
+            div {
+                color: #ff6801;
+            }
+        }
+    }
+    .main-container-navigation-right {
+        .fr;
+        margin-top: 12px;
+        color: #ff6801;
+        cursor: pointer;
+    }
+    .main-container-view {
+        padding: 20px;
+        padding-top: 0;
+        margin-top: 15px;
+        overflow: hidden;
+    }
+}
+
 .el-popper[x-placement^="bottom"] {
     margin-top: 0;
 }

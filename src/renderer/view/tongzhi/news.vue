@@ -10,7 +10,3 @@ export default {
     components: { message }
 }
 </script>
-
-<style lang="less" scoped>
-
-</style>

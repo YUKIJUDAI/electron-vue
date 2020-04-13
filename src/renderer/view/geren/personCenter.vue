@@ -147,7 +147,6 @@ export default {
 
 .personCenter {
     margin-top: 38px;
-    padding: 0 20px;
     .head {
         overflow: hidden;
         .head-left {

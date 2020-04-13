@@ -5,9 +5,6 @@
                 <router-link tag="li" to="/zhuanhua/dataChange" :class="{active:$route.meta.index === 0}">
                     <div>指数转化</div>
                 </router-link>
-                <router-link tag="li" to="/zhuanhua/dataReduction" :class="{active:$route.meta.index === 1}">
-                    <div>指数还原</div>
-                </router-link>
             </ul>
         </div>
         <router-view class="zhuanhua-main"></router-view>

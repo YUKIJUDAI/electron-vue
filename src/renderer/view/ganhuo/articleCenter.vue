@@ -79,9 +79,8 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 .article-center {
-    margin: 0 20px;
     .article-center-tab {
-        padding: 22px 0 14px 0;
+        padding: 0 0 14px 0;
         display: flex;
         justify-content: flex-start;
         border-bottom: 1px solid #eee;

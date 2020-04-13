@@ -109,6 +109,7 @@ export default {
 
 .vip {
     padding: 40px;
+    padding-top: 25px;
     .left,
     .center,
     .right {

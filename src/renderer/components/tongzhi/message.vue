@@ -44,6 +44,7 @@ export default {
 .message {
     ul {
         padding: 20px;
+        padding-top: 5px;
     }
     li {
         border-bottom: 1px solid #eee;

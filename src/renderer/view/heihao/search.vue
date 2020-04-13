@@ -256,11 +256,10 @@ export default {
 @import url("~@/assets/less/commom.less");
 
 .heihao-search {
-    padding: 0 20px;
     .search {
         .tl;
         font-size: 0;
-        padding-top: 40px;
+        padding-top: 25px;
     }
     .nums {
         padding-bottom: 24px;

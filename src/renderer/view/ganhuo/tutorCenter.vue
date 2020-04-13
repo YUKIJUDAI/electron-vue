@@ -59,7 +59,6 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 .tutor-center {
-    margin: 0 20px;
     .p-1 {
         font-size: 36px;
         margin-top: 40px;

@@ -111,9 +111,8 @@ export default {
 @import url("~@/assets/less/commom.less");
 
 .goldCoinDetails {
-    padding: 0 20px;
     .info {
-        margin-top: 30px;
+        margin-top: 15px;
         border: 1px solid #fe9f12;
         overflow: hidden;
         ul {
