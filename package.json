@@ -27,7 +27,7 @@
         "publish": [
             {
                 "provider": "generic",
-                "url": "http://mars.lethink.net/update"                
+                "url": "http://mars.lethink.net/update"
             }
         ],
         "win": {
@@ -56,6 +56,7 @@
         "less-loader": "^5.0.0",
         "log4js": "^6.1.2",
         "moment": "^2.24.0",
+        "qiankun": "^1.4.5",
         "qs": "^6.9.1",
         "run-electron": "^1.0.0",
         "rxjs": "^6.5.3",
