@@ -25,7 +25,7 @@ Vue.prototype.$fetch = fetch;
 Vue.config.productionTip = false;
 
 const errorHandler = error => {
-    ipcRenderer.send("log", error);
+    ipcRenderer.send("log", error.toString());
 };
 
 Vue.prototype.$log = errorHandler;
