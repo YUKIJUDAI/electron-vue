@@ -11,12 +11,12 @@
                 <p>{{arr[index].name}}</p>
                 <div class="body-input">
                     <div class="body-input-padding">
-                        <input class="body-inputs" v-for="(item,i) in data" :key="i" :placeholder="i === 0 ? '输入指数，一行一个':''" />
+                        <input type="number" class="body-inputs" v-for="(item,i) in data" :key="i" v-model="item.value" :placeholder="i === 0 ? '输入指数，一行一个':''" />
                     </div>
                 </div>
             </div>
             <div class="body-center">
-                <el-button type="primary" class="body-btn"><i class="el-icon-sort"></i>转成真实值</el-button>
+                <el-button type="primary" class="body-btn" @click="changeReal"><i class="el-icon-sort"></i>转成真实值</el-button>
                 <br />
                 <br />
                 <el-button type="primary" class="body-btn"><i class="el-icon-download"></i>下载数据</el-button>
@@ -25,7 +25,7 @@
                 <p>{{arr[index].rename}}</p>
                 <div class="body-input">
                     <div class="body-input-padding">
-                        <input class="body-inputs"></input>
+                        <input class="body-inputs" type="number" v-for="(item,i) in reData" :key="i" :value="item"></input>
                     </div>
                 </div>
             </div>
@@ -38,23 +38,31 @@ export default {
     data() {
         return {
             arr: [
-                { name: "流量指数", rename: "访客人数" },
-                { name: "支付转化指数", rename: "支付转化率" },
-                { name: "交易指数", rename: "交易金额" },
-                { name: "加购人气", rename: "加购人数" },
-                { name: "搜索人气", rename: "搜索人数" },
-                { name: "客群指数", rename: "支付人数" },
-                { name: "收藏人气", rename: "收藏人数" }
+                { name: "流量指数", rename: "访客人数", state: "flow" },
+                { name: "支付转化指数", rename: "支付转化率", state: "payChange" },
+                { name: "交易指数", rename: "交易金额", state: "transaction" },
+                { name: "加购人气", rename: "加购人数", state: "addition" },
+                { name: "搜索人气", rename: "搜索人数", state: "search" },
+                { name: "客群指数", rename: "支付人数", state: "payByrCnt" },
+                { name: "收藏人气", rename: "收藏人数", state: " collect" }
             ],
             data: [
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" }
             ],
+            reData: ["", "", "", "", "", ""],
             index: 0
+        }
+    },
+    methods: {
+        async changeReal() {
+            var data = this.data.map(item => item = item.value).filter(item => item);
+            var res = await this.$http.post("/tool/indexChange", { state: this.arr[this.index].state, data });
+            0 === res.code && (this.reData = res.data.concat(new Array(6 - res.data.length).fill("")));
         }
     }
 }

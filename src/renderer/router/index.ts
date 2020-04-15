@@ -53,6 +53,19 @@ export default new Router({
                     ]
                 },
                 {
+                    path: "mosou",
+                    component: require("@/view/mosou/index").default,
+                    redirect: "mosou/limit",
+                    children: [
+                        // 魔搜卡首屏
+                        {
+                            path: "limit",
+                            component: require("@/view/mosou/limit").default,
+                            meta: { index: 0 }
+                        }
+                    ]
+                },
+                {
                     path: "heisou",
                     component: require("@/view/heisou/index").default,
                     children: [
@@ -73,6 +86,7 @@ export default new Router({
                 {
                     path: "heisoubinding",
                     component: require("@/view/heisoubinding/index").default,
+                    redirect: "heisoubinding/binding",
                     children: [
                         // 生意参谋绑定
                         {
@@ -96,6 +110,7 @@ export default new Router({
                 {
                     path: "heihao",
                     component: require("@/view/heihao/index").default,
+                    redirect: "heihao/search",
                     children: [
                         // 黑号查询
                         {
@@ -120,6 +135,7 @@ export default new Router({
                 {
                     path: "liuliang",
                     component: require("@/view/liuliang/index").default,
+                    redirect: "liuliang/flow",
                     children: [
                         // 流量
                         {
@@ -173,6 +189,7 @@ export default new Router({
                 {
                     path: "zhuanhua",
                     component: require("@/view/zhuanhua/index").default,
+                    redirect: "/zhuanhua/dataChange",
                     children: [
                         {
                             path: "dataChange",
@@ -184,6 +201,7 @@ export default new Router({
                 {
                     path: "ganhuo",
                     component: require("@/view/ganhuo/index").default,
+                    redirect: "ganhuo/realstuffCenter",
                     children: [
                         // 干货
                         {

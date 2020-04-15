@@ -5,6 +5,7 @@ build/*
 server/node_modules
 server/static/public
 static/logs/
+vue-test/
 !build/icons
 node_modules/
 npm-debug.log
