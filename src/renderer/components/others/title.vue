@@ -118,7 +118,8 @@
 </template>
 
 <script>
-const { ipcRenderer, shell } = require("electron");
+
+import { openAd, openUrl, wd } from "@/util/electronFun";
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
@@ -178,7 +179,7 @@ export default {
     methods: {
         // 下载
         download() {
-            shell.openExternal(this.versionData.file);
+            openUrl(this.versionData.file);
         },
         // 打开socket
         openSocket() {
@@ -195,7 +196,7 @@ export default {
                 if (redata.type === 1 || redata.type === 3) {
                     this.unreadMessage = true;
                 } else if (redata.type == 2) {
-                    ipcRenderer.send("open-ad", redata.ads_id, proxyid);
+                    openAd(redata.ads_id);
                 }
             };
         },
@@ -214,7 +215,7 @@ export default {
             }
         },
         // 维护页面
-        goUphold(){
+        goUphold() {
             this.upholeFlag = true;
         },
         // 获取短信
@@ -303,7 +304,7 @@ export default {
         },
         // 最大化 最小化 关闭
         toMainFn(type) {
-            ipcRenderer.send(type);
+            wd(type);
         }
     },
     watch: {

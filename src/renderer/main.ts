@@ -2,10 +2,10 @@ import Vue from "vue";
 import echarts from "echarts";
 import ElementUI from "element-ui";
 import Electron from "vue-electron";
-const { ipcRenderer } = require("electron");
 
 import http from "@/util/http";
 import fetch from "@/util/fetch";
+import { log } from "@/util/electronFun";
 import "@/assets/theme/index.css";
 import "@/assets/iconfont/iconfont.css";
 
@@ -24,8 +24,8 @@ Vue.prototype.$fetch = fetch;
 
 Vue.config.productionTip = false;
 
-const errorHandler = error => {
-    ipcRenderer.send("log", error.toString());
+const errorHandler = (error) => {
+    log(error.toString());
 };
 
 Vue.prototype.$log = errorHandler;
@@ -36,5 +36,5 @@ new Vue({
     components: { App },
     router,
     store,
-    template: "<App/>"
+    template: "<App/>",
 }).$mount("#app");

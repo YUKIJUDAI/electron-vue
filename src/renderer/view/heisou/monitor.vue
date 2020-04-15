@@ -206,10 +206,11 @@
 </template>
 
 <script>
-const { ipcRenderer, remote } = require("electron");
 const { from } = require("rxjs");
-const moment = require('moment');
+import moment from "moment";
 import axios from "axios";
+
+import { getLog, getAllWindows, fromId } from "@/util/electronFun";
 
 export default {
     data() {
@@ -269,36 +270,7 @@ export default {
         this.getList();
         this.getShop();
         // 获取日志
-        ipcRenderer.on("get-log", (event, data) => {
-            // flag 0 成功  1进行中  2 失败
-            if (!this.logFlag) {
-                return;
-            }
-            switch (data.flag) {
-                case 0:
-                    this.addingFlag = false;
-                    this.logFlag = false;
-                    this.logList.push(data.msg);
-                    this.$alert('数据获取成功,请点击开始查询重新获取数据', '', {
-                        confirmButtonText: '确定',
-                        callback: this.handleClose
-                    });
-                    break;
-                case 1:
-                    this.logList.push(data.msg);
-                    break;
-                case 2:
-                    this.addingFlag = false;
-                    this.logFlag = false;
-                    this.logList.push(data.msg);
-                    this.$alert('数据获取失败', '', {
-                        confirmButtonText: '确定'
-                    });
-                    break;
-                default:
-                    break;
-            }
-        });
+        getLog(this);
     },
     methods: {
         // 关闭趋势
@@ -370,8 +342,8 @@ export default {
             this.addingFlag = true;
             this.logFlag = true;
             this.logList = [];
-            from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                remote.BrowserWindow.fromId(i.id).webContents.send("add-monitor", this.addData);
+            from(getAllWindows()).subscribe(i => {
+                fromId(i.id, "add-monitor", this.addData);
             });
         },
         // 创建图表

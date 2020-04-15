@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-const { remote } = require("electron");
+import { getGlobal } from "@/util/electronFun";
 
 Vue.use(Router);
 
@@ -107,8 +107,9 @@ export default new Router({
                             component: require("@/view/heisoubinding/binding").default,
                             meta: { index: 0, function_name: "竞品透视" },
                             beforeEnter(to, from, next) {
-                                if (remote.getGlobal("tbInfo")) {
-                                    if (remote.getGlobal("tbInfo").hasOwnProperty("runAsShopId") && remote.getGlobal("tbInfo").runAsShopId !== "") {
+                                const tbInfo = getGlobal("tbInfo") as any;
+                                if (tbInfo) {
+                                    if (tbInfo.hasOwnProperty("runAsShopId") && tbInfo.runAsShopId !== "") {
                                         next("/heisou/monitor");
                                     } else {
                                         next();

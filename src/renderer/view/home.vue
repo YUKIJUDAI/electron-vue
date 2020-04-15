@@ -89,7 +89,7 @@
 <script>
 import heisouTitle from "@/components/others/title";
 import { isEmpty } from "@/util/util";
-const { ipcRenderer, remote } = require("electron");
+import { sendXhrData, message, routerTo } from "@/util/electronFun";
 import factory from "@/util/factory";
 
 export default {
@@ -112,19 +112,11 @@ export default {
     },
     mounted() {
         // 获取xhr信息后处理
-        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
-            if (factory.obj[type]) {
-                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
-            }
-        });
+        sendXhrData();
         // 输出更新信息
-        ipcRenderer.on("message", (event, text) => {
-            console.log(text);
-        });
+        message();
         // 页面跳转跳转
-        ipcRenderer.on('router-to', (event, router) => {
-            this.$router.push(router);
-        });
+        routerTo();
 
         this.getUserInfo();
         this.getServiceCode();

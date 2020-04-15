@@ -108,7 +108,7 @@
 <script>
 import { isEmpty } from "@/util/util";
 import copy from "clipboard-copy";
-const qs = require("qs");
+import qs from "qs";
 
 export default {
     data() {

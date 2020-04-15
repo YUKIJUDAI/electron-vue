@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-const { remote } = require("electron");
 
 import { createPersistedState } from "vuex-electron";
 

@@ -34,8 +34,8 @@
 </template>
 
 <script>
-const { ipcRenderer } = require("electron");
 import { heisouBaseUrl } from "@/config/config";
+import { download } from "@/util/electronFun";
 
 export default {
     data() {
@@ -77,7 +77,7 @@ export default {
                 this.$message.error("请至少填写一行数据");
                 return;
             }
-            ipcRenderer.send("download", heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
+            download(heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
         }
     }
 }

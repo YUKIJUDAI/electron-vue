@@ -1,6 +1,6 @@
 {
     "name": "hxqb",
-    "version": "0.4.8",
+    "version": "0.4.9",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -50,8 +50,6 @@
         "echarts": "^4.5.0",
         "electron-updater": "^4.2.0",
         "element-ui": "^2.12.0",
-        "fork-ts-checker-notifier-webpack-plugin": "^1.0.3",
-        "fork-ts-checker-webpack-plugin": "^3.1.1",
         "less": "^3.10.3",
         "less-loader": "^5.0.0",
         "log4js": "^6.1.2",

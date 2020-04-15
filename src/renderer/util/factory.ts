@@ -1,8 +1,8 @@
 const { from } = require("rxjs");
-const { remote, ipcRenderer } = require("electron");
 
 const { aes } = require("./aes");
 import http from "./http";
+import { getGlobal, wd, getAllWindows, fromId } from "./electronFun";
 
 function Factory() {
     this.obj = {};
@@ -23,21 +23,22 @@ factory.add("getPersonalView", {
         }
         this.index++;
         const data = JSON.parse(res);
-        const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: remote.getGlobal("tbInfo").tb_password };
+        const tbInfo = getGlobal("tbInfo") as any;
+        const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: tbInfo.tb_password };
 
-        remote.getGlobal("tbInfo").loginUserName = data.loginUserName; //  淘宝登录账户
-        remote.getGlobal("tbInfo").runAsShopId = data.runAsShopId + ""; //  店铺id
-        remote.getGlobal("tbInfo").runAsShopTitle = data.runAsShopTitle; //  当前店铺名称
-        remote.getGlobal("tbInfo").loginUserId = data.loginUserId + ""; //  淘宝登录用户id
-        remote.getGlobal("tbInfo").runAsUserId = data.runAsUserId + ""; //  当前使用的淘宝用户id
+        tbInfo.loginUserName = data.loginUserName; //  淘宝登录账户
+        tbInfo.runAsShopId = data.runAsShopId + ""; //  店铺id
+        tbInfo.runAsShopTitle = data.runAsShopTitle; //  当前店铺名称
+        tbInfo.loginUserId = data.loginUserId + ""; //  淘宝登录用户id
+        tbInfo.runAsUserId = data.runAsUserId + ""; //  当前使用的淘宝用户id
 
-        http.post("/user/relateTbAccount", _data).then(res => {
+        http.post("/user/relateTbAccount", _data).then((res) => {
             0 === res.code &&
-                from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                    remote.BrowserWindow.fromId(i.id).webContents.send("login-success");
+                from(getAllWindows()).subscribe((i) => {
+                    fromId(i.id, "login-success");
                 });
         });
-    }
+    },
 });
 
 // 我的店铺趋势
@@ -47,18 +48,18 @@ factory.add("trend", {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                crawler_data: JSON.stringify(res.data)
+                crawler_data: JSON.stringify(res.data),
             };
             http.post("/collect/saveShopTrend", data).then();
         } else {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                crawler_data: aes(res)
+                crawler_data: aes(res),
             };
             http.post("/collect/addCoreTrendForMonitor", data).then();
         }
-    }
+    },
 });
 
 // 我的店铺数据
@@ -68,29 +69,29 @@ factory.add("overview", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: JSON.stringify(res.data)
+            crawler_data: JSON.stringify(res.data),
         };
         http.post("/collect/saveShopOverview", data).then();
-    }
+    },
 });
 
 // 店铺类目信息
 factory.add("getShopCate", {
     callback: function(params, res) {
-        const tbInfo = remote.getGlobal("tbInfo");
+        const tbInfo = getGlobal("tbInfo") as any;
         // 返回数据
         let result = JSON.parse(aes(res));
-        remote.getGlobal("tbInfo").cateId = result.cateId; // 店铺分类id
-        remote.getGlobal("tbInfo").cateName = result.cateName; // 店铺分类名字
+        tbInfo.cateId = result.cateId; // 店铺分类id
+        tbInfo.cateName = result.cateName; // 店铺分类名字
         const data = {
             sys: JSON.stringify({ ...params }),
             source: "getShopCate",
-            crawler_data: JSON.stringify(result)
+            crawler_data: JSON.stringify(result),
         };
         // http.post("/collect/saveLog", data).then(r => {
 
         // });
-    }
+    },
 });
 
 // 竞品列表
@@ -100,17 +101,17 @@ factory.add("list", {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                crawler_data: aes(res)
+                crawler_data: aes(res),
             };
-            http.post("/collect/saveList", data).then(r => {
-                //ipcRenderer.send("hide-sycm");
-                from(remote.BrowserWindow.getAllWindows()).subscribe(i => {
-                    remote.BrowserWindow.fromId(i.id).webContents.send("router-to", "/heisou/monitor");
+            http.post("/collect/saveList", data).then((r) => {
+                //hideSycm();
+                from(getAllWindows()).subscribe((i) => {
+                    fromId(i.id, "router-to", ["/heisou/monitor"]);
                 });
-                ipcRenderer.send("max");
+                wd("max");
             });
         }
-    }
+    },
 });
 
 // 竞争商品信息
@@ -119,10 +120,10 @@ factory.add("getSingleMonitoredInfo", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: aes(res)
+            crawler_data: aes(res),
         };
         http.post("/collect/addCompeteInfo", data).then();
-    }
+    },
 });
 
 // 关键指标对比
@@ -131,10 +132,10 @@ factory.add("getCoreIndexes", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: aes(res)
+            crawler_data: aes(res),
         };
         http.post("/collect/saveLog", data).then();
-    }
+    },
 });
 
 // 曲线图数据
@@ -143,10 +144,10 @@ factory.add("getCoreTrend", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: aes(res)
+            crawler_data: aes(res),
         };
         http.post("/collect/addCoreTrend", data).then();
-    }
+    },
 });
 
 // 入店关键词
@@ -155,10 +156,10 @@ factory.add("getKeywords", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: aes(res)
+            crawler_data: aes(res),
         };
         http.post("/collect/addKeywords", data).then();
-    }
+    },
 });
 
 // 入店来源
@@ -167,10 +168,10 @@ factory.add("getFlowSource", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: aes(res)
+            crawler_data: aes(res),
         };
         http.post("/collect/addFlowSource", data).then();
-    }
+    },
 });
 
 // 入店来源趋势
@@ -178,10 +179,10 @@ factory.add("getSourceTrend", {
     callback: function(params, res) {
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: JSON.stringify(res)
+            crawler_data: JSON.stringify(res),
         };
         http.post("/collect/addSourceTrend", data).then();
-    }
+    },
 });
 
 export default factory;

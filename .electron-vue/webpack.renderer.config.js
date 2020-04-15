@@ -11,8 +11,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
-const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 /**
  * List of node_modules to include in webpack bundle
@@ -141,15 +139,6 @@ let rendererConfig = {
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
-        new ForkTsCheckerWebpackPlugin({
-            checkSyntacticErrors: true,
-            tsconfig: path.join(__dirname, '../tsconfig.json'),
-            vue: true
-        }),
-        new ForkTsCheckerNotifierWebpackPlugin({
-            title: 'Renderer Process [mainBrowserWindow]',
-            excludeWarnings: false
-        }),
     ],
     output: {
         filename: '[name].js',
