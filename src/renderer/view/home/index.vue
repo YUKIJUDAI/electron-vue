@@ -83,7 +83,6 @@ export default {
                                 click: () => {
                                     var url = this.banner[this.swiper.realIndex].url;
                                     url.includes("http") ? shell.openExternal(url) : this.open(url);
-                                    shell.openExternal(this.banner[this.swiper.realIndex].url);
                                 }
                             }
                         });

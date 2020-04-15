@@ -2,12 +2,12 @@
     <div class="limit">
         <div class="head">
             <input type="text" class="input input1">
-            <input type="text" class="input input2">
-            <div type="text" class="sumit-btn">生成卡首屏二维码</div>
+            <input type="text" class="input input2" v-model="url">
+            <div type="text" class="sumit-btn" @click="createCode">生成卡首屏二维码</div>
         </div>
         <p class="msg">功能概述: 方便买家快速定位宝贝，提高宝贝关键词权重，提升排名，补单必备！</p>
         <div class="code">
-            <img src="" alt="">
+            <canvas ref="code"> </canvas>
         </div>
         <div class="introduction">
             <ul>
@@ -20,8 +20,19 @@
 </template>
 
 <script>
-export default {
+var QRCode = require('qrcode')
 
+export default {
+    data() {
+        return {
+            url: ""
+        }
+    },
+    methods: {
+        createCode() {
+            QRCode.toCanvas(this.$refs.code, this.url, { width: 240, height: 240, margin: 0, errorCorrectionLevel: 'H' });
+        }
+    }
 }
 </script>
 
@@ -31,6 +42,14 @@ export default {
 .limit {
     .head {
         display: flex;
+    }
+    .code {
+        margin-top: 25px;
+        margin-bottom: 40px;
+        margin-left: 300px;
+        canvas {
+            width: 0;
+        }
     }
     .input {
         width: 184px;
@@ -56,7 +75,7 @@ export default {
         cursor: pointer;
     }
     .msg {
-        font-size:14px;
+        font-size: 14px;
         color: #333;
         margin-top: 12px;
     }
