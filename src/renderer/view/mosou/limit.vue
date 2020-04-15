@@ -1,7 +1,7 @@
 <template>
     <div class="limit">
         <div class="head">
-            <input type="text" class="input input1">
+            <input type="text" class="input input1" v-model="keyword">
             <input type="text" class="input input2" v-model="url">
             <div type="text" class="sumit-btn" @click="createCode">生成卡首屏二维码</div>
         </div>
@@ -20,17 +20,21 @@
 </template>
 
 <script>
-var QRCode = require('qrcode')
+var QRCode = require('qrcode');
 
 export default {
     data() {
         return {
-            url: ""
+            url: "",
+            keyword: ""
         }
     },
     methods: {
-        createCode() {
-            QRCode.toCanvas(this.$refs.code, this.url, { width: 240, height: 240, margin: 0, errorCorrectionLevel: 'H' });
+        async createCode() {
+            var res = await this.$http.post("/tool/searchToHead", { url: this.url, keyword: this.keyword });
+            if (0 === res.code) {
+                QRCode.toCanvas(this.$refs.code, res.data, { width: 240, height: 240, margin: 0, errorCorrectionLevel: 'H' });
+            }
         }
     }
 }

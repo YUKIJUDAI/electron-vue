@@ -19,7 +19,7 @@
                 <el-button type="primary" class="body-btn" @click="changeReal"><i class="el-icon-sort"></i>转成真实值</el-button>
                 <br />
                 <br />
-                <el-button type="primary" class="body-btn"><i class="el-icon-download"></i>下载数据</el-button>
+                <el-button type="primary" class="body-btn" @click="download"><i class="el-icon-download"></i>下载数据</el-button>
             </div>
             <div class="body-right">
                 <p>{{arr[index].rename}}</p>
@@ -34,6 +34,9 @@
 </template>
 
 <script>
+const { ipcRenderer } = require("electron");
+import { heisouBaseUrl } from "@/config/config";
+
 export default {
     data() {
         return {
@@ -61,8 +64,20 @@ export default {
     methods: {
         async changeReal() {
             var data = this.data.map(item => item = item.value).filter(item => item);
+            if (data.length === 0) {
+                this.$message.error("请至少填写一行数据");
+                return;
+            }
             var res = await this.$http.post("/tool/indexChange", { state: this.arr[this.index].state, data });
             0 === res.code && (this.reData = res.data.concat(new Array(6 - res.data.length).fill("")));
+        },
+        async download() {
+            var data = this.data.map(item => item = item.value).filter(item => item);
+            if (data.length === 0) {
+                this.$message.error("请至少填写一行数据");
+                return;
+            }
+            ipcRenderer.send("download", heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
         }
     }
 }

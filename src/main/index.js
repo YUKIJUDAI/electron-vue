@@ -45,16 +45,6 @@ ipcMain.on("log", function (e, err) {
     logError.debug(err);
 })
 
-// 打开生意参谋
-ipcMain.on("open-sycm", function (e, account, pwd) {
-    createSycmWindow(account, pwd);
-});
-
-// 打开广告
-ipcMain.on("open-ad", function (e, id, proxyid) {
-    createAdView(id, proxyid);
-});
-
 // 最小化
 ipcMain.on("min", function () {
     mainWindow.minimize();
@@ -70,14 +60,29 @@ ipcMain.on("close", function () {
     mainWindow.close();
 });
 
+ipcMain.on("download", function (e, url) {
+    mainWindow.webContents.downloadURL(url);
+});
+
+// 打开生意参谋
+ipcMain.on("open-sycm", function (e, account, pwd) {
+    createSycmWindow(account, pwd);
+});
+
 // 隐藏生意参谋
 ipcMain.on("hide-sycm", function () {
     sycmWindow && sycmWindow.hide();
 });
 
+
 //显示生意参谋
 ipcMain.on("show-sycm", function () {
     sycmWindow && sycmWindow.showInactive();
+});
+
+// 打开广告
+ipcMain.on("open-ad", function (e, id, proxyid) {
+    createAdView(id, proxyid);
 });
 
 // 创建窗口

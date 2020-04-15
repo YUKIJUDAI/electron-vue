@@ -67,11 +67,12 @@
                             <i class="iconfont icon-shouye"></i>
                             <span>首页</span>
                         </router-link>
-                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.path === item.route}" @click="open(item.route,item.is_uphold)">
-                            <i :class="['iconfont',item.iconclass]"></i>
+                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.meta.function_name === item.function_name}" @click="open(item.route,item.is_uphold)">
+                            <img :src="item.icon_y" v-if="$route.meta.function_name === item.function_name">
+                            <img :src="item.icon_h" v-else>
                             <span>{{item.copy_title}}</span>
                         </li>
-                        <li class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" @click="open('/geren/personCenter',false)">
+                        <li class="clearfix" :class="{active:$route.meta.function_name === '个人中心'}" @click="open('/geren/personCenter',false)">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </li>
@@ -260,11 +261,15 @@ export default {
                     &:hover {
                         background: rgba(241, 245, 251, 1);
                     }
-                    i {
+                    i,
+                    img {
                         font-size: 18px;
                         margin-top: 13px;
                         margin-left: 33px;
                         vertical-align: -2px;
+                    }
+                    img {
+                        vertical-align: -4px;
                     }
                     span {
                         font-size: 12px;
