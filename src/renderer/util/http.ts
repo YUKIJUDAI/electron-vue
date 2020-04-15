@@ -26,7 +26,6 @@ http.interceptors.request.use(
         const tbInfo = remote.getGlobal("tbInfo");
 
         if (config.headers["Content-Type"] === "application/x-www-form-urlencoded") {
-            console.log(config)
             if (!config.data) config.data = {};
             config.data.sys = config.data.hasOwnProperty("sys") ? JSON.stringify(Object.assign({ ...tbInfo }, JSON.parse(config.data.sys))) : JSON.stringify({ ...tbInfo });
             config.data = qs.stringify(config.data);
