@@ -31,9 +31,15 @@ export default {
     },
     methods: {
         async createCode() {
+            if (this.url.indexOf('http')) {
+                this.$message.error("请输入正确的网址");
+                return;
+            }
             var res = await this.$http.post("/tool/searchToHead", { url: this.url, keyword: this.keyword });
             if (0 === res.code) {
                 QRCode.toCanvas(this.$refs.code, res.data, { width: 240, height: 240, margin: 0, errorCorrectionLevel: 'H' });
+            } else {
+                this.$message.error(res.msg);
             }
         }
     }

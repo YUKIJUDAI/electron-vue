@@ -672,21 +672,21 @@ export default {
     background-color: #ff6801;
     text-align: center;
     color: #fff;
-    padding: 14px 20px;
+    padding: 14px 20px !important;
     border-radius: 4px 4px 0 0;
 }
 .el-dialog__title {
-    color: #fff;
-    font-size: 20px;
+    color: #fff !important;
+    font-size: 20px !important;
 }
 .el-dialog__headerbtn .el-dialog__close {
-    color: #fff;
+    color: #fff !important;
 }
 .el-dialog__headerbtn:focus .el-dialog__close,
 .el-dialog__headerbtn:hover .el-dialog__close {
-    color: #fff;
+    color: #fff !important;
 }
 .el-dialog__body {
-    padding: 50px 30px;
+    padding: 50px 30px !important;
 }
 </style>

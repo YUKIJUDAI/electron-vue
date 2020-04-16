@@ -56,7 +56,7 @@
             </template>
             <el-form-item label="浏览时间" v-show="flag === 0 || flag === 1">
                 <el-select size="small" style="width:200px" v-model="form.browse_time" @change="changeBorwseTime">
-                    <el-option :label="item.serve_name" :value="item.value" v-for="(item,i) in browse_time[type]"></el-option>
+                    <el-option :label="item.serve_name" :value="item.value" v-for="(item,i) in browse_time[type]" :key="i"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="浏览深度" v-show="flag === 0 || flag === 1">
