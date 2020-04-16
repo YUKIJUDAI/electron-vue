@@ -48,7 +48,7 @@ factory.add("getPersonalView", {
         tbInfo.loginUserId = data.loginUserId + ""; //  淘宝登录用户id
         tbInfo.runAsUserId = data.runAsUserId + ""; //  当前使用的淘宝用户id
 
-        http.post("/user/relateTbAccount", _data).then((res) => {
+        http.post("/user/relateTbAccount", _data).then((res: any) => {
             0 === res.code &&
                 from(getAllWindows()).subscribe((i) => {
                     fromId(i.id, "login-success");
