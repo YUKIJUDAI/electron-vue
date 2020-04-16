@@ -6,23 +6,23 @@
                 <el-button type="primary" size="small">下载图片</el-button>
                 <el-button type="primary" size="small">下载评论加图片</el-button>
             </div>
-            <el-table stripe style="width: 100%">
-                <el-table-column label="SKU" align="center"></el-table-column>
-                <el-table-column label="旺旺名" align="center"></el-table-column>
-                <el-table-column label="初次评语" align="center"></el-table-column>
-                <el-table-column label="初次评语时间" align="center"></el-table-column>
-                <el-table-column label="服务评语" align="center"></el-table-column>
-                <el-table-column label="初次商家回复" align="center"></el-table-column>
-                <el-table-column label="追加评语" align="center"></el-table-column>
-                <el-table-column label="追加评语时间" align="center"></el-table-column>
-                <el-table-column label="追加商家回复" align="center"></el-table-column>
+            <el-table stripe style="width: 100%" :data="comments_list" height="500px">
+                <el-table-column label="SKU" align="center" prop="sku"></el-table-column>
+                <el-table-column label="旺旺名" align="center" prop="wangwang"></el-table-column>
+                <el-table-column label="初次评语" align="center" prop="firstrate"></el-table-column>
+                <el-table-column label="初次评语时间" align="center" prop="firstratetime"></el-table-column>
+                <el-table-column label="服务评语" align="center" prop="servicerate"></el-table-column>
+                <el-table-column label="初次商家回复" align="center" prop="sellerreply"></el-table-column>
+                <el-table-column label="追加评语" align="center" prop="appendrate"></el-table-column>
+                <el-table-column label="追加评语时间" align="center" prop="appendratetime"></el-table-column>
+                <el-table-column label="追加商家回复" align="center" prop="appendsellerreply"></el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination background layout="prev, pager, next" :page-count="total_pages" :current-page.sync="page" @current-change="getList">
+                <el-pagination background layout="prev, pager, next" :page-count="comments_total_pages" :current-page.sync="comments_pages" @current-change="getCommentsList">
                 </el-pagination>
             </div>
         </el-dialog>
-        <el-dialog title="查看问大家" :visible.sync="buyersShowDialog" width="90%">
+        <el-dialog title="查看问大家" :visible.sync="buyersShowDialog" width="90%" height="500px">
             <div class="comment-type">
                 <ul>
                     <li class="active">全部</li>
@@ -88,7 +88,7 @@
                 </el-table-column>
                 <el-table-column label="评论+买家秀" align="center" width="100px">
                     <template slot-scope="scope">
-                        <span @click="commentDialog = true">查看</span>
+                        <span @click="getCommentsList">查看</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="问大家" align="center">
@@ -121,18 +121,33 @@ export default {
     },
     data() {
         return {
-            commentDialog: false,
             buyersShowDialog: false,
             data: [{}],
             page: 1,
-            total_pages: 1
+            total_pages: 1,
+
+            // 评论
+            comments_list: [],
+            commentDialog: false,
+            comments_total_pages: 1,
+            comments_pages: 1,
         }
     },
     created() {
         this.getList();
     },
     methods: {
-        getList() { }
+        getList() { },
+        async getCommentsList() {
+            var res = await this.$fetch.post("/collect/allComments", { goodsId: 575736011178, currentPageNum: this.comments_pages, pageSize: 10 });
+            if (0 === res.code) {
+                this.commentDialog = true;
+                this.comments_list = res.data.commentlist;
+                this.comments_total_pages = res.data.pages;
+            } else {
+                this.$message.error(res.msg);
+            }
+        }
     }
 }
 </script>

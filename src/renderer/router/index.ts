@@ -66,6 +66,19 @@ export default new Router({
                     ],
                 },
                 {
+                    path: "dabiao",
+                    component: require("@/view/dabiao/index").default,
+                    redirect: "dabiao/speedMarking",
+                    children: [
+                        // 魔搜卡首屏
+                        {
+                            path: "speedMarking",
+                            component: require("@/view/dabiao/speedMarking").default,
+                            meta: { index: 0, function_name: "超级打标" },
+                        },
+                    ],
+                },
+                {
                     path: "batu",
                     component: require("@/view/batu/index").default,
                     redirect: "batu/dataCollection",
