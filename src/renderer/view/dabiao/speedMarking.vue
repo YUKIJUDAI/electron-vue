@@ -1,7 +1,7 @@
 <template>
     <div class="speedMarking">
         <div class="head">
-            <input type="text" class="input input2" v-model="url">
+            <input type="text" class="input input2" v-model="keyword" placeholder="请输入打标关键词">
             <div type="text" class="sumit-btn" @click="createCode">生成极速打标二维码</div>
         </div>
         <p class="msg">功能概述：先把用户在你类目下的权重值及标签精准提升上去，再让他下单，效果你懂的！</p>
@@ -17,13 +17,12 @@ var QRCode = require('qrcode');
 export default {
     data() {
         return {
-            url: "",
             keyword: ""
         }
     },
     methods: {
         async createCode() {
-            var res = await this.$http.post("/tool/searchToHead", { url: this.url, keyword: this.keyword });
+            var res = await this.$http.post("/tool/superMarking", { keyword: this.keyword });
             if (0 === res.code) {
                 QRCode.toCanvas(this.$refs.code, res.data, { width: 240, height: 240, margin: 0, errorCorrectionLevel: 'H' });
             } else {
@@ -63,7 +62,7 @@ export default {
     }
     .sumit-btn {
         .tc;
-        width: 152px;
+        width: 182px;
         .l-h(38px);
         color: #fff;
         font-size: 16px;

@@ -1,8 +1,8 @@
 <template>
     <div class="limit">
         <div class="head">
-            <input type="text" class="input input1" v-model="keyword">
-            <input type="text" class="input input2" v-model="url">
+            <input type="text" class="input input1" v-model="keyword" placeholder="请输入关键词">
+            <input type="text" class="input input2" v-model="url" placeholder="请输入宝贝链接">
             <div type="text" class="sumit-btn" @click="createCode">生成卡首屏二维码</div>
         </div>
         <p class="msg">功能概述: 方便买家快速定位宝贝，提高宝贝关键词权重，提升排名，补单必备！</p>

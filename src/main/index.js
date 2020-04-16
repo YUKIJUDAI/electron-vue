@@ -106,6 +106,9 @@ function createWindow() {
     });
     // 启动更新
     // updateHandle();
+    session.defaultSession.on('will-download', function (event, downloadItem, webContents) {
+        downloadItem.setSaveDialogOptions({ title: "文件保存" });
+    });
 
     tray = new Tray(__static + "/logo.ico")
     const contextMenu = Menu.buildFromTemplate([
