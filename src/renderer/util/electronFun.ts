@@ -44,9 +44,7 @@ const message = () => {
 };
 // 页面跳转
 const routerTo = () => {
-    console.log(1)
     ipcRenderer.on("router-to", (event, routes) => {
-        console.log(routes)
         router.push(routes);
     });
 };
