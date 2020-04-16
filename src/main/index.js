@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu, Tray, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu, Tray, screen, session } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { autoUpdater } = require("electron-updater");
@@ -60,6 +60,7 @@ ipcMain.on("close", function () {
     mainWindow.close();
 });
 
+// 下载
 ipcMain.on("download", function (e, url) {
     mainWindow.webContents.downloadURL(url);
 });
@@ -84,6 +85,7 @@ ipcMain.on("show-sycm", function () {
 ipcMain.on("open-ad", function (e, id, proxyid) {
     createAdView(id, proxyid);
 });
+
 
 // 创建窗口
 function createWindow() {
