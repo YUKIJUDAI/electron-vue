@@ -108,6 +108,18 @@ function createWindow() {
     // updateHandle();
     session.defaultSession.on('will-download', function (event, downloadItem, webContents) {
         downloadItem.setSaveDialogOptions({ title: "文件保存" });
+        downloadItem.on('updated', (event, state) => {
+            if (state === "progressing") {
+                mainWindow.webContents.send("download-schedule", downloadItem.getReceivedBytes(), downloadItem.getTotalBytes());
+            }
+        });
+        downloadItem.once('done', (event, state) => {
+            if (state === 'completed') {
+                mainWindow.webContents.send("download-success", true);
+            } else {
+                mainWindow.webContents.send("download-success", false);
+            }
+        })
     });
 
     tray = new Tray(__static + "/logo.ico")

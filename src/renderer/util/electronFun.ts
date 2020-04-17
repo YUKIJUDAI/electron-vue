@@ -90,6 +90,21 @@ const getLog = (vue) => {
         }
     });
 };
+// 获取下载进度
+const downloadSchedule = (vue) => {
+    ipcRenderer.on("download-schedule", (event, index, sum) => {
+        var s = ~~((index / sum) * 100);
+        vue.percentage = s;
+    });
+};
+
+const downloadSuccess = (vue) => {
+    ipcRenderer.on("download-success", (event, flag) => {
+        vue.progressDialog = false;
+        vue.percentage = 0;
+        flag ? vue.$message.success("下载成功") : vue.$message.error("下载失败或被取消");
+    });
+};
 
 // 打开url
 const openUrl = (url) => {
@@ -108,4 +123,4 @@ const fromId = (id, type, params = []) => {
     return remote.BrowserWindow.fromId(id).webContents.send(type, ...params);
 };
 
-export { openAd, log, hideSycm, openSycm, wd, download, sendXhrData, message, routerTo, getLog, openUrl, getGlobal, getAllWindows, fromId };
+export { openAd, log, hideSycm, openSycm, wd, download, sendXhrData, message, routerTo, getLog, downloadSchedule, downloadSuccess, openUrl, getGlobal, getAllWindows, fromId };

@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         async createCode() {
-            if (this.url.indexOf('http')) {
+            if (this.url.indexOf('http') < 0) {
                 this.$message.error("请输入正确的网址");
                 return;
             }
