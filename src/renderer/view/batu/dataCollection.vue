@@ -128,6 +128,7 @@ import { Loading } from 'element-ui';
 
 import { download, downloadSchedule, downloadSuccess } from "@/util/electronFun";
 import { baseUrl } from "@/config/config";
+import { downloadImg } from "@/util/fs";
 
 export default {
     filters: {
@@ -153,7 +154,7 @@ export default {
             comments_total_pages: 1,
             comments_pages: 1,
             comments_download_index: 1,
-            limit: 1000,
+            limit: 500,
             comments_download: []
         }
     },
@@ -206,7 +207,7 @@ export default {
             this.progressDialog = true;
             this.$fetch.post("/collect/downloadComments", { type, goodsId: this.goodsId, limit: this.limit, page: this.comments_download_index }).then(res => {
                 if (0 === res.code) {
-                    download(res.data);
+                    downloadImg(this.goodsId,res.data,this.limit);
                 } else {
                     this.progressDialog = false;
                     this.$message.error("下载失败");

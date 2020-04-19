@@ -5,6 +5,7 @@ build/*
 server/node_modules
 server/static/public
 static/logs/
+static/save/
 vue-test/
 !build/icons
 node_modules/

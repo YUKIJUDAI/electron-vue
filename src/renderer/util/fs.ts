@@ -1,30 +1,29 @@
-const { readFile, writeFile, access, mkdir } = require("@/middle/fs");
-var path = require("path");
+const fs = require("fs");
+var request = require("request");
+var Bagpipe = require("bagpipe");
+
+import { log, getGlobal } from "@/util/electronFun";
 
 function _path(filename) {
-    return path.join(__dirname, "../../save/" + filename);
+    return getGlobal("__static") + "/save/" + filename;
 }
 
-// 读取文件
-const readSaveData = function (filename) {
-    return readFile(_path(filename));
-}
+// 下载图片
+const downloadImg = function(filename, list, limit) {
+    try {
+        fs.accessSync(_path(filename), fs.constants.R_OK | fs.constants.W_OK);
+    } catch (err) {
+        fs.mkdirSync(_path(filename));
+    }
 
-// 写入文件
-const writeSaveData = function (filename, data) {
-    return writeFile(_path(filename), JSON.stringify(data));
-}
+    var bagpipe = new Bagpipe(limit);
+    function downloadPic(file, name) {
+        request(file).pipe(fs.createWriteStream(_path(filename) + "/" + name));
+    }
+    for (var i = 0; i < list.length; i++) {
+        var name = list[i].split("/")[list[i].split("/").length - 1];
+        bagpipe.push(downloadPic, list[i], name);
+    }
+};
 
-// 创建文件
-const mkdirSaveData = function (filename) {
-    access(_path(filename)).subscribe(
-        () => {
-            // todo存在 日志
-        },
-        (err) => {
-            writeFile(_path(filename), JSON.stringify({})).subscribe(() => { }, () => { });
-        }
-    )
-}
-
-export {readSaveData, writeSaveData,mkdirSaveData}
+export { downloadImg };
