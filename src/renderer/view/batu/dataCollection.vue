@@ -154,7 +154,7 @@ export default {
             comments_total_pages: 1,
             comments_pages: 1,
             comments_download_index: 1,
-            limit: 10,
+            limit: 500,
             comments_download: []
         }
     },

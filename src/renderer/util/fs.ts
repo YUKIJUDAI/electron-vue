@@ -19,7 +19,7 @@ const downloadImg = function(filename, list) {
         fs.mkdirSync(filePath);
     }
 
-    var bagpipe = new Bagpipe(2);
+    var bagpipe = new Bagpipe(20);
     function downloadPic(file, name, callback) {
         request(file)
             .pipe(fs.createWriteStream(filePath + "/" + name))
