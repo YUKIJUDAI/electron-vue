@@ -154,7 +154,7 @@ export default {
             comments_total_pages: 1,
             comments_pages: 1,
             comments_download_index: 1,
-            limit: 500,
+            limit: 10,
             comments_download: []
         }
     },
@@ -207,7 +207,7 @@ export default {
             this.progressDialog = true;
             this.$fetch.post("/collect/downloadComments", { type, goodsId: this.goodsId, limit: this.limit, page: this.comments_download_index }).then(res => {
                 if (0 === res.code) {
-                    downloadImg(this.goodsId,res.data,this.limit);
+                    downloadImg(this.goodsId,res.data);
                 } else {
                     this.progressDialog = false;
                     this.$message.error("下载失败");

@@ -88,10 +88,10 @@ ipcMain.on("open-ad", function(e, id, proxyid) {
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
-        height: 920,
+        height: 700,
         autoHideMenuBar: true,
         minWidth: 1280,
-        minHeight: 920,
+        minHeight: 700,
         frame: false,
         webPreferences: {
             devTools: true,
