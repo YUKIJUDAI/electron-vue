@@ -1,42 +1,156 @@
 const fs = require("fs");
-var request = require("request");
-var Bagpipe = require("bagpipe");
+const request = require("request");
+const Bagpipe = require("bagpipe");
 const compressing = require("compressing");
+const xlsx = require("node-xlsx");
 
-import { log, getGlobal } from "@/util/electronFun";
-import { download, downloadSchedule, downloadSuccess } from "@/util/electronFun";
+import { bindNodeCallback, interval, forkJoin } from "rxjs";
+import { find } from "rxjs/operators";
 
-function _path(filename) {
-    return getGlobal("__static") + "/save/" + filename;
+import { getGlobal, download } from "@/util/electronFun";
+
+function _path(filename?) {
+    return filename ? getGlobal("__static") + "/save/" + filename : getGlobal("__static") + "/save";
 }
 
-// 下载图片
-const downloadImg = function(filename, list) {
+function _downloadPic(file, name, filpath, callback) {
+    request(file)
+        .pipe(fs.createWriteStream(filpath + "/" + name))
+        .on("close", function() {
+            callback();
+        });
+}
+
+function del(filepath) {
+    var arr = fs.readdirSync(filepath);
+    for (var i in arr) {
+        var stats = fs.statSync(filepath + "/" + arr[i]);
+        stats.isFile() ? fs.unlinkSync(filepath + "/" + arr[i]) : del(filepath + "/" + arr[i]);
+    }
+    fs.rmdirSync(filepath);
+}
+
+// 下载文件
+const downloadFile = function(type, filename, list) {
     const filePath = _path(filename);
+    const filePathPic = _path(filename) + "/图片";
+    const fileComment = _path(filename) + "/评论";
+    const fileCommentPic = _path(filename) + "/评论和图片";
     try {
         fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
     } catch (err) {
         fs.mkdirSync(filePath);
     }
-
-    var bagpipe = new Bagpipe(20);
-    function downloadPic(file, name, callback) {
-        request(file)
-            .pipe(fs.createWriteStream(filePath + "/" + name))
-            .on("close", function() {
-                callback();
+    switch (type) {
+        // 评论
+        case "1":
+            downloadComment().subscribe(() => {
+                download(fileComment + "/" + filename + ".xls");
             });
-    }
-    for (let i = 0; i < list.length; i++) {
-        var name = list[i].split("/")[list[i].split("/").length - 1];
-        bagpipe.push(downloadPic, list[i], name, function() {
-            if (i === list.length - 1) {
-                compressing.zip.compressDir(filePath, _path(filename + ".zip")).then((res) => {
-                    download(_path(filename + ".zip"));
+            break;
+        // 图片
+        case "2":
+            downloadPic().subscribe(() => {
+                compressing.zip.compressDir(filePathPic, filePath + "/" + filename + ".zip").then((res) => {
+                    download(filePath + "/" + filename + ".zip");
                 });
-            }
+            });
+            break;
+        // 图片加评论
+        case "3":
+            downloadCommentPic().subscribe(() => {
+                compressing.zip.compressDir(fileCommentPic, filePath + "/" + filename + ".zip").then((res) => {
+                    download(filePath + "/" + filename + ".zip");
+                });
+            });
+            break;
+        default:
+            break;
+    }
+    // 下载excel
+    function downloadComment() {
+        try {
+            fs.accessSync(fileComment, fs.constants.R_OK | fs.constants.W_OK);
+        } catch (err) {
+            fs.mkdirSync(fileComment);
+        }
+        var arr = [["SKU", "旺旺名", "初次评语", "初次评语时间", "服务评语", "初次商家回复", "追加评语", "追加评语时间", "追加商家回复"]];
+        list.map((item) => {
+            arr.push([item.sku, item.wangwang, item.firstrate, item.firstratetime, item.servicerate, item.sellerreply, item.appendrate, item.appendratetime, item.appendsellerreply]);
         });
+        var options = { "!cols": [{ wch: 30 }, { wch: 10 }, { wch: 50 }, { wch: 10 }, { wch: 20 }, { wch: 20 }, { wch: 40 }, { wch: 10 }, { wch: 20 }] };
+        var writeFile = bindNodeCallback(fs.writeFile);
+        return writeFile(fileComment + "/" + filename + ".xls", xlsx.build([{ name: "sheetName", data: arr }], options), "binary");
+    }
+    // 下载图片
+    function downloadPic() {
+        try {
+            fs.accessSync(filePathPic, fs.constants.R_OK | fs.constants.W_OK);
+        } catch (err) {
+            fs.mkdirSync(filePathPic);
+        }
+        var bagpipe = new Bagpipe(10);
+        var flag = false;
+        for (let i = 0; i < list.length; i++) {
+            var name = list[i].split("/")[list[i].split("/").length - 1];
+            bagpipe.push(_downloadPic, list[i], name, filePathPic, function() {
+                i === list.length - 1 && (flag = true);
+            });
+        }
+        return interval(1000).pipe(find(() => flag));
+    }
+    // 下载评论加图片
+    function downloadCommentPic() {
+        try {
+            fs.accessSync(fileCommentPic, fs.constants.R_OK | fs.constants.W_OK);
+        } catch (err) {
+            fs.mkdirSync(fileCommentPic);
+        }
+        var txt = [],
+            pic = [],
+            txtFlag = false,
+            picFlag = false;
+
+        var txtBagpipe = new Bagpipe(5);
+        var picagpipe = new Bagpipe(5);
+        list.map((item, i) => {
+            if (item.firstrate) txt.push({ index: i, name: 1, value: item.firstrate });
+            if (item.appendrate) txt.push({ index: i, name: 2, value: item.appendrate });
+            if (item.image.length > 0) pic.push(...item.image);
+        });
+        // 循环文本数据 输出
+        for (let i = 0; i < txt.length; i++) {
+            try {
+                fs.accessSync(fileCommentPic + "/" + txt[i].index, fs.constants.R_OK | fs.constants.W_OK);
+            } catch (err) {
+                fs.mkdirSync(fileCommentPic + "/" + txt[i].index);
+            }
+            txtBagpipe.push(fs.writeFile, fileCommentPic + "/" + txt[i].index + (txt[i].name === 1 ? "/初次评语.txt" : "/追加评语.txt"), txt[i].value, function() {
+                i === list.length - 1 && (txtFlag = true);
+            });
+        }
+        // 循环图片数据 输出
+        for (let i = 0; i < pic.length; i++) {
+            try {
+                fs.accessSync(fileCommentPic + "/" + pic[i].index, fs.constants.R_OK | fs.constants.W_OK);
+            } catch (err) {
+                fs.mkdirSync(fileCommentPic + "/" + pic[i].index);
+            }
+            var name = pic[i].url.split("/")[pic[i].url.split("/").length - 1];
+            picagpipe.push(_downloadPic, pic[i].url, name, fileCommentPic + "/" + pic[i].index, function() {
+                i === list.length - 1 && (picFlag = true);
+            });
+        }
+        return forkJoin(interval(1000).pipe(find(() => txtFlag)), interval(1000).pipe(find(() => picFlag)));
     }
 };
 
-export { downloadImg };
+// 删除文件
+const rmdir = function(filename) {
+    try {
+        fs.accessSync(_path(filename), fs.constants.R_OK | fs.constants.W_OK);
+    } catch (err) {}
+    del(_path(filename));
+};
+
+export { downloadFile, rmdir };

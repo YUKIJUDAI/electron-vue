@@ -2,6 +2,7 @@ const { ipcRenderer, shell, remote } = require("electron");
 import router from "@/router/index";
 import { proxyid } from "@/config/config";
 import factory from "@/util/factory";
+import { rmdir } from "@/util/fs";
 
 // 打开广告
 const openAd = (ads_id) => {
@@ -102,6 +103,7 @@ const downloadSuccess = (vue) => {
     ipcRenderer.on("download-success", (event, flag) => {
         vue.progressDialog = false;
         vue.percentage = 0;
+        rmdir(vue.goodsId);
         flag ? vue.$message.success("下载成功") : vue.$message.error("下载失败或被取消");
     });
 };

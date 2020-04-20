@@ -1,6 +1,6 @@
 <template>
     <div class="dataCollection">
-        <el-dialog title="查看评论和买家秀" :visible.sync="commentDialog" width="90%">
+        <el-dialog title="查看评论和买家秀" :visible.sync="commentDialog" width="90%" :close-on-click-modal="false">
             <div class="comment-btn">
                 <span style="margin-right:10px">选择下载区间</span>
                 <el-select v-model="comments_download_index" style="margin-right:60px">
@@ -57,7 +57,7 @@
                 </el-pagination>
             </div>
         </el-dialog>
-        <el-dialog title="数据下载" :visible.sync="progressDialog" width="400px" height="200px">
+        <el-dialog title="数据下载" :visible.sync="progressDialog" width="400px" height="200px" :close-on-click-modal="false">
             <p class="progress">数据下载中请稍后。。。</p>
             <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage"></el-progress>
         </el-dialog>
@@ -128,7 +128,7 @@ import { Loading } from 'element-ui';
 
 import { download, downloadSchedule, downloadSuccess } from "@/util/electronFun";
 import { baseUrl } from "@/config/config";
-import { downloadImg } from "@/util/fs";
+import { downloadFile } from "@/util/fs";
 
 export default {
     filters: {
@@ -205,9 +205,9 @@ export default {
         // 评论下载
         downloadComments(type) {
             this.progressDialog = true;
-            this.$fetch.post("/collect/downloadComments", { type, goodsId: this.goodsId, limit: this.limit, page: this.comments_download_index }).then(res => {
+            this.$fetch.post("/collect/downloadComments", { type, goodsId: this.goodsId, limit: this.limit, page: this.comments_download_index }, { timeout: 60000 }).then(res => {
                 if (0 === res.code) {
-                    downloadImg(this.goodsId,res.data);
+                    downloadFile(type, this.goodsId, res.data);
                 } else {
                     this.progressDialog = false;
                     this.$message.error("下载失败");
@@ -238,7 +238,7 @@ export default {
         },
         // 获取评论列表
         async getCommentsList(goodsId) {
-            goodsId && (this.goodsId = goodsId);
+            typeof goodsId === "string" && (this.goodsId = goodsId);
             var res = await this.$fetch.post("/collect/allComments", { goodsId: this.goodsId, currentPageNum: this.comments_pages, pageSize: 10 });
             if (0 === res.code) {
                 this.comments_list = res.data.commentlist;
