@@ -6,6 +6,7 @@
                 <li :class="{active:index === i}" v-for="(item,i) in arr" :key="i" @click="index = i">{{item.name}}</li>
             </ul>
         </div>
+        <p class="msg">把生意参谋里面的{{arr[index].name}}，换算成真实的数值，方便准确了解信息。</p>
         <div class="body">
             <div class="body-left">
                 <p>{{arr[index].name}}</p>
@@ -89,8 +90,13 @@ export default {
 .dataChange {
     margin-top: 15px;
     padding: 0 20px;
+    .msg {
+        font-size: 14px;
+        color: #333;
+        margin-left: 80px;
+    }
     .header {
-        margin-top: 30px;
+        margin-top: 20px;
         display: flex;
         p {
             width: 60px;

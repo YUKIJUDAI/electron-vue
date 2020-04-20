@@ -69,6 +69,7 @@
             </el-select>
             <el-button type="primary" style="margin-left:20px" @click="collectAll">开始采集</el-button>
         </div>
+        <p class="msg">输入链接，一键获取评价内容信息，帮助分析共性/优缺点，并且提供一键下载</p>
         <div class="data-form">
             <el-table border :data="data">
                 <el-table-column label="商品信息" width="320px" align="center">
@@ -266,6 +267,11 @@ export default {
     .comment-btn {
         margin-bottom: 20px;
     }
+    .msg {
+        font-size: 14px;
+        color: #333;
+        margin-top: 15px;
+    }
     .progress {
         .tc;
         margin-bottom: 20px;
@@ -312,7 +318,7 @@ export default {
         margin-top: 15px;
     }
     .data-form {
-        margin-top: 20px;
+        margin-top: 30px;
         span {
             color: #399fff;
             cursor: pointer;
