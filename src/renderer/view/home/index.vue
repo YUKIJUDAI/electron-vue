@@ -36,10 +36,10 @@
 </template>
 
 <script>
-const { shell } = require("electron");
 import Swiper from 'swiper';
 import 'swiper/css/swiper.min.css';
 import { isEmpty } from "@/util/util";
+import { openUrl } from "@/util/electronFun";
 
 export default {
     data() {
@@ -82,8 +82,7 @@ export default {
                             on: {
                                 click: () => {
                                     var url = this.banner[this.swiper.realIndex].url;
-                                    url.includes("http") ? shell.openExternal(url) : this.open(url);
-                                    shell.openExternal(this.banner[this.swiper.realIndex].url);
+                                    url.includes("http") ? openUrl(url) : this.open(url);
                                 }
                             }
                         });

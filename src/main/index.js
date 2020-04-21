@@ -1,11 +1,13 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu, Tray, screen } = require('electron');
-const path = require('path');
-const fs = require('fs');
+const { app, BrowserWindow, ipcMain, dialog, Menu, Tray, screen, session } = require("electron");
+const path = require("path");
+const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
-const log4js = require('log4js');
+const log4js = require("log4js");
 
-if (process.env.NODE_ENV !== 'development') {
-    global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
+if (process.env.NODE_ENV !== "development") {
+    global.__static = path.join(__dirname, "/static").replace(/\\/g, "\\\\");
+} else {
+    global.__static = __static;
 }
 
 let mainWindow;
@@ -17,98 +19,121 @@ let uploadUrl = "http://mars.lethink.net/update";
 // 日志
 log4js.configure({
     appenders: {
-        error: { type: "dateFile", filename: __static + "/logs/error-log.log", pattern: ".yyyy-MM-dd", maxLogSize: 10240, backups: 3 }
+        error: { type: "dateFile", filename: __static + "/logs/error-log.log", pattern: ".yyyy-MM-dd", maxLogSize: 10240, backups: 3 },
     },
     categories: {
-        default: { appenders: ["error"], level: "debug" }
-    }
+        default: { appenders: ["error"], level: "debug" },
+    },
 });
 let logError = log4js.getLogger("default");
 
-const winURL = process.env.NODE_ENV === 'development'
-    ? `http://localhost:9080`
-    : `file://${__dirname}/index.html`
+const winURL = process.env.NODE_ENV === "development" ? `http://localhost:9080` : `file://${__dirname}/index.html`;
 
+app.on("ready", createWindow);
 
-app.on('ready', createWindow);
-
-app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit();
+app.on("window-all-closed", function() {
+    if (process.platform !== "darwin") app.quit();
 });
 
-app.on('activate', function () {
+app.on("activate", function() {
     if (mainWindow === null) createWindow();
 });
 
 // 输出日志
-ipcMain.on("log", function (e, err) {
+ipcMain.on("log", function(e, err) {
     logError.debug(err);
-})
-
-// 打开生意参谋
-ipcMain.on("open-sycm", function (e, account, pwd) {
-    createSycmWindow(account, pwd);
-});
-
-// 打开广告
-ipcMain.on("open-ad", function (e, id, proxyid) {
-    createAdView(id, proxyid);
 });
 
 // 最小化
-ipcMain.on("min", function () {
+ipcMain.on("min", function() {
     mainWindow.minimize();
 });
 
 // 最大化
-ipcMain.on("max", function () {
+ipcMain.on("max", function() {
     mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
 });
 
 // 关闭
-ipcMain.on("close", function () {
+ipcMain.on("close", function() {
     mainWindow.close();
 });
 
+// 下载
+ipcMain.on("download", function(e, url) {
+    mainWindow.webContents.downloadURL(url);
+});
+
+// 打开生意参谋
+ipcMain.on("open-sycm", function(e, account, pwd) {
+    createSycmWindow(account, pwd);
+});
+
 // 隐藏生意参谋
-ipcMain.on("hide-sycm", function () {
+ipcMain.on("hide-sycm", function() {
     sycmWindow && sycmWindow.hide();
 });
 
 //显示生意参谋
-ipcMain.on("show-sycm", function () {
+ipcMain.on("show-sycm", function() {
     sycmWindow && sycmWindow.showInactive();
+});
+
+// 打开广告
+ipcMain.on("open-ad", function(e, id, proxyid) {
+    createAdView(id, proxyid);
 });
 
 // 创建窗口
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 1280, height: 920, autoHideMenuBar: true,
-        minWidth: 1280, minHeight: 920, frame: false,
+        width: 1280,
+        height: 920,
+        autoHideMenuBar: true,
+        minWidth: 1280,
+        minHeight: 920,
+        frame: false,
         webPreferences: {
             devTools: true,
             webviewTag: true,
             webSecurity: true,
-            nodeIntegration: true
-        }
+            nodeIntegration: true,
+        },
     });
     // 加载网页
     mainWindow.loadURL(winURL);
-    mainWindow.on('closed', function () {
+    mainWindow.on("closed", function() {
         mainWindow = null;
     });
     // 启动更新
     // updateHandle();
+    session.defaultSession.on("will-download", function(event, downloadItem, webContents) {
+        downloadItem.setSaveDialogOptions({ title: "文件保存" });
+        downloadItem.on("updated", (event, state) => {
+            if (state === "progressing") {
+                mainWindow.webContents.send("download-schedule", downloadItem.getReceivedBytes(), downloadItem.getTotalBytes());
+            }
+        });
+        downloadItem.once("done", (event, state) => {
+            if (state === "completed") {
+                mainWindow.webContents.send("download-success", true);
+            } else {
+                mainWindow.webContents.send("download-success", false);
+            }
+        });
+    });
 
-    tray = new Tray(__static + "/logo.ico")
+    tray = new Tray(__static + "/logo.ico");
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: '退出', type: 'normal', click() {
-                if (process.platform !== 'darwin') app.quit();
-            }
-        }
-    ])
-    tray.setToolTip('火星情报');
+            label: "退出",
+            type: "normal",
+            click() {
+                if (process.platform !== "darwin") app.quit();
+            },
+        },
+    ]);
+    tray.setToolTip("火星情报");
     tray.setContextMenu(contextMenu);
 }
 
@@ -116,12 +141,17 @@ function createWindow() {
 function createAdView(id, proxyid) {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
     let adWindow = new BrowserWindow({
-        width: 250, height: 300,
-        x: width - 260, y: height - 305,
-        parent: mainWindow, autoHideMenuBar: true,
-        resizable: false, movable: false,
-        minimizable: false, maximizable: false
-    })
+        width: 250,
+        height: 300,
+        x: width - 260,
+        y: height - 305,
+        parent: mainWindow,
+        autoHideMenuBar: true,
+        resizable: false,
+        movable: false,
+        minimizable: false,
+        maximizable: false,
+    });
     adWindow.webContents.loadURL(__static + "/ad.html?proxyid=" + proxyid + "&id=" + id);
     adWindow.webContents.closeDevTools();
 }
@@ -133,18 +163,19 @@ function createSycmWindow(account, pwd) {
         return;
     }
     sycmWindow = new BrowserWindow({
-        width: 1000, height: 800,
+        width: 1000,
+        height: 800,
         autoHideMenuBar: true,
         webPreferences: {
             devTools: true,
             webviewTag: true,
             webSecurity: true,
-            preload: __static + "/sycm.js"
-        }
+            preload: __static + "/sycm.js",
+        },
     });
     // 加载网页
     sycmWindow.webContents.loadURL(
-        'https://login.taobao.com/member/login.jhtml?from=sycm&full_redirect=true&style=minisimple&minititle=&minipara=0,0,0&sub=true&redirect_url=http://sycm.taobao.com/portal/home.htm',
+        "https://login.taobao.com/member/login.jhtml?from=sycm&full_redirect=true&style=minisimple&minititle=&minipara=0,0,0&sub=true&redirect_url=http://sycm.taobao.com/portal/home.htm",
         { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36" }
     );
     sycmWindow.webContents.once("dom-ready", () => {
@@ -153,16 +184,16 @@ function createSycmWindow(account, pwd) {
     });
     // 存储淘宝信息
     global.tbInfo = {
-        loginUserName: "",    //  淘宝登录账户
-        tb_password: "",       // 淘宝密码
-        runAsShopId: "",      //  店铺id
-        runAsShopTitle: "",   //  当前店铺名称
-        loginUserId: "",      //  淘宝登录用户id
-        runAsUserId: "",      //  当前使用的淘宝用户id
-        cateId: "",           // 店铺分类id
-        cateName: ""          // 店铺分类名字
+        loginUserName: "", //  淘宝登录账户
+        tb_password: "", // 淘宝密码
+        runAsShopId: "", //  店铺id
+        runAsShopTitle: "", //  当前店铺名称
+        loginUserId: "", //  淘宝登录用户id
+        runAsUserId: "", //  当前使用的淘宝用户id
+        cateId: "", // 店铺分类id
+        cateName: "", // 店铺分类名字
     };
-    sycmWindow.on('closed', function () {
+    sycmWindow.on("closed", function() {
         mainWindow.webContents.send("router-to", "/heisoubinding/binding");
         sycmWindow = null;
         global.tbInfo = null;
@@ -172,27 +203,27 @@ function createSycmWindow(account, pwd) {
 // 版本更新
 function updateHandle() {
     autoUpdater.setFeedURL(uploadUrl);
-    autoUpdater.on('error', function (error) {
+    autoUpdater.on("error", function(error) {
         sendUpdateMessage(error.toString());
     });
-    autoUpdater.on('checking-for-update', function () {
+    autoUpdater.on("checking-for-update", function() {
         sendUpdateMessage("正在检查更新……");
     });
-    autoUpdater.on('update-available', function (info) {
+    autoUpdater.on("update-available", function(info) {
         sendUpdateMessage("检测到新版本，正在下载……");
     });
-    autoUpdater.on('update-not-available', function (info) {
+    autoUpdater.on("update-not-available", function(info) {
         sendUpdateMessage("现在使用的就是最新版本，不用更新");
     });
     // 执行更新
-    autoUpdater.on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
+    autoUpdater.on("update-downloaded", function(event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
         const dialogOpts = {
-            type: 'info',
-            buttons: ['更新', '不更新'],
-            title: '工具箱更新升级',
-            message: process.platform === 'win32' ? releaseNotes : releaseName,
-            detail: '监测到一个新的版本，请点击更新按钮更新工具箱'
-        }
+            type: "info",
+            buttons: ["更新", "不更新"],
+            title: "工具箱更新升级",
+            message: process.platform === "win32" ? releaseNotes : releaseName,
+            detail: "监测到一个新的版本，请点击更新按钮更新工具箱",
+        };
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
             if (returnValue.response === 0) {
                 sendUpdateMessage("install");
@@ -208,5 +239,5 @@ function updateHandle() {
 
 // 通过main进程发送事件给renderer进程
 function sendUpdateMessage(text) {
-    mainWindow.webContents.send('message', text)
+    mainWindow.webContents.send("message", text);
 }

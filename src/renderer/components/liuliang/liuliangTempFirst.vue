@@ -56,7 +56,7 @@
             </template>
             <el-form-item label="浏览时间" v-show="flag === 0 || flag === 1">
                 <el-select size="small" style="width:200px" v-model="form.browse_time" @change="changeBorwseTime">
-                    <el-option :label="item.serve_name" :value="item.value" v-for="(item,i) in browse_time[type]"></el-option>
+                    <el-option :label="item.serve_name" :value="item.value" v-for="(item,i) in browse_time[type]" :key="i"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="浏览深度" v-show="flag === 0 || flag === 1">
@@ -89,10 +89,10 @@
 </template>
 
 <script>
-const { shell } = require("electron");
-const moment = require('moment');
-const qs = require("qs");
+import moment from "moment";
+import qs from "qs";
 import { weightFn } from "@/util/util";
+import { openUrl } from "@/util/electronFun";
 
 // 默认配置 , 空配置
 var defaultData = [2, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 2, 1],
@@ -170,7 +170,7 @@ export default {
         open(i) {
             var id = qs.parse(this.form.target.split('?')[1]).id;
             var keyword = this.form.plan[i].keyword || "";
-            shell.openExternal("https://www.kehuda.com/#username=" + id + "&keyword=" + keyword + "&shebei=1");
+            openUrl("https://www.kehuda.com/#username=" + id + "&keyword=" + keyword + "&shebei=1");
         },
         // 改变url
         async changeTarget() {

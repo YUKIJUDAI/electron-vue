@@ -169,7 +169,7 @@
 </template>
 
 <script>
-const moment = require('moment');
+import moment from "moment";
 
 export default {
     data() {

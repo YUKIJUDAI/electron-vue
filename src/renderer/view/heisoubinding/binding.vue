@@ -29,9 +29,10 @@
 </template>
 
 <script>
-const { ipcRenderer } = require("electron");
 import axios from "axios";
 import Swiper from 'swiper';
+
+import { openSycm } from "@/util/electronFun";
 
 export default {
     data() {
@@ -50,7 +51,7 @@ export default {
             var a = this.$fetch.post("/user/getRelateTbList");
             var b = this.$fetch.post("/index/getFunctionPic");
 
-            axios.all([a,b]).then(res => {
+            axios.all([a, b]).then(res => {
                 if (0 === res[0].code && 0 === res[1].code) {
                     this.list = res[0].data;
                     this.picList = res[1].data;
@@ -86,7 +87,7 @@ export default {
         },
         // 打开生意参谋
         opensycm(account, pwd) {
-            ipcRenderer.send("open-sycm", account, pwd);
+            openSycm(account, pwd);
         }
     }
 }

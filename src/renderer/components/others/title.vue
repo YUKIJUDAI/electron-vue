@@ -118,7 +118,8 @@
 </template>
 
 <script>
-const { ipcRenderer, shell } = require("electron");
+
+import { openAd, openUrl, wd } from "@/util/electronFun";
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
@@ -178,7 +179,7 @@ export default {
     methods: {
         // 下载
         download() {
-            shell.openExternal(this.versionData.file);
+            openUrl(this.versionData.file);
         },
         // 打开socket
         openSocket() {
@@ -195,7 +196,7 @@ export default {
                 if (redata.type === 1 || redata.type === 3) {
                     this.unreadMessage = true;
                 } else if (redata.type == 2) {
-                    ipcRenderer.send("open-ad", redata.ads_id, proxyid);
+                    openAd(redata.ads_id);
                 }
             };
         },
@@ -214,7 +215,7 @@ export default {
             }
         },
         // 维护页面
-        goUphold(){
+        goUphold() {
             this.upholeFlag = true;
         },
         // 获取短信
@@ -303,7 +304,7 @@ export default {
         },
         // 最大化 最小化 关闭
         toMainFn(type) {
-            ipcRenderer.send(type);
+            wd(type);
         }
     },
     watch: {
@@ -671,21 +672,21 @@ export default {
     background-color: #ff6801;
     text-align: center;
     color: #fff;
-    padding: 14px 20px;
+    padding: 14px 20px !important;
     border-radius: 4px 4px 0 0;
 }
 .el-dialog__title {
-    color: #fff;
-    font-size: 20px;
+    color: #fff !important;
+    font-size: 20px !important;
 }
 .el-dialog__headerbtn .el-dialog__close {
-    color: #fff;
+    color: #fff !important;
 }
 .el-dialog__headerbtn:focus .el-dialog__close,
 .el-dialog__headerbtn:hover .el-dialog__close {
-    color: #fff;
+    color: #fff !important;
 }
 .el-dialog__body {
-    padding: 50px 30px;
+    padding: 50px 30px !important;
 }
 </style>

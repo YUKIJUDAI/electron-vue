@@ -1,8 +1,8 @@
-const axios = require("axios");
-const qs = require("qs");
-const { remote, ipcRenderer } = require("electron");
+import axios from "axios";
+import qs from "qs";
 
-const { heisouBaseUrl } = require("@/config/config");
+import { heisouBaseUrl } from "@/config/config";
+import { getGlobal } from "@/util/electronFun";
 import store from "@/store";
 
 // 创建新http - 火星情报
@@ -11,19 +11,19 @@ const http = axios.create({
     timeout: 10000,
     baseURL: heisouBaseUrl,
     headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+        "Content-Type": "application/x-www-form-urlencoded",
+    },
 });
 
 // 请求发送前数据处理
 http.interceptors.request.use(
-    config => {
+    (config) => {
         // 添加token
         const token = store.state.userInfo.token;
         token && (config.headers.token = token);
 
         // 添加tbInfo
-        const tbInfo = remote.getGlobal("tbInfo");
+        const tbInfo = getGlobal("tbInfo");
 
         if (config.headers["Content-Type"] === "application/x-www-form-urlencoded") {
             if (!config.data) config.data = {};
@@ -32,17 +32,17 @@ http.interceptors.request.use(
         }
         return config;
     },
-    error => {
+    (error) => {
         Promise.reject(error);
     }
 );
 
 // 请求发送后数据处理
 http.interceptors.response.use(
-    res => {
+    (res) => {
         return res.data;
     },
-    error => {
+    (error) => {
         return Promise.reject(error);
     }
 );

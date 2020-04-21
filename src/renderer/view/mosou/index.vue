@@ -2,8 +2,8 @@
     <div class="main-container">
         <div class="main-container-navigation">
             <ul class="main-container-navigation-ul">
-                <router-link tag="li" to="/zhuanhua/dataChange" :class="{active:$route.meta.index === 0}">
-                    <div>指数转化</div>
+                <router-link tag="li" to="/mosou/limit" :class="{active:$route.meta.index === 0}">
+                    <div>魔搜卡首屏</div>
                 </router-link>
             </ul>
         </div>

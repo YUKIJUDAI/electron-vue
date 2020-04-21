@@ -1,7 +1,7 @@
-const axios = require("axios");
-const qs = require("qs");
+import axios from "axios";
+import qs from "qs";
 
-const { baseUrl, proxyid } = require("@/config/config");
+import { baseUrl, proxyid } from "@/config/config";
 import store from "@/store";
 
 // 创建新http - 其他
@@ -9,12 +9,12 @@ import store from "@/store";
 const fetch = axios.create({
     timeout: 10000,
     baseURL: baseUrl,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
 });
 
 // 请求发送前数据处理
 fetch.interceptors.request.use(
-    config => {
+    (config) => {
         // 添加proxyid
         config.headers.proxyid = proxyid;
 
@@ -28,17 +28,17 @@ fetch.interceptors.request.use(
         }
         return config;
     },
-    error => {
+    (error) => {
         Promise.reject(error);
     }
 );
 
 // 请求发送后数据处理
 fetch.interceptors.response.use(
-    res => {
+    (res) => {
         return res.data;
     },
-    error => {
+    (error) => {
         return Promise.reject(error);
     }
 );

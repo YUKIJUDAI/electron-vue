@@ -67,11 +67,12 @@
                             <i class="iconfont icon-shouye"></i>
                             <span>首页</span>
                         </router-link>
-                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.path === item.route}" @click="open(item.route,item.is_uphold)">
-                            <i :class="['iconfont',item.iconclass]"></i>
+                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.meta.function_name === item.function_name}" @click="open(item.route,item.is_uphold)">
+                            <img :src="item.icon_y" v-if="$route.meta.function_name === item.function_name">
+                            <img :src="item.icon_h" v-else>
                             <span>{{item.copy_title}}</span>
                         </li>
-                        <li class="clearfix" :class="{active:$route.path === '/geren/personCenter'}" @click="open('/geren/personCenter',false)">
+                        <li class="clearfix" :class="{active:$route.meta.function_name === '个人中心'}" @click="open('/geren/personCenter',false)">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </li>
@@ -88,7 +89,7 @@
 <script>
 import heisouTitle from "@/components/others/title";
 import { isEmpty } from "@/util/util";
-const { ipcRenderer, remote } = require("electron");
+import { sendXhrData, message, routerTo } from "@/util/electronFun";
 import factory from "@/util/factory";
 
 export default {
@@ -111,19 +112,11 @@ export default {
     },
     mounted() {
         // 获取xhr信息后处理
-        ipcRenderer.on('send-xhr-data', (event, type, params, data) => {
-            if (factory.obj[type]) {
-                typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
-            }
-        });
+        sendXhrData();
         // 输出更新信息
-        ipcRenderer.on("message", (event, text) => {
-            console.log(text);
-        });
+        message();
         // 页面跳转跳转
-        ipcRenderer.on('router-to', (event, router) => {
-            this.$router.push(router);
-        });
+        routerTo();
 
         this.getUserInfo();
         this.getServiceCode();
@@ -260,11 +253,15 @@ export default {
                     &:hover {
                         background: rgba(241, 245, 251, 1);
                     }
-                    i {
+                    i,
+                    img {
                         font-size: 18px;
                         margin-top: 13px;
                         margin-left: 33px;
                         vertical-align: -2px;
+                    }
+                    img {
+                        vertical-align: -4px;
                     }
                     span {
                         font-size: 12px;
