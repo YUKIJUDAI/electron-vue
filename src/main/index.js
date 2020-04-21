@@ -31,56 +31,56 @@ const winURL = process.env.NODE_ENV === "development" ? `http://localhost:9080` 
 
 app.on("ready", createWindow);
 
-app.on("window-all-closed", function() {
+app.on("window-all-closed", function () {
     if (process.platform !== "darwin") app.quit();
 });
 
-app.on("activate", function() {
+app.on("activate", function () {
     if (mainWindow === null) createWindow();
 });
 
 // 输出日志
-ipcMain.on("log", function(e, err) {
+ipcMain.on("log", function (e, err) {
     logError.debug(err);
 });
 
 // 最小化
-ipcMain.on("min", function() {
+ipcMain.on("min", function () {
     mainWindow.minimize();
 });
 
 // 最大化
-ipcMain.on("max", function() {
+ipcMain.on("max", function () {
     mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
 });
 
 // 关闭
-ipcMain.on("close", function() {
+ipcMain.on("close", function () {
     mainWindow.close();
 });
 
 // 下载
-ipcMain.on("download", function(e, url) {
+ipcMain.on("download", function (e, url) {
     mainWindow.webContents.downloadURL(url);
 });
 
 // 打开生意参谋
-ipcMain.on("open-sycm", function(e, account, pwd) {
+ipcMain.on("open-sycm", function (e, account, pwd) {
     createSycmWindow(account, pwd);
 });
 
 // 隐藏生意参谋
-ipcMain.on("hide-sycm", function() {
+ipcMain.on("hide-sycm", function () {
     sycmWindow && sycmWindow.hide();
 });
 
 //显示生意参谋
-ipcMain.on("show-sycm", function() {
+ipcMain.on("show-sycm", function () {
     sycmWindow && sycmWindow.showInactive();
 });
 
 // 打开广告
-ipcMain.on("open-ad", function(e, id, proxyid) {
+ipcMain.on("open-ad", function (e, id, proxyid) {
     createAdView(id, proxyid);
 });
 
@@ -100,14 +100,17 @@ function createWindow() {
             nodeIntegration: true,
         },
     });
+
+    fs.writeFileSync(__static + "/theme.less", "@color:#FF6801;");
+
     // 加载网页
     mainWindow.loadURL(winURL);
-    mainWindow.on("closed", function() {
+    mainWindow.on("closed", function () {
         mainWindow = null;
     });
     // 启动更新
     // updateHandle();
-    session.defaultSession.on("will-download", function(event, downloadItem, webContents) {
+    session.defaultSession.on("will-download", function (event, downloadItem, webContents) {
         downloadItem.setSaveDialogOptions({ title: "文件保存" });
         downloadItem.on("updated", (event, state) => {
             if (state === "progressing") {
@@ -131,7 +134,7 @@ function createWindow() {
             click() {
                 if (process.platform !== "darwin") app.quit();
             },
-        },
+        }
     ]);
     tray.setToolTip("火星情报");
     tray.setContextMenu(contextMenu);
@@ -193,7 +196,7 @@ function createSycmWindow(account, pwd) {
         cateId: "", // 店铺分类id
         cateName: "", // 店铺分类名字
     };
-    sycmWindow.on("closed", function() {
+    sycmWindow.on("closed", function () {
         mainWindow.webContents.send("router-to", "/heisoubinding/binding");
         sycmWindow = null;
         global.tbInfo = null;
@@ -203,20 +206,20 @@ function createSycmWindow(account, pwd) {
 // 版本更新
 function updateHandle() {
     autoUpdater.setFeedURL(uploadUrl);
-    autoUpdater.on("error", function(error) {
+    autoUpdater.on("error", function (error) {
         sendUpdateMessage(error.toString());
     });
-    autoUpdater.on("checking-for-update", function() {
+    autoUpdater.on("checking-for-update", function () {
         sendUpdateMessage("正在检查更新……");
     });
-    autoUpdater.on("update-available", function(info) {
+    autoUpdater.on("update-available", function (info) {
         sendUpdateMessage("检测到新版本，正在下载……");
     });
-    autoUpdater.on("update-not-available", function(info) {
+    autoUpdater.on("update-not-available", function (info) {
         sendUpdateMessage("现在使用的就是最新版本，不用更新");
     });
     // 执行更新
-    autoUpdater.on("update-downloaded", function(event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
+    autoUpdater.on("update-downloaded", function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
         const dialogOpts = {
             type: "info",
             buttons: ["更新", "不更新"],
