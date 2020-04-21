@@ -119,7 +119,7 @@ export default {
                 color: #777;
             }
             .active {
-                background: rgba(255, 104, 1, 1);
+                background: @color;
                 color: #fff;
             }
         }
@@ -160,10 +160,10 @@ export default {
         }
         .body-right {
             p {
-                color: #ff6801;
+                color: @color;
             }
             .body-input {
-                border: 2px solid rgba(255, 104, 1, 1);
+                border: 2px solid @color;
             }
         }
         .body-center {

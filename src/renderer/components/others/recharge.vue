@@ -56,7 +56,7 @@ export default {
         margin-top: 30px;
         font-weight: bold;
         span {
-            color: #ff6801;
+            color: @color;
         }
     }
     .p3 {
@@ -80,7 +80,7 @@ export default {
         .l-h(40px);
         span {
             font-size: 16px;
-            color: #ff6801;
+            color: @color;
         }
     }
     .pay-way {
@@ -103,7 +103,7 @@ export default {
             }
         }
         .active {
-            border: 1px solid #ff6801;
+            border: 1px solid @color;
             &:after {
                 .abs;
                 top: 0;
@@ -120,7 +120,7 @@ export default {
         .l-h(42px);
         margin: 0 auto;
         margin-top: 80px;
-        background: rgb(255, 104, 1);
+        background: @color;
         .tc;
         font-size: 16px;
         color: #fff;

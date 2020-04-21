@@ -45,9 +45,9 @@ export default {
                 }
             }
             .active {
-                border-bottom: 3px solid #ff6801;
+                border-bottom: 3px solid @color;
                 div {
-                    color: #ff6801;
+                    color: @color;
                 }
             }
         }

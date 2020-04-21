@@ -320,7 +320,7 @@ export default {
 .header {
     width: 100%;
     height: 60px;
-    background: #ff6801;
+    background: @color;
     box-shadow: 4px 0px 19px 1px rgba(0, 32, 95, 0.15);
     .fix;
     top: 0;
@@ -556,7 +556,7 @@ export default {
         font-size: 14px;
         .tc;
         color: #fff;
-        background: rgba(255, 104, 1, 1);
+        background: @color;
         cursor: pointer;
         border-radius: 2px;
     }
@@ -577,7 +577,7 @@ export default {
 }
 .submit {
     width: 382px;
-    background: rgba(255, 104, 1, 1);
+    background: @color;
     .l-h(48px);
     margin: 0 auto;
     margin-top: 20px;
@@ -643,7 +643,7 @@ export default {
         width: 80px;
         .l-h(26px);
         font-size: 12px;
-        background: #ff6801;
+        background: @color;
         color: #fff;
         .tc;
         border-radius: 4px;
@@ -665,11 +665,12 @@ export default {
 }
 </style>
 <style lang="less">
+@import url("~@/assets/less/commom.less");
 .el-dialog {
     border-radius: 4px;
 }
 .el-dialog__header {
-    background-color: #ff6801;
+    background-color: @color;
     text-align: center;
     color: #fff;
     padding: 14px 20px !important;

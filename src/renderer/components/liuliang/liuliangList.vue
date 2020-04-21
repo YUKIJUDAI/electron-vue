@@ -43,7 +43,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="操作" align="center" width="80">
                     <template slot-scope="scope">
-                        <p style="color:#FF6801;cursor: pointer;" @click="view(scope.row.id)">查看详情</p>
+                        <p @click="view(scope.row.id)" class="view">查看详情</p>
                     </template>
                 </el-table-column>
             </el-table>
@@ -93,6 +93,10 @@ export default {
         overflow: hidden;
         padding-top: 20px;
         text-align: center;
+    }
+    .view {
+        color: @color;
+        cursor: pointer;
     }
 }
 </style>

@@ -198,7 +198,7 @@ export default {
                 height: 24px;
                 line-height: 24px;
                 color: #fff;
-                background: rgba(255, 104, 1, 1);
+                background: @color;
                 font-size: 12px;
                 border-radius: 4px;
                 cursor: pointer;

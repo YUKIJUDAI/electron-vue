@@ -189,7 +189,7 @@ export default {
             display: flex;
             justify-content: space-between;
             span {
-                color: #ff6801;
+                color: @color;
             }
         }
         .list {
@@ -221,7 +221,7 @@ export default {
                 }
             }
             .checked {
-                border: 1px solid rgba(255, 104, 1, 1);
+                border: 1px solid @color;
                 .rel;
                 img {
                     .abs;
@@ -250,7 +250,7 @@ export default {
                 }
             }
             .active {
-                border: 1px solid #ff6801;
+                border: 1px solid @color;
                 &:after {
                     .abs;
                     top: 0;
@@ -267,7 +267,7 @@ export default {
             .l-h(42px);
             margin: 0 auto;
             margin-top: 80px;
-            background: rgb(255, 104, 1);
+            background: @color;
             .tc;
             font-size: 16px;
             color: #fff;

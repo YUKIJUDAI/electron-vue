@@ -282,7 +282,7 @@ export default {
             flex-wrap: wrap;
             justify-content: center;
             .active {
-                background: rgba(255, 104, 1, 1);
+                background: @color;
                 color: #fff;
             }
             li {

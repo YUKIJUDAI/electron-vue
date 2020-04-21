@@ -2,7 +2,7 @@
     <div class="keyword-analysis">
         <p class="warn">注：因生意参谋竞品分析成交词每天最多提供20个入店关键词与20个成交关键词，但20个入店关键词不一定全部都存在成交词中 <br />所以系统会有:引流关键词分析，引流成交词分析，成交词统计等功能</p>
         <div class="form">
-            <el-table border class="form-table form-table1" :header-cell-style="headStyle" :data="tableData1" height="500">
+            <el-table border class="form-table form-table1" :header-cell-class-name="headStyle" :data="tableData1" height="500">
                 <el-table-column prop="_id" label="流量关键词" align="center" width="150">
                 </el-table-column>
                 <el-table-column prop="uv" label="访客数" align="center">
@@ -15,7 +15,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-table border class="form-table form-table2" :header-cell-style="headStyle" :data="tableData2" height="500">
+            <el-table border class="form-table form-table2" :header-cell-class-name="headStyle" :data="tableData2" height="500">
                 <el-table-column prop="_id" label="成交关键词" align="center" width="150">
                 </el-table-column>
                 <el-table-column prop="trade_num" label="成交数" align="center">
@@ -28,7 +28,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-table border class="form-table form-table3" :header-cell-style="headStyle" :data="tableData3" height="500">
+            <el-table border class="form-table form-table3" :header-cell-class-name="headStyle" :data="tableData3" height="500">
                 <el-table-column prop="_id" label="流量成交关键词" align="center" fixed width="150">
                 </el-table-column>
                 <el-table-column prop="" label="操作" align="center" fixed>
@@ -74,13 +74,13 @@ export default {
             myChart: ""
         }
     },
-    mounted(){
+    mounted() {
         this.itemId && this.getData();
     },
     methods: {
         headStyle({ row, column, rowIndex, columnIndex }) {
             if (columnIndex === 0) {
-                return "color:#FF6801;background-color:rgba(255, 105, 2, 0.08)"
+                return "headStyle"
             } else {
                 return "";
             }
@@ -279,7 +279,6 @@ export default {
 
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
-
 .keyword-analysis {
     .warn {
         padding: 14px 0;

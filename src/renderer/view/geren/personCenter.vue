@@ -217,7 +217,7 @@ export default {
                 }
                 span {
                     &:nth-child(2) {
-                        color: #ff6801;
+                        color: @color;
                         font-size: 14px;
                         padding-left: 9px;
                     }
@@ -242,7 +242,7 @@ export default {
         }
     }
     .p-4 {
-        color: #ff6801;
+        color: @color;
         font-size: 14px;
         font-weight: bold;
         margin-top: 7px;
@@ -265,7 +265,7 @@ export default {
                     }
                     .p-6 {
                         font-size: 24px;
-                        color: #ff6801;
+                        color: @color;
                         margin-top: 10px;
                         span {
                             font-size: 14px;

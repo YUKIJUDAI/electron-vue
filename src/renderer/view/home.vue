@@ -215,7 +215,7 @@ export default {
                 font-size: 12px;
                 color: #333;
                 span {
-                    color: #ff6801;
+                    color: @color;
                 }
                 li {
                     height: 24px;
@@ -224,7 +224,7 @@ export default {
             .main-left-2 {
                 .left-2-left {
                     .fl;
-                    background: rgba(255, 105, 2, 1);
+                    background: @color;
                     .l-h(36px);
                     color: #fff;
                     font-size: 14px;
@@ -235,10 +235,10 @@ export default {
                 .left-2-right {
                     .fl;
                     .l-h(34px);
-                    color: #ff6902;
+                    color: @color;
                     font-size: 14px;
                     .tc;
-                    border: 1px solid rgba(255, 105, 2, 1);
+                    border: 1px solid @color;
                     width: 49%;
                     cursor: pointer;
                 }
@@ -272,10 +272,10 @@ export default {
                 .active {
                     background: rgba(241, 245, 251, 1);
                     i {
-                        color: #ff6801;
+                        color: @color;
                     }
                     span {
-                        color: #ff6801;
+                        color: @color;
                     }
                 }
             }
@@ -315,16 +315,16 @@ export default {
             }
         }
         .active {
-            border-bottom: 3px solid #ff6801;
+            border-bottom: 3px solid @color;
             div {
-                color: #ff6801;
+                color: @color;
             }
         }
     }
     .main-container-navigation-right {
         .fr;
         margin-top: 12px;
-        color: #ff6801;
+        color: @color;
         cursor: pointer;
     }
     .main-container-view {
@@ -334,9 +334,23 @@ export default {
         overflow: hidden;
     }
 }
-
 .el-popper[x-placement^="bottom"] {
     margin-top: 0;
+}
+.el-button--primary {
+    background-color: @color !important;
+    border-color: @color !important;
+}
+.el-button--primary.is-plain {
+    color: @color !important;
+    background: rgb(255, 240, 230) !important;
+    border-color: rgb(255, 195, 153) !important;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: @color !important;
+}
+.el-button--text {
+    color: @color !important;
 }
 ._hover {
     margin: -12px;
@@ -369,5 +383,14 @@ export default {
         height: 84px;
         display: block;
     }
+}
+.headStyle {
+    color: @color;
+    background-color: rgba(255, 105, 2, 0.08) !important;
+}
+.headStyle2 {
+    background-color: @color !important;
+    border-color: @color;
+    color: #fff;
 }
 </style>

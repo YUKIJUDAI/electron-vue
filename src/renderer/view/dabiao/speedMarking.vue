@@ -66,7 +66,7 @@ export default {
         .l-h(38px);
         color: #fff;
         font-size: 16px;
-        background: rgba(255, 104, 1, 1);
+        background: @color;
         margin-left: 20px;
         cursor: pointer;
     }

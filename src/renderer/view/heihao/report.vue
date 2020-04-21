@@ -3,7 +3,7 @@
         <div class="heihao-form">
             <el-form :model="formData" label-width="120px">
                 <!-- <el-form-item label="举报奖励：">
-                    <span style="color:#ff6801">5点数</span>
+                    <span style="color:@color">5点数</span>
                 </el-form-item> -->
                 <el-form-item label="违规旺旺：">
                     <el-input v-model="formData.wangwang" placeholder="输入要举报的旺旺号" style="width:380px"></el-input>
