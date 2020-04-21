@@ -4580,10 +4580,10 @@ image-size@~0.5.0:
   resolved "https://registry.npm.taobao.org/image-size/download/image-size-0.5.5.tgz?cache=0&sync_timestamp=1569841504754&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fimage-size%2Fdownload%2Fimage-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
   integrity sha1-Cd/Uq50g4p6xw+gLiZA3jfnjy5w=
 
-import-html-entry@^1.4.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/import-html-entry/-/import-html-entry-1.5.1.tgz#7901f101720bfc3200b4e21878ed187322d352b3"
-  integrity sha512-Nw1ptkU+SJED52ztInck3FbDoHXfm8ayfmpmP3opGS+ABp/CQL910wycQ2XmWTyqnewHIXH48DlLZI/C4yPw3A==
+import-html-entry@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/import-html-entry/-/import-html-entry-1.6.0.tgz#d5a23adf28f155ee2710571ed4e85397752a753f"
+  integrity sha512-POG3BKtvaObl/jUs36h1b7P8jrbHWCNxarjvdXUH7GkueO80AoXbNF+u9pIrDEjkyUiw1aOmlVBmhcHFOr4BQA==
   dependencies:
     "@babel/runtime" "^7.7.2"
 
@@ -7020,16 +7020,17 @@ q@^1.1.2:
   resolved "https://registry.npm.taobao.org/q/download/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qiankun@^1.4.5:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/qiankun/-/qiankun-1.4.5.tgz#c309d69b0037163ab47bfcbc96d993d0111ef7e3"
-  integrity sha512-FjjO5EA2fY02D9zO4BvJ41gVKovDiNxHPe/x2nBubU6/P8DWTSSdqU7XypwRRAODa9KgFuW7Ki9ebq1FSRVCgQ==
+qiankun@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/qiankun/-/qiankun-2.0.2.tgz#e62252c42eaaf6cd0b5e1f556b5545e747f3de49"
+  integrity sha512-sPb1nU0s3CfBevINgmZd/7T/64amQS1Tn1uMb1ymEDJX6hpW5BYqCKoGiNWOxwD+rbi+SIuMS9YT2LIsIyQBYQ==
   dependencies:
     "@babel/runtime" "^7.5.5"
-    import-html-entry "^1.4.1"
+    import-html-entry "^1.6.0"
     lodash "^4.17.11"
-    single-spa "^4.4.3"
+    single-spa "^5.3.1"
     tslib "^1.10.0"
+
 qrcode@^1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.4.4.tgz#f0c43568a7e7510a55efc3b88d9602f71963ea83"
@@ -7735,10 +7736,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.npm.taobao.org/signal-exit/download/signal-exit-3.0.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsignal-exit%2Fdownload%2Fsignal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
-single-spa@^4.4.3:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/single-spa/-/single-spa-4.4.3.tgz#4dff3a17f633b732691cff25cf0bf0897ecdfd37"
-  integrity sha512-xpbCMrA3TtzJkjiq6zwxZQTqBTWtUrq4IDZWT+tOba+FgbFSrvCDCmHhadxDO9fm3JBuyELvKoS8qD73gUIh9Q==
+single-spa@^5.3.1:
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/single-spa/-/single-spa-5.3.4.tgz#d456b698f2068e98f94d3e203620dfc69b1a57c4"
+  integrity sha512-J0I+OfKn04QdaOp3lC8UL2xmD/BA/V0OisbCFbrR5LDIdsbcP9QG6ZFRNqIQQP8C9XXUtlGnA3ZWPLQBKGcOrw==
 
 slash@^1.0.0:
   version "1.0.0"
