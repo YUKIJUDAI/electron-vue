@@ -36,6 +36,7 @@ const downloadFile = function(type, filename, list) {
     const filePathPic = _path(filename) + "/图片";
     const fileComment = _path(filename) + "/评论";
     const fileCommentPic = _path(filename) + "/评论和图片";
+    const fileAskAll = _path(filename) + "/问大家";
     try {
         fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
     } catch (err) {
@@ -64,6 +65,11 @@ const downloadFile = function(type, filename, list) {
                 });
             });
             break;
+        // 问大家
+        case "4":
+            downloadAskAll().subscribe(() => {
+                download(fileAskAll + "/" + filename + ".xls");
+            });
         default:
             break;
     }
@@ -142,6 +148,25 @@ const downloadFile = function(type, filename, list) {
             });
         }
         return forkJoin(interval(1000).pipe(find(() => txtFlag)), interval(1000).pipe(find(() => picFlag)));
+    }
+    // 下载问大家
+    function downloadAskAll() {
+        try {
+            fs.accessSync(fileAskAll, fs.constants.R_OK | fs.constants.W_OK);
+        } catch (err) {
+            fs.mkdirSync(fileAskAll);
+        }
+        var arr = [["时间", "买手旺旺", "买手问题", "回答"]];
+        list.map((item) => {
+            var answer = "";
+            item.answer.map((val) => {
+                answer += "旺旺：" + val.usernick + "，回答：" + val.title + ";";
+            });
+            arr.push([item.createtime, item.question.usernick, item.question.title, answer]);
+        });
+        var options = { "!cols": [{ wch: 30 }, { wch: 10 }, { wch: 100 }, { wch: 500 }] };
+        var writeFile = bindNodeCallback(fs.writeFile);
+        return writeFile(fileAskAll + "/" + filename + ".xls", xlsx.build([{ name: "sheetName", data: arr }], options), "binary");
     }
 };
 
