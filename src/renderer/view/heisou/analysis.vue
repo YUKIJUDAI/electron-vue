@@ -42,7 +42,7 @@
         </el-dialog>
         <div class="info">
             <span class="info-title">宝贝信息</span>
-            <el-button type="primary" class="info-btn" @click="addFlag = true">选择宝贝</el-button>
+            <el-button type="primary" class="info-btn" @click="addFlag = true" v-has>选择宝贝</el-button>
             <div class="competition-info" v-show="goodsInfo.itemId">
                 <img :src="goodsInfo.pictUrl">
                 <div>
@@ -69,9 +69,9 @@
                 <el-form-item>
                     <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 </el-form-item>
-                <el-button type="primary" @click="t=new Date().getTime()">开始查询</el-button>
-                <el-button type="primary" plain @click="prevDay">分析前一天</el-button>
-                <el-button type="primary" plain @click="nextDay">分析后一天</el-button>
+                <el-button type="primary" @click="t=new Date().getTime()" v-has>开始查询</el-button>
+                <el-button type="primary" plain @click="prevDay" v-has>分析前一天</el-button>
+                <el-button type="primary" plain @click="nextDay" v-has>分析后一天</el-button>
                 <!-- <el-button type="primary" plain>导出excel</el-button> -->
             </el-form>
         </div>

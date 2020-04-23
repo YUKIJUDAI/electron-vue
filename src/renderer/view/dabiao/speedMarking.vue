@@ -2,7 +2,7 @@
     <div class="speedMarking">
         <div class="head">
             <input type="text" class="input input2" v-model="keyword" placeholder="请输入打标关键词">
-            <div type="text" class="sumit-btn" @click="createCode">生成极速打标二维码</div>
+            <div type="text" class="sumit-btn" @click="createCode" v-has>生成极速打标二维码</div>
         </div>
         <p class="msg">功能概述：先把用户在你类目下的权重值及标签精准提升上去，再让他下单，效果你懂的！</p>
         <div class="code">

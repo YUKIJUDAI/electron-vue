@@ -12,9 +12,13 @@
                 </div>
                 <div class="main-left-ul" v-if="isLogin">
                     <ul>
-                        <li>会员状态：<span>{{userInfo.vip_level === 0 ? '普通会员' : '高级会员'}}</span></li>
-                        <li>积分余额：<span>{{userInfo.gold}}</span></li>
-                        <!-- <li>担保资金：<span>0</span></li> -->
+                        <li>会员状态：<span>{{["游客","普通会员","超级会员"][userInfo.vip_level]}}</span>
+                            <router-link to="/geren/vip" tag="span">{{["开通","升级","续费"][userInfo.vip_level]}}</router-link>
+                        </li>
+                        <li>积分余额：<span>{{userInfo.gold}}</span>
+                            <router-link to="/geren/goldCoinDetails" tag="span">充值</router-link>
+                        </li>
+                        <li>担保资金：<span>0</span></li>
                     </ul>
                 </div>
                 <div class="main-left-2 clearfix">
@@ -67,7 +71,7 @@
                             <i class="iconfont icon-shouye"></i>
                             <span>首页</span>
                         </router-link>
-                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.meta.function_name === item.function_name}" @click="open(item.route,item.is_uphold)">
+                        <li class="clearfix" v-for="(item,i) in menuInfo[page]" :key="i" :class="{active:$route.meta.function_name === item.function_name}" @click="open(item.route,item.is_uphold)">
                             <img :src="item.icon_y" v-if="$route.meta.function_name === item.function_name">
                             <img :src="item.icon_h" v-else>
                             <span>{{item.copy_title}}</span>
@@ -77,6 +81,10 @@
                             <span>个人中心</span>
                         </li>
                     </ul>
+                    <div class="page">
+                        <i class="arrow arrow-left" @click="prev"></i>
+                        <i class="arrow" @click="next"></i>
+                    </div>
                 </div>
             </div>
             <div class="main-right">
@@ -96,7 +104,8 @@ export default {
     components: { heisouTitle },
     data() {
         return {
-            info: {}
+            info: {},
+            page: 0
         }
     },
     computed: {
@@ -107,7 +116,16 @@ export default {
             return this.$store.state.userInfo;
         },
         menuInfo() {
-            return this.$store.state.menuInfo || [];
+            var arr = [];
+            var menu = this.$store.state.menuInfo;
+            var num = 10;
+            if (menu.length === 0) return [];
+            var index = ~~(menu.length / num);
+            for (let i = 1; i <= index; i++) {
+                arr.push(menu.slice((i - 1) * num, i * num - 1));
+            }
+            arr.push(menu.slice(index * num, -1));
+            return arr;
         }
     },
     mounted() {
@@ -150,6 +168,12 @@ export default {
         },
         goRegistered() {
             this.$refs.heisouTitle.goRegistered()
+        },
+        prev() {
+            this.page > 0 && this.page--;
+        },
+        next() {
+            this.page < this.menuInfo.length && this.page++;
         }
     },
     watch: {
@@ -211,11 +235,16 @@ export default {
                 }
             }
             .main-left-ul {
-                padding: 0 33px 20px 33px;
+                padding: 0 5px 10px 5px;
                 font-size: 12px;
                 color: #333;
                 span {
                     color: @color;
+                    &:nth-child(2) {
+                        padding-left: 5px;
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
                 }
                 li {
                     height: 24px;
@@ -286,6 +315,20 @@ export default {
             margin-bottom: 20px;
             background: rgba(255, 255, 255, 1);
             box-shadow: -4px 0px 11px 1px rgba(0, 32, 95, 0.1);
+        }
+    }
+    .page {
+        margin-top: 20px;
+        .tc;
+        i {
+            .dib;
+            background: url("~@/assets/icon/arrow.png") no-repeat;
+            .wh(30px);
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .arrow-left {
+            transform: rotate(180deg)
         }
     }
 }

@@ -80,7 +80,7 @@
                 <el-option value="1" label="淘宝"></el-option>
                 <el-option value="2" label="天猫"></el-option>
             </el-select>
-            <el-button type="primary" style="margin-left:20px" @click="collectAll">开始采集</el-button>
+            <el-button type="primary" style="margin-left:20px" @click="collectAll" v-has>开始采集</el-button>
         </div>
         <p class="msg">输入链接，一键获取评价内容信息，帮助分析共性/优缺点，并且提供一键下载</p>
         <div class="data-form">

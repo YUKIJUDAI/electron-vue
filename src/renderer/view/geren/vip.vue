@@ -15,7 +15,7 @@
             <ul>
                 <li class="head head-vip">
                     <img src="~@/assets/img/recommend.png" class="recommend">
-                    <p><i class="vip-icon"></i>高级会员</p>
+                    <p><i class="vip-icon"></i>超级会员</p>
                     <span @click="dialogVisible = true">开通会员</span>
                 </li>
                 <li>无限使用</li>
@@ -28,7 +28,10 @@
         </div>
         <div class="right">
             <ul>
-                <li class="head">普通会员</li>
+                <li class="head head-vip head-vip-2">
+                    <p><i class="vip-icon2"></i>普通会员</p>
+                    <span @click="dialogVisible = true">开通会员</span>
+                </li>
                 <li>免费日查询宝贝≤3个</li>
                 <li>免费日查询账号≤30个</li>
                 <li>不限制</li>
@@ -37,7 +40,20 @@
                 <li>体验发布</li>
             </ul>
         </div>
-        <vip v-model="dialogVisible"></vip>
+        <div class="right right2">
+            <ul>
+                <li class="head head-vip head-vip-2">
+                    <p>游客</p>
+                </li>
+                <li>免费日查询宝贝≤3个</li>
+                <li>免费日查询账号≤30个</li>
+                <li>不限制</li>
+                <li>赠送200积分</li>
+                <li>免费微调</li>
+                <li>体验发布</li>
+            </ul>
+        </div>
+        <vip v-model="dialogVisible" v-if="dialogVisible"></vip>
     </div>
 </template>
 
@@ -59,7 +75,6 @@ export default {
 @import url("~@/assets/less/commom.less");
 
 .vip {
-    padding: 40px;
     padding-top: 25px;
     .left,
     .center,
@@ -68,7 +83,7 @@ export default {
         border: 1px solid rgba(211, 209, 208, 1);
         .tc;
         li {
-            .l-h(65px);
+            .l-h(55px);
             &:nth-child(2n) {
                 background: rgba(251, 249, 248, 1);
             }
@@ -94,6 +109,14 @@ export default {
                 vertical-align: -5px;
                 margin-right: 10px;
             }
+            .vip-icon2 {
+                background: url("~@/assets/icon/vip2.png") no-repeat;
+                .dib;
+                width: 28px;
+                height: 26px;
+                vertical-align: -5px;
+                margin-right: 10px;
+            }
             p {
                 color: #ff0a01;
             }
@@ -105,20 +128,31 @@ export default {
                     rgba(250, 93, 81, 1)
                 );
                 border-radius: 18px;
-                font-size: 18px;
+                font-size: 16px;
                 color: #fff;
-                width: 134px;
-                .l-h(36px);
+                width: 122px;
+                .l-h(33px);
                 margin: 0 auto;
                 cursor: pointer;
             }
         }
+        .head-vip-2 {
+            p {
+                color: #333;
+            }
+            span {
+                .l-h(34px);
+                background: #fff;
+                border:1px solid #FF6C00;
+                color: #FF6C00;
+            }
+        }
     }
     .left {
-        width: 25%;
+        width: 26%;
     }
     .center {
-        width: 40%;
+        width: 28%;
         padding-bottom: 4px;
         border: 1px solid rgba(254, 69, 62, 1);
         margin-top: -2px;
@@ -129,7 +163,11 @@ export default {
         }
     }
     .right {
-        width: 34%;
+        width: 24%;
+        border-left: 0;
+    }
+    .right2 {
+        width: 20%;
     }
 }
 </style>

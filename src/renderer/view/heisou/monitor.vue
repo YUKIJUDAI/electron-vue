@@ -121,8 +121,8 @@
         <div class="table-form">
             <el-form :inline="true" :model="form" class="demo-form-inline">
                 <el-form-item label="新增竞品">
-                    <el-button type="primary" size="small" @click="addDialog">新增商品监控</el-button>
-                    <el-button type="info" plain size="small" @click="update">更新数据</el-button>
+                    <el-button type="primary" size="small" @click="addDialog" v-has>新增商品监控</el-button>
+                    <el-button type="info" plain size="small" @click="update" v-has>更新数据</el-button>
                 </el-form-item>
                 </br>
                 <!-- 日期下拉 -->
@@ -148,9 +148,9 @@
                 </br>
                 <!-- 按钮 -->
                 <el-form-item label="查询表格">
-                    <el-button type="primary" size="small" @click="getList">开始查询</el-button>
-                    <el-button type="info" plain size="small" @click="del">删除</el-button>
-                    <el-button type="info" plain size="small">导出Excel</el-button>
+                    <el-button type="primary" size="small" @click="getList" v-has>开始查询</el-button>
+                    <el-button type="info" plain size="small" @click="del" v-has>删除</el-button>
+                    <el-button type="info" plain size="small" v-has>导出Excel</el-button>
                 </el-form-item>
             </el-form>
         </div>

@@ -77,10 +77,10 @@
             </el-form-item>
         </el-form>
         <div class="settlement">
-            <div class="settlement-btn" @click="submit">
+            <button class="settlement-btn" @click="submit">
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
-            </div>
+            </button>
             <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price[type].price + browse_price}}</span> 积分，合计消费 <span>{{(price[type].price + browse_price)*countbydays*days}}</span> 积分</p>
             <br />
             <p class="settlement-p-2" v-show="vip_level === 0">升级<span>会员</span> 每单可节省 <span>{{price[type].price + browse_price - price[type].vip_price}}</span> 积分，合计节省 <span>{{(price[type].price + browse_price - price[type].vip_price)*countbydays*days}}</span> 积分</p>
@@ -454,7 +454,9 @@ export default {
             cursor: pointer;
             width: 180px;
             height: 76px;
+            border: 0;
             background: @color;
+            .tl;
             i {
                 margin-left: 18px;
                 color: #fff;

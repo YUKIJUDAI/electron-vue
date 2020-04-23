@@ -40,7 +40,7 @@
             <el-pagination background layout="prev, pager, next" :page-count="total_pages" :current-page.sync="page" @current-change="getList">
             </el-pagination>
         </div>
-        <credits v-model="dialogVisible"></credits>
+        <credits v-model="dialogVisible" v-if="credits"></credits>
     </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible.sync="value" title="开通高级会员" width="690px" :before-close="handleClose">
+    <el-dialog :visible.sync="value" title="开通会员" width="690px" :before-close="handleClose">
         <div class="recharge-1" v-if="paying">
             <div class="account clearfix">
                 <p>开通账号：<span>{{$store.state.userInfo.user_phone}}</span></p>
@@ -13,12 +13,17 @@
                     <p>{{item.value}}</p>
                 </li>
             </ul>
-            <div class="pay-way">
+            <div class="pay-way clearfix">
+                <p>会员类型：</p>
+                <div @click="vip_level = 2" class="pay-way-o" :class="{active:vip_level === 2}">超级会员</div>
+                <div @click="vip_level = 1" class="pay-way-o" :class="{active:vip_level === 1}">普通会员</div>
+            </div>
+            <div class="pay-way clearfix">
                 <p>支付方式：</p>
                 <div @click="pay_type = 1" class="pay-way-o" :class="{active:pay_type === 1}">支付宝</div>
                 <!-- <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div> -->
 
-                <div class="pay" @click="toPay()">开通</div>
+                <div class="pay" @click="paying = false">开通</div>
             </div>
         </div>
         <paytel v-else :pay_type="pay_type" :serve_id="price[checked].id"></paytel>
@@ -33,6 +38,7 @@ export default {
     props: ["value"],
     data() {
         return {
+            vip_level: 2,
             pay_type: 1,
             price: [],
             paying: true,
@@ -48,9 +54,6 @@ export default {
         handleClose() {
             this.$emit("input", false);
             this.paying = false;
-        },
-        toPay() {
-            this.paying = true;
         }
     }
 }
@@ -110,7 +113,7 @@ export default {
         }
     }
     .pay-way {
-        margin-top: 30px;
+        margin-top: 20px;
         font-size: 14px;
         color: #333;
         .pay-way-o {

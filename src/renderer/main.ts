@@ -5,6 +5,7 @@ import Electron from "vue-electron";
 
 import http from "@/util/http";
 import fetch from "@/util/fetch";
+import authority from "@/util/authority";
 import { log } from "@/util/electronFun";
 import "@/assets/theme/index.css";
 import "@/assets/iconfont/iconfont.css";
@@ -27,6 +28,8 @@ Vue.config.productionTip = false;
 const errorHandler = (error) => {
     log(error.toString());
 };
+
+Vue.directive("has", authority);
 
 Vue.prototype.$log = errorHandler;
 Vue.config.errorHandler = errorHandler;

@@ -17,10 +17,10 @@
                 </div>
             </div>
             <div class="body-center">
-                <el-button type="primary" class="body-btn" @click="changeReal"><i class="el-icon-sort"></i>转成真实值</el-button>
+                <el-button type="primary" class="body-btn" @click="changeReal" v-has><i class="el-icon-sort"></i>转成真实值</el-button>
                 <br />
                 <br />
-                <el-button type="primary" class="body-btn" @click="download"><i class="el-icon-download"></i>下载数据</el-button>
+                <el-button type="primary" class="body-btn" @click="download" v-has><i class="el-icon-download"></i>下载数据</el-button>
             </div>
             <div class="body-right">
                 <p>{{arr[index].rename}}</p>
