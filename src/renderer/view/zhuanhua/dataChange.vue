@@ -3,7 +3,7 @@
         <div class="header">
             <p>选择指数</p>
             <ul>
-                <li :class="{active:index === i}" v-for="(item,i) in arr" :key="i" @click="index = i">{{item.name}}</li>
+                <li :class="{active:index === i}" v-for="(item,i) in arr" :key="i" @click="changeIndex(i)">{{item.name}}</li>
             </ul>
         </div>
         <p class="msg">把生意参谋里面的{{arr[index].name}}，换算成真实的数值，方便准确了解信息。</p>
@@ -79,6 +79,18 @@ export default {
                 return;
             }
             download(heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
+        },
+        changeIndex() {
+            this.index = i;
+            this.data = [
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" }
+            ];
+            this.reData = ["", "", "", "", "", ""]
         }
     }
 }
