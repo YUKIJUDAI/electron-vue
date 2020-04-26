@@ -123,7 +123,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <span slot="reference" @click="del(scope.row.goodsId)">删除</span>
+                        <span slot="reference" @click="del(scope.row.goodsId)" v-if="scope.row.userId !== '0'">删除</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -198,7 +198,7 @@ export default {
         },
         // 获取列表
         async getList() {
-            var res = await this.$fetch.post("/collect/collectList", { currentPageNum: this.page, pageSize: 10 });
+            var res = await this.$fetch.post("/collect/collectList", { currentPageNum: this.page, pageSize: 10, queryAllNum: "20" });
             0 === res.code && (this.data = res.data.data, this.total_pages = res.data.pages);
         },
         // 采集数据
