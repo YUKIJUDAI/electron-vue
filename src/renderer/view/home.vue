@@ -67,16 +67,16 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <router-link tag="li" class="clearfix" to="/index" :class="{active:$route.path === '/index'}">
+                        <router-link tag="li" class="clearfix" to="/index" :class="{active:$route.path.includes('index')}">
                             <i class="iconfont icon-shouye"></i>
                             <span>首页</span>
                         </router-link>
-                        <li class="clearfix" v-for="(item,i) in menuInfo[page]" :key="i" :class="{active:$route.meta.function_name === item.function_name}" @click="open(item.route,item.is_uphold)">
-                            <img :src="item.icon_y" v-if="$route.meta.function_name === item.function_name">
+                        <li class="clearfix" v-for="(item,i) in menuInfo[page]" :key="i" :class="{active:$route.path.includes(item.route) && item.route !==''}" @click="open(item.route,item.is_uphold)">
+                            <img :src="item.icon_y" v-if="$route.path.includes(item.route) && item.route !==''">
                             <img :src="item.icon_h" v-else>
                             <span>{{item.copy_title}}</span>
                         </li>
-                        <li class="clearfix" :class="{active:$route.meta.function_name === '个人中心'}" @click="open('/geren/personCenter',false)">
+                        <li class="clearfix" :class="{active:$route.path.includes('geren')}" @click="open('geren/personCenter',false)">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </li>
@@ -160,7 +160,7 @@ export default {
             if (Boolean(is_uphold)) {
                 this.$refs.heisouTitle.goUphold();
             } else {
-                this.$router.push(url);
+                this.$router.push("/" + url);
             }
         },
         goLogin() {
@@ -328,7 +328,7 @@ export default {
             margin-right: 15px;
         }
         .arrow-left {
-            transform: rotate(180deg)
+            transform: rotate(180deg);
         }
     }
 }
