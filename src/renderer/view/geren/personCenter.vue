@@ -10,6 +10,7 @@
                         您好，{{userInfo.username}}
                         <img src="~@/assets/img/vip-0.png" v-show="userInfo.vip_level === 0" />
                         <img src="~@/assets/img/vip-1.png" v-show="userInfo.vip_level === 1" />
+                        <img src="~@/assets/img/vip-2.png" v-show="userInfo.vip_level === 2" />
                         <router-link to="/geren/vip" v-show="userInfo.vip_level === 0" tag="span">升级</router-link>
                     </p>
                     <ul class="clearfix">

@@ -6,6 +6,7 @@
                 <div class="main-left-1">
                     <img src="~@/assets/img/level-0.png" class="identity-tag" v-show="userInfo.vip_level === 0">
                     <img src="~@/assets/img/level-1.png" class="identity-tag" v-show="userInfo.vip_level === 1">
+                    <img src="~@/assets/img/level-2.png" class="identity-tag" v-show="userInfo.vip_level === 2">
                     <img src="~@/assets/img/admin.png" class="avatar">
                     <router-link to="/geren/personCenter" tag="div" class="main-login" v-if="isLogin">{{userInfo.user_phone}}</router-link>
                     <div class="main-login" @click="goLogin" v-else>请登录</div>
