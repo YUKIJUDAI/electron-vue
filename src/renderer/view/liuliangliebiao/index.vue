@@ -2,7 +2,7 @@
     <div class="main-container">
         <div class="main-container-navigation clearfix">
             <ul class="main-container-navigation-ul">
-                <router-link tag="li" to="/liuliangliebiao/flow" :class="{active:$route.meta.index === 0}">
+                <router-link tag="li" to="/liuliang-liebiao/flow" :class="{active:$route.meta.index === 0}">
                     <div>任务日志</div>
                 </router-link>
             </ul>

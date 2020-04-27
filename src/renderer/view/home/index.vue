@@ -98,7 +98,7 @@ export default {
                     this.$store.dispatch("set_menu_info", res.data);
                     var o = {};
                     res.data.forEach(item => {
-                        o[item.route] = { vip_level: item.vip_level, functions_time: item.functions_time };
+                        o[item.route] = { id: item.id, vip_level: item.vip_level, functions_time: item.functions_time };
                     });
                     this.$store.dispatch("set_authority_info", o);
                 }

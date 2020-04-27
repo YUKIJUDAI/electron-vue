@@ -197,7 +197,7 @@ function createSycmWindow(account, pwd) {
         cateName: "", // 店铺分类名字
     };
     sycmWindow.on("closed", function () {
-        mainWindow.webContents.send("router-to", "/heisoubinding/binding");
+        mainWindow.webContents.send("router-to", "/heisou/binding");
         sycmWindow = null;
         global.tbInfo = null;
     });

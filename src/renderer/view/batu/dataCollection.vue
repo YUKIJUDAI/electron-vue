@@ -80,7 +80,7 @@
                 <el-option value="1" label="淘宝"></el-option>
                 <el-option value="2" label="天猫"></el-option>
             </el-select>
-            <el-button type="primary" style="margin-left:20px" @click="collectAll" v-has>开始采集</el-button>
+            <el-button type="primary" style="margin-left:20px" @click="monitoringAuthority('collectAll')">开始采集</el-button>
         </div>
         <p class="msg">输入链接，一键获取评价内容信息，帮助分析共性/优缺点，并且提供一键下载</p>
         <div class="data-form">
@@ -113,17 +113,17 @@
                 </el-table-column>
                 <el-table-column label="评论+买家秀" align="center" width="100px">
                     <template slot-scope="scope">
-                        <span @click="getCommentsList(scope.row.goodsId)">查看</span>
+                        <span @click="monitoringAuthority('getCommentsList',scope.row.goodsId)">查看</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="问大家" align="center">
                     <template slot-scope="scope">
-                        <span @click="askAll(scope.row.goodsId)">查看</span>
+                        <span @click="monitoringAuthority('askAll',scope.row.goodsId)">查看</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <span slot="reference" @click="del(scope.row.goodsId)" v-if="scope.row.userId !== '0'">删除</span>
+                        <span slot="reference" @click="monitoringAuthority('del',scope.row.goodsId)" v-if="scope.row.userId !== '0'">删除</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -141,8 +141,8 @@ import qs from "qs";
 import { Loading } from 'element-ui';
 
 import { download, downloadSchedule, downloadSuccess } from "@/util/electronFun";
-import { baseUrl } from "@/config/config";
 import { downloadFile } from "@/util/fs";
+import { monitoringAuthority } from "@/util/util";
 
 export default {
     filters: {
@@ -188,7 +188,7 @@ export default {
         downloadSchedule(this);
         downloadSuccess(this);
 
-        this.getList();
+        this.monitoringAuthority('getList');
     },
     methods: {
         // 复制
@@ -201,9 +201,13 @@ export default {
             var res = await this.$fetch.post("/collect/collectList", { currentPageNum: this.page, pageSize: 10, queryAllNum: "20" });
             0 === res.code && (this.data = res.data.data, this.total_pages = res.data.pages);
         },
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
+        },
         // 采集数据
         async collectAll() {
-            if (this.collectForm.url.indexOf("http") < 0) {
+            if (!this.collectForm.url || this.collectForm.url.indexOf("http") < 0) {
                 this.$message.error("请输入正确的网址");
                 return;
             }

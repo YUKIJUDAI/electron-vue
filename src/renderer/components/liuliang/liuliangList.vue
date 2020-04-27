@@ -21,7 +21,7 @@
                     <el-input placeholder="查询关键词" size="small" v-model="keyword"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="getList" v-has>查询</el-button>
+                    <el-button type="primary" @click="monitoringAuthority('getList')">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import { monitoringAuthority } from "@/util/util";
+
 export default {
     data() {
         return {
@@ -71,6 +73,10 @@ export default {
         this.getList();
     },
     methods: {
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
+        },
         async getList() {
             var date1 = this.date ? this.date[0] : "";
             var date2 = this.date ? this.date[1] : "";

@@ -17,10 +17,10 @@
                 </div>
             </div>
             <div class="body-center">
-                <el-button type="primary" class="body-btn" @click="changeReal" v-has><i class="el-icon-sort"></i>转成真实值</el-button>
+                <el-button type="primary" class="body-btn" @click="monitoringAuthority('changeReal')"><i class="el-icon-sort"></i>转成真实值</el-button>
                 <br />
                 <br />
-                <el-button type="primary" class="body-btn" @click="download" v-has><i class="el-icon-download"></i>下载数据</el-button>
+                <el-button type="primary" class="body-btn" @click="monitoringAuthority('download')"><i class="el-icon-download"></i>下载数据</el-button>
             </div>
             <div class="body-right">
                 <p>{{arr[index].rename}}</p>
@@ -37,6 +37,7 @@
 <script>
 import { heisouBaseUrl } from "@/config/config";
 import { download } from "@/util/electronFun";
+import { monitoringAuthority } from "@/util/util";
 
 export default {
     data() {
@@ -63,6 +64,10 @@ export default {
         }
     },
     methods: {
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
+        },
         async changeReal() {
             var data = this.data.map(item => item = item.value).filter(item => item);
             if (data.length === 0) {
@@ -80,7 +85,7 @@ export default {
             }
             download(heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
         },
-        changeIndex() {
+        changeIndex(i) {
             this.index = i;
             this.data = [
                 { value: "" },

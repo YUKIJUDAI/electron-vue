@@ -93,38 +93,38 @@ var routes = new Router({
                     ],
                 },
                 {
-                    path: "heisou",
-                    component: require("@/view/heisou/index").default,
+                    path: "heisou-features",
+                    component: require("@/view/heisouFeatures/index").default,
                     children: [
                         // 竞品监控
                         {
                             path: "monitor",
-                            component: require("@/view/heisou/monitor").default,
+                            component: require("@/view/heisouFeatures/monitor").default,
                             meta: { index: 0, hasAuthority: true },
                         },
                         // 竞品分析
                         {
                             path: "analysis",
-                            component: require("@/view/heisou/analysis").default,
+                            component: require("@/view/heisouFeatures/analysis").default,
                             meta: { index: 1, hasAuthority: true },
                         },
                     ],
                 },
                 {
-                    path: "heisoubinding",
-                    component: require("@/view/heisoubinding/index").default,
-                    redirect: "heisoubinding/binding",
+                    path: "heisou",
+                    component: require("@/view/heisou/index").default,
+                    redirect: "heisou/binding",
                     children: [
                         // 生意参谋绑定
                         {
                             path: "binding",
-                            component: require("@/view/heisoubinding/binding").default,
+                            component: require("@/view/heisou/binding").default,
                             meta: { index: 0, hasAuthority: true },
                             beforeEnter(to, from, next) {
                                 const tbInfo = getGlobal("tbInfo") as any;
                                 if (tbInfo) {
                                     if (tbInfo.hasOwnProperty("runAsShopId") && tbInfo.runAsShopId !== "") {
-                                        next("/heisou/monitor");
+                                        next("/heisou-features/monitor");
                                     } else {
                                         next();
                                     }
@@ -186,7 +186,7 @@ var routes = new Router({
                     ],
                 },
                 {
-                    path: "liuliangliebiao",
+                    path: "liuliang-liebiao",
                     component: require("@/view/liuliangliebiao/index").default,
                     children: [
                         // 流量
@@ -310,7 +310,7 @@ var routes = new Router({
 
 routes.beforeResolve((to, from, next) => {
     if (to.meta.hasAuthority) {
-        console.log(to);
+        to.meta.authorityInfo = store.state.authorityInfo[to.fullPath.split("/")[1].split("-")[0]];
     }
     next();
 });
