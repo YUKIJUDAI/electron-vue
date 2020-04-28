@@ -22,7 +22,7 @@
             </el-form>
         </div>
         <div class="reportHistory-table">
-            <el-table :data="tableData" border style="width: 100%" :header-cell-style="{'background':'#FF6801','border-color':'#FF6801','color':'#fff'}">
+            <el-table :data="tableData" border style="width: 100%" header-cell-class-name="headStyle2">
                 <el-table-column prop="wangwang" label="举报旺旺">
                 </el-table-column>
                 <el-table-column prop="content" label="举报类型">

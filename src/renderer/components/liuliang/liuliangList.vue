@@ -21,7 +21,7 @@
                     <el-input placeholder="查询关键词" size="small" v-model="keyword"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="getList">查询</el-button>
+                    <el-button type="primary" @click="monitoringAuthority('getList')">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -43,7 +43,7 @@
                 </el-table-column>
                 <el-table-column prop="" label="操作" align="center" width="80">
                     <template slot-scope="scope">
-                        <p style="color:#FF6801;cursor: pointer;" @click="view(scope.row.id)">查看详情</p>
+                        <p @click="view(scope.row.id)" class="view">查看详情</p>
                     </template>
                 </el-table-column>
             </el-table>
@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import { monitoringAuthority } from "@/util/util";
+
 export default {
     data() {
         return {
@@ -71,6 +73,10 @@ export default {
         this.getList();
     },
     methods: {
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
+        },
         async getList() {
             var date1 = this.date ? this.date[0] : "";
             var date2 = this.date ? this.date[1] : "";
@@ -93,6 +99,10 @@ export default {
         overflow: hidden;
         padding-top: 20px;
         text-align: center;
+    }
+    .view {
+        color: @color;
+        cursor: pointer;
     }
 }
 </style>

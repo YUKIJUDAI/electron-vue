@@ -13,7 +13,7 @@
                 </router-link>
             </ul>
             <div class="main-container-navigation-right">
-                <router-link tag="p" to="/liuliangliebiao/flow">任务管理</router-link>
+                <router-link tag="p" to="/liuliang-liebiao/flow">任务管理</router-link>
             </div>
         </div>
         <router-view class="main-container-view"></router-view>
@@ -75,7 +75,7 @@ export default {}
         vertical-align: -2px;
     }
     .flow-select-btn-active {
-        background: rgba(255, 104, 1, 1);
+        background: @color;
         color: #fff;
         i {
             color: #fff;

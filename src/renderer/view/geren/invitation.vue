@@ -98,7 +98,7 @@ export default {
             }
             .p-6 {
                 font-size: 24px;
-                color: #ff6801;
+                color: @color;
                 margin-top: 10px;
                 span {
                     font-size: 14px;

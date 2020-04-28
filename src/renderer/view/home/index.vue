@@ -93,7 +93,15 @@ export default {
         // 推荐列表
         getRecFunctions() {
             this.$fetch.post("/index/getRecFunctions").then(res => {
-                0 === res.code && (this.recommend = res.data, this.$store.dispatch("set_menu_info", res.data));
+                if (0 === res.code) {
+                    this.recommend = res.data;
+                    this.$store.dispatch("set_menu_info", res.data);
+                    var o = {};
+                    res.data.forEach(item => {
+                        o[item.route] = { id: item.id, vip_level: item.vip_level, functions_time: item.functions_time };
+                    });
+                    this.$store.dispatch("set_authority_info", o);
+                }
             });
         },
         // 视频播放
@@ -198,7 +206,7 @@ export default {
                 height: 24px;
                 line-height: 24px;
                 color: #fff;
-                background: rgba(255, 104, 1, 1);
+                background: @color;
                 font-size: 12px;
                 border-radius: 4px;
                 cursor: pointer;

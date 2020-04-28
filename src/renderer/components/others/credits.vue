@@ -1,47 +1,67 @@
 <template>
-    <div class="recharge">
-        <p class="p1">积分不可提现。1人民币等于{{data.value}}积分。</p>
-        <p class="p2">充值账号：<span>{{userPhone}}</span></p>
-        <p class="p3">充值金额<input type="number" placeholder="请输入不小于10的整数" v-model="value" maxlength="9"></p>
-        <p class="p4">充值总额<span>{{value}}元</span> （充值￥{{value}}元，获得{{value*data.value}}积分)</p>
-        <div class="pay-way">
-            <p>支付方式：</p>
-            <div @click="pay_type = 1" class="pay-way-o" :class="{active:pay_type === 1}">支付宝</div>
-            <!-- <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div> -->
+    <el-dialog :visible.sync="value" title="积分充值" width="690px" :before-close="handleClose">
+        <div class="recharge" v-if="paying">
+            <p class="p1">积分不可提现。1人民币等于{{orderMsg.value}}积分。</p>
+            <p class="p2">充值账号：<span>{{userPhone}}</span></p>
+            <p class="p3">充值金额<input type="number" placeholder="请输入不小于10的整数" v-model="num" maxlength="9"></p>
+            <p class="p4">充值总额<span>{{num}}元</span> （充值￥{{num}}元，获得{{num*orderMsg.value}}积分)</p>
+            <div class="pay-way">
+                <p>支付方式：</p>
+                <div @click="pay_type = 1" class="pay-way-o" :class="{active:pay_type === 1}">支付宝</div>
+                <!-- <div @click="pay_type= 2" class="pay-way-o" :class="{active:pay_type === 2}">微信支付</div> -->
 
-            <div class="pay" @click="toPay()">开通</div>
+                <div class="pay" @click="paying = false">开通</div>
+            </div>
         </div>
-    </div>
+        <pay v-else :pay_type="pay_type" :num="num" :serve_id="orderMsg.id"></pay>
+    </el-dialog>
 </template>
 
 <script>
+import pay from "@/components/others/pay";
+
 export default {
+    props: ["value"],
+    components: { pay },
     data() {
         return {
+            dialogVisible: false,
+            paying: true,
             pay_type: 1,
-            data: {},
-            value: 10
+            orderMsg: {},
+            num: 10
         }
     },
     computed: {
         userPhone() {
             return this.$store.state.userInfo.user_phone;
-        },
+        }
     },
-    mounted() {
+    created() {
         this.getGoldPrice();
     },
     methods: {
         async getGoldPrice() {
             var res = await this.$fetch.post("/price/getGoldPrice");
-            0 === res.code && (this.data = res.data);
+            0 == res.code && (this.orderMsg = res.data);
+        },
+        handleClose() {
+            this.$emit("input", false);
+            this.paying = true;
+        }
+    },
+    watch: {
+        num(val, oldval) {
+            if (val !== oldval) this.num = Math.abs(~~val);
         }
     }
+
 }
 </script>
 
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
+
 .recharge {
     padding: 0 30px;
     .p1 {
@@ -56,7 +76,7 @@ export default {
         margin-top: 30px;
         font-weight: bold;
         span {
-            color: #ff6801;
+            color: @color;
         }
     }
     .p3 {
@@ -80,7 +100,7 @@ export default {
         .l-h(40px);
         span {
             font-size: 16px;
-            color: #ff6801;
+            color: @color;
         }
     }
     .pay-way {
@@ -103,7 +123,7 @@ export default {
             }
         }
         .active {
-            border: 1px solid #ff6801;
+            border: 1px solid @color;
             &:after {
                 .abs;
                 top: 0;
@@ -120,7 +140,7 @@ export default {
         .l-h(42px);
         margin: 0 auto;
         margin-top: 80px;
-        background: rgb(255, 104, 1);
+        background: @color;
         .tc;
         font-size: 16px;
         color: #fff;

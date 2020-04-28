@@ -132,7 +132,7 @@ export default {
                 padding: 5px 0;
                 font-size: 14px;
                 color: #333;
-                border-bottom: 4px solid #ff6801;
+                border-bottom: 4px solid @color;
             }
             .p-2 {
                 font-size: 24px;
@@ -155,7 +155,7 @@ export default {
                 font-size: 24px;
                 padding: 13px 0;
                 span {
-                    color: #ff6801;
+                    color: @color;
                 }
             }
             .p-5 {
@@ -212,10 +212,10 @@ export default {
                 width: 80px;
                 .l-h(26px);
                 background: rgba(255, 255, 255, 1);
-                border: 1px solid rgba(255, 104, 1, 1);
+                border: 1px solid @color;
                 border-radius: 4px;
                 font-size: 14px;
-                color: #ff6801;
+                color: @color;
             }
         }
     }

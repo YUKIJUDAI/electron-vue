@@ -33,7 +33,7 @@ let rendererConfig = {
         rules: [
             {
                 test: /\.less$/,
-                use: ['vue-style-loader', 'css-loader', 'less-loader']
+                use: ['vue-style-loader', 'css-loader', { loader: 'less-loader', options: { javascriptEnabled: true } }]
             },
             {
                 test: /\.css$/,
@@ -112,7 +112,6 @@ let rendererConfig = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new MiniCssExtractPlugin({ filename: 'styles.css' }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.resolve(__dirname, '../src/index.ejs'),
@@ -147,6 +146,7 @@ let rendererConfig = {
     },
     resolve: {
         alias: {
+            '@@':path.join(__dirname, '../static'),
             '@': path.join(__dirname, '../src/renderer'),
             'vue$': 'vue/dist/vue.esm.js'
         },

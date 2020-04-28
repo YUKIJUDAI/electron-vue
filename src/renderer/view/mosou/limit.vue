@@ -3,7 +3,7 @@
         <div class="head">
             <input type="text" class="input input1" v-model="keyword" placeholder="请输入关键词">
             <input type="text" class="input input2" v-model="url" placeholder="请输入宝贝链接">
-            <div type="text" class="sumit-btn" @click="createCode">生成卡首屏二维码</div>
+            <div type="text" class="sumit-btn" @click="monitoringAuthority('createCode')">生成卡首屏二维码</div>
         </div>
         <p class="msg">功能概述: 方便买家快速定位宝贝，提高宝贝关键词权重，提升排名，补单必备！</p>
         <div class="code">
@@ -21,6 +21,7 @@
 
 <script>
 var QRCode = require('qrcode');
+import { monitoringAuthority } from "@/util/util";
 
 export default {
     data() {
@@ -30,8 +31,12 @@ export default {
         }
     },
     methods: {
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
+        },
         async createCode() {
-            if (this.url.indexOf('http') < 0) {
+            if (!this.url || this.url.indexOf('http') < 0) {
                 this.$message.error("请输入正确的网址");
                 return;
             }
@@ -80,7 +85,7 @@ export default {
         .l-h(38px);
         color: #fff;
         font-size: 16px;
-        background: rgba(255, 104, 1, 1);
+        background: @color;
         margin-left: 20px;
         cursor: pointer;
     }

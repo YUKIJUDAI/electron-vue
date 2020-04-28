@@ -77,7 +77,7 @@
                     <p class="msg-title-p1">用户打标情况<span>（深度付费查询）</span></p>
                     <p class="msg-title-p2" @click="report">【这个是黑号，我有证据，我要举报】</p>
                 </div>
-                <el-table :data="tableData" border style="width: 100%" :header-cell-style="{'text-align':'center','background':'#FF6801','border-color':'#FF6801','color':'#fff'}">
+                <el-table :data="tableData" border style="width: 100%" header-cell-style="headStyle2">
                     <el-table-column prop="pd" label="跑单">
                         <template slot-scope="scope" slot="header">
                             跑单
@@ -141,10 +141,10 @@
         <div class="unsearch" v-else>
             <div class="introduction">
                 <ul>
-                    <li><i class="icon-star"></i>免费提供基础查询，如存在次数将自动执行深度查询；</li>
-                    <li><i class="icon-star"></i>深度查询结果为黑号，将扣除一次次数；</li>
-                    <li><i class="icon-star"></i>深度查询结果不是黑号，不扣当日剩余次数</li>
-                    <li><i class="icon-star"></i>当日重复查询同一账号，不会重复计次数。</li>
+                    <li><i class="icon-star"></i>会员提供无限制手动查询，API接口合作联系客服；</li>
+                    <li><i class="icon-star"></i>查询结果仅供参考，每个软件号库不同，会存在差异；</li>
+                    <li><i class="icon-star"></i>成功举报黑号赠送会员1个月；</li>
+                    <li><i class="icon-star"></i>建议结合超级打标功能使用：查号+打权重 超级打标 ；</li>
                 </ul>
             </div>
             <div class="information-desk">
@@ -273,7 +273,7 @@ export default {
             }
         }
         span {
-            color: #ff6801;
+            color: @color;
             cursor: pointer;
         }
     }
@@ -351,7 +351,7 @@ export default {
             .l-h(30px);
             font-size: 14px;
             font-weight: bold;
-            color: #ff6801;
+            color: @color;
             text-decoration: underline;
             cursor: pointer;
         }
@@ -410,7 +410,7 @@ export default {
             color: #333;
             line-height: 26px;
             span {
-                color: #ff6801;
+                color: @color;
             }
         }
         .information-prompt {

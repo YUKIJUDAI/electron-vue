@@ -3,7 +3,7 @@
         <div class="header">
             <p>选择指数</p>
             <ul>
-                <li :class="{active:index === i}" v-for="(item,i) in arr" :key="i" @click="index = i">{{item.name}}</li>
+                <li :class="{active:index === i}" v-for="(item,i) in arr" :key="i" @click="changeIndex(i)">{{item.name}}</li>
             </ul>
         </div>
         <p class="msg">把生意参谋里面的{{arr[index].name}}，换算成真实的数值，方便准确了解信息。</p>
@@ -17,10 +17,10 @@
                 </div>
             </div>
             <div class="body-center">
-                <el-button type="primary" class="body-btn" @click="changeReal"><i class="el-icon-sort"></i>转成真实值</el-button>
+                <el-button type="primary" class="body-btn" @click="monitoringAuthority('changeReal')"><i class="el-icon-sort"></i>转成真实值</el-button>
                 <br />
                 <br />
-                <el-button type="primary" class="body-btn" @click="download"><i class="el-icon-download"></i>下载数据</el-button>
+                <el-button type="primary" class="body-btn" @click="monitoringAuthority('download')"><i class="el-icon-download"></i>下载数据</el-button>
             </div>
             <div class="body-right">
                 <p>{{arr[index].rename}}</p>
@@ -37,6 +37,7 @@
 <script>
 import { heisouBaseUrl } from "@/config/config";
 import { download } from "@/util/electronFun";
+import { monitoringAuthority } from "@/util/util";
 
 export default {
     data() {
@@ -63,6 +64,10 @@ export default {
         }
     },
     methods: {
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
+        },
         async changeReal() {
             var data = this.data.map(item => item = item.value).filter(item => item);
             if (data.length === 0) {
@@ -79,6 +84,18 @@ export default {
                 return;
             }
             download(heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
+        },
+        changeIndex(i) {
+            this.index = i;
+            this.data = [
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" },
+                { value: "" }
+            ];
+            this.reData = ["", "", "", "", "", ""]
         }
     }
 }
@@ -119,7 +136,7 @@ export default {
                 color: #777;
             }
             .active {
-                background: rgba(255, 104, 1, 1);
+                background: @color;
                 color: #fff;
             }
         }
@@ -160,10 +177,10 @@ export default {
         }
         .body-right {
             p {
-                color: #ff6801;
+                color: @color;
             }
             .body-input {
-                border: 2px solid rgba(255, 104, 1, 1);
+                border: 2px solid @color;
             }
         }
         .body-center {

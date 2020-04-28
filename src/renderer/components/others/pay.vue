@@ -192,7 +192,7 @@ export default {
                 color: #999;
                 padding-bottom: 8px;
                 span {
-                    color: #ff6801;
+                    color: @color;
                 }
             }
         }

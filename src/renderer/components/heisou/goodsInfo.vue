@@ -110,7 +110,7 @@ export default {
         }
         .active {
             background: rgba(255, 254, 254, 1);
-            border: 1px solid rgba(255, 104, 1, 1);
+            border: 1px solid @color;
             border-radius: 15px;
         }
     }

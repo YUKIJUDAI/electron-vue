@@ -42,7 +42,7 @@
         </el-dialog>
         <div class="info">
             <span class="info-title">宝贝信息</span>
-            <el-button type="primary" class="info-btn" @click="addFlag = true">选择宝贝</el-button>
+            <el-button type="primary" class="info-btn" @click="monitoringAuthority('addFlag',true)">选择宝贝</el-button>
             <div class="competition-info" v-show="goodsInfo.itemId">
                 <img :src="goodsInfo.pictUrl">
                 <div>
@@ -69,9 +69,9 @@
                 <el-form-item>
                     <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 </el-form-item>
-                <el-button type="primary" @click="t=new Date().getTime()">开始查询</el-button>
-                <el-button type="primary" plain @click="prevDay">分析前一天</el-button>
-                <el-button type="primary" plain @click="nextDay">分析后一天</el-button>
+                <el-button type="primary" @click="monitoringAuthority('t',new Date().getTime())">开始查询</el-button>
+                <el-button type="primary" plain @click="monitoringAuthority('prevDay')">分析前一天</el-button>
+                <el-button type="primary" plain @click="monitoringAuthority('nextDay')">分析后一天</el-button>
                 <!-- <el-button type="primary" plain>导出excel</el-button> -->
             </el-form>
         </div>
@@ -94,6 +94,7 @@
 const { from } = require("rxjs");
 import moment from "moment";
 import { getAllWindows, fromId, getLog } from "@/util/electronFun";
+import { monitoringAuthority } from "@/util/util";
 
 import dataSource from "@/components/heisou/dataSource";
 import keywordAnalysis from "@/components/heisou/keywordAnalysis";
@@ -147,6 +148,10 @@ export default {
     methods: {
         changeTab(index) {
             this.tabIndex = index;
+        },
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
         },
         // 获取列表数据
         getList() {
@@ -265,13 +270,13 @@ export default {
     }
     .tab {
         margin-top: 30px;
-        border-bottom: 2px solid #ff6902;
+        border-bottom: 2px solid @color;
         height: 30px;
         li {
             .fl;
             background: rgba(255, 105, 2, 0.08);
             border-radius: 4px 4px 0px 0px;
-            color: #ff6902;
+            color: @color;
             .l-h(30px);
             padding: 0 15px;
             margin-right: 15px;
@@ -298,10 +303,10 @@ export default {
             }
         }
         .active {
-            background: rgba(255, 105, 2, 1);
+            background: @color;
             color: #fff;
             &::after {
-                border-bottom: 30px solid rgba(255, 105, 2, 1);
+                border-bottom: 30px solid @color;
             }
         }
         .active1 {

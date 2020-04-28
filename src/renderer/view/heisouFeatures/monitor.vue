@@ -121,8 +121,8 @@
         <div class="table-form">
             <el-form :inline="true" :model="form" class="demo-form-inline">
                 <el-form-item label="新增竞品">
-                    <el-button type="primary" size="small" @click="addDialog">新增商品监控</el-button>
-                    <el-button type="info" plain size="small" @click="update">更新数据</el-button>
+                    <el-button type="primary" size="small" @click="monitoringAuthority('addDialog')">新增商品监控</el-button>
+                    <el-button type="info" plain size="small" @click="monitoringAuthority('update')">更新数据</el-button>
                 </el-form-item>
                 </br>
                 <!-- 日期下拉 -->
@@ -148,9 +148,9 @@
                 </br>
                 <!-- 按钮 -->
                 <el-form-item label="查询表格">
-                    <el-button type="primary" size="small" @click="getList">开始查询</el-button>
-                    <el-button type="info" plain size="small" @click="del">删除</el-button>
-                    <el-button type="info" plain size="small">导出Excel</el-button>
+                    <el-button type="primary" size="small" @click="monitoringAuthority('getList')">开始查询</el-button>
+                    <el-button type="info" plain size="small" @click="monitoringAuthority('del')">删除</el-button>
+                    <!-- <el-button type="info" plain size="small">导出Excel</el-button> -->
                 </el-form-item>
             </el-form>
         </div>
@@ -211,6 +211,7 @@ import moment from "moment";
 import axios from "axios";
 
 import { getLog, getAllWindows, fromId } from "@/util/electronFun";
+import { monitoringAuthority } from "@/util/util";
 
 export default {
     data() {
@@ -267,12 +268,16 @@ export default {
     },
     mounted() {
         this.form.date = "1";
-        this.getList();
+        this.monitoringAuthority("getList");
         this.getShop();
         // 获取日志
         getLog(this);
     },
     methods: {
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
+        },
         // 关闭趋势
         treadClose() {
             this.tread = "30";
@@ -343,7 +348,7 @@ export default {
             this.logFlag = true;
             this.logList = [];
             from(getAllWindows()).subscribe(i => {
-                fromId(i.id, "add-monitor", this.addData);
+                fromId(i.id, "add-monitor", [this.addData]);
             });
         },
         // 创建图表

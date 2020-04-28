@@ -10,7 +10,7 @@
                 <el-button type="primary" size="small" @click="downloadComments('2')">下载图片</el-button>
                 <el-button type="primary" size="small" @click="downloadComments('3')">下载评论加图片</el-button>
             </div>
-            <el-table stripe style="width: 100%" :data="comments_list" height="500px">
+            <el-table stripe style="width: 100%" :data="comments_list" height="400px">
                 <el-table-column label="SKU" align="center" prop="sku"></el-table-column>
                 <el-table-column label="旺旺名" align="center" prop="wangwang"></el-table-column>
                 <el-table-column label="初次评语" align="center" prop="firstrate"></el-table-column>
@@ -26,34 +26,47 @@
                 </el-pagination>
             </div>
         </el-dialog>
-        <el-dialog title="查看问大家" :visible.sync="buyersShowDialog" width="90%" height="500px">
+        <el-dialog title="查看问大家" :visible.sync="buyersShowDialog" width="90%">
             <div class="comment-type">
                 <ul>
-                    <li class="active">全部</li>
-                    <li>正品</li>
-                    <li>多久</li>
+                    <li :class="{active:propertyId === 0}" @click="_getAskList(0)">全部</li>
+                    <li :class="{active:propertyId === item.propertyId}" v-for="(item,i) in askSortList" :key="i" @click="_getAskList(item.propertyId)">{{item.keyword}}</li>
                 </ul>
             </div>
             <div class="comment-btn">
-                <el-button type="primary" size="small">导出数据</el-button>
+                <span style="margin-right:10px">选择下载区间</span>
+                <el-select v-model="ask_download_index" style="margin-right:60px">
+                    <el-option v-for="(item,i) in ask_download" :key="i" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+                <el-button type="primary" size="small" @click="downloadComments">导出数据</el-button>
             </div>
-            <el-table stripe style="width: 100%" :data="data">
-                <el-table-column label="时间" align="center"></el-table-column>
+            <el-table stripe style="width: 100%" :data="ask_list" height="400px">
+                <el-table-column label="时间" align="center" prop="createtime"></el-table-column>
                 <el-table-column label="问题" align="center">
                     <template slot-scope="scope">
                         <div class="show">
-                            <img src="" alt="">
+                            <img :src="scope.row.question.useravatar" alt="">
                             <div class="show-right">
-                                <p>别***年：</p>
-                                <p>请问姐妹们是正品嘛</p>
+                                <p>{{scope.row.question.usernick}}：</p>
+                                <p>{{scope.row.question.title}}</p>
                             </div>
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="回答" align="center"></el-table-column>
+                <el-table-column label="回答" align="center">
+                    <template slot-scope="scope">
+                        <div class="show" v-for="(item,i) in scope.row.answer" :key="i">
+                            <img :src="item.useravatar" alt="">
+                            <div class="show-right">
+                                <p>{{item.usernick}}：</p>
+                                <p>{{item.title}}</p>
+                            </div>
+                        </div>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination background layout="prev, pager, next" :page-count="total_pages" :current-page.sync="page" @current-change="getList">
+                <el-pagination background layout="prev, pager, next" :page-count="ask_total_pages" :current-page.sync="ask_pages" @current-change="getAskList">
                 </el-pagination>
             </div>
         </el-dialog>
@@ -67,7 +80,7 @@
                 <el-option value="1" label="淘宝"></el-option>
                 <el-option value="2" label="天猫"></el-option>
             </el-select>
-            <el-button type="primary" style="margin-left:20px" @click="collectAll">开始采集</el-button>
+            <el-button type="primary" style="margin-left:20px" @click="monitoringAuthority('collectAll')">开始采集</el-button>
         </div>
         <p class="msg">输入链接，一键获取评价内容信息，帮助分析共性/优缺点，并且提供一键下载</p>
         <div class="data-form">
@@ -100,17 +113,17 @@
                 </el-table-column>
                 <el-table-column label="评论+买家秀" align="center" width="100px">
                     <template slot-scope="scope">
-                        <span @click="getCommentsList(scope.row.goodsId)">查看</span>
+                        <span @click="monitoringAuthority('getCommentsList',scope.row.goodsId)">查看</span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="问大家" align="center">
+                <el-table-column label="问大家" align="center">
                     <template slot-scope="scope">
-                        <span @click="buyersShowDialog = true">查看</span>
+                        <span @click="monitoringAuthority('askAll',scope.row.goodsId)">查看</span>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <span slot="reference" @click="del(scope.row.goodsId)">删除</span>
+                        <span slot="reference" @click="monitoringAuthority('del',scope.row.goodsId)" v-if="scope.row.userId !== '0'">删除</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -128,8 +141,8 @@ import qs from "qs";
 import { Loading } from 'element-ui';
 
 import { download, downloadSchedule, downloadSuccess } from "@/util/electronFun";
-import { baseUrl } from "@/config/config";
 import { downloadFile } from "@/util/fs";
+import { monitoringAuthority } from "@/util/util";
 
 export default {
     filters: {
@@ -141,7 +154,6 @@ export default {
         return {
             goodsId: "",
             collectForm: { platform: "1" },
-            buyersShowDialog: false,
             data: [],
             page: 1,
             total_pages: 1,
@@ -156,7 +168,19 @@ export default {
             comments_pages: 1,
             comments_download_index: 1,
             limit: 500,
-            comments_download: []
+            comments_download: [],
+
+            // 问大家
+            buyersShowDialog: false,
+            askSortList: [],
+            ask_list: [],
+            propertyId: 0,
+            ask_total_pages: 1,
+            ask_pages: 1,
+            ask_download_index: 1,
+            ask_limit: 2,
+            ask_download: [],
+
         }
     },
     created() {
@@ -164,7 +188,7 @@ export default {
         downloadSchedule(this);
         downloadSuccess(this);
 
-        this.getList();
+        this.monitoringAuthority('getList');
     },
     methods: {
         // 复制
@@ -174,12 +198,16 @@ export default {
         },
         // 获取列表
         async getList() {
-            var res = await this.$fetch.post("/collect/collectList", { currentPageNum: this.page, pageSize: 10 });
+            var res = await this.$fetch.post("/collect/collectList", { currentPageNum: this.page, pageSize: 10, queryAllNum: "20" });
             0 === res.code && (this.data = res.data.data, this.total_pages = res.data.pages);
+        },
+        // 权限
+        monitoringAuthority(type, ...arg) {
+            monitoringAuthority(this, type, ...arg);
         },
         // 采集数据
         async collectAll() {
-            if (this.collectForm.url.indexOf("http") < 0) {
+            if (!this.collectForm.url || this.collectForm.url.indexOf("http") < 0) {
                 this.$message.error("请输入正确的网址");
                 return;
             }
@@ -206,9 +234,32 @@ export default {
         // 评论下载
         downloadComments(type) {
             this.progressDialog = true;
-            this.$fetch.post("/collect/downloadComments", { type, goodsId: this.goodsId, limit: this.limit, page: this.comments_download_index }, { timeout: 60000 }).then(res => {
+            this.$fetch.post(
+                "/collect/downloadComments",
+                { type, goodsId: this.goodsId, limit: this.limit, page: this.comments_download_index },
+                { timeout: 60000 }
+            ).then(res => {
                 if (0 === res.code) {
                     downloadFile(type, this.goodsId, res.data);
+                } else {
+                    this.progressDialog = false;
+                    this.$message.error("下载失败");
+                }
+            }).catch(err => {
+                this.progressDialog = false;
+                this.$message.error("下载失败");
+            });
+        },
+        // 问大家下载
+        downloadComments(type) {
+            this.progressDialog = true;
+            this.$fetch.post(
+                "/collect/exportAsk",
+                { goodsId: this.goodsId, limit: this.ask_limit, page: this.ask_download_index, propertyId: this.propertyId },
+                { timeout: 60000 }
+            ).then(res => {
+                if (0 === res.code) {
+                    downloadFile("4", this.goodsId, res.data);
                 } else {
                     this.progressDialog = false;
                     this.$message.error("下载失败");
@@ -240,7 +291,13 @@ export default {
         // 获取评论列表
         async getCommentsList(goodsId) {
             typeof goodsId === "string" && (this.goodsId = goodsId);
-            var res = await this.$fetch.post("/collect/allComments", { goodsId: this.goodsId, currentPageNum: this.comments_pages, pageSize: 10 });
+            var loadingInstance = Loading.service({ background: 'rgba(0,0,0,.1)', text: "数据量过大，加载较慢，请耐心等待！" });
+            var res = await this.$fetch.post(
+                "/collect/allComments",
+                { goodsId: this.goodsId, currentPageNum: this.comments_pages, pageSize: 10 },
+                { timeout: 60000 }
+            );
+            loadingInstance.close();
             if (0 === res.code) {
                 this.comments_list = res.data.commentlist;
                 this.comments_total_pages = res.data.pages;
@@ -255,6 +312,43 @@ export default {
             } else {
                 this.$message.error(res.msg);
             }
+        },
+        // 获取问大家信息
+        askAll(goodsId) {
+            this.$fetch.post("/collect/askSortList", { goodsId }).then(res => {
+                0 === res.code && (this.askSortList = res.data);
+            });
+            this.getAskList(goodsId);
+        },
+        // 获取问大家列表
+        async getAskList(goodsId) {
+            typeof goodsId === "string" && (this.goodsId = goodsId);
+            var loadingInstance = Loading.service({ background: 'rgba(0,0,0,.1)', text: "数据量过大，加载较慢，请耐心等待！" });
+            var res = await this.$fetch.post(
+                "/collect/askAll",
+                { goodsId: this.goodsId, propertyId: this.propertyId, currentPageNum: this.ask_pages, pageSize: 10 },
+                { timeout: 60000 }
+            );
+            loadingInstance.close();
+            if (0 === res.code) {
+                this.ask_list = res.data.asklist;
+                this.ask_total_pages = res.data.pages;
+                var index = Math.floor(res.data.total / this.ask_limit);
+                var arr = [];
+                for (let i = 1; i <= index; i++) {
+                    arr.push({ value: i, label: `第${(i - 1) * this.ask_limit + 1}个~第${i * this.ask_limit}个` });
+                }
+                arr.push({ value: index + 1, label: `第${index * this.ask_limit + 1}个~第${res.data.total}个` });
+                this.ask_download = arr;
+                this.buyersShowDialog = true;
+            } else {
+                this.$message.error(res.msg);
+            }
+        },
+        _getAskList(propertyId) {
+            this.propertyId = propertyId;
+            this.ask_pages = 1;
+            this.getAskList();
         }
     }
 }
@@ -265,7 +359,7 @@ export default {
 
 .dataCollection {
     .comment-btn {
-        margin-bottom: 20px;
+        margin: 20px 0;
     }
     .msg {
         font-size: 14px;
@@ -282,12 +376,12 @@ export default {
             flex-wrap: wrap;
             justify-content: center;
             .active {
-                background: rgba(255, 104, 1, 1);
+                background: @color;
                 color: #fff;
             }
             li {
                 .tc;
-                width: 54px;
+                padding: 0 10px;
                 .l-h(28px);
                 background: rgba(255, 220, 204, 1);
                 border-radius: 14px;
@@ -306,6 +400,7 @@ export default {
         .show-right {
             .tl;
             margin-left: 6px;
+            width: 90%;
             p {
                 line-height: 21px;
                 &:nth-child(2) {

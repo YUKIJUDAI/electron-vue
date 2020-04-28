@@ -81,7 +81,7 @@ export default {
             color: #333;
         }
         .active {
-            border-bottom: 4px solid #ff6801;
+            border-bottom: 4px solid @color;
         }
     }
     .tutor-list {

@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 import { getGlobal } from "@/util/electronFun";
+import store from "@/store";
 
 Vue.use(Router);
 
-export default new Router({
+var routes = new Router({
     mode: "history",
     routes: [
         {
@@ -62,7 +63,7 @@ export default new Router({
                         {
                             path: "limit",
                             component: require("@/view/mosou/limit").default,
-                            meta: { index: 0, function_name: "魔搜卡首屏" },
+                            meta: { index: 0, hasAuthority: true },
                         },
                     ],
                 },
@@ -71,11 +72,11 @@ export default new Router({
                     component: require("@/view/dabiao/index").default,
                     redirect: "dabiao/speedMarking",
                     children: [
-                        // 魔搜卡首屏
+                        // 超级打标
                         {
                             path: "speedMarking",
                             component: require("@/view/dabiao/speedMarking").default,
-                            meta: { index: 0, function_name: "超级打标" },
+                            meta: { index: 0, hasAuthority: true },
                         },
                     ],
                 },
@@ -88,43 +89,43 @@ export default new Router({
                         {
                             path: "dataCollection",
                             component: require("@/view/batu/dataCollection").default,
-                            meta: { index: 0, function_name: "一键扒图/评论/问大家" },
+                            meta: { index: 0, hasAuthority: true },
+                        },
+                    ],
+                },
+                {
+                    path: "heisou-features",
+                    component: require("@/view/heisouFeatures/index").default,
+                    children: [
+                        // 竞品监控
+                        {
+                            path: "monitor",
+                            component: require("@/view/heisouFeatures/monitor").default,
+                            meta: { index: 0, hasAuthority: true },
+                        },
+                        // 竞品分析
+                        {
+                            path: "analysis",
+                            component: require("@/view/heisouFeatures/analysis").default,
+                            meta: { index: 1, hasAuthority: true },
                         },
                     ],
                 },
                 {
                     path: "heisou",
                     component: require("@/view/heisou/index").default,
-                    children: [
-                        // 竞品监控
-                        {
-                            path: "monitor",
-                            component: require("@/view/heisou/monitor").default,
-                            meta: { index: 0, function_name: "竞品透视" },
-                        },
-                        // 竞品分析
-                        {
-                            path: "analysis",
-                            component: require("@/view/heisou/analysis").default,
-                            meta: { index: 1, function_name: "竞品透视" },
-                        },
-                    ],
-                },
-                {
-                    path: "heisoubinding",
-                    component: require("@/view/heisoubinding/index").default,
-                    redirect: "heisoubinding/binding",
+                    redirect: "heisou/binding",
                     children: [
                         // 生意参谋绑定
                         {
                             path: "binding",
-                            component: require("@/view/heisoubinding/binding").default,
-                            meta: { index: 0, function_name: "竞品透视" },
+                            component: require("@/view/heisou/binding").default,
+                            meta: { index: 0, hasAuthority: true },
                             beforeEnter(to, from, next) {
                                 const tbInfo = getGlobal("tbInfo") as any;
                                 if (tbInfo) {
                                     if (tbInfo.hasOwnProperty("runAsShopId") && tbInfo.runAsShopId !== "") {
-                                        next("/heisou/monitor");
+                                        next("/heisou-features/monitor");
                                     } else {
                                         next();
                                     }
@@ -144,19 +145,19 @@ export default new Router({
                         {
                             path: "search",
                             component: require("@/view/heihao/search").default,
-                            meta: { index: 0, function_name: "查黑号" },
+                            meta: { index: 0, hasAuthority: true },
                         },
                         // 举报黑号
                         {
                             path: "report",
                             component: require("@/view/heihao/report").default,
-                            meta: { index: 1, function_name: "查黑号" },
+                            meta: { index: 1, hasAuthority: true },
                         },
                         // 举报记录
                         {
                             path: "reportHistory",
                             component: require("@/view/heihao/reportHistory").default,
-                            meta: { index: 2, function_name: "查黑号" },
+                            meta: { index: 2, hasAuthority: true },
                         },
                     ],
                 },
@@ -169,31 +170,31 @@ export default new Router({
                         {
                             path: "flow",
                             component: require("@/view/liuliang/flow").default,
-                            meta: { index: 0, function_name: "淘宝流量" },
+                            meta: { index: 0, hasAuthority: true },
                         },
                         // 收藏
                         {
                             path: "favorite",
                             component: require("@/view/liuliang/favorite").default,
-                            meta: { index: 1, function_name: "淘宝流量" },
+                            meta: { index: 1, hasAuthority: true },
                         },
                         // 加购
                         {
                             path: "plusPurchase",
                             component: require("@/view/liuliang/plusPurchase").default,
-                            meta: { index: 2, function_name: "淘宝流量" },
+                            meta: { index: 2, hasAuthority: true },
                         },
                     ],
                 },
                 {
-                    path: "liuliangliebiao",
+                    path: "liuliang-liebiao",
                     component: require("@/view/liuliangliebiao/index").default,
                     children: [
                         // 流量
                         {
                             path: "flow",
                             component: require("@/view/liuliangliebiao/flow").default,
-                            meta: { index: 0, function_name: "淘宝流量" },
+                            meta: { index: 0, hasAuthority: true },
                         },
                     ],
                 },
@@ -210,7 +211,7 @@ export default new Router({
                         {
                             path: "securitySupplement",
                             component: require("@/view/budan/securitySupplement").default,
-                            meta: { index: 0 },
+                            meta: { index: 0, hasAuthority: true },
                         },
                     ],
                 },
@@ -222,7 +223,7 @@ export default new Router({
                         {
                             path: "dataChange",
                             component: require("@/view/zhuanhua/dataChange").default,
-                            meta: { index: 0, function_name: "指数转实数" },
+                            meta: { index: 0, hasAuthority: true },
                         },
                     ],
                 },
@@ -235,31 +236,31 @@ export default new Router({
                         {
                             path: "realstuffCenter",
                             component: require("@/view/ganhuo/realstuffCenter").default,
-                            meta: { index: 0, function_name: "干货分享" },
+                            meta: { index: 0 },
                         },
                         // 视频
                         {
                             path: "videoCenter/:id?",
                             component: require("@/view/ganhuo/videoCenter").default,
-                            meta: { index: 1, function_name: "干货分享" },
+                            meta: { index: 1 },
                         },
                         // 文章
                         {
                             path: "articleCenter/:id?",
                             component: require("@/view/ganhuo/articleCenter").default,
-                            meta: { index: 2, function_name: "干货分享" },
+                            meta: { index: 2 },
                         },
                         // 文章详情
                         {
                             path: "articleDetail/:id",
                             component: require("@/view/ganhuo/articleDetail").default,
-                            meta: { index: 2, function_name: "干货分享", hasBack: true },
+                            meta: { index: 2, hasBack: true },
                         },
                         // 导师中心
                         {
                             path: "tutorCenter",
                             component: require("@/view/ganhuo/tutorCenter").default,
-                            meta: { index: 3, function_name: "干货分享" },
+                            meta: { index: 3 },
                         },
                     ],
                 },
@@ -271,31 +272,31 @@ export default new Router({
                         {
                             path: "personCenter",
                             component: require("@/view/geren/personCenter").default,
-                            meta: { index: 0, function_name: "个人中心" },
+                            meta: { index: 0 },
                         },
                         // 邀请有奖
                         {
                             path: "Invitation",
                             component: require("@/view/geren/invitation").default,
-                            meta: { index: 1, function_name: "个人中心" },
+                            meta: { index: 1 },
                         },
                         // 积分明细
                         {
                             path: "goldCoinDetails",
                             component: require("@/view/geren/goldCoinDetails").default,
-                            meta: { index: 2, function_name: "个人中心" },
+                            meta: { index: 2 },
                         },
                         // 账户设置
                         {
                             path: "accountSettings",
                             component: require("@/view/geren/accountSettings").default,
-                            meta: { index: 3, function_name: "个人中心" },
+                            meta: { index: 3 },
                         },
                         // vip充值
                         {
                             path: "vip",
                             component: require("@/view/geren/vip").default,
-                            meta: { index: 4, function_name: "个人中心" },
+                            meta: { index: 4 },
                         },
                     ],
                 },
@@ -307,3 +308,12 @@ export default new Router({
         // },
     ],
 });
+
+routes.beforeResolve((to, from, next) => {
+    if (to.meta.hasAuthority) {
+        to.meta.authorityInfo = store.state.authorityInfo[to.fullPath.split("/")[1].split("-")[0]];
+    }
+    next();
+});
+
+export default routes;

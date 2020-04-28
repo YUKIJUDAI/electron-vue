@@ -77,10 +77,10 @@
             </el-form-item>
         </el-form>
         <div class="settlement">
-            <div class="settlement-btn" @click="submit">
+            <button class="settlement-btn" @click="submit">
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
-            </div>
+            </button>
             <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price[type].price + browse_price}}</span> 积分，合计消费 <span>{{(price[type].price + browse_price)*countbydays*days}}</span> 积分</p>
             <br />
             <p class="settlement-p-2" v-show="vip_level === 0">升级<span>会员</span> 每单可节省 <span>{{price[type].price + browse_price - price[type].vip_price}}</span> 积分，合计节省 <span>{{(price[type].price + browse_price - price[type].vip_price)*countbydays*days}}</span> 积分</p>
@@ -318,7 +318,7 @@ export default {
         font-size: 16px;
         color: #666;
         span {
-            color: #ff6801;
+            color: @color;
         }
     }
     .el-collapse {
@@ -336,8 +336,8 @@ export default {
                 cursor: pointer;
             }
             .active {
-                border: 1px solid #ff6801;
-                background: #ff6801;
+                border: 1px solid @color;
+                background: @color;
                 color: #fff;
             }
         }
@@ -355,8 +355,8 @@ export default {
             .tc;
             color: #fff;
             cursor: pointer;
-            background: #ff6801;
-            border: 1px solid #ff6801;
+            background: @color;
+            border: 1px solid @color;
             margin-left: 14px;
             border-radius: 4px;
             vertical-align: -1px;
@@ -377,7 +377,7 @@ export default {
             font-size: 28px;
             cursor: pointer;
             vertical-align: -5px;
-            color: #ff6801;
+            color: @color;
         }
         .icon-jiahao {
             margin-left: 10px;
@@ -438,7 +438,7 @@ export default {
             line-height: 40px;
             color: #666;
             span {
-                color: #ff6801;
+                color: @color;
             }
         }
         .settlement-p-2 {
@@ -446,7 +446,7 @@ export default {
             font-size: 15px;
             color: #999;
             span {
-                color: #ff6801;
+                color: @color;
             }
         }
         .settlement-btn {
@@ -454,7 +454,9 @@ export default {
             cursor: pointer;
             width: 180px;
             height: 76px;
-            background: rgba(255, 104, 1, 1);
+            border: 0;
+            background: @color;
+            .tl;
             i {
                 margin-left: 18px;
                 color: #fff;
@@ -471,12 +473,13 @@ export default {
 }
 </style>
 <style lang="less">
+@import url("~@/assets/less/commom.less");
 .liuliangTempFirst {
     .el-collapse-item__header {
         height: 30px;
         line-height: 30px;
         font-size: 15px;
-        color: #ff6801;
+        color: @color;
         border: 0;
     }
     .el-collapse-item__wrap {

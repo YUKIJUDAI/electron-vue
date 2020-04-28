@@ -122,7 +122,7 @@ factory.add("list", {
             http.post("/collect/saveList", data).then((r) => {
                 //hideSycm();
                 from(getAllWindows()).subscribe((i) => {
-                    fromId(i.id, "router-to", ["/heisou/monitor"]);
+                    fromId(i.id, "router-to", ["/heisou-features/monitor"]);
                 });
                 wd("max");
             });

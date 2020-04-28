@@ -6,15 +6,20 @@
                 <div class="main-left-1">
                     <img src="~@/assets/img/level-0.png" class="identity-tag" v-show="userInfo.vip_level === 0">
                     <img src="~@/assets/img/level-1.png" class="identity-tag" v-show="userInfo.vip_level === 1">
+                    <img src="~@/assets/img/level-2.png" class="identity-tag" v-show="userInfo.vip_level === 2">
                     <img src="~@/assets/img/admin.png" class="avatar">
                     <router-link to="/geren/personCenter" tag="div" class="main-login" v-if="isLogin">{{userInfo.user_phone}}</router-link>
                     <div class="main-login" @click="goLogin" v-else>请登录</div>
                 </div>
                 <div class="main-left-ul" v-if="isLogin">
                     <ul>
-                        <li>会员状态：<span>{{userInfo.vip_level === 0 ? '普通会员' : '高级会员'}}</span></li>
-                        <li>积分余额：<span>{{userInfo.gold}}</span></li>
-                        <!-- <li>担保资金：<span>0</span></li> -->
+                        <li>会员状态：<span>{{["游客","普通会员","超级会员"][userInfo.vip_level]}}</span>
+                            <router-link to="/geren/vip" tag="span">{{["开通","升级","续费"][userInfo.vip_level]}}</router-link>
+                        </li>
+                        <li>积分余额：<span>{{userInfo.gold}}</span>
+                            <router-link to="/geren/goldCoinDetails" tag="span">充值</router-link>
+                        </li>
+                        <li>担保资金：<span>0</span></li>
                     </ul>
                 </div>
                 <div class="main-left-2 clearfix">
@@ -63,16 +68,16 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <router-link tag="li" class="clearfix" to="/index" :class="{active:$route.path === '/index'}">
+                        <router-link tag="li" class="clearfix" to="/index" :class="{active:$route.path.includes('index')}">
                             <i class="iconfont icon-shouye"></i>
                             <span>首页</span>
                         </router-link>
-                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.meta.function_name === item.function_name}" @click="open(item.route,item.is_uphold)">
-                            <img :src="item.icon_y" v-if="$route.meta.function_name === item.function_name">
+                        <li class="clearfix" v-for="(item,i) in menuInfo[page]" :key="i" :class="{active:$route.path.includes(item.route) && item.route !==''}" @click="open(item.route,item.is_uphold)">
+                            <img :src="item.icon_y" v-if="$route.path.includes(item.route) && item.route !==''">
                             <img :src="item.icon_h" v-else>
                             <span>{{item.copy_title}}</span>
                         </li>
-                        <li class="clearfix" :class="{active:$route.meta.function_name === '个人中心'}" @click="open('/geren/personCenter',false)">
+                        <li class="clearfix" :class="{active:$route.path.includes('geren')}" @click="open('geren/personCenter',false)">
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </li>
@@ -81,6 +86,10 @@
                             <span>测试</span>
                         </router-link>
                     </ul>
+                    <div class="page">
+                        <i class="arrow arrow-left" @click="prev"></i>
+                        <i class="arrow" @click="next"></i>
+                    </div>
                 </div>
             </div>
             <div class="main-right">
@@ -100,7 +109,8 @@ export default {
     components: { heisouTitle },
     data() {
         return {
-            info: {}
+            info: {},
+            page: 0
         }
     },
     computed: {
@@ -111,7 +121,16 @@ export default {
             return this.$store.state.userInfo;
         },
         menuInfo() {
-            return this.$store.state.menuInfo || [];
+            var arr = [];
+            var menu = this.$store.state.menuInfo;
+            var num = 10;
+            if (menu.length === 0) return [];
+            var index = ~~(menu.length / num);
+            for (let i = 1; i <= index; i++) {
+                arr.push(menu.slice((i - 1) * num, i * num - 1));
+            }
+            arr.push(menu.slice(index * num, -1));
+            return arr;
         }
     },
     mounted() {
@@ -146,7 +165,7 @@ export default {
             if (Boolean(is_uphold)) {
                 this.$refs.heisouTitle.goUphold();
             } else {
-                this.$router.push(url);
+                this.$router.push("/" + url);
             }
         },
         goLogin() {
@@ -154,6 +173,12 @@ export default {
         },
         goRegistered() {
             this.$refs.heisouTitle.goRegistered()
+        },
+        prev() {
+            this.page > 0 && this.page--;
+        },
+        next() {
+            this.page < this.menuInfo.length && this.page++;
         }
     },
     watch: {
@@ -215,11 +240,16 @@ export default {
                 }
             }
             .main-left-ul {
-                padding: 0 33px 20px 33px;
+                padding: 0 5px 10px 5px;
                 font-size: 12px;
                 color: #333;
                 span {
-                    color: #ff6801;
+                    color: @color;
+                    &:nth-child(2) {
+                        padding-left: 5px;
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
                 }
                 li {
                     height: 24px;
@@ -228,7 +258,7 @@ export default {
             .main-left-2 {
                 .left-2-left {
                     .fl;
-                    background: rgba(255, 105, 2, 1);
+                    background: @color;
                     .l-h(36px);
                     color: #fff;
                     font-size: 14px;
@@ -239,10 +269,10 @@ export default {
                 .left-2-right {
                     .fl;
                     .l-h(34px);
-                    color: #ff6902;
+                    color: @color;
                     font-size: 14px;
                     .tc;
-                    border: 1px solid rgba(255, 105, 2, 1);
+                    border: 1px solid @color;
                     width: 49%;
                     cursor: pointer;
                 }
@@ -276,10 +306,10 @@ export default {
                 .active {
                     background: rgba(241, 245, 251, 1);
                     i {
-                        color: #ff6801;
+                        color: @color;
                     }
                     span {
-                        color: #ff6801;
+                        color: @color;
                     }
                 }
             }
@@ -290,6 +320,20 @@ export default {
             margin-bottom: 20px;
             background: rgba(255, 255, 255, 1);
             box-shadow: -4px 0px 11px 1px rgba(0, 32, 95, 0.1);
+        }
+    }
+    .page {
+        margin-top: 20px;
+        .tc;
+        i {
+            .dib;
+            background: url("~@/assets/icon/arrow.png") no-repeat;
+            .wh(30px);
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .arrow-left {
+            transform: rotate(180deg);
         }
     }
 }
@@ -319,16 +363,16 @@ export default {
             }
         }
         .active {
-            border-bottom: 3px solid #ff6801;
+            border-bottom: 3px solid @color;
             div {
-                color: #ff6801;
+                color: @color;
             }
         }
     }
     .main-container-navigation-right {
         .fr;
         margin-top: 12px;
-        color: #ff6801;
+        color: @color;
         cursor: pointer;
     }
     .main-container-view {
@@ -338,9 +382,23 @@ export default {
         overflow: hidden;
     }
 }
-
 .el-popper[x-placement^="bottom"] {
     margin-top: 0;
+}
+.el-button--primary {
+    background-color: @color !important;
+    border-color: @color !important;
+}
+.el-button--primary.is-plain {
+    color: @color !important;
+    background: rgb(255, 240, 230) !important;
+    border-color: rgb(255, 195, 153) !important;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: @color !important;
+}
+.el-button--text {
+    color: @color !important;
 }
 ._hover {
     margin: -12px;
@@ -373,5 +431,14 @@ export default {
         height: 84px;
         display: block;
     }
+}
+.headStyle {
+    color: @color;
+    background-color: rgba(255, 105, 2, 0.08) !important;
+}
+.headStyle2 {
+    background-color: @color !important;
+    border-color: @color;
+    color: #fff;
 }
 </style>

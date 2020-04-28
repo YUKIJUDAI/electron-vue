@@ -182,8 +182,8 @@ export default {
                 padding: 2px 10px;
                 .l-h(28px);
                 background: rgba(255, 255, 255, 1);
-                border: 1px solid rgba(255, 105, 2, 1);
-                color: rgba(255, 105, 2, 1);
+                border: 1px solid @color;
+                color: @color;
                 border-radius: 13px;
                 .tc;
                 font-size: 14px;
@@ -191,7 +191,7 @@ export default {
             }
             .span-2 {
                 font-size: 14px;
-                color: rgba(255, 105, 2, 1);
+                color: @color;
                 cursor: pointer;
             }
         }
@@ -229,7 +229,7 @@ export default {
         }
         .span-1 {
             font-size: 14px;
-            color: rgba(255, 105, 2, 1);
+            color: @color;
             cursor: pointer;
         }
         .span-2 {

@@ -8,7 +8,8 @@ Vue.use(Vuex);
 const state = {
     userInfo: {}, // 用户信息
     taobaoInfo: {}, // 淘宝信息
-    menuInfo: [] // 菜单信息
+    menuInfo: [], // 菜单信息
+    authorityInfo: [], //权限信息
 };
 
 const mutations = {
@@ -17,6 +18,9 @@ const mutations = {
     },
     SET_MENU_INFO(state, arr) {
         state.menuInfo = arr;
+    },
+    SET_AUTHORITY_INFO(state, o) {
+        state.authorityInfo = o;
     }
 };
 
@@ -30,7 +34,10 @@ const actions = {
     },
     set_menu_info({ commit }, arr) {
         commit("SET_MENU_INFO", arr);
-    }
+    },
+    set_authority_info({ commit }, o) {
+        commit("SET_AUTHORITY_INFO", o);
+    },
 };
 
 export default new Vuex.Store({
@@ -38,5 +45,5 @@ export default new Vuex.Store({
     mutations,
     actions,
     plugins: [createPersistedState()],
-    strict: process.env.NODE_ENV !== "production"
+    strict: process.env.NODE_ENV !== "production",
 });
