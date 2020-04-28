@@ -46,9 +46,9 @@ new Vue({
 registerMicroApps([
     {
         name: "vue app",
-        entry: { html: "//localhost:3000" },
+        entry: "//localhost:3000",
         container: "#myapp",
-        activeRule: "/vue-test",
+        activeRule: "/#/vue-test",
     },
 ]);
 
