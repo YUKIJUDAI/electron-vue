@@ -3,11 +3,11 @@
         <div class="recharge-1" v-if="paying">
             <div class="account clearfix">
                 <p>开通账号：<span>{{$store.state.userInfo.user_phone}}</span></p>
-                <p>开通时常：<span>{{price[checked].value}}</span></p>
-                <p>到期时间：<span>{{price[checked].vip_end_time}}</span></p>
+                <p>开通时常：<span>{{price[vip_level-1][checked].value}}</span></p>
+                <p>到期时间：<span>{{price[vip_level-1][checked].vip_end_time}}</span></p>
             </div>
             <ul class="list clearfix">
-                <li :class="{checked:checked === i}" v-for="(item,i) in price" :key="i" @click="checked = i">
+                <li :class="{checked:checked === i}" v-for="(item,i) in price[vip_level-1]" :key="i" @click="checked = i">
                     <img src="~@/assets/icon/checked.png" class="check" v-show="checked === i">
                     <div>{{item.price}}<span>元</span></div>
                     <p>{{item.value}}</p>
@@ -40,14 +40,14 @@ export default {
         return {
             vip_level: 2,
             pay_type: 1,
-            price: [],
+            price: [[],[]],
             paying: true,
             checked: 0
         }
     },
     created() {
         this.$fetch.post("/price/getVipPrice").then(res => {
-            0 === res.code && (this.price = res.data.price);
+            0 === res.code && (this.price = [res.data.price, res.data.sup_price]);
         });
     },
     methods: {
