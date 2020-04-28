@@ -75,7 +75,7 @@ export default {
 @import url("~@/assets/less/commom.less");
 
 .vip {
-    padding-top: 25px;
+    padding-top: 25px !important;
     .left,
     .center,
     .right {
