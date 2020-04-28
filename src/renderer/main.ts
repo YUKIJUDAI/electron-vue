@@ -46,7 +46,7 @@ new Vue({
 registerMicroApps([
     {
         name: "vue app",
-        entry: { scripts: ["//localhost:3000/app.js", "//localhost:3000/chunk-vendors.js"] },
+        entry: { html: "//localhost:3000" },
         container: "#myapp",
         activeRule: "/vue-test",
     },
