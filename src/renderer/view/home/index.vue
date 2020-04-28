@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="main-container home">
         <div class="swiper-container banner" id="swiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="(item,i) in banner" :key="i">
@@ -116,12 +116,7 @@ export default {
 <style lang="less" scoped>
 @import url("~@/assets/less/commom.less");
 .home {
-    width: calc(~"100% - 40px");
     padding: 0 20px;
-    min-height: calc(~"87vh");
-    .banner {
-        padding-top: 14px;
-    }
     .banner-img {
         width: 100%;
         height: auto;

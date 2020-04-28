@@ -47,7 +47,7 @@ registerMicroApps([
     {
         name: "vue app",
         entry: "//localhost:3000",
-        container: "#myapp",
+        container: "#myApp",
         activeRule: "/#/vue-test",
     },
 ]);

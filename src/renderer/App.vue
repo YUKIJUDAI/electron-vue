@@ -316,6 +316,8 @@ export default {
             }
         }
         .main-right {
+            padding-top: 15px;
+            min-height: calc(~"87vh - 15px");
             margin-left: 208px;
             margin-right: 20px;
             margin-bottom: 20px;
@@ -342,8 +344,7 @@ export default {
 <style lang="less">
 @import url("~@/assets/less/commom.less");
 .main-container {
-    padding-top: 15px;
-    min-height: calc(~"87vh - 15px");
+    
     .main-container-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
