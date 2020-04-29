@@ -6,8 +6,8 @@ import { registerMicroApps, start } from "qiankun";
 
 import http from "@/util/http";
 import fetch from "@/util/fetch";
-import authority from "@/util/authority";
 import { log } from "@/util/electronFun";
+import * as util from "@/util/util";
 import "@/assets/theme/index.css";
 import "@/assets/iconfont/iconfont.css";
 
@@ -30,8 +30,6 @@ const errorHandler = (error) => {
     log(error.toString());
 };
 
-Vue.directive("has", authority);
-
 Vue.prototype.$log = errorHandler;
 Vue.config.errorHandler = errorHandler;
 
@@ -49,6 +47,7 @@ registerMicroApps([
         entry: "//localhost:3000",
         container: "#myApp",
         activeRule: "/#/vue-test",
+        props: { util },
     },
 ]);
 
