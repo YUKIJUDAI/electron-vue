@@ -81,10 +81,10 @@
                             <i class="iconfont icon-tubiao"></i>
                             <span>个人中心</span>
                         </li>
-                        <!-- <router-link tag="li" class="clearfix" to="/vue-test">
+                        <router-link tag="li" class="clearfix" to="/vue-test">
                             <i class="iconfont icon-shouye"></i>
                             <span>测试</span>
-                        </router-link> -->
+                        </router-link>
                     </ul>
                     <div class="page">
                         <i class="arrow arrow-left" @click="prev"></i>

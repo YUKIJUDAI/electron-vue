@@ -2,12 +2,12 @@ import Vue from "vue";
 import echarts from "echarts";
 import ElementUI from "element-ui";
 import Electron from "vue-electron";
+import { Subject } from "rxjs";
 import { registerMicroApps, start } from "qiankun";
 
 import http from "@/util/http";
 import fetch from "@/util/fetch";
-import { log } from "@/util/electronFun";
-import * as util from "@/util/util";
+import * as electronFun from "@/util/electronFun";
 import "@/assets/theme/index.css";
 import "@/assets/iconfont/iconfont.css";
 
@@ -21,7 +21,7 @@ Vue.use(Electron);
 Vue.use(ElementUI, { size: "small", zIndex: 3000 });
 
 const errorHandler = (error) => {
-    log(error.toString());
+    electronFun.log(error.toString());
 };
 
 Vue.prototype.$echarts = echarts;
@@ -35,6 +35,8 @@ Vue.config.errorHandler = errorHandler;
 Vue.filter("hasHttp", function(value) {
     return value && value.includes("http") ? value : "https:" + value;
 });
+
+var subject = new Subject();
 
 /* eslint-disable no-new */
 new Vue({
@@ -50,7 +52,7 @@ registerMicroApps([
         entry: "//localhost:3000",
         container: "#myApp",
         activeRule: "/#/vue-test",
-        props: { util },
+        props: { electronFun, data: store.state, subject },
     },
 ]);
 
