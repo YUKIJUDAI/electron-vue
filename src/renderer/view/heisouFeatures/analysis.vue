@@ -4,12 +4,12 @@
             <el-table :data="goodsList" border style="width: 100%" class="goodsInfo">
                 <el-table-column prop="" label="主图" width="70">
                     <template slot-scope="scope">
-                        <img class="picture" :src="scope.row.pictUrl" alt="" />
+                        <img class="picture" :src="scope.row.pictUrl | hasHttp" alt="" />
                     </template>
                 </el-table-column>
                 <el-table-column prop="itemId" label="宝贝ID" width="110">
                 </el-table-column>
-                <el-table-column prop="goods_name" label="宝贝标题" width="220">
+                <el-table-column prop="goods_name" label="宝贝标题" width="210">
                 </el-table-column>
                 <el-table-column prop="shop_name" label="店铺名称" width="140">
                 </el-table-column>
@@ -44,7 +44,7 @@
             <span class="info-title">宝贝信息</span>
             <el-button type="primary" class="info-btn" @click="monitoringAuthority('addFlag',true)">选择宝贝</el-button>
             <div class="competition-info" v-show="goodsInfo.itemId">
-                <img :src="goodsInfo.pictUrl">
+                <img :src="goodsInfo.pictUrl | hasHttp">
                 <div>
                     <span class="title">{{goodsInfo.goods_name}}</span>
                     <br />

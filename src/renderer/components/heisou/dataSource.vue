@@ -22,15 +22,15 @@
                 </el-table-column>
                 <el-table-column prop="uvPrice" label="UV价值" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="一键分析" align="center">
+                <!-- <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
                         <p>查看</p>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </div>
         <div class="data-source-table" v-show="tabIndex === 1">
-            <el-table :data="tableData0" border style="width: 100%" height="500">
+            <el-table :data="tableData1" border style="width: 100%" height="500">
                 <el-table-column prop="data_date" label="开始日期" align="center" width="150px">
                 </el-table-column>
                 <el-table-column prop="compete_keywords" label="关键词" align="center" width="200px">
@@ -43,15 +43,15 @@
                 </el-table-column>
                 <el-table-column prop="payRateRatio" label="转化率/%" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="一键分析" align="center">
+                <!-- <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
                         <p>查看</p>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </div>
         <div class="data-source-table" v-show="tabIndex === 2">
-            <el-table :data="tableData1" border style="width: 100%" height="500">
+            <el-table :data="tableData2" border style="width: 100%" height="500">
                 <el-table-column prop="data_date" label="开始日期" align="center" width="150px">
                 </el-table-column>
                 <el-table-column prop="source_name" label="渠道" align="center">
@@ -68,15 +68,15 @@
                 </el-table-column>
                 <el-table-column prop="uvPrice" label="UV价值" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="一键分析" align="center">
+                <!-- <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
                         <p>查看</p>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </div>
         <div class="data-source-table" v-show="tabIndex === 3">
-            <el-table :data="tableData2" border style="width: 100%" height="500">
+            <el-table :data="tableData3" border style="width: 100%" height="500">
                 <el-table-column prop="analysis_time" label="开始日期" align="center" width="150px">
                 </el-table-column>
                 <el-table-column prop="uvIndexNum" label="访客数" align="center">
@@ -93,11 +93,11 @@
                 </el-table-column>
                 <el-table-column prop="tradeNum" label="交易额" align="center">
                 </el-table-column>
-                <el-table-column prop="" label="一键分析" align="center">
+                <!-- <el-table-column prop="" label="一键分析" align="center">
                     <template slot-scope="scope">
                         <p>查看</p>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </div>
     </div>
@@ -141,6 +141,7 @@ export default {
         },
         getSource() {
             this.$http.post("/collect/getSource", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
+                console.log(res.data);
                 0 === res.code && (this.tableData2 = res.data);
             });
         },

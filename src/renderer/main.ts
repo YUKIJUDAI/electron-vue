@@ -20,18 +20,21 @@ if (!process.env.IS_WEB) Vue.use(require("vue-electron"));
 Vue.use(Electron);
 Vue.use(ElementUI, { size: "small", zIndex: 3000 });
 
-Vue.prototype.$echarts = echarts;
-Vue.prototype.$http = http;
-Vue.prototype.$fetch = fetch;
-
-Vue.config.productionTip = false;
-
 const errorHandler = (error) => {
     log(error.toString());
 };
 
+Vue.prototype.$echarts = echarts;
+Vue.prototype.$http = http;
+Vue.prototype.$fetch = fetch;
 Vue.prototype.$log = errorHandler;
+
+Vue.config.productionTip = false;
 Vue.config.errorHandler = errorHandler;
+
+Vue.filter("hasHttp", function(value) {
+    return value && value.includes("http") ? value : "https:" + value;
+});
 
 /* eslint-disable no-new */
 new Vue({

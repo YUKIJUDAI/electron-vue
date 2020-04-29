@@ -36,7 +36,7 @@
             <div class="tread">
                 <div class="tread-title clearfix">
                     <div class="tread-title-left">
-                        <img :src="treadActiveData.pictUrl">
+                        <img :src="treadActiveData.pictUrl | hasHttp">
                         <div>
                             <p>{{treadActiveData.goods_name}}</p>
                             <p>{{treadActiveData.shop_name}}</p>
@@ -61,9 +61,9 @@
                                 <el-table-column prop="itemId" label="宝贝ID" width="120"> </el-table-column>
                                 <el-table-column prop="analysis_time_str" label="日期" width="120"> </el-table-column>
                                 <el-table-column prop="uvIndexNum" label="访客数"> </el-table-column>
-                                <el-table-column prop="tradeNum" label="买家数"> </el-table-column>
-                                <el-table-column prop="payAmount" label="支付金额"> </el-table-column>
-                                <el-table-column prop="price" label="客单价"> </el-table-column>
+                                <el-table-column prop="payByrCntIndexNum" label="买家数"> </el-table-column>
+                                <el-table-column prop="tradeNum" label="支付金额"> </el-table-column>
+                                <el-table-column prop="per_price" label="客单价"> </el-table-column>
                                 <el-table-column prop="payRateRatio" label="转化率/%"> </el-table-column>
                                 <el-table-column prop="uvPrice" label="UV价值"> </el-table-column>
                             </el-table>
@@ -173,7 +173,7 @@
                 <el-table-column prop="monitor_days" label="监控天数" width="70" fixed align="center"> </el-table-column>
                 <el-table-column label="主图" width="70" fixed align="center">
                     <template slot-scope="scope">
-                        <img class="picture" :src="scope.row.pictUrl" alt="" />
+                        <img class="picture" :src="scope.row.pictUrl | hasHttp" alt="" />
                     </template>
                 </el-table-column>
                 <el-table-column prop="itemId" label="宝贝ID" width="120" fixed align="center"> </el-table-column>
@@ -185,7 +185,7 @@
                 <el-table-column prop="payRateRatio" label="转化率/%" align="center"> </el-table-column>
                 <el-table-column prop="uvPrice" label="UV价值" align="center"> </el-table-column>
 
-                <el-table-column label="深度智能分析" width="120" align="center">
+                <!-- <el-table-column label="深度智能分析" width="120" align="center">
                     <template slot-scope="scope">
                         <p>点击展开智能分析</p>
                     </template>
@@ -194,7 +194,7 @@
                     <template slot-scope="scope">
                         <p>扫码添加咨询诊断</p>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </div>
         <!-- 下部表格结束 -->
