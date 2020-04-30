@@ -2,8 +2,8 @@
     <div class="title">
         <div class="header clearfix" style="-webkit-app-region: drag">
             <router-link class="msg" tag="div" to="/main" style="-webkit-app-region: no-drag">
-                <img src="~@/assets/icon/logo.png" class="logo" />
-                <span class="header-title">火星情报<i>v{{version_num}}</i></span>
+                <img :src="serviceInfo.logo_white" class="logo" />
+                <span class="header-title">{{serviceInfo.name}}<i>v{{version_num}}</i></span>
             </router-link>
             <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
                 <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
@@ -128,6 +128,7 @@ import factory from "@/util/factory";
 
 export default {
     components: { password },
+    props: ["serviceInfo"],
     data() {
         return {
             websock: null,

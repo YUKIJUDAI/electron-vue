@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <heisou-title ref="heisouTitle"></heisou-title>
+        <heisou-title ref="heisouTitle" :serviceInfo="serviceInfo"></heisou-title>
         <div class="body clearfix">
             <div class="main-left">
                 <div class="main-left-1">
@@ -46,22 +46,22 @@
                     </el-popover>
                     <el-popover placement="bottom" trigger="hover" :offset="-43">
                         <div class="_hover">
-                            <p>{{info.kefu_name}}</p>
+                            <p>{{serviceInfo.kefu_name}}</p>
                             <ul>
                                 <li>
                                     <i class="iconfont icon-shouji1"></i>
-                                    手机：<span>{{info.kefu_phone}}</span>
+                                    手机：<span>{{serviceInfo.kefu_phone}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
-                                    Q Q：<span>{{info.kefu_qq}}</span>
+                                    Q Q：<span>{{serviceInfo.kefu_qq}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-weixin"></i>
-                                    微信：<span>{{info.kefu_wechat}}</span>
+                                    微信：<span>{{serviceInfo.kefu_wechat}}</span>
                                 </li>
                             </ul>
-                            <img :src="info.kefu_qr_code">
+                            <img :src="serviceInfo.kefu_qr_code">
                         </div>
                         <div class="left-2-right" slot="reference">售后客服</div>
                     </el-popover>
@@ -110,8 +110,7 @@ export default {
     components: { heisouTitle },
     data() {
         return {
-            info: {},
-            bossInfo:{},
+            bossInfo: {},
             page: 0
         }
     },
@@ -133,6 +132,9 @@ export default {
             }
             arr.push(menu.slice(index * num, -1));
             return arr;
+        },
+        serviceInfo(){
+            return this.$store.state.serviceInfo;
         }
     },
     mounted() {
@@ -150,7 +152,7 @@ export default {
     methods: {
         async getServiceCode() {
             var res = await this.$fetch.post("/index/getServiceCode");
-            0 === res.code && (this.info = res.data);
+            0 === res.code && this.$store.dispatch("set_service_info", res.data);
         },
         async getBossCode() {
             var res = await this.$fetch.post("/index/getBossCode");
