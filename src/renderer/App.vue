@@ -86,9 +86,9 @@
                             <span>测试</span>
                         </router-link> -->
                     </ul>
-                    <div class="page">
-                        <i class="arrow arrow-left" @click="prev"></i>
-                        <i class="arrow" @click="next"></i>
+                    <div class="page" @click="next">
+                        <div class="arrow arrow-1"></div>
+                        <div class="arrow arrow-2"></div>
                     </div>
                 </div>
             </div>
@@ -175,11 +175,8 @@ export default {
         goRegistered() {
             this.$refs.heisouTitle.goRegistered()
         },
-        prev() {
-            this.page > 0 && this.page--;
-        },
         next() {
-            this.page < this.menuInfo.length && this.page++;
+            this.page < this.menuInfo.length - 1 ? this.page++ : this.page = 0;
         }
     },
     watch: {
@@ -326,17 +323,76 @@ export default {
         }
     }
     .page {
-        margin-top: 20px;
-        .tc;
-        i {
-            .dib;
-            background: url("~@/assets/icon/arrow.png") no-repeat;
-            .wh(30px);
-            cursor: pointer;
-            margin-right: 15px;
+        margin-top: 10px;
+        height: 40px;
+        position: relative;
+        cursor: pointer;
+        .arrow {
+            position: absolute;
+            left: 40%;
+            top: 30%;
         }
-        .arrow-left {
-            transform: rotate(180deg);
+
+        .arrow-1 {
+            -webkit-animation: arrow-movement 2s ease-in-out infinite;
+            animation: arrow-movement 2s ease-in-out infinite;
+        }
+
+        .arrow-2 {
+            -webkit-animation: arrow-movement 2s 1s ease-in-out infinite;
+            animation: arrow-movement 2s 1s ease-in-out infinite;
+        }
+
+        .arrow:before,
+        .arrow:after {
+            background: #ccc;
+            content: "";
+            display: block;
+            height: 3px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+        }
+
+        .arrow:before {
+            -webkit-transform: rotate(45deg) translateX(-10%);
+            transform: rotate(45deg) translateX(-10%);
+            -webkit-transform-origin: top left;
+            transform-origin: top left;
+        }
+
+        .arrow:after {
+            -webkit-transform: rotate(-45deg) translateX(10%);
+            transform: rotate(-45deg) translateX(10%);
+            -webkit-transform-origin: top right;
+            transform-origin: top right;
+        }
+
+        @-webkit-keyframes arrow-movement {
+            0% {
+                opacity: 0;
+                top: 0%;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes arrow-movement {
+            0% {
+                opacity: 0;
+                top: 0%;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
         }
     }
 }
@@ -344,7 +400,6 @@ export default {
 <style lang="less">
 @import url("~@/assets/less/commom.less");
 .main-container {
-    
     .main-container-navigation {
         margin: 0 20px;
         border-bottom: 1px solid #d5d5d5;
