@@ -52,7 +52,7 @@
                 </ul>
             </div>
         </div>
-        <p class="p-3">邀请码：{{userInfo.invite_url | code}}，<span @click="copy(userInfo.invite_url)">点击复制邀请链接</span></p>
+        <p class="p-3">邀请码：{{userInfo.invite_url | code}} <span @click="copy(userInfo.invite_url)">点击复制邀请链接</span></p>
         <p class="p-4">邀请商家成功注册送7天VIP会员</p>
         <div class="body">
             <div class="body-con">

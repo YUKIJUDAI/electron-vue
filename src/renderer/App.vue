@@ -25,22 +25,22 @@
                 <div class="main-left-2 clearfix">
                     <el-popover placement="bottom" trigger="hover" :offset="44">
                         <div class="_hover">
-                            <p>{{info.boss_name}}</p>
+                            <p>{{bossInfo.boss_name}}</p>
                             <ul>
                                 <li>
                                     <i class="iconfont icon-shouji1"></i>
-                                    手机：<span>{{info.boss_phone}}</span>
+                                    手机：<span>{{bossInfo.boss_phone}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
-                                    Q Q：<span>{{info.boss_qq}}</span>
+                                    Q Q：<span>{{bossInfo.boss_qq}}</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-weixin"></i>
-                                    微信：<span>{{info.boss_wechat}}</span>
+                                    微信：<span>{{bossInfo.boss_wechat}}</span>
                                 </li>
                             </ul>
-                            <img :src="info.boss_qr_code">
+                            <img :src="bossInfo.boss_qr_code">
                         </div>
                         <div class="left-2-left" slot="reference">客户经理</div>
                     </el-popover>
@@ -78,7 +78,7 @@
                             <span>{{item.copy_title}}</span>
                         </li>
                         <li class="clearfix" :class="{active:$route.path.includes('geren')}" @click="open('geren/personCenter',false)">
-                            <i class="iconfont icon-tubiao"></i>
+                            <i class="iconfont icon-shouye"></i>
                             <span>个人中心</span>
                         </li>
                         <!-- <router-link tag="li" class="clearfix" to="/vue-test">
@@ -111,6 +111,7 @@ export default {
     data() {
         return {
             info: {},
+            bossInfo:{},
             page: 0
         }
     },
@@ -144,11 +145,16 @@ export default {
 
         this.getUserInfo();
         this.getServiceCode();
+        this.getBossCode();
     },
     methods: {
         async getServiceCode() {
             var res = await this.$fetch.post("/index/getServiceCode");
             0 === res.code && (this.info = res.data);
+        },
+        async getBossCode() {
+            var res = await this.$fetch.post("/index/getBossCode");
+            0 === res.code && (this.bossInfo = res.data);
         },
         async getUserInfo() {
             if (!this.isLogin) {
@@ -238,7 +244,7 @@ export default {
                 }
             }
             .main-left-ul {
-                padding: 0 5px 10px 5px;
+                padding: 0 10px 10px 10px;
                 font-size: 12px;
                 color: #333;
                 span {

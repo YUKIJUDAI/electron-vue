@@ -3,11 +3,11 @@
         <div class="recharge-1" v-if="paying">
             <div class="account clearfix">
                 <p>开通账号：<span>{{$store.state.userInfo.user_phone}}</span></p>
-                <p>开通时常：<span>{{price[vip_level][checked].value}}</span></p>
-                <p>到期时间：<span>{{price[vip_level][checked].vip_end_time}}</span></p>
+                <p>开通时常：<span>{{price[vip_index][checked].value}}</span></p>
+                <p>到期时间：<span>{{price[vip_index][checked].vip_end_time}}</span></p>
             </div>
             <ul class="list clearfix">
-                <li :class="{checked:checked === i}" v-for="(item,i) in price[vip_level]" :key="i" @click="checked = i">
+                <li :class="{checked:checked === i}" v-for="(item,i) in price[vip_index]" :key="i" @click="checked = i">
                     <img src="~@/assets/icon/checked.png" class="check" v-show="checked === i">
                     <div>{{item.price}}<span>元</span></div>
                     <p>{{item.value}}</p>
@@ -15,8 +15,17 @@
             </ul>
             <div class="pay-way clearfix">
                 <p>会员类型：</p>
-                <div @click="vip_level = 0" class="pay-way-o" :class="{active:vip_level === 0}">普通会员</div>
-                <div @click="vip_level = 1" class="pay-way-o" :class="{active:vip_level === 1}">超级会员</div>
+                <div v-if="vip_level === 0">
+                    <div @click="vip_index = 0,checked = 0" class="pay-way-o" :class="{active:vip_index === 0}">普通会员</div>
+                    <div @click="vip_index = 1,checked = 0" class="pay-way-o" :class="{active:vip_index === 1}">超级会员</div>
+                </div>
+                <div v-else-if="vip_level === 1">
+                    <div @click="vip_index = 0,checked = 0" class="pay-way-o" :class="{active:vip_index === 0}">续费普通会员</div>
+                    <div @click="vip_index = 1,checked = 0" class="pay-way-o" :class="{active:vip_index === 1}">升级超级会员</div>
+                </div>
+                <div v-else-if="vip_level === 2">
+                    <div @click="vip_index = 1,checked = 0" class="pay-way-o" :class="{active:vip_index === 1}">续费超级会员</div>
+                </div>
             </div>
             <div class="pay-way clearfix">
                 <p>支付方式：</p>
@@ -26,7 +35,7 @@
                 <div class="pay" @click="paying = false">开通</div>
             </div>
         </div>
-        <paytel v-else :pay_type="pay_type" :serve_id="price[vip_level][checked].id"></paytel>
+        <paytel v-else :pay_type="pay_type" :serve_id="price[vip_index][checked].id"></paytel>
     </el-dialog>
 </template>
 
@@ -38,16 +47,21 @@ export default {
     props: ["value"],
     data() {
         return {
-            vip_level: 1,
+            vip_index: 1,
             pay_type: 1,
-            price: [[],[]],
+            price: [[], []],
             paying: true,
             checked: 0
         }
     },
+    computed: {
+        vip_level() {
+            return this.$store.state.userInfo.vip_level;
+        }
+    },
     created() {
         this.$fetch.post("/price/getVipPrice").then(res => {
-            0 === res.code && (this.price = [res.data.price, res.data.sup_price]);
+            0 === res.code && (this.price = [this.vip_level === 2 ? [] : res.data.price, res.data.sup_price]);
         });
     },
     methods: {
