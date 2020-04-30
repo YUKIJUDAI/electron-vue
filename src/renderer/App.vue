@@ -133,7 +133,7 @@ export default {
             arr.push(menu.slice(index * num, -1));
             return arr;
         },
-        serviceInfo(){
+        serviceInfo() {
             return this.$store.state.serviceInfo;
         }
     },
@@ -163,7 +163,7 @@ export default {
                 return;
             }
             var res = await this.$fetch.post("/user/getUserInfo");
-            0 === res.code && this.$store.dispatch("set_user_info", { gold: res.data.gold });
+            0 === res.code && this.$store.dispatch("set_user_info", res.data);
         },
         // 打开
         open(url, is_uphold) {

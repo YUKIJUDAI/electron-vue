@@ -33,7 +33,7 @@ const actions = {
         if (JSON.stringify(obj) === "{}") {
             commit("SET_USER_INFO", {});
         } else {
-            commit("SET_USER_INFO", Object.assign(obj, state.userInfo));
+            commit("SET_USER_INFO", Object.assign(state.userInfo, obj));
         }
     },
     set_menu_info({ commit }, arr) {
@@ -44,7 +44,7 @@ const actions = {
     },
     set_service_info({ commit }, o) {
         commit("SET_SERVICE_INFO", o);
-    }
+    },
 };
 
 export default new Vuex.Store({

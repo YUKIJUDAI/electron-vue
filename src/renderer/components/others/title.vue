@@ -265,7 +265,6 @@ export default {
             this.$fetch.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", res.data);
                     this.$message.success(res.msg);
                     this.loginFlag = false;
                     this.openSocket();

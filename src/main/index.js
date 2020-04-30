@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
 const log4js = require("log4js");
+const config = require(__static + "/config.json");
 
 if (process.env.NODE_ENV !== "development") {
     global.__static = path.join(__dirname, "/static").replace(/\\/g, "\\\\");
