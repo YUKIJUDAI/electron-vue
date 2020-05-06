@@ -116,7 +116,7 @@ export default {
     },
     computed: {
         isLogin() {
-            return !isEmpty(this.$store.state.userInfo.token);
+            return !isEmpty(this.userInfo.token);
         },
         userInfo() {
             return this.$store.state.userInfo;

@@ -92,6 +92,12 @@
                 </div>
             </div>
         </el-dialog>
+        <el-dialog title="新人礼包" :visible.sync="customerServiceFlag" width="558px">
+            <div class="customerService">
+                <p>恭喜您成功注册，请联系客服领取新人专属会员大礼包</p>
+                <img :src="serviceInfo.kefu_qr_code">
+            </div>
+        </el-dialog>
         <el-dialog title="功能维护中" :visible.sync="upholeFlag" width="400px">
             <div class="uphole">
                 <img src="~@/assets/img/uphold.png" alt="">
@@ -146,6 +152,7 @@ export default {
             upholeFlag: false,
             loginFlag: false,
             registeredFlag: false,
+            customerServiceFlag: false,
             forgetFlag: false,
             // 更新弹窗
             updateFlag: false,
@@ -200,6 +207,10 @@ export default {
                     openAd(redata.ads_id);
                 }
             };
+        },
+        // 关闭socket
+        closeSocket() {
+            this.websock && this.websock.close();
         },
         // 随机key
         getKey() {
@@ -266,6 +277,7 @@ export default {
                 this.submitFlag = false;
                 if (0 === res.code) {
                     this.$message.success(res.msg);
+                    this.$store.dispatch("set_user_info", res.data);
                     this.loginFlag = false;
                     this.openSocket();
                 } else {
@@ -289,6 +301,7 @@ export default {
                     this.$message.success(res.msg);
                     this.$store.dispatch("set_user_info", res.data);
                     this.registeredFlag = false;
+                    this.customerServiceFlag = true;
                     this.openSocket();
                 } else {
                     this.getKey();
@@ -308,8 +321,8 @@ export default {
         }
     },
     watch: {
-        isLogin() {
-            this.openSocket();
+        isLogin(val) {
+            val ? this.openSocket() : this.closeSocket();
         }
     }
 }
@@ -661,6 +674,17 @@ export default {
         color: #666;
         margin-top: 19px;
         margin-left: 26px;
+    }
+}
+.customerService {
+    .tc;
+    p {
+        font-size: 18px;
+        color: #333;
+    }
+    img {
+        margin-top: 20px;
+        .wh(200px);
     }
 }
 </style>

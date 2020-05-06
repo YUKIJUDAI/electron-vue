@@ -33,7 +33,8 @@ const actions = {
         if (JSON.stringify(obj) === "{}") {
             commit("SET_USER_INFO", {});
         } else {
-            commit("SET_USER_INFO", Object.assign(state.userInfo, obj));
+            var o = JSON.parse(JSON.stringify(Object.assign(state.userInfo, obj)));
+            commit("SET_USER_INFO", o);
         }
     },
     set_menu_info({ commit }, arr) {
