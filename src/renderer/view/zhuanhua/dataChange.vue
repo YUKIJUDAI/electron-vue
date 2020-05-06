@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { heisouBaseUrl } from "@/config/config";
+import config from "@/config/config";
 import { download } from "@/util/electronFun";
 import { monitoringAuthority } from "@/util/util";
 
@@ -83,7 +83,7 @@ export default {
                 this.$message.error("请至少填写一行数据");
                 return;
             }
-            download(heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
+            download(config.heisouBaseUrl + '/tool/indexChangeDownload?state=' + this.arr[this.index].state + "&data=" + data.toString());
         },
         changeIndex(i) {
             this.index = i;

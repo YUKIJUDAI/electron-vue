@@ -64,8 +64,8 @@ export const hasAuthority = function(_vue): Observable<any> {
     var authority_level = _vue.$route.meta.authorityInfo.vip_level;
     var functions_time = _vue.$route.meta.authorityInfo.functions_time;
     var vip_level = _vue.$store.state.userInfo.vip_level;
-    if (functions_time === "0") {
-        var flag = +vip_level >= +authority_level;
+    if (functions_time === 0) {
+        var flag = authority_level.includes(vip_level);
         if (!flag) _vue.$message("请升级或开通vip获取此页面使用权限");
         return flag
             ? new Observable((observer) => {

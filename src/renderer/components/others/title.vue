@@ -123,7 +123,7 @@ import { openAd, openUrl, wd } from "@/util/electronFun";
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
-import { baseUrl, wsUrl, proxyid, version_num } from "@/config/config";
+import config from "@/config/config";
 import factory from "@/util/factory";
 
 export default {
@@ -134,14 +134,14 @@ export default {
             websock: null,
             unreadMessage: false,
 
-            baseUrl,
+            baseUrl: config.baseUrl,
             // 登录表格
             loginForm: {},
             // 注册表格
             registeredForm: {},
             // 更新信息
             versionData: {},
-            version_num,
+            version_num: config.version_num,
 
             upholeFlag: false,
             loginFlag: false,
@@ -185,7 +185,7 @@ export default {
         // 打开socket
         openSocket() {
             if (!this.isLogin) return;
-            this.websock = new WebSocket(wsUrl);
+            this.websock = new WebSocket(config.wsUrl);
             this.websock.onopen = () => {
                 this.websock.send(this.$store.state.userInfo.user_id);
             }
@@ -207,7 +207,7 @@ export default {
         },
         // 获取版本信息
         async getAppVersion() {
-            var res = await this.$fetch.post("/index/getAppVersion", { version_num });
+            var res = await this.$fetch.post("/index/getAppVersion", { version_num: config.version_num });
             if (0 === res.code) {
                 this.updateFlag = true;
                 this.versionData = res.data;
