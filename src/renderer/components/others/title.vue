@@ -2,8 +2,8 @@
     <div class="title">
         <div class="header clearfix" style="-webkit-app-region: drag">
             <router-link class="msg" tag="div" to="/main" style="-webkit-app-region: no-drag">
-                <img src="~@/assets/icon/logo.png" class="logo" />
-                <span class="header-title">火星情报<i>v{{version_num}}</i></span>
+                <img :src="serviceInfo.logo_white" class="logo" />
+                <span class="header-title">{{serviceInfo.name}}<i>v{{version_num}}</i></span>
             </router-link>
             <ul class="clearfix right-button" style="-webkit-app-region: no-drag">
                 <li class="min" @click="toMainFn('min')"><i class="icon-min"></i></li>
@@ -92,6 +92,12 @@
                 </div>
             </div>
         </el-dialog>
+        <el-dialog title="新人礼包" :visible.sync="customerServiceFlag" width="558px">
+            <div class="customerService">
+                <p>恭喜您成功注册，请联系客服领取新人专属会员大礼包</p>
+                <img :src="serviceInfo.kefu_qr_code">
+            </div>
+        </el-dialog>
         <el-dialog title="功能维护中" :visible.sync="upholeFlag" width="400px">
             <div class="uphole">
                 <img src="~@/assets/img/uphold.png" alt="">
@@ -123,28 +129,30 @@ import { openAd, openUrl, wd } from "@/util/electronFun";
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
-import { baseUrl, wsUrl, proxyid, version_num } from "@/config/config";
+import config from "@/config/config";
 import factory from "@/util/factory";
 
 export default {
     components: { password },
+    props: ["serviceInfo"],
     data() {
         return {
             websock: null,
             unreadMessage: false,
 
-            baseUrl,
+            baseUrl: config.baseUrl,
             // 登录表格
             loginForm: {},
             // 注册表格
             registeredForm: {},
             // 更新信息
             versionData: {},
-            version_num,
+            version_num: config.version_num,
 
             upholeFlag: false,
             loginFlag: false,
             registeredFlag: false,
+            customerServiceFlag: false,
             forgetFlag: false,
             // 更新弹窗
             updateFlag: false,
@@ -184,7 +192,7 @@ export default {
         // 打开socket
         openSocket() {
             if (!this.isLogin) return;
-            this.websock = new WebSocket(wsUrl);
+            this.websock = new WebSocket(config.wsUrl);
             this.websock.onopen = () => {
                 this.websock.send(this.$store.state.userInfo.user_id);
             }
@@ -200,13 +208,17 @@ export default {
                 }
             };
         },
+        // 关闭socket
+        closeSocket() {
+            this.websock && this.websock.close();
+        },
         // 随机key
         getKey() {
             this.key = new Date().getTime() + "" + (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000);
         },
         // 获取版本信息
         async getAppVersion() {
-            var res = await this.$fetch.post("/index/getAppVersion", { version_num });
+            var res = await this.$fetch.post("/index/getAppVersion", { version_num: config.version_num });
             if (0 === res.code) {
                 this.updateFlag = true;
                 this.versionData = res.data;
@@ -264,8 +276,8 @@ export default {
             this.$fetch.post("/index/login", Object.assign(this.loginForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
-                    this.$store.dispatch("set_user_info", res.data);
                     this.$message.success(res.msg);
+                    this.$store.dispatch("set_user_info", res.data);
                     this.loginFlag = false;
                     this.openSocket();
                 } else {
@@ -289,6 +301,7 @@ export default {
                     this.$message.success(res.msg);
                     this.$store.dispatch("set_user_info", res.data);
                     this.registeredFlag = false;
+                    this.customerServiceFlag = true;
                     this.openSocket();
                 } else {
                     this.getKey();
@@ -308,8 +321,8 @@ export default {
         }
     },
     watch: {
-        isLogin() {
-            this.openSocket();
+        isLogin(val) {
+            val ? this.openSocket() : this.closeSocket();
         }
     }
 }
@@ -661,6 +674,17 @@ export default {
         color: #666;
         margin-top: 19px;
         margin-left: 26px;
+    }
+}
+.customerService {
+    .tc;
+    p {
+        font-size: 18px;
+        color: #333;
+    }
+    img {
+        margin-top: 20px;
+        .wh(200px);
     }
 }
 </style>

@@ -47,7 +47,7 @@
 
 <script>
 import { rand } from "@/util/util";
-import { qnUrl } from "@/config/config";
+import config from "@/config/config";
 
 export default {
     data() {
@@ -59,7 +59,7 @@ export default {
             // 七牛上传url
             url: "",
             // 七牛地址
-            qnUrl
+            qnUrl: config.qnUrl
         }
     },
     created() {

@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 
-import { heisouBaseUrl } from "@/config/config";
+import config from "@/config/config";
 import { getGlobal } from "@/util/electronFun";
 import store from "@/store";
 
@@ -9,7 +9,7 @@ import store from "@/store";
 
 const http = axios.create({
     timeout: 10000,
-    baseURL: heisouBaseUrl,
+    baseURL: config.heisouBaseUrl,
     headers: {
         "Content-Type": "application/x-www-form-urlencoded",
     },

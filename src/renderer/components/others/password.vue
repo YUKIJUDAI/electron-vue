@@ -36,13 +36,13 @@
 
 <script>
 import { getPhoneCode } from "@/util/util";
-import { baseUrl } from "@/config/config";
+import config from "@/config/config";
 
 export default {
     props: ["type", "phone"],
     data() {
         return {
-            baseUrl,
+            baseUrl: config.baseUrl,
             // 忘记密码表格
             forgetForm: {},
             phoneCodeFlag: false,

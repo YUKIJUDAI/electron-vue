@@ -6,6 +6,7 @@ import { createPersistedState } from "vuex-electron";
 Vue.use(Vuex);
 
 const state = {
+    serviceInfo: {}, //配置信息
     userInfo: {}, // 用户信息
     taobaoInfo: {}, // 淘宝信息
     menuInfo: [], // 菜单信息
@@ -21,7 +22,10 @@ const mutations = {
     },
     SET_AUTHORITY_INFO(state, o) {
         state.authorityInfo = o;
-    }
+    },
+    SET_SERVICE_INFO(state, o) {
+        state.serviceInfo = o;
+    },
 };
 
 const actions = {
@@ -29,7 +33,8 @@ const actions = {
         if (JSON.stringify(obj) === "{}") {
             commit("SET_USER_INFO", {});
         } else {
-            commit("SET_USER_INFO", Object.assign(obj, state.userInfo));
+            var o = JSON.parse(JSON.stringify(Object.assign(state.userInfo, obj)));
+            commit("SET_USER_INFO", o);
         }
     },
     set_menu_info({ commit }, arr) {
@@ -37,6 +42,9 @@ const actions = {
     },
     set_authority_info({ commit }, o) {
         commit("SET_AUTHORITY_INFO", o);
+    },
+    set_service_info({ commit }, o) {
+        commit("SET_SERVICE_INFO", o);
     },
 };
 

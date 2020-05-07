@@ -1,12 +1,12 @@
 const { ipcRenderer, shell, remote } = require("electron");
 import router from "@/router/index";
-import { proxyid } from "@/config/config";
+import config from "@/config/config";
 import factory from "@/util/factory";
 import { rmdir } from "@/util/fs";
 
 // 打开广告
 const openAd = (ads_id) => {
-    ipcRenderer.send("open-ad", ads_id, proxyid);
+    ipcRenderer.send("open-ad", ads_id, config.proxyid);
 };
 // 日志
 const log = (error) => {

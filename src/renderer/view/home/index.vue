@@ -92,7 +92,7 @@ export default {
         },
         // 推荐列表
         getRecFunctions() {
-            this.$fetch.post("/index/getRecFunctions").then(res => {
+            this.$fetch.post("/index/getRoleFunctions").then(res => {
                 if (0 === res.code) {
                     this.recommend = res.data;
                     this.$store.dispatch("set_menu_info", res.data);
