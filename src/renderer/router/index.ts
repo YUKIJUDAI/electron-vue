@@ -48,6 +48,19 @@ var routes = new Router({
             ],
         },
         {
+            path: "/yujing",
+            component: require("@/view/yujing/index").default,
+            redirect: "yujing/plugin",
+            children: [
+                // 订单预警
+                {
+                    path: "plugin",
+                    component: require("@/view/yujing/plugin").default,
+                    meta: { index: 0, hasAuthority: true },
+                },
+            ],
+        },
+        {
             path: "/mosou",
             component: require("@/view/mosou/index").default,
             redirect: "mosou/limit",
