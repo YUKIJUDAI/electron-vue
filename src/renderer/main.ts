@@ -15,8 +15,6 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
-if (!process.env.IS_WEB) Vue.use(require("vue-electron"));
-
 Vue.use(Electron);
 Vue.use(ElementUI, { size: "small", zIndex: 3000 });
 
