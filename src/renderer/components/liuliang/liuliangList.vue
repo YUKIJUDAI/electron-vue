@@ -101,7 +101,7 @@ export default {
         text-align: center;
     }
     .view {
-        color: @color;
+        color: var(--themeColor);
         cursor: pointer;
     }
 }

@@ -201,7 +201,7 @@ export default {
                 height: 24px;
                 line-height: 24px;
                 color: #fff;
-                background: @color;
+                background: var(--themeColor);
                 font-size: 12px;
                 border-radius: 4px;
                 cursor: pointer;

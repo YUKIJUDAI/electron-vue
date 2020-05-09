@@ -318,7 +318,7 @@ export default {
         font-size: 16px;
         color: #666;
         span {
-            color: @color;
+            color: var(--themeColor);
         }
     }
     .el-collapse {
@@ -336,8 +336,8 @@ export default {
                 cursor: pointer;
             }
             .active {
-                border: 1px solid @color;
-                background: @color;
+                border: 1px solid var(--themeColor);
+                background: var(--themeColor);
                 color: #fff;
             }
         }
@@ -355,8 +355,8 @@ export default {
             .tc;
             color: #fff;
             cursor: pointer;
-            background: @color;
-            border: 1px solid @color;
+            background: var(--themeColor);
+            border: 1px solid var(--themeColor);
             margin-left: 14px;
             border-radius: 4px;
             vertical-align: -1px;
@@ -377,7 +377,7 @@ export default {
             font-size: 28px;
             cursor: pointer;
             vertical-align: -5px;
-            color: @color;
+            color: var(--themeColor);
         }
         .icon-jiahao {
             margin-left: 10px;
@@ -438,7 +438,7 @@ export default {
             line-height: 40px;
             color: #666;
             span {
-                color: @color;
+                color: var(--themeColor);
             }
         }
         .settlement-p-2 {
@@ -446,7 +446,7 @@ export default {
             font-size: 15px;
             color: #999;
             span {
-                color: @color;
+                color: var(--themeColor);
             }
         }
         .settlement-btn {
@@ -455,7 +455,7 @@ export default {
             width: 180px;
             height: 76px;
             border: 0;
-            background: @color;
+            background: var(--themeColor);
             .tl;
             i {
                 margin-left: 18px;
@@ -479,7 +479,7 @@ export default {
         height: 30px;
         line-height: 30px;
         font-size: 15px;
-        color: @color;
+        color: var(--themeColor);
         border: 0;
     }
     .el-collapse-item__wrap {

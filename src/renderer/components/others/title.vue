@@ -332,7 +332,7 @@ export default {
 .header {
     width: 100%;
     height: 60px;
-    background: @color;
+    background: var(--themeColor);
     box-shadow: 4px 0px 19px 1px rgba(0, 32, 95, 0.15);
     .fix;
     top: 0;
@@ -568,7 +568,7 @@ export default {
         font-size: 14px;
         .tc;
         color: #fff;
-        background: @color;
+        background: var(--themeColor);
         cursor: pointer;
         border-radius: 2px;
     }
@@ -589,7 +589,7 @@ export default {
 }
 .submit {
     width: 382px;
-    background: @color;
+    background: var(--themeColor);
     .l-h(48px);
     margin: 0 auto;
     margin-top: 20px;
@@ -655,7 +655,7 @@ export default {
         width: 80px;
         .l-h(26px);
         font-size: 12px;
-        background: @color;
+        background: var(--themeColor);
         color: #fff;
         .tc;
         border-radius: 4px;
@@ -693,7 +693,7 @@ export default {
     border-radius: 4px;
 }
 .el-dialog__header {
-    background-color: @color;
+    background-color: var(--themeColor);
     text-align: center;
     color: #fff;
     padding: 14px 20px !important;

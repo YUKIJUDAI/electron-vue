@@ -91,7 +91,7 @@ export default {
             }
             .p-6 {
                 font-size: 24px;
-                color: @color;
+                color: var(--themeColor);
                 margin-top: 10px;
                 span {
                     font-size: 14px;

@@ -76,7 +76,7 @@ export default {
         margin-top: 30px;
         font-weight: bold;
         span {
-            color: @color;
+            color: var(--themeColor);
         }
     }
     .p3 {
@@ -100,7 +100,7 @@ export default {
         .l-h(40px);
         span {
             font-size: 16px;
-            color: @color;
+            color: var(--themeColor);
         }
     }
     .pay-way {
@@ -123,7 +123,7 @@ export default {
             }
         }
         .active {
-            border: 1px solid @color;
+            border: 1px solid var(--themeColor);
             &:after {
                 .abs;
                 top: 0;
@@ -140,7 +140,7 @@ export default {
         .l-h(42px);
         margin: 0 auto;
         margin-top: 80px;
-        background: @color;
+        background: var(--themeColor);
         .tc;
         font-size: 16px;
         color: #fff;

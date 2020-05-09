@@ -102,7 +102,7 @@ export default {
         }
         .active {
             background: rgba(255, 254, 254, 1);
-            border: 1px solid @color;
+            border: 1px solid var(--themeColor);
             border-radius: 15px;
         }
     }

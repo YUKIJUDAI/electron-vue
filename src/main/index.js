@@ -5,14 +5,10 @@ const request = require("request");
 const { autoUpdater } = require("electron-updater");
 const log4js = require("log4js");
 
-// const config = require(__static + "/config.json");
-
 if (process.env.NODE_ENV !== "development") {
     global.__static = path.join(__dirname, "/static").replace(/\\/g, "\\\\");
-    // config = require(path.join(__dirname, "/static").replace(/\\/g, "\\\\") + "/config.json");
 } else {
     global.__static = __static;
-    // config = require(__static + "/config.json");
 }
 
 let mainWindow;
@@ -107,22 +103,7 @@ function createWindow() {
             nodeIntegration: true,
         },
     });
-
-    var config = fs.readFileSync(__static + "/config.json");
-    config = JSON.parse(config);
-    request.post(
-        {
-            url: config.baseUrl + "/index/getServiceCode",
-            headers: { "Content-Type": "application/x-www-form-urlencoded", proxyid: config.proxyid },
-            json: true
-        }, function (error, res, body) {
-            if (!error && res.statusCode == 200 && body.code === 0) {
-                fs.writeFileSync(__static + "/theme.less", `@color:${body.data.tool_main_color};`);
-            } else {
-                fs.writeFileSync(__static + "/theme.less", "@color:#ff6801;");
-            }
-            mainWindow.loadURL(winURL);
-        });
+    mainWindow.loadURL(winURL);
     // 加载网页
     mainWindow.on("closed", function () {
         mainWindow = null;

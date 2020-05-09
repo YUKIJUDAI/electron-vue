@@ -270,13 +270,13 @@ export default {
     }
     .tab {
         margin-top: 30px;
-        border-bottom: 2px solid @color;
+        border-bottom: 2px solid var(--themeColor);
         height: 30px;
         li {
             .fl;
             background: rgba(255, 105, 2, 0.08);
             border-radius: 4px 4px 0px 0px;
-            color: @color;
+            color: var(--themeColor);
             .l-h(30px);
             padding: 0 15px;
             margin-right: 15px;
@@ -303,10 +303,10 @@ export default {
             }
         }
         .active {
-            background: @color;
+            background: var(--themeColor);
             color: #fff;
             &::after {
-                border-bottom: 30px solid @color;
+                border-bottom: 30px solid var(--themeColor);
             }
         }
         .active1 {

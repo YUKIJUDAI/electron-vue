@@ -136,7 +136,7 @@ export default {
                 color: #777;
             }
             .active {
-                background: @color;
+                background: var(--themeColor);
                 color: #fff;
             }
         }
@@ -177,10 +177,10 @@ export default {
         }
         .body-right {
             p {
-                color: @color;
+                color: var(--themeColor);
             }
             .body-input {
-                border: 2px solid @color;
+                border: 2px solid var(--themeColor);
             }
         }
         .body-center {

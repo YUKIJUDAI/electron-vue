@@ -85,7 +85,7 @@ export default {
         .l-h(38px);
         color: #fff;
         font-size: 16px;
-        background: @color;
+        background: var(--themeColor);
         margin-left: 20px;
         cursor: pointer;
     }

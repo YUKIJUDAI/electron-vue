@@ -75,7 +75,7 @@ export default {}
         vertical-align: -2px;
     }
     .flow-select-btn-active {
-        background: @color;
+        background: var(--themeColor);
         color: #fff;
         i {
             color: #fff;

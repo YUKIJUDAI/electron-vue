@@ -273,7 +273,7 @@ export default {
             }
         }
         span {
-            color: @color;
+            color: var(--themeColor);
             cursor: pointer;
         }
     }
@@ -351,7 +351,7 @@ export default {
             .l-h(30px);
             font-size: 14px;
             font-weight: bold;
-            color: @color;
+            color: var(--themeColor);
             text-decoration: underline;
             cursor: pointer;
         }
@@ -410,7 +410,7 @@ export default {
             color: #333;
             line-height: 26px;
             span {
-                color: @color;
+                color: var(--themeColor);
             }
         }
         .information-prompt {

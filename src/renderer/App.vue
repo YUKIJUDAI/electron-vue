@@ -152,7 +152,8 @@ export default {
     methods: {
         async getServiceCode() {
             var res = await this.$fetch.post("/index/getServiceCode");
-            0 === res.code && this.$store.dispatch("set_service_info", res.data);
+            0 === res.code &&
+                (this.$store.dispatch("set_service_info", res.data), document.body.style.setProperty('--themeColor', res.data.tool_main_color));
         },
         async getBossCode() {
             var res = await this.$fetch.post("/index/getBossCode");
@@ -250,7 +251,7 @@ export default {
                 font-size: 12px;
                 color: #333;
                 span {
-                    color: @color;
+                    color: var(--themeColor);
                     &:nth-child(2) {
                         padding-left: 5px;
                         cursor: pointer;
@@ -264,7 +265,7 @@ export default {
             .main-left-2 {
                 .left-2-left {
                     .fl;
-                    background: @color;
+                    background: var(--themeColor);
                     .l-h(36px);
                     color: #fff;
                     font-size: 14px;
@@ -275,10 +276,10 @@ export default {
                 .left-2-right {
                     .fl;
                     .l-h(34px);
-                    color: @color;
+                    color: var(--themeColor);
                     font-size: 14px;
                     .tc;
-                    border: 1px solid @color;
+                    border: 1px solid var(--themeColor);
                     width: 49%;
                     cursor: pointer;
                 }
@@ -312,10 +313,10 @@ export default {
                 .active {
                     background: rgba(241, 245, 251, 1);
                     i {
-                        color: @color;
+                        color: var(--themeColor);
                     }
                     span {
-                        color: @color;
+                        color: var(--themeColor);
                     }
                 }
             }
@@ -428,16 +429,16 @@ export default {
             }
         }
         .active {
-            border-bottom: 3px solid @color;
+            border-bottom: 3px solid var(--themeColor);
             div {
-                color: @color;
+                color: var(--themeColor);
             }
         }
     }
     .main-container-navigation-right {
         .fr;
         margin-top: 12px;
-        color: @color;
+        color: var(--themeColor);
         cursor: pointer;
     }
     .main-container-view {
@@ -451,19 +452,19 @@ export default {
     margin-top: 0;
 }
 .el-button--primary {
-    background-color: @color !important;
-    border-color: @color !important;
+    background-color: var(--themeColor) !important;
+    border-color: var(--themeColor) !important;
 }
 .el-button--primary.is-plain {
-    color: @color !important;
+    color: var(--themeColor) !important;
     background: rgb(255, 240, 230) !important;
     border-color: rgb(255, 195, 153) !important;
 }
 .el-pagination.is-background .el-pager li:not(.disabled).active {
-    background-color: @color !important;
+    background-color: var(--themeColor) !important;
 }
 .el-button--text {
-    color: @color !important;
+    color: var(--themeColor) !important;
 }
 ._hover {
     margin: -12px;
@@ -498,12 +499,12 @@ export default {
     }
 }
 .headStyle {
-    color: @color;
+    color: var(--themeColor);
     background-color: rgba(255, 105, 2, 0.08) !important;
 }
 .headStyle2 {
-    background-color: @color !important;
-    border-color: @color;
+    background-color: var(--themeColor) !important;
+    border-color: var(--themeColor);
     color: #fff;
 }
 </style>

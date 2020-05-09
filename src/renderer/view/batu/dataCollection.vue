@@ -376,7 +376,7 @@ export default {
             flex-wrap: wrap;
             justify-content: center;
             .active {
-                background: @color;
+                background: var(--themeColor);
                 color: #fff;
             }
             li {

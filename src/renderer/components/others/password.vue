@@ -212,7 +212,7 @@ export default {
             font-size: 14px;
             .tc;
             color: #fff;
-            background: @color;
+            background: var(--themeColor);
             cursor: pointer;
             border-radius: 2px;
         }
@@ -233,7 +233,7 @@ export default {
     }
     .submit {
         width: 382px;
-        background: @color;
+        background: var(--themeColor);
         .l-h(48px);
         margin: 0 auto;
         margin-top: 20px;

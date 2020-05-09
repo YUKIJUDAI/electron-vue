@@ -43,9 +43,9 @@ export default {
                 }
             }
             .active {
-                border-bottom: 3px solid @color;
+                border-bottom: 3px solid var(--themeColor);
                 div {
-                    color: @color;
+                    color: var(--themeColor);
                 }
             }
         }
