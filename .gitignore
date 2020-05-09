@@ -4,8 +4,12 @@ dist/web/*
 build/*
 server/node_modules
 server/static/public
-static/logs/
-static/save/
+static/logs/*.log
+static/logs/*.1
+static/logs/*.2
+static/logs/*.3
+static/logs/*.4
+static/logs/*.5
 vue-test/
 !build/icons
 node_modules/
