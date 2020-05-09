@@ -17,7 +17,7 @@
     },
     "build": {
         "productName": "火星情报",
-        "appId": "com.example.yourapp",
+        "appId": "com.example.${name}",
         "directories": {
             "output": "build/${productName}_${version}"
         },
@@ -31,7 +31,7 @@
             }
         ],
         "win": {
-            "artifactName": "hxqb_setup_${version}.${ext}",
+            "artifactName": "${name}_setup_${version}.${ext}",
             "target": "nsis",
             "icon": "static/logo.ico"
         },

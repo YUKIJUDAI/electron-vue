@@ -150,7 +150,7 @@ factory.add("getCoreIndexes", {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
         };
-        http.post("/collect/saveLog", data).then();
+        // http.post("/collect/saveLog", data).then();
     },
 });
 

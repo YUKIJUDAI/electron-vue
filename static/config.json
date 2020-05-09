@@ -4,6 +4,6 @@
     "heisouBaseUrl": "http://mars-hesso.lethink.net",
     "qnUrl": "http://file.bsearch.lethink.net/",
     "wsUrl": "ws://47.99.101.142:2046/",
-    "proxyid": 1,
+    "proxyid": 9,
     "version_num": "0.6.5"
 }

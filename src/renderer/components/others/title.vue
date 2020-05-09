@@ -1,7 +1,7 @@
 <template>
     <div class="title">
         <div class="header clearfix" style="-webkit-app-region: drag">
-            <router-link class="msg" tag="div" to="/main" style="-webkit-app-region: no-drag">
+            <router-link class="msg" tag="div" to="" style="-webkit-app-region: no-drag">
                 <img :src="serviceInfo.logo_white" class="logo" />
                 <span class="header-title">{{serviceInfo.name}}<i>v{{version_num}}</i></span>
             </router-link>
@@ -298,7 +298,6 @@ export default {
             this.$fetch.post("/index/register", Object.assign(this.registeredForm, { verify_key: this.key })).then(res => {
                 this.submitFlag = false;
                 if (0 === res.code) {
-                    this.$message.success(res.msg);
                     this.$store.dispatch("set_user_info", res.data);
                     this.registeredFlag = false;
                     this.customerServiceFlag = true;
