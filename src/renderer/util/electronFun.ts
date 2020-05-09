@@ -1,4 +1,6 @@
 const { ipcRenderer, shell, remote } = require("electron");
+const path = require("path");
+
 import router from "@/router/index";
 import config from "@/config/config";
 import factory from "@/util/factory";
@@ -116,6 +118,12 @@ const openUrl = (url) => {
 const getGlobal = (params) => {
     return remote.getGlobal(params);
 };
+
+// userData目录
+const getUserDataPath = (_path = "") => {
+    return path.join(remote.app.getPath("userData"), _path);
+};
+
 // 获取所有窗口
 const getAllWindows = () => {
     return remote.BrowserWindow.getAllWindows();
@@ -125,4 +133,4 @@ const fromId = (id, type, params = []) => {
     return remote.BrowserWindow.fromId(id).webContents.send(type, ...params);
 };
 
-export { openAd, log, hideSycm, openSycm, wd, download, sendXhrData, message, routerTo, getLog, downloadSchedule, downloadSuccess, openUrl, getGlobal, getAllWindows, fromId };
+export { openAd, log, hideSycm, openSycm, wd, download, sendXhrData, message, routerTo, getLog, downloadSchedule, downloadSuccess, openUrl, getGlobal, getUserDataPath, getAllWindows, fromId };

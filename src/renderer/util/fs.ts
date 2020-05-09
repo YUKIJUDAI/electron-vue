@@ -7,10 +7,10 @@ const xlsx = require("node-xlsx");
 import { bindNodeCallback, interval, forkJoin } from "rxjs";
 import { find } from "rxjs/operators";
 
-import { getGlobal, download } from "@/util/electronFun";
+import { download, getUserDataPath } from "@/util/electronFun";
 
 function _path(filename?) {
-    return filename ? getGlobal("__static") + "/save/" + filename : getGlobal("__static") + "/save";
+    return filename ? getUserDataPath("/" + filename) : getUserDataPath();
 }
 
 function _downloadPic(file, name, filpath, callback) {
@@ -32,6 +32,7 @@ function del(filepath) {
 
 // 下载文件
 const downloadFile = function(type, filename, list) {
+    console.log(_path());
     const filePath = _path(filename);
     const filePathPic = _path(filename) + "/图片";
     const fileComment = _path(filename) + "/评论";

@@ -89,7 +89,7 @@
                     <template slot-scope="scope">
                         <div class="goods-info">
                             <div class="goods-info-left">
-                                <img :src="scope.row.goodsImage" alt="">
+                                <img :src="scope.row.goodsImage | hasHttp" alt="">
                             </div>
                             <div class="goods-info-right">
                                 <p class="p1">{{scope.row.goodsTitle | strOver}}<span @click="copy(scope.row.goodsTitle)">复制标题</span></p>

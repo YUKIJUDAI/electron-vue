@@ -5,10 +5,15 @@ const request = require("request");
 const { autoUpdater } = require("electron-updater");
 const log4js = require("log4js");
 
-if (process.env.NODE_ENV !== "development") {
-    global.__static = path.join(__dirname, "/static").replace(/\\/g, "\\\\");
+let logPath = "", winURL = "";
+
+if (process.env.NODE_ENV !== 'development') {
+    global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\');
+    logPath = app.getPath("userData") + "/logs/error-log.log";
+    winURL = `file://${__dirname}/index.html`
 } else {
-    global.__static = __static;
+    logPath = __static + "/logs/error-log.log";
+    winURL = "http://localhost:9080";
 }
 
 let mainWindow;
@@ -20,15 +25,13 @@ let uploadUrl = "http://mars.lethink.net/update";
 // 日志
 log4js.configure({
     appenders: {
-        error: { type: "dateFile", filename: __static + "/logs/error-log.log", pattern: ".yyyy-MM-dd", maxLogSize: 10240, backups: 3 },
+        error: { type: "dateFile", filename: logPath, pattern: ".yyyy-MM-dd", maxLogSize: 10240, backups: 3 },
     },
     categories: {
         default: { appenders: ["error"], level: "debug" },
     },
 });
 let logError = log4js.getLogger("default");
-
-const winURL = process.env.NODE_ENV === "development" ? `http://localhost:9080` : `file://${__dirname}/index.html`;
 
 app.on("ready", createWindow);
 
@@ -141,7 +144,7 @@ function createWindow() {
                 if (process.platform !== "darwin") app.quit();
             },
         }
-    ]);  
+    ]);
     tray.setContextMenu(contextMenu);
 }
 
