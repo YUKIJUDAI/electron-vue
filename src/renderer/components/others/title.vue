@@ -110,14 +110,10 @@
         <el-dialog title="版本更新" :visible.sync="updateFlag" width="558px" class="update" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
             <div class="update-version">
                 升级版本：v{{versionData.version_num}}
-                <span class="must" v-show="versionData.is_force === 1">强制升级</span>
-                <span class="unmust" v-show="versionData.is_force === 0">推荐升级</span>
             </div>
             <div class="update-con" v-html="versionData.remark"></div>
             <div class="update-btn">
-                <el-button class="to-update" type="primary" @click="download">立即下载</el-button>
-                <el-button class="cancel-update" v-if="versionData.is_force === 1" @click="toMainFn('close')">暂不下载</el-button>
-                <el-button class="cancel-update" v-if="versionData.is_force === 0" @click="updateFlag = false">以后再说</el-button>
+                <el-button class="to-update" type="primary" @click="download">立即更新</el-button>
             </div>
         </el-dialog>
     </div>
@@ -125,7 +121,7 @@
 
 <script>
 
-import { openAd, openUrl, wd } from "@/util/electronFun";
+import { openAd, wd, checkForUpdate, upDateExe, isUpdateNow } from "@/util/electronFun";
 import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
@@ -155,7 +151,7 @@ export default {
             customerServiceFlag: false,
             forgetFlag: false,
             // 更新弹窗
-            updateFlag: false,
+            updateFlag: true,
             phoneCodeFlag: false,
             // 协议
             protocolFlag: true,
@@ -178,16 +174,13 @@ export default {
         // 判断在线离线状态
         isOnline();
         // 获取更新
-        // ipcRenderer.send("checkForUpdate");
-
-        this.openSocket();
-        this.getKey();
-        this.getAppVersion();
+        checkForUpdate();
+        isUpdateNow();
     },
     methods: {
         // 下载
         download() {
-            openUrl(this.versionData.file);
+            upDateExe();
         },
         // 打开socket
         openSocket() {

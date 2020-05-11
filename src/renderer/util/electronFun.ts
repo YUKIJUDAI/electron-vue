@@ -7,32 +7,40 @@ import factory from "@/util/factory";
 import { rmdir } from "@/util/fs";
 
 // 打开广告
-const openAd = (ads_id) => {
+export const openAd = (ads_id) => {
     ipcRenderer.send("open-ad", ads_id, config.proxyid);
 };
 // 日志
-const log = (error) => {
+export const log = (error) => {
     ipcRenderer.send("log", error.toString());
 };
 // 隐藏生意参谋
-const hideSycm = () => {
+export const hideSycm = () => {
     ipcRenderer.send("hide-sycm");
 };
 // 打开生意参谋
-const openSycm = (account, pwd) => {
+export const openSycm = (account, pwd) => {
     ipcRenderer.send("open-sycm", account, pwd);
 };
 // 操作窗口
-const wd = (type: "min" | "max" | "close") => {
+export const wd = (type: "min" | "max" | "close") => {
     ipcRenderer.send(type);
 };
 // 下载
-const download = (url) => {
+export const download = (url) => {
     ipcRenderer.send("download", url);
+};
+// 检查更新
+export const checkForUpdate = () => {
+    ipcRenderer.send("checkForUpdate");
+};
+// 下载更新
+export const upDateExe = () => {
+    ipcRenderer.send("isUpdateNow");
 };
 
 // 获取xhr信息后处理
-const sendXhrData = () => {
+export const sendXhrData = () => {
     ipcRenderer.on("send-xhr-data", (event, type, params, data) => {
         if (factory.obj[type]) {
             typeof factory.obj[type].callback === "function" && factory.obj[type].callback(params, data);
@@ -40,19 +48,19 @@ const sendXhrData = () => {
     });
 };
 // 输出信息
-const message = () => {
+export const message = () => {
     ipcRenderer.on("message", (event, text) => {
         console.log(text);
     });
 };
 // 页面跳转
-const routerTo = () => {
+export const routerTo = () => {
     ipcRenderer.on("router-to", (event, routes) => {
         router.push(routes);
     });
 };
 // 获取日志
-const getLog = (vue) => {
+export const getLog = (vue) => {
     ipcRenderer.on("get-log", (event, data) => {
         // flag 0 成功  1进行中  2 失败
         if (!vue.logFlag) {
@@ -94,14 +102,13 @@ const getLog = (vue) => {
     });
 };
 // 获取下载进度
-const downloadSchedule = (vue) => {
+export const downloadSchedule = (vue) => {
     ipcRenderer.on("download-schedule", (event, index, sum) => {
         var s = ~~((index / sum) * 100);
         vue.percentage = s;
     });
 };
-
-const downloadSuccess = (vue) => {
+export const downloadSuccess = (vue) => {
     ipcRenderer.on("download-success", (event, flag) => {
         vue.progressDialog = false;
         vue.percentage = 0;
@@ -109,28 +116,32 @@ const downloadSuccess = (vue) => {
         flag ? vue.$message.success("下载成功") : vue.$message.error("下载失败或被取消");
     });
 };
+// 有新下载
+export const isUpdateNow = (vue) => {
+    ipcRenderer.on("isUpdateNow", () => {
+        vue.getAppVersion && typeof vue.getAppVersion === "function" && vue.getAppVersion();
+    });
+};
 
 // 打开url
-const openUrl = (url) => {
+export const openUrl = (url) => {
     shell.openExternal(url);
 };
 // 获取全局变量
-const getGlobal = (params) => {
+export const getGlobal = (params) => {
     return remote.getGlobal(params);
 };
 
 // userData目录
-const getUserDataPath = (_path = "") => {
+export const getUserDataPath = (_path = "") => {
     return path.join(remote.app.getPath("userData"), _path);
 };
 
 // 获取所有窗口
-const getAllWindows = () => {
+export const getAllWindows = () => {
     return remote.BrowserWindow.getAllWindows();
 };
 // 通过id获取窗口
-const fromId = (id, type, params = []) => {
+export const fromId = (id, type, params = []) => {
     return remote.BrowserWindow.fromId(id).webContents.send(type, ...params);
 };
-
-export { openAd, log, hideSycm, openSycm, wd, download, sendXhrData, message, routerTo, getLog, downloadSchedule, downloadSuccess, openUrl, getGlobal, getUserDataPath, getAllWindows, fromId };

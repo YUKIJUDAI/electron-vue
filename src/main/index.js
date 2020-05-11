@@ -112,7 +112,8 @@ function createWindow() {
         mainWindow = null;
     });
     // 启动更新
-    // updateHandle();
+    updateHandle();
+    // 下载进度
     session.defaultSession.on("will-download", function (event, downloadItem, webContents) {
         downloadItem.setSaveDialogOptions({ title: "文件保存" });
         downloadItem.on("updated", (event, state) => {
@@ -228,18 +229,10 @@ function updateHandle() {
     });
     // 执行更新
     autoUpdater.on("update-downloaded", function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
-        const dialogOpts = {
-            type: "info",
-            buttons: ["更新", "不更新"],
-            title: "工具箱更新升级",
-            message: process.platform === "win32" ? releaseNotes : releaseName,
-            detail: "监测到一个新的版本，请点击更新按钮更新工具箱",
-        };
-        dialog.showMessageBox(dialogOpts).then((returnValue) => {
-            if (returnValue.response === 0) {
-                sendUpdateMessage("install");
-            }
+        ipcMain.on('isUpdateNow', (e, arg) => {
+            autoUpdater.quitAndInstall();
         });
+        mainWindow.webContents.send('isUpdateNow');
     });
 
     ipcMain.on("checkForUpdate", () => {
