@@ -151,7 +151,7 @@ export default {
             customerServiceFlag: false,
             forgetFlag: false,
             // 更新弹窗
-            updateFlag: true,
+            updateFlag: false,
             phoneCodeFlag: false,
             // 协议
             protocolFlag: true,
@@ -175,7 +175,7 @@ export default {
         isOnline();
         // 获取更新
         checkForUpdate();
-        isUpdateNow();
+        isUpdateNow(this);
     },
     methods: {
         // 下载
