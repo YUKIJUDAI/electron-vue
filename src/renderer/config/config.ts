@@ -5,5 +5,5 @@ export default {
     qnUrl: "http://file.bsearch.lethink.net/",
     wsUrl: "ws://47.99.101.142:2046/",
     proxyid: 1,
-    version_num: "0.6.7",
+    version_num: "0.6.9",
 };
