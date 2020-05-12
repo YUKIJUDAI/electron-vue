@@ -20,6 +20,10 @@ const aes = function(txt) {
     return res.toString(CryptoJS.enc.Utf8);
 };
 
+function rand(min: number = 1000, max: number = 9999): string {
+    return Math.floor(Math.random() * (max - min)) + min + "";
+}
+
 function Factory() {
     this.obj = {};
 }
@@ -40,7 +44,7 @@ factory.add("getPersonalView", {
         this.index++;
         const data = JSON.parse(res);
         const tbInfo = getGlobal("tbInfo") as any;
-        const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: tbInfo.tb_password };
+        const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: tbInfo.tb_password, rand: rand() };
 
         tbInfo.loginUserName = data.loginUserName; //  淘宝登录账户
         tbInfo.runAsShopId = data.runAsShopId + ""; //  店铺id
@@ -65,6 +69,7 @@ factory.add("trend", {
             const data = {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: JSON.stringify(res.data),
+                rand: rand()
             };
             http.post("/collect/saveShopTrend", data).then();
         } else {
@@ -86,6 +91,7 @@ factory.add("overview", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: JSON.stringify(res.data),
+            rand: rand(),
         };
         http.post("/collect/saveShopOverview", data).then();
     },
@@ -103,6 +109,7 @@ factory.add("getShopCate", {
             sys: JSON.stringify({ ...params }),
             source: "getShopCate",
             crawler_data: JSON.stringify(result),
+            rand: rand()
         };
         // http.post("/collect/saveLog", data).then(r => {
 
@@ -118,6 +125,7 @@ factory.add("list", {
             const data = {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: aes(res),
+                rand: rand()
             };
             http.post("/collect/saveList", data).then((r) => {
                 //hideSycm();
@@ -137,6 +145,7 @@ factory.add("getSingleMonitoredInfo", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
+            rand: rand()
         };
         http.post("/collect/addCompeteInfo", data).then();
     },
@@ -149,6 +158,7 @@ factory.add("getCoreIndexes", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
+            rand: rand()
         };
         // http.post("/collect/saveLog", data).then();
     },
@@ -161,6 +171,7 @@ factory.add("getCoreTrend", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
+            rand: rand()
         };
         http.post("/collect/addCoreTrend", data).then();
     },
@@ -173,6 +184,7 @@ factory.add("getKeywords", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
+            rand: rand()
         };
         http.post("/collect/addKeywords", data).then();
     },
@@ -185,6 +197,7 @@ factory.add("getFlowSource", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
+            rand: rand()
         };
         http.post("/collect/addFlowSource", data).then();
     },
@@ -196,6 +209,7 @@ factory.add("getSourceTrend", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: JSON.stringify(res),
+            rand: rand()
         };
         http.post("/collect/addSourceTrend", data).then();
     },

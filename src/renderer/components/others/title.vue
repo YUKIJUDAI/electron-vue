@@ -109,11 +109,12 @@
         </el-dialog>
         <el-dialog title="版本更新" :visible.sync="updateFlag" width="558px" class="update" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
             <div class="update-version">
-                升级版本：v{{versionData.version_num}}
+                检测到软件有最新版本v{{versionData.version_num}}
             </div>
-            <div class="update-con" v-html="versionData.remark"></div>
+            <div class="update-con" v-html="'更新内容：'+ versionData.remark"></div>
             <div class="update-btn">
-                <el-button class="to-update" type="primary" @click="download">立即更新</el-button>
+                <el-button class="to-update" type="primary" @click="download">自动更新</el-button>
+                <el-button class="to-update" type="primary" @click="downloadUrl">下载更新包</el-button>
             </div>
         </el-dialog>
     </div>
@@ -142,7 +143,9 @@ export default {
             // 注册表格
             registeredForm: {},
             // 更新信息
-            versionData: {},
+            versionData: {
+                remark:"花瓣自上线以来，积累了众多用户的数亿张采集，我们感谢您的辛勤付出，并且十分珍视您和您分享的内容。在业务调整期间，给您的体验带来诸多不便，敬请谅解，感谢您一直以来对花瓣的支持与喜爱！"
+            },
             version_num: config.version_num,
 
             upholeFlag: false,
@@ -181,6 +184,10 @@ export default {
         // 下载
         download() {
             upDateExe();
+        },
+        // 下载
+        downloadUrl() {
+            openUrl(this.versionData.file);
         },
         // 打开socket
         openSocket() {
@@ -621,8 +628,9 @@ export default {
     }
     .update-con {
         padding: 0 30px;
-        font-size: 16px;
-        margin-top: 20px;
+        font-size: 14px;
+        line-height: 24px;
+        margin-top: 30px;
         color: #666;
     }
     .update-btn {

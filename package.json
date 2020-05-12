@@ -27,7 +27,7 @@
         "publish": [
             {
                 "provider": "generic",
-                "url": "http://mars.lethink.net/update"
+                "url": "http://mars.lethink.net/1/autoUpdate"
             }
         ],
         "win": {
