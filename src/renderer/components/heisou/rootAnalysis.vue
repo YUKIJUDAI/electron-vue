@@ -152,7 +152,6 @@ export default {
                     arr.push(item);
                 }
             });
-            console.log(arr, type)
             if (type === 0) {
                 this.tableList1 = arr;
             } else if (type === 1) {

@@ -141,7 +141,6 @@ export default {
         },
         getSource() {
             this.$http.post("/collect/getSource", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
-                console.log(res.data);
                 0 === res.code && (this.tableData2 = res.data);
             });
         },

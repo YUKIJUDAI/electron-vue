@@ -115,7 +115,6 @@ const DomFactory = function () {
     }
     // 是否在监控商品页面
     function isMonitorPage() {
-        console.warn(11111)
         return hasClass(document.querySelectorAll(".level-leaf")[3], "selected");
     }
     // 是否在竞品分析页面
@@ -144,7 +143,6 @@ const { loginPage, mainPage, monitorPage, analysisPage, configurationPage, isCom
 
 // dom-ready
 ipcRenderer.on("dom-ready", (event) => {
-
     try {
         loginPage.submitBtn()[0].addEventListener("click", () => {
             remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput()[0].value;
@@ -158,7 +156,6 @@ ipcRenderer.on("dom-ready", (event) => {
 
 // 自动登录
 ipcRenderer.on("autoLogin", (event, account, pwd) => {
-    window.abc = "abc";
     interval(100)
         .pipe(
             filter(() => loginPage.readyFlag1().length > 0 || loginPage.readyFlag2().length > 0),
@@ -196,27 +193,36 @@ ipcRenderer.on("autoLogin", (event, account, pwd) => {
 
 // 登录成功后
 ipcRenderer.on('login-success', (event) => {
-    //点击竞争
     interval(1000)
         .pipe(
             filter(() => mainPage.navigationBar().length > 0),
             take(1),
-            delay(3000),
             // 点击竞争
             tap(() => { !isCompetitionPage() && loadURL() }),
-            delay(3000),
-            // 点击监控商品
-            tap(() => { !isMonitorPage() && monitorPage.monitorBtn().click() }),
-            delay(3000),
-            tap(() => monitorPage.paginationSel().click()),
-            delay(3000),
-            // 点击分页参数
-            tap(() => { monitorPage.paginationSize().click() }),
             catchError(err => {
                 ipcRenderer.send("log", "登录成功后->" + err.toString());
             })
         )
         .subscribe();
+});
+
+// 竞争页打开成功
+ipcRenderer.on("loadURL-success", (event) => {
+    interval(1000).pipe(
+        take(1),
+        delay(1000),
+        // 点击监控商品
+        tap(() => { !isMonitorPage() && monitorPage.monitorBtn().click() }),
+        delay(3000),
+        tap(() => monitorPage.paginationSel().click()),
+        delay(3000),
+        // 点击分页参数
+        tap(() => { monitorPage.paginationSize().click() }),
+        catchError(err => {
+            ipcRenderer.send("log", "竞争页打开成功->" + err.toString());
+        })
+    )
+    .subscribe()
 });
 
 // 添加竞品
