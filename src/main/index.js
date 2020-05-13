@@ -65,6 +65,16 @@ ipcMain.on("close", function (event) {
     event.preventDefault();
 });
 
+ipcMain.on("loadURL", function (event, url) {
+    sycmWindow.webContents.loadURL(
+        url,
+        { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36" }
+    );
+    setTimeout(() => {
+        sycmWindow.webContents.send("login-success");
+    }, 3000)
+})
+
 // 下载
 ipcMain.on("download", function (e, url) {
     mainWindow.webContents.downloadURL(url);

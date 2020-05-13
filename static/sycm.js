@@ -35,7 +35,7 @@ const DomFactory = function () {
     // 竞品监控页面
     const monitorPage = {
         // 竞品监控按钮
-        monitorBtn: () => $$(".ebase-ModernFrame__leftMenu .level-leaf")[3].querySelector("a"),
+        monitorBtn: () => $$(".level-leaf")[3].querySelector("a"),
         // 分页下拉
         paginationSel: () => $(".alife-dt-card-common-table-pagination-container").querySelector(".oui-select"),
         // 选择分页100
@@ -115,6 +115,7 @@ const DomFactory = function () {
     }
     // 是否在监控商品页面
     function isMonitorPage() {
+        console.warn(11111)
         return hasClass(document.querySelectorAll(".level-leaf")[3], "selected");
     }
     // 是否在竞品分析页面
@@ -143,7 +144,7 @@ const { loginPage, mainPage, monitorPage, analysisPage, configurationPage, isCom
 
 // dom-ready
 ipcRenderer.on("dom-ready", (event) => {
-     
+
     try {
         loginPage.submitBtn()[0].addEventListener("click", () => {
             remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput()[0].value;
@@ -157,7 +158,7 @@ ipcRenderer.on("dom-ready", (event) => {
 
 // 自动登录
 ipcRenderer.on("autoLogin", (event, account, pwd) => {
-    window.abc="abc";
+    window.abc = "abc";
     interval(100)
         .pipe(
             filter(() => loginPage.readyFlag1().length > 0 || loginPage.readyFlag2().length > 0),
@@ -200,9 +201,9 @@ ipcRenderer.on('login-success', (event) => {
         .pipe(
             filter(() => mainPage.navigationBar().length > 0),
             take(1),
-            delay(10000),
+            delay(3000),
             // 点击竞争
-            tap(() => { !isCompetitionPage() && mainPage.competitionBtn().click() }),
+            tap(() => { !isCompetitionPage() && loadURL() }),
             delay(3000),
             // 点击监控商品
             tap(() => { !isMonitorPage() && monitorPage.monitorBtn().click() }),
@@ -504,6 +505,12 @@ function SetValue(node, text) {
     event = document.createEvent('HTMLEvents');
     event.initEvent('input', true, false);
     node.dispatchEvent(event);
+}
+// 页面跳转
+function loadURL(url = "https://sycm.taobao.com/mc/ci/shop/monitor") {
+    from(remote.BrowserWindow.getAllWindows()).subscribe(j => {
+        remote.BrowserWindow.fromId(j.id).webContents.send('loadURL', url);
+    });
 }
 
 // 通过劫持原生XMLHttpRequest实现对页面ajax请求的监听

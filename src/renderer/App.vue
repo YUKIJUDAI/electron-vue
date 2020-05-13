@@ -103,7 +103,7 @@
 <script>
 import heisouTitle from "@/components/others/title";
 import { isEmpty } from "@/util/util";
-import { sendXhrData, message, routerTo } from "@/util/electronFun";
+import { sendXhrData, message, routerTo,loadURL } from "@/util/electronFun";
 import factory from "@/util/factory";
 
 export default {
@@ -144,6 +144,8 @@ export default {
         message();
         // 页面跳转跳转
         routerTo();
+        // 页面载入
+        loadURL();
 
         this.getUserInfo();
         this.getServiceCode();

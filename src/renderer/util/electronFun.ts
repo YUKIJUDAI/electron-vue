@@ -22,6 +22,7 @@ export const hideSycm = () => {
 export const openSycm = (account, pwd) => {
     ipcRenderer.send("open-sycm", account, pwd);
 };
+
 // 操作窗口
 export const wd = (type: "min" | "max" | "close") => {
     ipcRenderer.send(type);
@@ -37,6 +38,12 @@ export const checkForUpdate = () => {
 // 下载更新
 export const upDateExe = () => {
     ipcRenderer.send("isUpdateNow");
+};
+
+export const loadURL = () => {
+    ipcRenderer.on("loadURL", (event, url) => {
+        ipcRenderer.send("loadURL", url);
+    });
 };
 
 // 获取xhr信息后处理

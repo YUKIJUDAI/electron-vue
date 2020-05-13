@@ -3,7 +3,8 @@ var CryptoJS = require("crypto-js");
 var AES = require("crypto-js/aes");
 
 import http from "./http";
-import { getGlobal, wd, getAllWindows, fromId } from "./electronFun";
+import { getGlobal, wd, getAllWindows, fromId, loadURL } from "./electronFun";
+import { delay } from "rxjs/operators";
 
 const aes = function(txt) {
     var key = "w28Cz694s63kBYk4";
@@ -48,7 +49,7 @@ factory.add("getPersonalView", {
         tbInfo.runAsUserId = data.runAsUserId + ""; //  当前使用的淘宝用户id
 
         http.post("/user/relateTbAccount", _data).then((res: any) => {
-            0 === res.code &&
+            0 == res.code &&
                 from(getAllWindows()).subscribe((i) => {
                     fromId(i.id, "login-success");
                 });
@@ -64,7 +65,7 @@ factory.add("trend", {
             const data = {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: JSON.stringify(res.data),
-                rand: rand()
+                rand: rand(),
             };
             http.post("/collect/saveShopTrend", data).then();
         } else {
@@ -104,7 +105,7 @@ factory.add("getShopCate", {
             sys: JSON.stringify({ ...params }),
             source: "getShopCate",
             crawler_data: JSON.stringify(result),
-            rand: rand()
+            rand: rand(),
         };
         // http.post("/collect/saveLog", data).then(r => {
 
@@ -120,7 +121,7 @@ factory.add("list", {
             const data = {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: aes(res),
-                rand: rand()
+                rand: rand(),
             };
             http.post("/collect/saveList", data).then((r) => {
                 //hideSycm();
@@ -140,7 +141,7 @@ factory.add("getSingleMonitoredInfo", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand()
+            rand: rand(),
         };
         http.post("/collect/addCompeteInfo", data).then();
     },
@@ -153,7 +154,7 @@ factory.add("getCoreIndexes", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand()
+            rand: rand(),
         };
         // http.post("/collect/saveLog", data).then();
     },
@@ -166,7 +167,7 @@ factory.add("getCoreTrend", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand()
+            rand: rand(),
         };
         http.post("/collect/addCoreTrend", data).then();
     },
@@ -179,7 +180,7 @@ factory.add("getKeywords", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand()
+            rand: rand(),
         };
         http.post("/collect/addKeywords", data).then();
     },
@@ -192,7 +193,7 @@ factory.add("getFlowSource", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand()
+            rand: rand(),
         };
         http.post("/collect/addFlowSource", data).then();
     },
@@ -204,7 +205,7 @@ factory.add("getSourceTrend", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: JSON.stringify(res),
-            rand: rand()
+            rand: rand(),
         };
         http.post("/collect/addSourceTrend", data).then();
     },
