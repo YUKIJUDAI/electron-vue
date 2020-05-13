@@ -32,7 +32,6 @@ function del(filepath) {
 
 // 下载文件
 const downloadFile = function(type, filename, list) {
-    console.log(_path());
     const filePath = _path(filename);
     const filePathPic = _path(filename) + "/图片";
     const fileComment = _path(filename) + "/评论";

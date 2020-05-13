@@ -143,6 +143,7 @@ const { loginPage, mainPage, monitorPage, analysisPage, configurationPage, isCom
 
 // dom-ready
 ipcRenderer.on("dom-ready", (event) => {
+     
     try {
         loginPage.submitBtn()[0].addEventListener("click", () => {
             remote.getGlobal("tbInfo").tb_password = loginPage.pwdInput()[0].value;
@@ -156,6 +157,7 @@ ipcRenderer.on("dom-ready", (event) => {
 
 // 自动登录
 ipcRenderer.on("autoLogin", (event, account, pwd) => {
+    window.abc="abc";
     interval(100)
         .pipe(
             filter(() => loginPage.readyFlag1().length > 0 || loginPage.readyFlag2().length > 0),
@@ -198,7 +200,7 @@ ipcRenderer.on('login-success', (event) => {
         .pipe(
             filter(() => mainPage.navigationBar().length > 0),
             take(1),
-            delay(3000),
+            delay(10000),
             // 点击竞争
             tap(() => { !isCompetitionPage() && mainPage.competitionBtn().click() }),
             delay(3000),
