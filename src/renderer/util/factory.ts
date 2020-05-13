@@ -56,8 +56,6 @@ factory.add("getPersonalView", {
     },
 });
 
-
-
 // 我的店铺趋势
 factory.add("trend", {
     callback: function(params, res) {
