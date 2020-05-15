@@ -23,14 +23,14 @@
                     </ul>
                 </div>
                 <div class="main-left-2 clearfix">
-                    <el-popover placement="bottom" trigger="hover" :offset="44">
+                    <el-popover placement="top" trigger="hover" :offset="44">
                         <div class="_hover">
                             <p>{{bossInfo.boss_name}}</p>
                             <ul>
-                                <li>
+                                <!-- <li>
                                     <i class="iconfont icon-shouji1"></i>
                                     手机：<span>{{bossInfo.boss_phone}}</span>
-                                </li>
+                                </li> -->
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
                                     Q Q：<span>{{bossInfo.boss_qq}}</span>
@@ -41,17 +41,18 @@
                                 </li>
                             </ul>
                             <img :src="bossInfo.boss_qr_code">
+                            <p class="red">加好友送七天会员</p>
                         </div>
                         <div class="left-2-left" slot="reference">客户经理</div>
                     </el-popover>
-                    <el-popover placement="bottom" trigger="hover" :offset="-43">
+                    <el-popover placement="top" trigger="hover" :offset="-43">
                         <div class="_hover">
                             <p>{{serviceInfo.kefu_name}}</p>
                             <ul>
-                                <li>
+                                <!-- <li>
                                     <i class="iconfont icon-shouji1"></i>
                                     手机：<span>{{serviceInfo.kefu_phone}}</span>
-                                </li>
+                                </li> -->
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
                                     Q Q：<span>{{serviceInfo.kefu_qq}}</span>
@@ -480,6 +481,11 @@ export default {
     p {
         font-size: 14px;
         color: #333;
+    }
+    .red {
+        .tc;
+        font-size: 14px;
+        color: red;
     }
     ul {
         margin-top: 12px;

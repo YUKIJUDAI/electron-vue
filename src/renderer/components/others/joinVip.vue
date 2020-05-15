@@ -16,13 +16,13 @@
             <div class="pay-way clearfix">
                 <p>会员类型：</p>
                 <div v-if="vip_level === 0">
-                    <div @click="vip_index = 0,checked = 0" class="pay-way-o" :class="{active:vip_index === 0}">普通会员</div>
+                    <!-- <div @click="vip_index = 0,checked = 0" class="pay-way-o" :class="{active:vip_index === 0}">普通会员</div> -->
                     <div @click="vip_index = 1,checked = 0" class="pay-way-o" :class="{active:vip_index === 1}">超级会员</div>
                 </div>
-                <div v-else-if="vip_level === 1">
+                <!-- <div v-else-if="vip_level === 1">
                     <div @click="vip_index = 0,checked = 0" class="pay-way-o" :class="{active:vip_index === 0}">续费普通会员</div>
                     <div @click="vip_index = 1,checked = 0" class="pay-way-o" :class="{active:vip_index === 1}">升级超级会员</div>
-                </div>
+                </div> -->
                 <div v-else-if="vip_level === 2">
                     <div @click="vip_index = 1,checked = 0" class="pay-way-o" :class="{active:vip_index === 1}">续费超级会员</div>
                 </div>

@@ -7,14 +7,6 @@
                         <i class="iconfont icon-shouji"></i>
                         <span>APP流量</span>
                     </li>
-                    <li class="flow-select-btn" :class="{'flow-select-btn-active':type === 1}" @click="changeBtn(1)">
-                        <i class="iconfont icon-qiantai"></i>
-                        <span>PC流量</span>
-                    </li>
-                    <li class="flow-select-btn" :class="{'flow-select-btn-active':type === 2}" @click="changeBtn(2)">
-                        <i class="iconfont icon-lianjie"></i>
-                        <span>直访流量</span>
-                    </li>
                 </ul>
             </el-form-item>
         </el-form>

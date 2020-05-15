@@ -20,7 +20,7 @@ let mainWindow;
 let sycmWindow;
 let adWindow;
 let tray;
-let uploadUrl = "http://mars.lethink.net/1/autoUpdate";
+let uploadUrl = "http://mars.lethink.net/autoUpdate/1";
 
 // 日志
 log4js.configure({

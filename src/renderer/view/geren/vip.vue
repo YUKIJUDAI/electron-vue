@@ -26,7 +26,7 @@
                 <li>体验发布</li>
             </ul>
         </div>
-        <div class="right">
+        <!-- <div class="right">
             <ul>
                 <li class="head head-vip head-vip-2">
                     <p><i class="vip-icon2"></i>普通会员</p>
@@ -39,7 +39,7 @@
                 <li>免费微调</li>
                 <li>体验发布</li>
             </ul>
-        </div>
+        </div> -->
         <div class="right right2">
             <ul>
                 <li class="head head-vip head-vip-2">

@@ -15,7 +15,7 @@
                 </div>
             </el-form-item>
             <template v-for="(item,i) in form.plan">
-                <el-form-item :label="'关键词' + (i + 1)" v-show="flag === 0 || flag === 1">
+                <el-form-item :label="'关键词' + (i + 1)" v-show="flag === 0">
                     <div class="keywords">
                         <el-input placeholder="请输入关键词" class="input-with-select" v-model="item.keyword" style="width:600px">
                             <el-button slot="append" icon="el-icon-search" @click="open(i)">查排名</el-button>
@@ -34,14 +34,21 @@
                             <el-radio :label="1">手动指定时段</el-radio>
                         </el-radio-group>
                         <div class="keywords-right show" v-show="flag === 0">
-                            <span>展现</span>
+                            <el-popover placement="left" width="400" trigger="hover">
+                                <div class="popover-left">
+                                    <strong>新功能介绍</strong>
+                                    <p>增加展现可提高宝贝在搜索页的曝光度，吸引更多的自然流量；也可以优化点击进店的转化率，让流量更自然更真实。</p>
+                                    <p>一般访客与展现最低比例建议1:3，即3倍展现即可，也可根据自己的需求选择其它倍数。</p>
+                                </div>
+                                <span slot="reference" class="reference-span">展现</span>
+                            </el-popover>
                             <el-input size="small" style="width:80px" v-model="item.show_count" @change="changeShow(i)"></el-input>
                             <span class="circle" @click="item.multiple = 1,item.show_count=item.multiple * item.count" :class="{active:item.multiple===1}">1倍</span>
                             <span class="circle" @click="item.multiple = 3,item.show_count=item.multiple * item.count" :class="{active:item.multiple===3}">3倍</span>
                             <span class="circle" @click="item.multiple = 5,item.show_count=item.multiple * item.count" :class="{active:item.multiple===5}">5倍</span>
                         </div>
                         <br />
-                        <el-collapse v-model="item.collapse" v-show="flag !== 2 && automatic === 1">
+                        <el-collapse v-model="item.collapse" v-show="automatic === 1">
                             <el-collapse-item :title="'共 '+ item.count +'个任务，已分配 '+ item.assigned + '个任务，未分配 ' + item.unassigned + ' 个'" name="1">
                                 <ul class="clearfix">
                                     <li v-for="(value,j) in item.hour" :key="j">
@@ -54,12 +61,12 @@
                     </div>
                 </el-form-item>
             </template>
-            <el-form-item label="浏览时间" v-show="flag === 0 || flag === 1">
+            <el-form-item label="浏览时间" v-show="flag === 0">
                 <el-select size="small" style="width:200px" v-model="form.browse_time" @change="changeBorwseTime">
                     <el-option :label="item.serve_name" :value="item.value" v-for="(item,i) in browse_time[type]" :key="i"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="浏览深度" v-show="flag === 0 || flag === 1">
+            <el-form-item label="浏览深度" v-show="flag === 0">
                 <el-select size="small" style="width:200px" v-model="form.depth">
                     <el-option label="不浏览其他商品" value="0"></el-option>
                     <el-option label="随机浏览商品" value="1"></el-option>
@@ -261,15 +268,6 @@ export default {
             if ([0, 9, 11].includes(val)) {
                 this.flag = 0;
                 this.form.browse_time = "100-180";
-            } else if ([1].includes(val)) {
-                this.flag = 1;
-                this.form.browse_time = "30-50";
-            } else if ([2].includes(val)) {
-                this.flag = 2;
-                this.form.plan = [this.form.plan[0]];
-                var countbydays = 0;
-                this.form.plan.map((item, i) => countbydays += item.count);
-                this.countbydays = countbydays;
             } else if ([7, 10].includes(val)) {
                 this.flag = 3;
                 this.form.plan = [this.form.plan[0]];
@@ -346,6 +344,9 @@ export default {
         }
         .keywords-left {
             .fl;
+        }
+        .reference-span {
+            cursor: pointer;
         }
         .keywords-span-1 {
             padding-right: 10px;
@@ -474,6 +475,18 @@ export default {
 </style>
 <style lang="less">
 @import url("~@/assets/less/commom.less");
+.popover-left {
+    padding: 20px;
+    strong {
+        margin-bottom: 30px;
+        color: var(--themeColor);
+        font-size: 20px;
+        display: block;
+    }
+    p {
+        margin-bottom: 15px;
+    }
+}
 .liuliangTempFirst {
     .el-collapse-item__header {
         height: 30px;

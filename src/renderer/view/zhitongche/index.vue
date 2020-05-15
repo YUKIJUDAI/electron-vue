@@ -6,19 +6,19 @@
                 <p class="p-2">直通车</p>
                 <p class="p-3">专业的直通车关键词评估，针对性投放，<br />精准的展现在搜索买家面前，<br />实现精准营销。</p>
             </div>
-            <div class="ad">
+            <div class="ad" @click="open('3605144908')">
                 <img src="~@/assets/img/ztc-1.png" class="img-1">
                 <p class="p-4"><span>疑难咨询</span></p>
                 <p class="p-5">常见疑难问题解答，包括不仅限于<br />PPC ROI 黑科技 等</p>
                 <img src="~@/assets/img/ztc-btn.png" class="img-2">
             </div>
-            <div class="ad">
+            <div class="ad" @click="open('3605144908')">
                 <img src="~@/assets/img/ztc-2.png" class="img-1">
                 <p class="p-4"><span>免费诊断</span></p>
                 <p class="p-5">3年以上车手点对点免费诊断计划<br />给出实质性解决方案</p>
                 <img src="~@/assets/img/ztc-btn.png" class="img-2">
             </div>
-            <div class="ad">
+            <div class="ad" @click="open('3605144908')">
                 <img src="~@/assets/img/ztc-3.png" class="img-1">
                 <p class="p-4"><span>全案制定</span></p>
                 <p class="p-5">单独车神团队沟通定制全套推广方案<br />直通车 钻展 超推 拼多多等</p>
@@ -78,6 +78,7 @@
 <script>
 import Swiper from 'swiper';
 import 'swiper/css/swiper.min.css';
+import { openUrl } from "@/util/electronFun";
 
 export default {
     data() {
@@ -112,6 +113,10 @@ export default {
         async getRecArticle() {
             var res = await this.$fetch.post("/ganhuo/getZtcRecArticle");
             0 === res.code && (this.recArticle = res.data);
+        },
+        open(qq){
+            var url = "http://wpa.qq.com/msgrd?v=3&uin=" + qq + "&menu=yes";
+            openUrl(url);
         }
     }
 }
@@ -148,6 +153,7 @@ export default {
         .ad {
             .fl;
             .tc;
+            cursor: pointer;
             width: 250px;
             height: 220px;
             padding-top: 20px;
