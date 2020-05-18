@@ -113,8 +113,7 @@ factory.add("list", {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                crawler_data: aes(res),
-                rand: getGlobal("tbInfo").rand,
+                crawler_data: aes(res)
             };
             http.post("/collect/saveList", data).then((r) => {
                 // todo

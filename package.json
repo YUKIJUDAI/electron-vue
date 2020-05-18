@@ -1,6 +1,6 @@
 {
     "name": "hxqb",
-    "version": "0.7.3",
+    "version": "0.7.4",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -15,12 +15,8 @@
         "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
         "rebuildsqlite3": "electron-rebuild -f -w .\\node_modules\\better-sqlite3"
     },
-    "config": {
-        "substationId":"1",
-        "publishUrl":"http://mars.lethink.net/autoUpdate/${config.substationId}"
-    },
     "build": {
-        "productName": "火星情报",
+        "productName": "hxqb",
         "appId": "com.example.hxqb",
         "directories": {
             "output": "build/${productName}_${version}"

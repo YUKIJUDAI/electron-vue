@@ -5,6 +5,9 @@ const request = require("request");
 const { autoUpdater } = require("electron-updater");
 const log4js = require("log4js");
 
+const url = require("@@/package.json").build.publish[0].url;
+console.log(url)
+
 let logPath = "", winURL = "";
 
 if (process.env.NODE_ENV !== 'development') {
@@ -20,7 +23,6 @@ let mainWindow;
 let sycmWindow;
 let adWindow;
 let tray;
-let uploadUrl = "http://mars.lethink.net/autoUpdate/1";
 
 // 日志
 log4js.configure({
@@ -225,7 +227,7 @@ function createSycmWindow(account, pwd) {
 
 // 版本更新
 function updateHandle() {
-    autoUpdater.setFeedURL(uploadUrl);
+    autoUpdater.setFeedURL(url);
     autoUpdater.on("error", function (error) {
         sendUpdateMessage(error.toString());
     });
