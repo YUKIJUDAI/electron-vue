@@ -282,7 +282,7 @@ var routes = new Router({
                 },
                 // 邀请有奖
                 {
-                    path: "Invitation",
+                    path: "invitation",
                     component: require("@/view/geren/invitation").default,
                     meta: { index: 1 },
                 },

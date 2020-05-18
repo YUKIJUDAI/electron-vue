@@ -64,15 +64,15 @@
                     <ul>
                         <li>
                             <p class="p-5">竞品已监控</p>
-                            <p class="p-6">0<span>天</span></p>
+                            <p class="p-6">{{userInfo.details.compete_goods}}<span>天</span></p>
                         </li>
                         <li>
                             <p class="p-5">黑号已查询</p>
-                            <p class="p-6">{{userInfo.black_num}}<span>次</span></p>
+                            <p class="p-6">{{userInfo.details.black_num}}<span>次</span></p>
                         </li>
                         <li>
                             <p class="p-5">流量已发布</p>
-                            <p class="p-6">{{userInfo.lieliu_count}}<span>单</span></p>
+                            <p class="p-6">{{userInfo.details.flow}}<span>单</span></p>
                         </li>
                     </ul>
                 </el-card>
@@ -82,18 +82,20 @@
                 <el-card class="box-card box-card2">
                     <div slot="header" class="clearfix">
                         <span>邀请明细</span>
-                        <el-button style="float: right; padding: 3px 0" type="text">查看更多></el-button>
+                        <el-button style="float: right; padding: 3px 0" type="text">
+                            <router-link tag="span" to="/geren/invitation">查看更多></router-link>
+                        </el-button>
                     </div>
                     <ul>
-                        <router-link tag="li" to="/geren/Invitation">
+                        <router-link tag="li" to="/geren/invitation">
                             <img src="~@/assets/icon/p.png" class="p">
                             <p class="p-5">累计邀请人数</p>
-                            <p class="p-6">{{userInfo.invite_count}}<span>人</span></p>
+                            <p class="p-6">{{userInfo.invite.number}}<span>人</span></p>
                         </router-link>
                         <li>
                             <img src="~@/assets/icon/m.png" class="m">
                             <p class="p-5">累计获得奖励 (积分)</p>
-                            <p class="p-6">0<span>个</span></p>
+                            <p class="p-6">{{userInfo.invite.integral}}<span>个</span></p>
                         </li>
                         <li>
                             <el-button size="small" type="primary" class="invite">立即邀请</el-button>
@@ -114,7 +116,10 @@ import qs from "qs";
 export default {
     data() {
         return {
-            userInfo: {}
+            userInfo: {
+                details: {},
+                invite: {}
+            }
         }
     },
     created() {

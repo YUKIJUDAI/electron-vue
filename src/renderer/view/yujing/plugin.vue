@@ -1,6 +1,6 @@
 <template>
     <div class="plugin">
-        <img src="~@/assets/img/plugin-0.jpg" class="plugin-img">
+        <img src="~@/assets/img/plugin-0.jpg" class="plugin-img" @click="open">
         <div class="title">
             <div class="tit border" :class="{active:flag}" @click="flag=true">
                 <p>安装教程</p>
@@ -54,16 +54,23 @@
                 <img src="~@/assets/img/tutorial_04.jpg">
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
+import config from "@/config/config";
+import { download } from "@/util/electronFun";
+
 export default {
     data() {
         return {
             flag: true,
             index: 0
+        }
+    },
+    methods: {
+        open() {
+            download(config.qnUrl + "1589789658231.zip");
         }
     }
 }
@@ -119,7 +126,7 @@ export default {
         border-bottom: 1px solid #f2f2f2;
         margin-bottom: 30px;
         ul {
-            display: flex;          
+            display: flex;
         }
         li {
             .tc;
