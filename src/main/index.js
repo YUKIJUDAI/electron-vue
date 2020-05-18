@@ -6,7 +6,6 @@ const { autoUpdater } = require("electron-updater");
 const log4js = require("log4js");
 
 const url = require("@@/package.json").build.publish[0].url;
-console.log(url)
 
 let logPath = "", winURL = "";
 
