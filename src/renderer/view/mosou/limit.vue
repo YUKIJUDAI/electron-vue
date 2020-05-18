@@ -1,6 +1,10 @@
 <template>
     <div class="limit">
         <div class="head">
+            <el-select v-model="type" size="medium">
+                <el-option label="淘宝" value="1"></el-option>
+                <el-option label="拼多多" value="2"></el-option>
+            </el-select>
             <input type="text" class="input input1" v-model="keyword" placeholder="请输入关键词">
             <input type="text" class="input input2" v-model="url" placeholder="请输入宝贝链接">
             <div type="text" class="sumit-btn" @click="monitoringAuthority('createCode')">生成卡首屏二维码</div>
@@ -20,6 +24,7 @@
 </template>
 
 <script>
+import { Loading } from 'element-ui';
 var QRCode = require('qrcode');
 import { monitoringAuthority } from "@/util/util";
 
@@ -27,7 +32,8 @@ export default {
     data() {
         return {
             url: "",
-            keyword: ""
+            keyword: "",
+            type: "1"
         }
     },
     methods: {
@@ -40,7 +46,9 @@ export default {
                 this.$message.error("请输入正确的网址");
                 return;
             }
-            var res = await this.$http.post("/tool/searchToHead", { url: this.url, keyword: this.keyword });
+            let loadingInstance = Loading.service({ background: 'rgba(0,0,0,.1)', text: "数据量过大，加载较慢，请耐心等待！" });
+            var res = await this.$http.post("/tool/searchToHead", { url: this.url, keyword: this.keyword, type: this.type });
+            loadingInstance.close();
             if (0 === res.code) {
                 QRCode.toCanvas(this.$refs.code, res.data, { width: 240, height: 240, margin: 0, errorCorrectionLevel: 'H' });
             } else {
@@ -67,6 +75,7 @@ export default {
         }
     }
     .input {
+        margin-left: 20px;
         width: 184px;
         height: 14px;
         background: rgba(255, 255, 255, 1);
@@ -76,8 +85,7 @@ export default {
         color: #333;
     }
     .input2 {
-        width: 462px;
-        margin-left: 20px;
+        width: 400px;
     }
     .sumit-btn {
         .tc;

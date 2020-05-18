@@ -93,8 +93,8 @@
 <script>
 const { from } = require("rxjs");
 import moment from "moment";
-import { getAllWindows, fromId, getLog } from "@/util/electronFun";
-import { monitoringAuthority } from "@/util/util";
+import { getAllWindows, fromId, getLog, getGlobal } from "@/util/electronFun";
+import { monitoringAuthority, rand } from "@/util/util";
 
 import dataSource from "@/components/heisou/dataSource";
 import keywordAnalysis from "@/components/heisou/keywordAnalysis";
@@ -182,6 +182,7 @@ export default {
                 this.addingFlag = true;
                 this.logList = [];
                 this.logFlag = true;
+                getGlobal("tbInfo").rand = rand();
                 from(getAllWindows()).subscribe(i => {
                     fromId(i.id, "add-monitor-detail", [data.goods_name]);
                 });

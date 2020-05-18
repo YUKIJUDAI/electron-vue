@@ -3,8 +3,7 @@ var CryptoJS = require("crypto-js");
 var AES = require("crypto-js/aes");
 
 import http from "./http";
-import { getGlobal, wd, getAllWindows, fromId, loadURL } from "./electronFun";
-import { delay } from "rxjs/operators";
+import { getGlobal, wd, getAllWindows, fromId } from "./electronFun";
 
 const aes = function(txt) {
     var key = "w28Cz694s63kBYk4";
@@ -21,10 +20,6 @@ const aes = function(txt) {
     return res.toString(CryptoJS.enc.Utf8);
 };
 
-function rand(min: number = 1000, max: number = 9999): string {
-    return Math.floor(Math.random() * (max - min)) + min + "";
-}
-
 function Factory() {
     this.obj = {};
 }
@@ -40,7 +35,7 @@ factory.add("getPersonalView", {
     callback: function(params, res) {
         const data = JSON.parse(res);
         const tbInfo = getGlobal("tbInfo") as any;
-        const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: tbInfo.tb_password, rand: rand() };
+        const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: tbInfo.tb_password };
 
         tbInfo.loginUserName = data.loginUserName; //  淘宝登录账户
         tbInfo.runAsShopId = data.runAsShopId + ""; //  店铺id
@@ -65,7 +60,7 @@ factory.add("trend", {
             const data = {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: JSON.stringify(res.data),
-                rand: rand(),
+                rand: getGlobal("tbInfo").rand,
             };
             http.post("/collect/saveShopTrend", data).then();
         } else {
@@ -86,8 +81,7 @@ factory.add("overview", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: JSON.stringify(res.data),
-            rand: rand(),
+            crawler_data: JSON.stringify(res.data)
         };
         http.post("/collect/saveShopOverview", data).then();
     },
@@ -104,8 +98,7 @@ factory.add("getShopCate", {
         const data = {
             sys: JSON.stringify({ ...params }),
             source: "getShopCate",
-            crawler_data: JSON.stringify(result),
-            rand: rand(),
+            crawler_data: JSON.stringify(result)
         };
         // http.post("/collect/saveLog", data).then(r => {
 
@@ -121,9 +114,10 @@ factory.add("list", {
             const data = {
                 sys: JSON.stringify({ ...params }),
                 crawler_data: aes(res),
-                rand: rand(),
+                rand: getGlobal("tbInfo").rand,
             };
             http.post("/collect/saveList", data).then((r) => {
+                // todo
                 //hideSycm();
                 from(getAllWindows()).subscribe((i) => {
                     fromId(i.id, "router-to", ["/heisou-features/monitor"]);
@@ -141,7 +135,7 @@ factory.add("getSingleMonitoredInfo", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand(),
+            rand: getGlobal("tbInfo").rand
         };
         http.post("/collect/addCompeteInfo", data).then();
     },
@@ -154,7 +148,7 @@ factory.add("getCoreIndexes", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand(),
+            rand: getGlobal("tbInfo").rand,
         };
         // http.post("/collect/saveLog", data).then();
     },
@@ -167,7 +161,7 @@ factory.add("getCoreTrend", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand(),
+            rand: getGlobal("tbInfo").rand,
         };
         http.post("/collect/addCoreTrend", data).then();
     },
@@ -180,7 +174,7 @@ factory.add("getKeywords", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand(),
+            rand: getGlobal("tbInfo").rand,
         };
         http.post("/collect/addKeywords", data).then();
     },
@@ -193,7 +187,7 @@ factory.add("getFlowSource", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: rand(),
+            rand: getGlobal("tbInfo").rand,
         };
         http.post("/collect/addFlowSource", data).then();
     },
@@ -205,7 +199,7 @@ factory.add("getSourceTrend", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: JSON.stringify(res),
-            rand: rand(),
+            rand: getGlobal("tbInfo").rand,
         };
         http.post("/collect/addSourceTrend", data).then();
     },

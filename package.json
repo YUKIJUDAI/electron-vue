@@ -15,6 +15,10 @@
         "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
         "rebuildsqlite3": "electron-rebuild -f -w .\\node_modules\\better-sqlite3"
     },
+    "config": {
+        "substationId":"1",
+        "publishUrl":"http://mars.lethink.net/autoUpdate/${config.substationId}"
+    },
     "build": {
         "productName": "火星情报",
         "appId": "com.example.hxqb",
