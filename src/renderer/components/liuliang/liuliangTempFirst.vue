@@ -18,7 +18,6 @@
                 <el-form-item :label="'关键词' + (i + 1)" v-show="flag === 0">
                     <div class="keywords">
                         <el-input placeholder="请输入关键词" class="input-with-select" v-model="item.keyword" style="width:600px">
-                            <el-button slot="append" icon="el-icon-search" @click="open(i)">查排名</el-button>
                         </el-input>
                         <div class="keywords-right">
                             <i class="iconfont icon-jianhao" @click="removePlan(i)" v-show="form.plan.length > 1"></i>
@@ -43,13 +42,16 @@
                                 <span slot="reference" class="reference-span">展现</span>
                             </el-popover>
                             <el-input size="small" style="width:80px" v-model="item.show_count" @change="changeShow(i)"></el-input>
-                            <span class="circle" @click="item.multiple = 1,item.show_count=item.multiple * item.count" :class="{active:item.multiple===1}">1倍</span>
-                            <span class="circle" @click="item.multiple = 3,item.show_count=item.multiple * item.count" :class="{active:item.multiple===3}">3倍</span>
-                            <span class="circle" @click="item.multiple = 5,item.show_count=item.multiple * item.count" :class="{active:item.multiple===5}">5倍</span>
+                            <span class="circle" @click="_changeShow(i,1)" :class="{active:item.multiple===1}">1倍</span>
+                            <span class="circle" @click="_changeShow(i,3)" :class="{active:item.multiple===3}">3倍</span>
+                            <span class="circle" @click="_changeShow(i,5)" :class="{active:item.multiple===5}">5倍</span>
                         </div>
                         <br />
                         <el-collapse v-model="item.collapse" v-show="automatic === 1">
-                            <el-collapse-item :title="'共 '+ item.count +'个任务，已分配 '+ item.assigned + '个任务，未分配 ' + item.unassigned + ' 个'" name="1">
+                            <el-collapse-item name="1">
+                                <template slot="title">
+                                    <p>共{{item.count}}个任务，已分配{{item.assigned}}个任务，未分配{{item.unassigned}}个<span v-show="flag === 0">，展现{{item.show_count}}个</span></p>
+                                </template>
                                 <ul class="clearfix">
                                     <li v-for="(value,j) in item.hour" :key="j">
                                         <p :class="{'color':j > 19 }">{{j > 9 ? j + ":00" : "0" + j + ":00"}}</p>
@@ -88,9 +90,20 @@
                 <i class="iconfont icon-fabu"></i>
                 <span>发布任务</span>
             </button>
-            <p class="settlement-p-1">任务耗时 <span>{{taskTime[+type]}}</span> 秒，单个任务 <span>{{price[type].price + browse_price}}</span> 积分，合计消费 <span>{{(price[type].price + browse_price)*countbydays*days}}</span> 积分</p>
+            <p class="settlement-p-1">
+                任务耗时 <span>{{taskTime[+type]}}</span> 秒，
+                单个任务 <span>{{price[type].price + browse_price}}</span> 积分，
+                <template v-if="flag === 0">
+                    单个展现 <span>{{price[type].show_price}} </span>积分，
+                </template>
+                合计消费 <span>{{ (price[type].price + browse_price)*countbydays*days + (flag === 0 ? price[type].show_price*showNums*days : 0)}}</span> 积分
+            </p>
             <br />
-            <p class="settlement-p-2" v-show="vip_level === 0">升级<span>会员</span> 每单可节省 <span>{{price[type].price + browse_price - price[type].vip_price}}</span> 积分，合计节省 <span>{{(price[type].price + browse_price - price[type].vip_price)*countbydays*days}}</span> 积分</p>
+            <p class="settlement-p-2" v-show="vip_level === 0">
+                升级<span>会员</span>
+                每单可节省 <span>{{price[type].price - price[type].vip_price}}</span> 积分，
+                合计节省 <span>{{(price[type].price - price[type].vip_price)*countbydays*days}}</span> 积分
+            </p>
         </div>
     </div>
 </template>
@@ -113,6 +126,8 @@ export default {
             days: 0,
             // 任务天数
             countbydays: 100,
+            // 展现数目
+            showNums: 300,
             // 是否显示关键词
             flag: 0,
             // 商品flag
@@ -160,7 +175,7 @@ export default {
             // 获取单价
             var res = await this.$fetch.post("/price/getLieLiuPrice", { type: this.type });
             if (0 === res.code) {
-                var a = [], b = [];
+                var a = [], b = [], c = [];
                 res.data.price.forEach((item, i) => {
                     item.price = this.vip_level === 0 ? item.price : item.vip_price;
                     a[item.type] = item;
@@ -172,12 +187,6 @@ export default {
                 this.price = a;
                 this.browse_time = b;
             }
-        },
-        // 查排名
-        open(i) {
-            var id = qs.parse(this.form.target.split('?')[1]).id;
-            var keyword = this.form.plan[i].keyword || "";
-            openUrl("https://www.kehuda.com/#username=" + id + "&keyword=" + keyword + "&shebei=1");
         },
         // 改变url
         async changeTarget() {
@@ -200,6 +209,16 @@ export default {
                 this.form.plan[i].show_count = this.form.plan[i].count * Math.ceil(this.form.plan[i].show_count / this.form.plan[i].count);
             }
             this.form.plan[i].multiple = this.form.plan[i].show_count % this.form.plan[i].count;
+            var showNums = 0;
+            this.form.plan.map((item, i) => showNums += item.show_count);
+            this.showNums = showNums;
+        },
+        _changeShow(i, num) {
+            this.form.plan[i].multiple = num;
+            this.form.plan[i].show_count = this.form.plan[i].multiple * this.form.plan[i].count;
+            var showNums = 0;
+            this.form.plan.map((item, i) => showNums += item.show_count);
+            this.showNums = showNums;
         },
         // 改变数值
         changeInput(i) {

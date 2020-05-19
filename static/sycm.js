@@ -595,6 +595,7 @@ function FetchProxy() {
     }
 
     this.fetchList = [
+        "getPersonalView", // 个人信息
         "trend", // 我的店铺趋势
         "overview", // 我的点铺数据
         "list", // 竞品列表

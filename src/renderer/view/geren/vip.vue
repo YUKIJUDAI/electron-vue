@@ -2,28 +2,21 @@
     <div class="vip">
         <div class="left">
             <ul>
-                <li class="head">功能特权</li>
-                <li>精品透视</li>
-                <li>黑号/标签查询</li>
-                <li>卡首屏/魔搜</li>
-                <li>流量</li>
-                <li>直通车托管</li>
-                <li>试用补单</li>
+                <li class="head">{{list[0].th}}</li>
+                <li v-for="(item,i) in list[0].tr" :key="i">{{item}}</li>
             </ul>
         </div>
         <div class="center">
             <ul>
                 <li class="head head-vip">
-                    <img src="~@/assets/img/recommend.png" class="recommend">
-                    <p><i class="vip-icon"></i>超级会员</p>
-                    <span @click="dialogVisible = true">开通会员</span>
+                    <div>
+                        <img src="~@/assets/img/recommend.png" class="recommend">
+                        <p><i class="vip-icon"></i>{{list[1].th}}</p>
+                        <span @click="dialogVisible = true">开通会员</span>
+                    </div>
+
                 </li>
-                <li>无限使用</li>
-                <li>无限使用</li>
-                <li>无限使用</li>
-                <li>赠送5000积分</li>
-                <li>1对1出计划优先</li>
-                <li>体验发布</li>
+                <li v-for="(item,i) in list[1].tr" :key="i">{{item}}</li>
             </ul>
         </div>
         <!-- <div class="right">
@@ -43,14 +36,9 @@
         <div class="right right2">
             <ul>
                 <li class="head head-vip head-vip-2">
-                    <p>游客</p>
+                    <p>{{list[2].th}}</p>
                 </li>
-                <li>免费日查询宝贝≤3个</li>
-                <li>免费日查询账号≤30个</li>
-                <li>不限制</li>
-                <li>赠送200积分</li>
-                <li>免费微调</li>
-                <li>体验发布</li>
+                <li v-for="(item,i) in list[2].tr" :key="i">{{item}}</li>
             </ul>
         </div>
         <vip v-model="dialogVisible" v-if="dialogVisible"></vip>
@@ -66,6 +54,16 @@ export default {
     data() {
         return {
             dialogVisible: false,
+            list: [{}, {}, {}]
+        }
+    },
+    created() {
+        this.memberRecharge();
+    },
+    methods: {
+        async memberRecharge() {
+            var res = await this.$fetch.post("/price/memberRecharge");
+            0 === res.code && (this.list = res.data);
         }
     }
 }
@@ -143,8 +141,8 @@ export default {
             span {
                 .l-h(34px);
                 background: #fff;
-                border:1px solid #FF6C00;
-                color: #FF6C00;
+                border: 1px solid #ff6c00;
+                color: #ff6c00;
             }
         }
     }
