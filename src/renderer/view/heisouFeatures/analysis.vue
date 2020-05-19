@@ -40,6 +40,13 @@
                 </div>
             </el-card>
         </el-dialog>
+        <div class="version">
+            <span class="info-title">生意参谋版本</span>
+            <el-select size="small" v-model="version">
+                <el-option label="标准版" value="0"></el-option>
+                <el-option label="专业版" value="1"></el-option>
+            </el-select>
+        </div>
         <div class="info">
             <span class="info-title">宝贝信息</span>
             <el-button type="primary" class="info-btn" @click="monitoringAuthority('addFlag',true)">选择宝贝</el-button>
@@ -107,6 +114,8 @@ import heisouAnalysis from "@/components/heisou/heisouAnalysis";
 export default {
     data() {
         return {
+            // 生意参谋版本
+            version: "0",
             form: {
                 date: "",
                 dateValue: "",
@@ -213,6 +222,9 @@ export default {
                 this.form.date = "0";
                 this.form.date_range = val[0] + "|" + val[1];
             }
+        },
+        "version"(val) {
+            getGlobal("tbInfo").version = val;
         }
     }
 }
@@ -223,6 +235,11 @@ export default {
 .analysis {
     margin: 0 15px;
     margin-top: 20px;
+    .version {
+        .info-title {
+            .l-h(40px);
+        }
+    }
     .info {
         display: flex;
         justify-content: flex-start;

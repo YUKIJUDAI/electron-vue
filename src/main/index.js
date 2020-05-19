@@ -215,6 +215,7 @@ function createSycmWindow(account, pwd) {
         runAsUserId: "", //  当前使用的淘宝用户id
         cateId: "", // 店铺分类id
         cateName: "", // 店铺分类名字
+        version:"", //生意参谋版本
         rand: ""
     };
     sycmWindow.on("closed", function () {

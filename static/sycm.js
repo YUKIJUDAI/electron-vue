@@ -49,7 +49,9 @@ const DomFactory = function () {
         analysisBtn: () => $$(".level-leaf")[5].querySelector('a'),
         // 导航条 日
         day: () => $$(".oui-date-picker-particle-button"),
-        // 导航条 日按钮
+        // 导航条 日按钮(普通版))
+        _dayBtn: () => $$(".oui-date-picker-particle-button button")[2],
+        // 导航条 日按钮(专业版)
         dayBtn: () => $$(".oui-date-picker-particle-button button")[3],
         // 加号下拉
         addSel: () => $$(".alife-dt-card-sycm-common-select"),
@@ -222,7 +224,7 @@ ipcRenderer.on("loadURL-success", (event) => {
             ipcRenderer.send("log", "竞争页打开成功->" + err.toString());
         })
     )
-    .subscribe()
+        .subscribe()
 });
 
 // 添加竞品
@@ -307,7 +309,11 @@ ipcRenderer.on('add-monitor-detail', (event, goodsname) => {
             filter(() => analysisPage.day().length > 0),
             // 点击日
             tap(() => {
-                !hasClass(analysisPage.dayBtn(), "ant-btn-primary") && analysisPage.dayBtn().click()
+                if (remote.getGlobal("tbInfo").version === '0') {
+                    !hasClass(analysisPage._dayBtn(), "ant-btn-primary") && analysisPage._dayBtn().click();
+                } else if (remote.getGlobal("tbInfo").version === '1') {
+                    !hasClass(analysisPage.dayBtn(), "ant-btn-primary") && analysisPage.dayBtn().click();
+                }
             }),
             filter(() => analysisPage.addSel().length > 0),
             take(1),

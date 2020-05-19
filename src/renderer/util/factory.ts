@@ -33,7 +33,7 @@ var factory = new Factory();
 // 个淘宝人信息
 factory.add("getPersonalView", {
     callback: function(params, res) {
-        const data = JSON.parse(res);
+        const data = typeof res === 'string' ? JSON.parse(res) : res;
         const tbInfo = getGlobal("tbInfo") as any;
         const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: tbInfo.tb_password };
 
