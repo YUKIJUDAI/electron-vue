@@ -199,6 +199,7 @@ ipcRenderer.on('login-success', (event) => {
         .pipe(
             filter(() => mainPage.navigationBar().length > 0),
             take(1),
+            delay(5000),
             // 点击竞争
             tap(() => { !isCompetitionPage() && loadURL() }),
             catchError(err => {

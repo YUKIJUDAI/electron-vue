@@ -1,6 +1,6 @@
 {
     "name": "hxqb",
-    "version": "0.7.8",
+    "version": "0.8.1",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -27,7 +27,7 @@
         "publish": [
             {
                 "provider": "generic",
-                "url": "http://mars.lethink.net/autoUpdate/1"
+                "url": "http://mars.lethink.net/autoUpdate/0"
             }
         ],
         "win": {

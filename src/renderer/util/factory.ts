@@ -59,8 +59,7 @@ factory.add("trend", {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                crawler_data: JSON.stringify(res.data),
-                rand: getGlobal("tbInfo").rand,
+                crawler_data: JSON.stringify(res.data)
             };
             http.post("/collect/saveShopTrend", data).then();
         } else {

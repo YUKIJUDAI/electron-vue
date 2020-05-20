@@ -98,12 +98,6 @@
                 </template>
                 合计消费 <span>{{ (price[type].price + browse_price)*countbydays*days + (flag === 0 ? price[type].show_price*showNums*days : 0)}}</span> 积分
             </p>
-            <br />
-            <p class="settlement-p-2" v-show="vip_level === 0">
-                升级<span>会员</span>
-                每单可节省 <span>{{price[type].price - price[type].vip_price}}</span> 积分，
-                合计节省 <span>{{(price[type].price - price[type].vip_price)*countbydays*days}}</span> 积分
-            </p>
         </div>
     </div>
 </template>
@@ -177,7 +171,6 @@ export default {
             if (0 === res.code) {
                 var a = [], b = [], c = [];
                 res.data.price.forEach((item, i) => {
-                    item.price = this.vip_level === 0 ? item.price : item.vip_price;
                     a[item.type] = item;
                 });
                 b[0] = res.data.app;
