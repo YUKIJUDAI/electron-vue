@@ -36,7 +36,7 @@
                             <div class="tutor-right">
                                 <p class="tutor-name">{{item.mentor_name}}</p>
                                 <p class="tutor-text">{{item.mentor_desc}}</p>
-                                <div class="tutor-btn">在线咨询</div>
+                                <div class="tutor-btn" @click="open(item.mentor_QQ)">在线咨询</div>
                             </div>
                         </div>
                     </div>
@@ -104,8 +104,15 @@ export default {
             var res = await this.$fetch.post("/ganhuo/getVideoRecMentor");
             if (0 === res.code) {
                 this.tutor = res.data;
+                var _this = this;
                 this.$nextTick((res => {
-                    this.swiper = new Swiper("#swiper", { slidesPerView: 3, spaceBetween: 16, autoplay: { delay: 12000 } });
+                    this.swiper = new Swiper("#swiper",
+                        {
+                            slidesPerView: 3,
+                            spaceBetween: 16,
+                            autoplay: { delay: 12000 }
+                        }
+                    );
                 }));
             }
         },
@@ -114,7 +121,7 @@ export default {
             var res = await this.$fetch.post("/ganhuo/getZtcRecArticle");
             0 === res.code && (this.recArticle = res.data);
         },
-        open(qq){
+        open(qq) {
             var url = "http://wpa.qq.com/msgrd?v=3&uin=" + qq + "&menu=yes";
             openUrl(url);
         }
