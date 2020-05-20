@@ -69,11 +69,11 @@
                 </div>
                 <div class="main-left-3">
                     <ul>
-                        <router-link tag="li" class="clearfix" to="/" :class="{active:$route.path.includes('index')}">
+                        <router-link tag="li" class="clearfix" to="/" :class="{active:$route.path === '/'}">
                             <i class="iconfont icon-shouye"></i>
                             <span>首页</span>
                         </router-link>
-                        <li class="clearfix" v-for="(item,i) in menuInfo[page]" :key="i" :class="{active:$route.path.includes(item.route) && item.route !==''}" @click="open(item.route,item.is_uphold)">
+                        <li class="clearfix" v-for="(item,i) in menuInfo" :key="i" :class="{active:$route.path.includes(item.route) && item.route !==''}" @click="open(item.route,item.is_uphold)">
                             <img :src="item.icon_y" v-if="$route.path.includes(item.route) && item.route !==''">
                             <img :src="item.icon_h" v-else>
                             <span>{{item.copy_title}}</span>
@@ -87,15 +87,14 @@
                             <span>测试</span>
                         </router-link> -->
                     </ul>
-                    <div class="page" @click="next">
+                    <!-- <div class="page" @click="next">
                         <div class="arrow arrow-1"></div>
                         <div class="arrow arrow-2"></div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="main-right">
                 <router-view @goLogin="goLogin" />
-                <div id="myApp"></div>
             </div>
         </div>
     </div>
@@ -111,8 +110,7 @@ export default {
     components: { heisouTitle },
     data() {
         return {
-            bossInfo: {},
-            page: 0
+            bossInfo: {}
         }
     },
     computed: {
@@ -123,16 +121,7 @@ export default {
             return this.$store.state.userInfo;
         },
         menuInfo() {
-            var arr = [];
-            var menu = this.$store.state.menuInfo;
-            var num = 10;
-            if (menu.length === 0) return [];
-            var index = ~~(menu.length / num);
-            for (let i = 1; i <= index; i++) {
-                arr.push(menu.slice((i - 1) * num, i * num - 1));
-            }
-            arr.push(menu.slice(index * num, -1));
-            return arr;
+            return this.$store.state.menuInfo;
         },
         serviceInfo() {
             return this.$store.state.serviceInfo;
@@ -290,7 +279,7 @@ export default {
             .main-left-3 {
                 margin-top: 10px;
                 li {
-                    .l-h(34px);
+                    height: 32px;
                     background: #fff;
                     cursor: pointer;
                     color: #666;
@@ -299,8 +288,9 @@ export default {
                     }
                     i,
                     img {
+                        display: inline-block;
                         font-size: 18px;
-                        margin-top: 13px;
+                        margin-top: 8px;
                         margin-left: 33px;
                         vertical-align: -2px;
                     }

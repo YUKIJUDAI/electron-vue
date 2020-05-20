@@ -19,7 +19,7 @@
                     <p class="p-6">0<span>天</span></p>
                 </li>
                 <li class="no-border last-li">
-                    <el-button size="small" type="primary" class="invite">立即邀请</el-button>
+                    <el-button size="small" type="primary" class="invite" @click="copy">立即邀请</el-button>
                 </li>
             </ul>
         </div>
@@ -50,10 +50,13 @@
 </template>
 
 <script>
+import copy from "clipboard-copy";
+
 export default {
     data() {
         return {
             list: [],
+            url: "",
             total_pages: 1,
             total_items: 0,
             page: 1
@@ -65,7 +68,16 @@ export default {
     methods: {
         async getList() {
             var res = await this.$fetch.post("/user/getInviteList", { page: this.page });
-            0 == res.code && (this.list = res.data.items, this.total_pages = res.data.total_pages, this.total_items = res.data.total_items);
+            0 == res.code && (
+                this.list = res.data.items,
+                this.total_pages = res.data.total_pages,
+                this.total_items = res.data.total_items,
+                this.url = res.data.invite_url
+            );
+        },
+        copy() {
+            copy(this.url);
+            this.$message("复制邀请链接成功，快去分享吧");
         }
     }
 }

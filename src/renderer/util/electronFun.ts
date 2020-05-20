@@ -115,11 +115,11 @@ export const downloadSchedule = (vue) => {
         vue.percentage = s;
     });
 };
-export const downloadSuccess = (vue) => {
+export const downloadSuccess = (vue, path) => {
     ipcRenderer.on("download-success", (event, flag) => {
         vue.progressDialog = false;
         vue.percentage = 0;
-        rmdir(vue.goodsId);
+        rmdir(path || vue.goodsId);
         flag ? vue.$message.success("下载成功") : vue.$message.error("下载失败或被取消");
     });
 };

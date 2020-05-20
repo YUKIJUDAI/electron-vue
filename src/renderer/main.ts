@@ -7,7 +7,6 @@ import { registerMicroApps, start } from "qiankun";
 import http from "@/util/http";
 import fetch from "@/util/fetch";
 import { log } from "@/util/electronFun";
-import * as util from "@/util/util";
 import "@/assets/theme/index.css";
 import "@/assets/iconfont/iconfont.css";
 
@@ -42,13 +41,13 @@ new Vue({
     template: "<App/>",
 }).$mount("#app");
 
+// 微服务架构
 registerMicroApps([
     {
         name: "vue app",
         entry: "//localhost:3000",
         container: "#myApp",
-        activeRule: "/#/vue-test",
-        props: { util },
+        activeRule: "/#/vue-test"
     },
 ]);
 

@@ -8,6 +8,7 @@ import { bindNodeCallback, interval, forkJoin } from "rxjs";
 import { find } from "rxjs/operators";
 
 import { download, getUserDataPath } from "@/util/electronFun";
+import { Form } from "element-ui";
 
 function _path(filename?) {
     return filename ? getUserDataPath("/" + filename) : getUserDataPath();
@@ -178,4 +179,30 @@ const rmdir = function(filename) {
     del(_path(filename));
 };
 
-export { downloadFile, rmdir };
+// 导出二维码
+const ewm = function(list) {
+    const filePath = _path("ewm");
+    const filePathPic = _path("ewm") + "/二维码";
+    try {
+        fs.accessSync(filePath, fs.constants.R_OK | fs.constants.W_OK);
+    } catch (err) {
+        fs.mkdirSync(filePath);
+    }
+    try {
+        fs.accessSync(filePathPic, fs.constants.R_OK | fs.constants.W_OK);
+    } catch (err) {
+        fs.mkdirSync(filePathPic);
+    }
+    list.length > 0 &&
+        list.map((item, i) => {
+            var base64 = item.url.replace(/^data:image\/\w+;base64,/, "");
+            var dataBuffer = new Buffer(base64, "base64");
+            fs.writeFileSync(filePathPic + "/" + item.name + ".png", dataBuffer);
+        });
+
+    compressing.zip.compressDir(filePathPic, filePath + "/二维码.zip").then((res) => {
+        download(filePath + "/二维码.zip");
+    });
+};
+
+export { downloadFile, rmdir, ewm };

@@ -12,6 +12,7 @@
                         <img src="~@/assets/img/vip-1.png" v-show="userInfo.vip_level === 1" />
                         <img src="~@/assets/img/vip-2.png" v-show="userInfo.vip_level === 2" />
                         <router-link to="/geren/vip" v-show="userInfo.vip_level === 0" tag="span">升级</router-link>
+                        <span v-show="userInfo.vip_level !== 0">{{userInfo.vip_end_time.split(" ")[0]}}到期</span>
                     </p>
                     <ul class="clearfix">
                         <li>
@@ -98,7 +99,7 @@
                             <p class="p-6">{{userInfo.invite.integral}}<span>个</span></p>
                         </li>
                         <li>
-                            <el-button size="small" type="primary" class="invite">立即邀请</el-button>
+                            <el-button size="small" type="primary" class="invite" @click="copy(userInfo.invite_url)">立即邀请</el-button>
                         </li>
                     </ul>
                 </el-card>
@@ -142,7 +143,7 @@ export default {
         },
         copy(val) {
             copy(val);
-            this.$message("复制成功");
+            this.$message("复制邀请链接成功，快去分享吧");
         }
     }
 }
@@ -215,8 +216,8 @@ export default {
                 display: flex;
             }
             li {
-                width: 148px;
-                padding: 18px 0 18px 18px;
+                width: 140px;
+                padding: 15px 0 15px 15px;
                 img {
                     .fl;
                     margin-top: 4px;
