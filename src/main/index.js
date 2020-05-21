@@ -34,7 +34,18 @@ log4js.configure({
 });
 let logError = log4js.getLogger("default");
 
-app.on("ready", createWindow);
+if (!app.requestSingleInstanceLock()) {
+    app.quit();
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        if (mainWindow) {
+            mainWindow.isMinimized() && mainWindow.restore();
+            mainWindow.focus();
+            mainWindow.show();
+        }
+    });
+    app.on("ready", createWindow);
+}
 
 app.on("window-all-closed", function () {
     if (process.platform !== "darwin") app.quit();
@@ -215,7 +226,7 @@ function createSycmWindow(account, pwd) {
         runAsUserId: "", //  当前使用的淘宝用户id
         cateId: "", // 店铺分类id
         cateName: "", // 店铺分类名字
-        version:"", //生意参谋版本
+        version: "", //生意参谋版本
         rand: ""
     };
     sycmWindow.on("closed", function () {

@@ -1,6 +1,6 @@
 {
     "name": "hxqb",
-    "version": "0.8.1",
+    "version": "0.8.3",
     "author": "YUKIJUDAI <1787149082@qq.com>",
     "description": "An electron-vue project",
     "main": "./dist/electron/main.js",
@@ -16,7 +16,7 @@
         "rebuildsqlite3": "electron-rebuild -f -w .\\node_modules\\better-sqlite3"
     },
     "build": {
-        "productName": "hxqb",
+        "productName": "火星情报",
         "appId": "com.example.hxqb",
         "directories": {
             "output": "build/${productName}_${version}"
