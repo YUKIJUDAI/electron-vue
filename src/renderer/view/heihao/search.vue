@@ -143,7 +143,6 @@
                 <ul>
                     <li><i class="icon-star"></i>会员提供无限制手动查询，API接口合作联系客服；</li>
                     <li><i class="icon-star"></i>查询结果仅供参考，每个软件号库不同，会存在差异；</li>
-                    <li><i class="icon-star"></i>成功举报黑号赠送会员1个月；</li>
                     <li><i class="icon-star"></i>建议结合超级打标功能使用：查号+打权重 超级打标 ；</li>
                 </ul>
             </div>

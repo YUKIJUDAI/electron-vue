@@ -121,7 +121,7 @@ export default {
             return this.$store.state.userInfo;
         },
         menuInfo() {
-            return this.$store.state.menuInfo;
+            return this.$store.state.menuInfo.filter(item=>item.is_nav === "1" );
         },
         serviceInfo() {
             return this.$store.state.serviceInfo;
