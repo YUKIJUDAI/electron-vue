@@ -52,17 +52,13 @@
                 <canvas ref="code"> </canvas>
             </div>
         </div>
-        <el-dialog title="数据下载" :visible.sync="progressDialog" width="400px" height="200px" :close-on-click-modal="false">
-            <p class="progress">数据下载中请稍后。。。</p>
-            <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage"></el-progress>
-        </el-dialog>
     </div>
 </template>
 
 <script>
 import { monitoringAuthority } from "@/util/util";
 import { downloadSuccess } from "@/util/electronFun";
-import { ewm } from "@/util/fs";
+import { downloadFile } from "@/util/fs";
 import { Loading } from 'element-ui';
 var QRCode = require('qrcode');
 
@@ -74,9 +70,6 @@ export default {
             keyword2: "",
             keyword3: "",
             config: { width: 200, height: 200, margin: 0, errorCorrectionLevel: 'M' },
-            // 进度条
-            progressDialog: false,
-            percentage: 0,
         }
     },
     mounted() {
@@ -108,12 +101,11 @@ export default {
             }
         },
         save() {
-            
             var arr = [];
             Array.prototype.map.call(document.querySelectorAll(".code-p"), (item, i) => {
                 item.innerText !== "" && arr.push({ name: item.innerText, url: document.querySelectorAll("canvas")[i].toDataURL("image/png") })
             });
-            arr.length > 0 && (this.progressDialog = true) && ewm(arr);
+            arr.length > 0 && (this.progressDialog = true) && downloadFile("二维码", "ewm", arr);
         }
     }
 }

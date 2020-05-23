@@ -86,7 +86,12 @@ export default {
             report: []
         }
     },
-    mounted(){
+    computed: {
+        tableData() {
+            return this.report;
+        }
+    },
+    mounted() {
         this.itemId && this.getData();
     },
     methods: {
@@ -124,8 +129,8 @@ export default {
                     ]
                 },
                 grid: {
-                    x:50,
-                    y:100,
+                    x: 50,
+                    y: 100,
                     left: '10%',
                     right: '10%',
                     bottom: '5%',

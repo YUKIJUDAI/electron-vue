@@ -34,6 +34,7 @@
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
                                     Q Q：<span>{{bossInfo.boss_qq}}</span>
+                                    <span @click="openQQ(bossInfo.boss_qq)">立即咨询</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-weixin"></i>
@@ -41,7 +42,6 @@
                                 </li>
                             </ul>
                             <img :src="bossInfo.boss_qr_code">
-                            <p class="red">加好友送七天会员</p>
                         </div>
                         <div class="left-2-left" slot="reference">客户经理</div>
                     </el-popover>
@@ -56,6 +56,7 @@
                                 <li>
                                     <i class="iconfont icon-QQ"></i>
                                     Q Q：<span>{{serviceInfo.kefu_qq}}</span>
+                                    <span @click="openQQ(serviceInfo.kefu_qq)">立即咨询</span>
                                 </li>
                                 <li>
                                     <i class="iconfont icon-weixin"></i>
@@ -63,8 +64,13 @@
                                 </li>
                             </ul>
                             <img :src="serviceInfo.kefu_qr_code">
+                            <div class="getvip">
+                                【
+                                <p>有问题？扫码加微信</br>还可以<span>领取7天VIP</span></p>
+                                】
+                            </div>
                         </div>
-                        <div class="left-2-right" slot="reference">售后客服</div>
+                        <div class="left-2-right" slot="reference">售后经理</div>
                     </el-popover>
                 </div>
                 <div class="main-left-3">
@@ -103,8 +109,7 @@
 <script>
 import heisouTitle from "@/components/others/title";
 import { isEmpty } from "@/util/util";
-import { sendXhrData, message, routerTo,loadURL } from "@/util/electronFun";
-import factory from "@/util/factory";
+import { sendXhrData, message, routerTo, loadURL, openUrl } from "@/util/electronFun";
 
 export default {
     components: { heisouTitle },
@@ -121,7 +126,7 @@ export default {
             return this.$store.state.userInfo;
         },
         menuInfo() {
-            return this.$store.state.menuInfo.filter(item=>item.is_nav === "1" );
+            return this.$store.state.menuInfo.filter(item => item.is_nav === "1");
         },
         serviceInfo() {
             return this.$store.state.serviceInfo;
@@ -157,6 +162,10 @@ export default {
             }
             var res = await this.$fetch.post("/user/getUserInfo");
             0 === res.code && this.$store.dispatch("set_user_info", res.data);
+        },
+        openQQ(qq) {
+            var url = "http://wpa.qq.com/msgrd?v=3&uin=" + qq + "&menu=yes";
+            openUrl(url);
         },
         // 打开
         open(url, is_uphold) {
@@ -462,9 +471,9 @@ export default {
 ._hover {
     margin: -12px;
     padding: 12px;
-    width: 150px;
+    width: 170px;
     font-size: 12px;
-    background: #eee;
+    background: #fff;
     i {
         vertical-align: -1px;
     }
@@ -487,6 +496,12 @@ export default {
         }
         span {
             color: #333;
+            &:nth-child(3) {
+                cursor: pointer;
+                color: var(--themeColor);
+                font-size: 11px;
+                text-decoration: underline;
+            }
         }
     }
     img {
@@ -494,6 +509,19 @@ export default {
         width: 84px;
         height: 84px;
         display: block;
+    }
+    .getvip {
+        display: flex;
+        justify-content:center;
+        p {
+            font-size: 12px;
+            color: #666;
+            padding: 0 5px;
+            margin-top: -10px;
+        }
+        span {
+            color: var(--themeColor);
+        }
     }
 }
 .headStyle {

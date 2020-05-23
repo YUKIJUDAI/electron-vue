@@ -49,7 +49,12 @@ export default {
             keywordsTrend: []
         }
     },
-    mounted(){
+    computed: {
+        tableData() {
+            return this.flowStructure;
+        }
+    },
+    mounted() {
         this.itemId && this.getData();
     },
     methods: {

@@ -60,7 +60,6 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>使用明细</span>
-                        <el-button style="float: right; padding: 3px 0" type="text">查看更多></el-button>
                     </div>
                     <ul>
                         <li>

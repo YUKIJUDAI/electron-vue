@@ -6,9 +6,9 @@
                 <el-select v-model="comments_download_index" style="margin-right:60px">
                     <el-option v-for="(item,i) in comments_download" :key="i" :label="item.label" :value="item.value"></el-option>
                 </el-select>
-                <el-button type="primary" size="small" @click="downloadComments('1')">下载评论</el-button>
-                <el-button type="primary" size="small" @click="downloadComments('2')">下载图片</el-button>
-                <el-button type="primary" size="small" @click="downloadComments('3')">下载评论加图片</el-button>
+                <el-button type="primary" size="small" @click="downloadComments('评论')">下载评论</el-button>
+                <el-button type="primary" size="small" @click="downloadComments('图片')">下载图片</el-button>
+                <el-button type="primary" size="small" @click="downloadComments('评论和图片')">下载评论加图片</el-button>
             </div>
             <el-table stripe style="width: 100%" :data="comments_list" height="400px">
                 <el-table-column label="SKU" align="center" prop="sku"></el-table-column>
@@ -38,7 +38,7 @@
                 <el-select v-model="ask_download_index" style="margin-right:60px">
                     <el-option v-for="(item,i) in ask_download" :key="i" :label="item.label" :value="item.value"></el-option>
                 </el-select>
-                <el-button type="primary" size="small" @click="downloadComments">导出数据</el-button>
+                <el-button type="primary" size="small" @click="downloadAskall">导出数据</el-button>
             </div>
             <el-table stripe style="width: 100%" :data="ask_list" height="400px">
                 <el-table-column label="时间" align="center" prop="createtime"></el-table-column>
@@ -178,7 +178,7 @@ export default {
             ask_total_pages: 1,
             ask_pages: 1,
             ask_download_index: 1,
-            ask_limit: 2,
+            ask_limit: 100,
             ask_download: [],
 
         }
@@ -251,7 +251,7 @@ export default {
             });
         },
         // 问大家下载
-        downloadComments(type) {
+        downloadAskall(type) {
             this.progressDialog = true;
             this.$fetch.post(
                 "/collect/exportAsk",
@@ -259,7 +259,7 @@ export default {
                 { timeout: 60000 }
             ).then(res => {
                 if (0 === res.code) {
-                    downloadFile("4", this.goodsId, res.data);
+                    downloadFile("问大家", this.goodsId, res.data);
                 } else {
                     this.progressDialog = false;
                     this.$message.error("下载失败");

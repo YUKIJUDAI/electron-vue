@@ -115,7 +115,12 @@ export default {
             checked2: "",
         }
     },
-    mounted(){
+    computed: {
+        tableData() {
+            return this.tableList1;
+        }
+    },
+    mounted() {
         this.itemId && this.getData();
     },
     methods: {

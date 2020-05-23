@@ -76,9 +76,10 @@
                 <el-form-item>
                     <el-date-picker v-model="form.dateValue" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" size="small"> </el-date-picker>
                 </el-form-item>
-                <el-button type="primary" @click="monitoringAuthority('t',new Date().getTime())">开始查询</el-button>
-                <el-button type="primary" plain @click="monitoringAuthority('prevDay')">分析前一天</el-button>
-                <el-button type="primary" plain @click="monitoringAuthority('nextDay')">分析后一天</el-button>
+                <el-button type="primary" @click="t=new Date().getTime()" :disabled="!goodsInfo.itemId">开始查询</el-button>
+                <el-button type="primary" plain @click="prevDay" :disabled="!goodsInfo.itemId">分析前一天</el-button>
+                <el-button type="primary" plain @click="nextDay" :disabled="!goodsInfo.itemId">分析后一天</el-button>
+                <el-button type="primary" @click="exportExcel" :disabled="!goodsInfo.itemId">导出excel</el-button>
                 <!-- <el-button type="primary" plain>导出excel</el-button> -->
             </el-form>
         </div>
@@ -93,15 +94,16 @@
                 <!-- <li :class="{active1:tabIndex === 6}" @click="changeTab(6)">黑搜分析<i class="hot"></i></li> -->
             </ul>
         </div>
-        <div class="data" :is="tempList[tabIndex]" :itemId="goodsInfo.itemId" :date_range="form.date_range" :t="t" :title="goodsInfo.goods_name"></div>
+        <div class="data" ref="data" :is="tempList[tabIndex]" :itemId="goodsInfo.itemId" :date_range="form.date_range" :t="t" :title="goodsInfo.goods_name"></div>
     </div>
 </template>
 
 <script>
-const { from } = require("rxjs");
+import { from } from "rxjs";
 import moment from "moment";
-import { getAllWindows, fromId, getLog, getGlobal } from "@/util/electronFun";
+import { getAllWindows, fromId, getLog, getGlobal, downloadSuccess } from "@/util/electronFun";
 import { monitoringAuthority, rand } from "@/util/util";
+import { downloadFile } from "@/util/fs";
 
 import dataSource from "@/components/heisou/dataSource";
 import keywordAnalysis from "@/components/heisou/keywordAnalysis";
@@ -135,6 +137,7 @@ export default {
             goodsList: [],
             // 竞品获取中flag
             addingFlag: false,
+            goodsId: "",
             goodsInfo: {
                 goods_name: "", pictUrl: "", shop_name: "", itemId: ""
             },
@@ -153,6 +156,8 @@ export default {
         this.getList();
         // 获取日志
         getLog(this);
+        // 下载成功
+        downloadSuccess(this);
     },
     methods: {
         changeTab(index) {
@@ -177,12 +182,17 @@ export default {
             this.form.dateValue = [moment(this.form.dateValue[0]).add(1, 'days').format('YYYY-MM-DD'), moment(this.form.dateValue[1]).add(1, 'days').format('YYYY-MM-DD')];
             this.t = new Date().getTime();
         },
+        // 导出
+        exportExcel() {
+            downloadFile(["数据源", "关键词分析", "词根分析", "流量结构分析", "黑搜报表", "宝贝信息"][this.tabIndex], this.goodsId, this.$refs.data.tableData);
+        },
         // 获取竞品数据
         getCompeteGoodsInfo(data) {
             if (this.addingFlag) {
                 this.$message.error("请等待当前任务完成后再试");
                 return;
             }
+            this.goodsId = data.itemId;
             this.goodsInfo = { goods_name: data.goods_name, pictUrl: data.pictUrl, shop_name: data.shop_name, itemId: data.itemId };
             this.$confirm('是否获取新数据后再分析?', '提示', {
                 confirmButtonText: '获取数据',

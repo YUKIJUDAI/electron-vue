@@ -117,8 +117,8 @@ export const downloadSchedule = (vue) => {
 };
 export const downloadSuccess = (vue, path) => {
     ipcRenderer.on("download-success", (event, flag) => {
-        vue.progressDialog = false;
-        vue.percentage = 0;
+        vue.hasOwnProperty('progressDialog') && (vue.progressDialog = false);
+        vue.hasOwnProperty('percentage') && (vue.percentage = 0);
         rmdir(path || vue.goodsId);
         flag ? vue.$message.success("下载成功") : vue.$message.error("下载失败或被取消");
     });

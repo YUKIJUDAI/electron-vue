@@ -49,6 +49,8 @@
                             <el-option label="60天" value="60"></el-option>
                             <el-option label="90天" value="90"></el-option>
                         </el-select>
+                        <br />
+                        <el-button type="primary" class="export" @click="monitoringAuthority('jpjpExport')">导出列表</el-button>
                     </div>
                 </div>
                 <div class="tread-body">
@@ -206,12 +208,13 @@
 </template>
 
 <script>
-const { from } = require("rxjs");
+import { from } from "rxjs";
 import moment from "moment";
 import axios from "axios";
 
-import { getLog, getAllWindows, fromId } from "@/util/electronFun";
+import { getLog, getAllWindows, fromId, downloadSuccess } from "@/util/electronFun";
 import { monitoringAuthority } from "@/util/util";
+import { downloadFile } from "@/util/fs";
 
 export default {
     data() {
@@ -249,6 +252,7 @@ export default {
             tread: "30",
             treadActiveName: "first",
             treadActiveData: {},
+            goodsId: "",
             treadData: {},
             treadTable: [],
             myChart: "",
@@ -272,6 +276,7 @@ export default {
         this.getShop();
         // 获取日志
         getLog(this);
+        downloadSuccess(this);
     },
     methods: {
         // 权限
@@ -283,6 +288,7 @@ export default {
             this.tread = "30";
             this.treadActiveName = "first";
             this.treadActiveData = {};
+            this.goodsId = "";
             this.treadData = {};
             this.treadTable = [];
             this.treadFlag = false;
@@ -291,6 +297,7 @@ export default {
         toCheckTrend(data) {
             this.treadFlag = true;
             this.treadActiveData = data;
+            this.goodsId = data.itemId;
             this.$nextTick(() => {
                 var a = this.$http.post("/collect/getTrend", { itemId: data.itemId });
                 var b = this.$http.post("/collect/getTrendData", { itemId: data.itemId });
@@ -622,6 +629,10 @@ export default {
             }).catch(() => {
                 this.$message({ type: 'info', message: '已取消删除' });
             });
+        },
+        // 导出列表
+        jpjpExport() {
+            downloadFile("竞品监控列表", this.treadActiveData.itemId, this.treadTable);
         }
     },
     watch: {
@@ -750,6 +761,10 @@ export default {
         .day {
             font-size: 16px;
             margin: 0 20px;
+        }
+        .export {
+            .fr;
+            margin-top: 10px;
         }
     }
     .tread-body {

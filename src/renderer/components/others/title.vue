@@ -12,7 +12,7 @@
             </ul>
             <ul class="clearfix right-ul" style="-webkit-app-region: no-drag">
                 <li class="login" @click="goLogin" v-if="!isLogin"><i class="icon-login"></i>登录</li>
-                <li class="registered" @click="goRegistered" v-if="!isLogin"><i class="icon-registered"></i>注册</li>
+                <li class="registered" @click="goRegistered" v-if="!isLogin"><img src="~@/assets/img/svip1.png"><i class="icon-registered"></i>注册</li>
                 <router-link tag="li" to="/geren/personCenter" class="user" v-if="isLogin">{{userPhone}}</router-link>
                 <router-link v-if="isLogin" tag="li" to="/tongzhi/announcement" class="message">
                     <img src="~@/assets/icon/notification.png" class="notification" @click="unreadMessage = false">
@@ -85,6 +85,7 @@
                 <div class="other clearfix">
                     <span class="registered" @click="goLogin">已有账号？点击登录</span>
                 </div>
+                <img src="~@/assets/img/svip2.png" class="svip2">
                 <div class="submit" @click="registered">注册</div>
                 <div class="protocol clearfix">
                     <input type="checkbox" class="protocol-checkbox" v-model="protocolFlag" />
@@ -127,7 +128,6 @@ import { fromEvent } from "rxjs";
 import { isEmpty, getPhoneCode, isOnline } from "@/util/util";
 import password from "@/components/others/password";
 import config from "@/config/config";
-import factory from "@/util/factory";
 
 export default {
     components: { password },
@@ -144,7 +144,7 @@ export default {
             registeredForm: {},
             // 更新信息
             versionData: {
-                remark:"花瓣自上线以来，积累了众多用户的数亿张采集，我们感谢您的辛勤付出，并且十分珍视您和您分享的内容。在业务调整期间，给您的体验带来诸多不便，敬请谅解，感谢您一直以来对花瓣的支持与喜爱！"
+                remark: ""
             },
             version_num: config.version_num,
 
@@ -396,6 +396,15 @@ export default {
                 rgba(255, 253, 142, 1)
             );
             border-radius: 15px;
+            position: relative;
+            img {
+                position: absolute;
+                top: -18px;
+                right: -8px;
+                display: block;
+                width: 70px;
+                height: 35px;
+            }
         }
         .login,
         .user {
@@ -587,12 +596,17 @@ export default {
         .fr;
     }
 }
+.svip2 {
+    display: block;
+    margin-left: 133px;
+    margin-top: 20px;
+}
 .submit {
     width: 382px;
     background: var(--themeColor);
     .l-h(48px);
     margin: 0 auto;
-    margin-top: 20px;
+    margin-top: 5px;
     .tc;
     color: #fff;
     font-size: 18px;

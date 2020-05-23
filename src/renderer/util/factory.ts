@@ -1,4 +1,4 @@
-const { from } = require("rxjs");
+import { from } from "rxjs";
 var CryptoJS = require("crypto-js");
 var AES = require("crypto-js/aes");
 
@@ -33,10 +33,11 @@ var factory = new Factory();
 // 个淘宝人信息
 factory.add("getPersonalView", {
     callback: function(params, res) {
-        const data = typeof res === 'string' ? JSON.parse(res) : res;
+        const data = typeof res === "string" ? JSON.parse(res) : res;
         const tbInfo = getGlobal("tbInfo") as any;
         const _data = { tb_account: data.loginUserName, tb_user_id: data.loginUserId, tb_password: tbInfo.tb_password };
-
+        // 生意参谋会多次调用，防重复
+        if (tbInfo.loginUserName) return;
         tbInfo.loginUserName = data.loginUserName; //  淘宝登录账户
         tbInfo.runAsShopId = data.runAsShopId + ""; //  店铺id
         tbInfo.runAsShopTitle = data.runAsShopTitle; //  当前店铺名称
@@ -45,7 +46,7 @@ factory.add("getPersonalView", {
 
         http.post("/user/relateTbAccount", _data).then((res: any) => {
             0 == res.code &&
-                from(getAllWindows()).subscribe((i) => {
+                from(getAllWindows()).subscribe((i: { id: string | number; [propsName: string]: any }) => {
                     fromId(i.id, "login-success");
                 });
         });
@@ -59,7 +60,7 @@ factory.add("trend", {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                crawler_data: JSON.stringify(res.data)
+                crawler_data: JSON.stringify(res.data),
             };
             http.post("/collect/saveShopTrend", data).then();
         } else {
@@ -80,7 +81,7 @@ factory.add("overview", {
         // 返回数据
         const data = {
             sys: JSON.stringify({ ...params }),
-            crawler_data: JSON.stringify(res.data)
+            crawler_data: JSON.stringify(res.data),
         };
         http.post("/collect/saveShopOverview", data).then();
     },
@@ -97,7 +98,7 @@ factory.add("getShopCate", {
         const data = {
             sys: JSON.stringify({ ...params }),
             source: "getShopCate",
-            crawler_data: JSON.stringify(result)
+            crawler_data: JSON.stringify(result),
         };
         // http.post("/collect/saveLog", data).then(r => {
 
@@ -112,7 +113,7 @@ factory.add("list", {
             // 返回数据
             const data = {
                 sys: JSON.stringify({ ...params }),
-                crawler_data: aes(res)
+                crawler_data: aes(res),
             };
             http.post("/collect/saveList", data).then((r) => {
                 // todo
@@ -133,7 +134,7 @@ factory.add("getSingleMonitoredInfo", {
         const data = {
             sys: JSON.stringify({ ...params }),
             crawler_data: aes(res),
-            rand: getGlobal("tbInfo").rand
+            rand: getGlobal("tbInfo").rand,
         };
         http.post("/collect/addCompeteInfo", data).then();
     },

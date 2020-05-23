@@ -74,6 +74,11 @@ export default {
             myChart: ""
         }
     },
+    computed: {
+        tableData() {
+            return [this.tableData1, this.tableData2, this.tableData3];
+        }
+    },
     mounted() {
         this.itemId && this.getData();
     },

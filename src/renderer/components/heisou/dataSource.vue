@@ -116,7 +116,12 @@ export default {
             tableData3: []
         }
     },
-    mounted(){
+    computed: {
+        tableData() {
+            return [this.tableData0, this.tableData1, this.tableData2, this.tableData3];
+        }
+    },
+    mounted() {
         this.itemId && this.getData();
     },
     methods: {

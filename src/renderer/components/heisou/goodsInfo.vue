@@ -62,7 +62,12 @@ export default {
             tableData1: [],
         }
     },
-    mounted(){
+    computed: {
+        tableData() {
+            return [this.tableData0, this.tableData1];
+        }
+    },
+    mounted() {
         this.itemId && this.getData();
     },
     methods: {
@@ -73,13 +78,13 @@ export default {
             this.goodsInfoLog();
             this.goodsStock();
         },
-        goodsInfoLog(){
-            this.$http.post("/analysis/goodsInfoLog", { itemId: this.itemId, date_range: this.date_range}).then((res) => {
+        goodsInfoLog() {
+            this.$http.post("/analysis/goodsInfoLog", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
                 0 === res.code && (this.tableData0 = res.data);
             });
         },
-        goodsStock(){
-            this.$http.post("/analysis/goodsStock", { itemId: this.itemId, date_range: this.date_range}).then((res) => {
+        goodsStock() {
+            this.$http.post("/analysis/goodsStock", { itemId: this.itemId, date_range: this.date_range }).then((res) => {
                 0 === res.code && (this.tableData1 = res.data);
             });
         }
